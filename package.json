@@ -8,8 +8,9 @@
   },
   "author": "pocketberserker",
   "license": "MIT",
-  "typings": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "dependencies": {
+    "@akashic-extension/akashic-label": "0.3.3",
     "@akashic/akashic-engine": "2.0.0-beta.0"
   },
   "devDependencies": {
