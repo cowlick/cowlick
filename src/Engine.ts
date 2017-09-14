@@ -11,7 +11,10 @@ export class Engine {
   }
 
   start(scenario?: Scenario): void {
-    const scene = new Scene(this.game);
+
+    const s = scenario ? scenario : Scenario.load();
+
+    const scene = new Scene(this.game, scenario);
     this.game.pushScene(scene);
   }
 }

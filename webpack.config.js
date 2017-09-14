@@ -11,7 +11,7 @@ var config = {
     path: outDir,
     filename: "index.js",
     library: "cowlick",
-    libraryTarget: "commonjs"
+    libraryTarget: "commonjs2"
   },
   module : {
     rules: [

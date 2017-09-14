@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "commonjs",
+    "noLib": false,
+    "sourceMap": false,
+    "noImplicitAny": true
+  },
+  "files": [
+    "node_modules/@akashic/akashic-engine/lib/main.d.ts",
+    "../lib/index.d.ts"
+  ],
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

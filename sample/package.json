@@ -1,23 +1,16 @@
 {
-  "name": "cowlick",
-  "version": "0.0.1",
-  "description": "novel engine for Akashic Engine",
-  "main": "index.js",
   "scripts": {
-    "postinstall": "cd sample && npm install",
     "build": "webpack --progress",
-    "sample:build": "cd sample && npm run build",
-    "start": "cd sample && npm start"
+    "start": "akashic-sandbox game",
+    "scan:assets": "cd ./game && akashic scan asset"
   },
-  "author": "pocketberserker",
-  "license": "MIT",
-  "types": "lib/index.d.ts",
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.3",
     "@akashic/akashic-engine": "2.0.0-beta.0"
   },
   "devDependencies": {
-    "@akashic/akashic-sandbox": "1.0.0-beta.0",
+    "@akashic/akashic-sandbox": "0.13.2",
+    "@akashic/akashic-cli": "1.1.4",
     "@types/node": "8.0.25",
     "awesome-typescript-loader": "3.2.3",
     "ts-loader": "2.3.3",

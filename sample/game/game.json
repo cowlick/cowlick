@@ -1,0 +1,13 @@
+{
+	"width": 640,
+	"height": 480,
+	"fps": 30,
+	"main": "./script/main.js",
+	"assets": {
+		"main": {
+			"type": "script",
+			"path": "script/main.js",
+			"global": true
+		}
+	}
+}
