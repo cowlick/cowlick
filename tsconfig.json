@@ -6,7 +6,7 @@
     "sourceMap": false,
     "noImplicitAny": true,
     "declaration": true,
-    "outDir": "lib"
+    "outDir": "."
   },
   "files": [
     "node_modules/@akashic/akashic-engine/lib/main.d.ts"

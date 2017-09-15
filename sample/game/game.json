@@ -8,6 +8,12 @@
 			"type": "script",
 			"path": "script/main.js",
 			"global": true
+		},
+		"black": {
+			"type": "image",
+			"width": 640,
+			"height": 480,
+			"path": "image/black.png"
 		}
 	}
 }

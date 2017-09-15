@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "webpack --progress",
+    "build": "webpack --progress && npm run scan:assets",
     "start": "akashic-sandbox game",
     "scan:assets": "cd ./game && akashic scan asset"
   },
@@ -9,10 +9,9 @@
     "@akashic/akashic-engine": "2.0.0-beta.0"
   },
   "devDependencies": {
-    "@akashic/akashic-sandbox": "0.13.2",
+    "@akashic/akashic-sandbox": "1.0.0-beta.0",
     "@akashic/akashic-cli": "1.1.4",
     "@types/node": "8.0.25",
-    "awesome-typescript-loader": "3.2.3",
     "ts-loader": "2.3.3",
     "typescript": "2.4.2",
     "uglify-save-license": "0.4.1",

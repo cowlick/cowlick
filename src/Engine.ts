@@ -1,5 +1,5 @@
 "use strict";
-import {Scenario} from "./Scenario";
+import {Scenario} from "./models/Scenario";
 import {Scene} from "./components/Scene";
 
 export class Engine {

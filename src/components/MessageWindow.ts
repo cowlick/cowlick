@@ -1,13 +1,11 @@
 "use strict";
 import {Label} from "./Label";
-import {Scenario} from "../Scenario";
 
 export class MessageWindow extends g.Pane {
 
   textLabel: Label;
-  scenario: Scenario;
 
-  constructor(scene: g.Scene, scenario: Scenario) {
+  constructor(scene: g.Scene) {
     super({
       scene,
       width: scene.game.width,
@@ -16,20 +14,12 @@ export class MessageWindow extends g.Pane {
       y: scene.game.height - scene.game.height / 4,
     });
 
-    this.scenario = scenario;
 
     this.textLabel = new Label(scene);
-    this.textLabel.setText(this.scenario.next());
     this.append(this.textLabel);
-
-    this.touchable = true;
-    this.pointDown.handle(this, this.onPointDown);
   }
 
-  onPointDown() {
-    const text = this.scenario.next();
-    if(text) {
-      this.textLabel.setText(text);
-    }
+  updateText(text: string) {
+    this.textLabel.updateText(text);
   }
 }

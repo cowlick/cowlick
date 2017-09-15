@@ -12,11 +12,12 @@ export class Label extends al.Label {
       font: new g.DynamicFont({
         game: scene.game,
         fontFamily: g.FontFamily.SansSerif,
-        size: 15
+        size: 18
       }),
       text: "",
-      fontSize: 15,
-      width: scene.game.width,
+      fontSize: 18,
+      textColor: "white",
+      width: scene.game.width - 40,
       x: 20,
       y: 20,
       rubyParser: Label.rubyParser
@@ -26,7 +27,7 @@ export class Label extends al.Label {
     this.update.handle(this, this.onUpdated);
   }
 
-  setText(text: string) {
+  updateText(text: string) {
     this.text = "";
     this.characters = text.split("");
     this.counter = 0;

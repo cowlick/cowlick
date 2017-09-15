@@ -16,9 +16,7 @@ var config = {
     rules: [
       {
         test: /\.ts$/,
-        loader: "awesome-typescript-loader",
-        include: srcDir,
-        exclude: /node_modules/
+        loader: "ts-loader"
       }
     ]
   },
