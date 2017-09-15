@@ -15,7 +15,11 @@ export class Scenario {
   }
 
   next(): string {
-    this.index++;
-    return this.texts[this.index];
+    if(this.index < this.texts.length) {
+      this.index++;
+      return this.texts[this.index];
+    } else {
+      return undefined;
+    }
   }
 }

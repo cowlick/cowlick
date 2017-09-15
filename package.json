@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cd sample && npm install",
-    "build": "webpack --progress",
+    "build": "webpack --progress && npm run sample:build",
     "sample:build": "cd sample && npm run build",
     "start": "cd sample && npm start"
   },

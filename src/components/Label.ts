@@ -4,9 +4,9 @@ import * as al from "@akashic-extension/akashic-label";
 export class Label extends al.Label {
 
   private counter = 0;
-  private characters: string[];
+  private characters: string[] = [];
 
-  constructor(scene: g.Scene, text: string) {
+  constructor(scene: g.Scene) {
     super({
       scene,
       font: new g.DynamicFont({
@@ -22,9 +22,14 @@ export class Label extends al.Label {
       rubyParser: Label.rubyParser
     });
 
-    this.characters = text.split("");
     this.textAlign = g.TextAlign.Left;
     this.update.handle(this, this.onUpdated);
+  }
+
+  setText(text: string) {
+    this.text = "";
+    this.characters = text.split("");
+    this.counter = 0;
   }
 
   onUpdated() {

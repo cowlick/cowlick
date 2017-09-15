@@ -18,7 +18,18 @@ export class MessageWindow extends g.Pane {
 
     this.scenario = scenario;
 
-    this.textLabel = new Label(scene, this.scenario.next());
+    this.textLabel = new Label(scene);
+    this.textLabel.setText(this.scenario.next());
     this.append(this.textLabel);
+
+    this.touchable = true;
+    this.pointDown.handle(this, this.onPointDown);
+  }
+
+  onPointDown() {
+    const text = this.scenario.next();
+    if(text) {
+      this.textLabel.setText(text);
+    }
   }
 }
