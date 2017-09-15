@@ -7,7 +7,10 @@ function main() {
       new novel.Frame(
         [
           {
-            id: "black"
+            tag: "image",
+            data: {
+              assetId: "black"
+            }
           }
         ],
         "Hello\nAkashic Novel!"
@@ -15,7 +18,10 @@ function main() {
       new novel.Frame(
         [
           {
-            id: "black"
+            tag: "image",
+            data: {
+              assetId: "black"
+            }
           }
         ],
         "<ruby>ルビのテスト<rt>テスト</rt></ruby>"

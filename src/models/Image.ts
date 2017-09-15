@@ -1,5 +1,5 @@
 export interface Image {
-  id: string;
+  assetId: string;
   x?: number;
   y?: number;
   width?: number;

@@ -1,23 +1,29 @@
 "use strict";
-import {Image} from "./Image";
+import {Script} from "./Script";
 
 export class Frame {
 
   private index = -1;
-  private _images: Image[];
+  private _scripts: Script[];
   private _text: string;
 
-  constructor(images: Image[], text: string) {
-    this._images = images;
+  constructor(scripts: Script[], text: string) {
+    this._scripts = scripts;
     this._text = text;
   }
 
-  get images(): Image[] {
-    return this._images;
+  get scripts(): Script[] {
+    return this._scripts;
   }
 
   get assetIds(): string[] {
-    return this._images.map(i => i.id);
+    let ids: string[] = [];
+    this._scripts.forEach(s => {
+      if(s.data.assetId) {
+        ids.push(<string>s.data.assetId);
+      }
+    });
+    return ids;
   }
 
   get text(): string {

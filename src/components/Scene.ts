@@ -3,28 +3,37 @@ import {ScenarioViewModel} from "../vm/ScenarioViewModel";
 import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
-import {Image} from "../models/Image";
+import {Script} from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
+
+export interface SceneParameters {
+  game: g.Game;
+  scenario: Scenario;
+  scripts: Map<string, any>;
+}
 
 export class Scene extends g.Scene {
 
   messageWindow: MessageWindow;
   scenario: ScenarioViewModel;
+  scripts: Map<string, any>;
   images: g.Sprite[] = [];
 
-  constructor(game: g.Game, scenario: Scenario) {
+  constructor(params: SceneParameters) {
     super({
-      game,
-      assetIds: scenario.scene.assetIds
+      game: params.game,
+      assetIds: params.scenario.scene.assetIds
     });
+
+    this.scripts = params.scripts;
 
     this.loaded.handle(this, this.onLoaded);
 
-    this.scenario = new ScenarioViewModel(scenario);
+    this.scenario = new ScenarioViewModel(params.scenario);
     this.scenario.nextScene((scene: SceneModel) => {
     });
     this.scenario.nextFrame((frame: Frame) => {
-      this.updateImages(frame.images);
+      this.applyScripts(frame.scripts);
       this.messageWindow.updateText(frame.text);
       this.append(this.messageWindow);
     });
@@ -39,7 +48,7 @@ export class Scene extends g.Scene {
     this.messageWindow.pointDown.add(this.onPointDown, this);
 
     if(frame) {
-      this.updateImages(frame.images);
+      this.applyScripts(frame.scripts);
       this.messageWindow.updateText(frame.text);
     }
 
@@ -50,46 +59,22 @@ export class Scene extends g.Scene {
     this.scenario.next();
   }
 
-  private updateImages(images: Image[]) {
-    if(images.length > 0) {
+  appendImage(sprite: g.Sprite) {
+    this.append(sprite);
+    this.images.push(sprite);
+  }
+
+  private applyScripts(scripts: Script[]) {
+    if(scripts.length > 0) {
       this.images.forEach(s => {
         this.remove(s);
       });
-      this.images = images.map(i => {
-        const s = this.createImage(i);
-        this.append(s);
-        return s;
+      scripts.forEach(s => {
+        let f = this.scripts.get(s.tag);
+        if(f) {
+          f(this, s.data);
+        }
       });
     }
   }
-
-  private createImage(image: Image): g.Sprite {
-    const asset = <g.ImageAsset>this.assets[image.id];
-    let sprite: g.Sprite;
-    if(image.frames) {
-      let s = new g.FrameSprite({
-        scene: this,
-        src: asset,
-        width: image.width,
-        height: image.height
-      });
-      s.frames = image.frames;
-      s.interval = 1000;
-      s.start();
-      sprite = s;
-    } else {
-      sprite = new g.Sprite({
-        scene: this,
-        src: asset
-      });
-    }
-    if(image.x) {
-      sprite.x = image.x;
-    }
-    if(image.y) {
-      sprite.y = image.y;
-    }
-    sprite.invalidate();
-    return sprite;
-}
 }
