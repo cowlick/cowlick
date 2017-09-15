@@ -1,10 +1,10 @@
 "use strict";
 import {Scenario} from "../Scenario";
-import {Label} from "./Label";
+import {MessageWindow} from "./MessageWindow";
 
 export class Scene extends g.Scene {
 
-  textLabel: Label;
+  messageWindow: MessageWindow;
   scenario: Scenario;
 
   constructor(game: g.Game, scenario: Scenario) {
@@ -17,7 +17,7 @@ export class Scene extends g.Scene {
 
   onLoaded() {
 
-    this.textLabel = new Label(this, this.scenario.next());
-    this.append(this.textLabel);
+    this.messageWindow = new MessageWindow(this, this.scenario);
+    this.append(this.messageWindow);
   }
 }

@@ -17,7 +17,7 @@ export class Label extends al.Label {
       text: "",
       fontSize: 15,
       width: scene.game.width,
-      x: 10,
+      x: 20,
       y: 20,
       rubyParser: Label.rubyParser
     });
