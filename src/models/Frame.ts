@@ -7,7 +7,7 @@ export class Frame {
   private _scripts: Script[];
   private _text: string;
 
-  constructor(scripts: Script[], text: string) {
+  constructor(scripts: Script[], text?: string) {
     this._scripts = scripts;
     this._text = text;
   }
@@ -19,7 +19,7 @@ export class Frame {
   get assetIds(): string[] {
     let ids: string[] = [];
     this._scripts.forEach(s => {
-      if(s.data.assetId) {
+      if(typeof(s.data) === "object" && s.data.assetId) {
         ids.push(<string>s.data.assetId);
       }
     });

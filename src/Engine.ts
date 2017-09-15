@@ -1,7 +1,9 @@
 "use strict";
 import {Scenario} from "./models/Scenario";
 import {Image} from "./models/Image";
+import {Choice} from "./models/Choice";
 import {Scene} from "./components/Scene";
+import {ChoiceButton} from "./components/ChoiceButton";
 
 export class Engine {
 
@@ -13,6 +15,7 @@ export class Engine {
 
     this.scripts = new Map<string, any>();
     this.scripts.set("image", Engine.addImage);
+    this.scripts.set("choice", Engine.addChoice);
   }
 
   start(scenario?: Scenario): void {
@@ -58,6 +61,33 @@ export class Engine {
       sprite.y = image.y;
     }
     sprite.invalidate();
-    scene.appendImage(sprite);
+    scene.appendE(image.layer, sprite);
+  }
+
+  private static addChoice(scene: Scene, items: Choice[]) {
+    scene.disableMessageWindowTrigger();
+    const count = items.length;
+    const baseWidth = scene.game.width / 4;
+    const height = 32;
+    const space = 10;
+    const baseY = (scene.game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
+    items.forEach((choice: Choice, i: number) => {
+      let button = new ChoiceButton({
+        scene,
+        width: baseWidth * 3,
+        height,
+        choice
+      });
+      button.click.addOnce(() => {
+        scene.source.update(choice.sceneId);
+        scene.game.pushScene(new Scene({
+          game: scene.game,
+          scenario: scene.source,
+          scripts: scene.scripts
+        }));
+      });
+      button.setPosition(baseWidth / 2, baseY + (height + space) * i);
+      scene.appendE("choice", button);
+    });
   }
 }

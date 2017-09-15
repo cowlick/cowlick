@@ -48,4 +48,11 @@ export class Scenario {
       return undefined;
     }
   }
+
+  update(sceneId: string) {
+    const i = this.scenes.findIndex(s => s.id === sceneId);
+    if(i > -1) {
+      this.index = i;
+    }
+  }
 }

@@ -1,13 +1,24 @@
 "use strict";
 import {Frame} from "./Frame";
 
+export interface SceneParameters {
+  id: string;
+  frames: Frame[];
+}
+
 export class Scene {
 
   private index: number = 0;
+  private _id: string;
   private frames: Frame[];
 
-  constructor(frames: Frame[]) {
-    this.frames = frames;
+  constructor(params: SceneParameters) {
+    this._id = params.id;
+    this.frames = params.frames;
+  }
+
+  get id() {
+    return this._id;
   }
 
   get frame() {

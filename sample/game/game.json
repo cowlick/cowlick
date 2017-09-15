@@ -14,6 +14,12 @@
 			"width": 640,
 			"height": 480,
 			"path": "image/black.png"
+		},
+		"button": {
+			"type": "image",
+			"width": 32,
+			"height": 32,
+			"path": "image/button.png"
 		}
 	}
 }

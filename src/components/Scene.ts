@@ -5,6 +5,7 @@ import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
 import {Script} from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
+import {LayerGroup} from "./LayerGroup";
 
 export interface SceneParameters {
   game: g.Game;
@@ -14,60 +15,78 @@ export interface SceneParameters {
 
 export class Scene extends g.Scene {
 
-  messageWindow: MessageWindow;
-  scenario: ScenarioViewModel;
+  private messageWindow: MessageWindow;
+  private scenario: ScenarioViewModel;
   scripts: Map<string, any>;
-  images: g.Sprite[] = [];
+  private layerGroup: LayerGroup;
 
   constructor(params: SceneParameters) {
     super({
       game: params.game,
-      assetIds: params.scenario.scene.assetIds
+      assetIds: params.scenario.scene.assetIds.concat(["button"])
     });
 
+    this.layerGroup = new LayerGroup(this);
     this.scripts = params.scripts;
 
-    this.loaded.handle(this, this.onLoaded);
+    this.loaded.add(this.onLoaded, this);
 
     this.scenario = new ScenarioViewModel(params.scenario);
     this.scenario.nextScene((scene: SceneModel) => {
     });
     this.scenario.nextFrame((frame: Frame) => {
       this.applyScripts(frame.scripts);
-      this.messageWindow.updateText(frame.text);
+      if(frame.text) {
+        this.messageWindow.updateText(frame.text);
+      }
       this.append(this.messageWindow);
     });
   }
 
-  onLoaded() {
+  get source(): Scenario {
+    return this.scenario.source;
+  }
+
+  appendE(layerName: string, e: g.E) {
+    this.layerGroup.appendE(layerName, e);
+  }
+
+  disableMessageWindowTrigger() {
+    this.messageWindow.pointDown.remove(this.onMessageWindowPointDown, this);
+  }
+
+  private onLoaded() {
 
     const frame = this.scenario.source.frame;
 
     this.messageWindow = new MessageWindow(this);
     this.messageWindow.touchable = true;
-    this.messageWindow.pointDown.add(this.onPointDown, this);
+    this.messageWindow.pointDown.add(this.onMessageWindowPointDown, this);
 
     if(frame) {
       this.applyScripts(frame.scripts);
-      this.messageWindow.updateText(frame.text);
+      if(frame.text) {
+        this.messageWindow.updateText(frame.text);
+      }
     }
 
     this.append(this.messageWindow);
   }
 
-  onPointDown() {
+  private onMessageWindowPointDown() {
     this.scenario.next();
-  }
-
-  appendImage(sprite: g.Sprite) {
-    this.append(sprite);
-    this.images.push(sprite);
   }
 
   private applyScripts(scripts: Script[]) {
     if(scripts.length > 0) {
-      this.images.forEach(s => {
-        this.remove(s);
+      const names = new Set<string>();
+      scripts.forEach((s: Script) => {
+        if(s.data.layer) {
+          names.add(s.data.layer);
+        }
+      });
+      names.forEach(name => {
+        this.layerGroup.remove(name);
       });
       scripts.forEach(s => {
         let f = this.scripts.get(s.tag);
