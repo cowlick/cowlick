@@ -49,10 +49,13 @@ export class Scenario {
     }
   }
 
-  update(label: string) {
+  update(label: string): boolean {
     const i = this.scenes.findIndex(s => s.label === label);
     if(i > -1) {
       this.index = i;
+      return true;
+    } else {
+      return false;
     }
   }
 }

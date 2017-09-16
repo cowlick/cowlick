@@ -77,11 +77,12 @@ export class Engine {
 
   private static addChoice(scene: Scene, items: Choice[]) {
     scene.disableMessageWindowTrigger();
+    const game = scene.game;
     const count = items.length;
-    const baseWidth = scene.game.width / 4;
+    const baseWidth = game.width / 4;
     const height = 32;
     const space = 10;
-    const baseY = (scene.game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
+    const baseY = (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
     items.forEach((choice: Choice, i: number) => {
       let button = new ChoiceButton({
         scene,
@@ -91,13 +92,17 @@ export class Engine {
         choice
       });
       button.click.addOnce(() => {
-        scene.source.update(choice.label);
-        scene.game.pushScene(new Scene({
-          game: scene.game,
+        if(scene.source.update(choice.label)) {
+        game.pushScene(new Scene({
+          game,
           scenario: scene.source,
           scripts: scene.scripts,
           config: Engine.config
         }));
+        } else {
+          // TODO: 続行不可能としてタイトルに戻る?
+          game.logger.warn("scene not found:" + choice.label);
+        }
       });
       button.setPosition(baseWidth / 2, baseY + (height + space) * i);
       scene.appendE("choice", button);
