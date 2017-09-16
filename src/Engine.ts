@@ -1,6 +1,6 @@
 "use strict";
 import {Scenario} from "./models/Scenario";
-import {Image, Choice, Jump} from "./models/Script";
+import * as script from "./models/Script";
 import {Scene} from "./components/Scene";
 import {ChoiceButton} from "./components/ChoiceButton";
 import {Config, defaultConfig} from "./Config";
@@ -45,7 +45,7 @@ export class Engine {
     return Engine._config;
   }
 
-  private static image(scene: Scene, image: Image) {
+  private static image(scene: Scene, image: script.Image) {
     const asset = <g.ImageAsset>scene.assets[image.assetId];
     let sprite: g.Sprite;
     if(image.frame) {
@@ -75,7 +75,7 @@ export class Engine {
     scene.appendE(image.layer, sprite);
   }
 
-  private static jump(scene: Scene, data: Jump) {
+  private static jump(scene: Scene, data: script.Jump) {
     const game = scene.game;
     if(scene.source.update(data.label)) {
       game.pushScene(new Scene({
@@ -90,28 +90,43 @@ export class Engine {
       }
   }
 
-  private static choice(scene: Scene, items: Choice[]) {
-    scene.disableMessageWindowTrigger();
+  private static choice(scene: Scene, choice: script.Choice) {
+    if(choice.windowTrigger === script.Trigger.Disable) {
+      scene.disableMessageWindowTrigger();
+    }
     const game = scene.game;
-    const count = items.length;
-    const baseWidth = game.width / 4;
-    const height = 32;
+    const count = choice.values.length;
+    // TODO: 計算式を書き直す
+    const width = choice.width ? choice.width : game.width / 4 * 3;
+    const height = choice.height ? choice.height : 32;
     const space = 10;
-    const baseY = (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
-    items.forEach((choice: Choice, i: number) => {
+    const baseX = choice.x ? choice.x : width / 6;
+    const baseY = choice.y ? choice.y : (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
+    choice.values.forEach((item: script.ChoiceItem, i: number) => {
       let button = new ChoiceButton({
         scene,
-        width: baseWidth * 3,
+        width,
         height,
         config: Engine.config,
-        choice
+        choice: item,
+        assetId: choice.assetId
       });
       button.click.addOnce(() => {
-        scene.enableMessageWindowTrigger();
-        this.scriptManager.call(scene, choice);
+        if(choice.windowTrigger === script.Trigger.Disable) {
+          scene.enableMessageWindowTrigger();
+        }
+        this.scriptManager.call(scene, item);
       });
-      button.setPosition(baseWidth / 2, baseY + (height + space) * i);
-      scene.appendE("choice", button);
+      const direction = choice.direction ? choice.direction : script.Direction.Vertical;
+      switch(direction) {
+        case script.Direction.Vertical:
+          button.move(baseX, baseY + (height + space) * i);
+          break;
+        case script.Direction.Horizontal:
+        button.move(baseX + (width + space) * i, baseY);
+          break;
+      }
+      scene.appendE(choice.layer, button);
     });
   }
 }

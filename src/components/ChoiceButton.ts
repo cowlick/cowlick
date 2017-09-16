@@ -1,15 +1,15 @@
 "use strict";
-import {Choice} from "../models/Script";
+import {ChoiceItem} from "../models/Script";
 import {ButtonParameters, Button} from "./Button";
 import {Scene} from "./Scene";
 
 export interface ChoiceButtonParameters extends ButtonParameters {
-  choice: Choice;
+  choice: ChoiceItem;
 }
 
 export class ChoiceButton extends Button {
 
-  choice: Choice;
+  choice: ChoiceItem;
 
   constructor(params: ChoiceButtonParameters) {
     super(params);
@@ -31,7 +31,7 @@ export class ChoiceButton extends Button {
     this.append(label);
   }
 
-  setPosition(x: number, y: number) {
+  move(x: number, y: number) {
 
     this.x = x;
     this.y = y;

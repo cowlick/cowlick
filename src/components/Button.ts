@@ -7,6 +7,7 @@ export interface ButtonParameters {
   width: number;
   height: number;
   config: Config;
+  assetId?: string;
 }
 
 export class Button extends g.Pane {
@@ -19,7 +20,7 @@ export class Button extends g.Pane {
       scene: params.scene,
       width: params.width,
       height: params.height,
-      backgroundImage: <g.ImageAsset>params.scene.assets[params.config.pane.assetId],
+      backgroundImage: params.assetId === null ? undefined : <g.ImageAsset>params.scene.assets[params.config.pane.assetId],
       padding: 4,
       backgroundEffector: new g.NinePatchSurfaceEffector(params.scene.game, params.config.pane.borderWidth)
     });

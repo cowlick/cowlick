@@ -2,6 +2,9 @@
 import * as novel from "../../lib/index";
 
 function main() {
+
+  novel.engine.script("noop", (scene, data) => {});
+
   novel.engine.config = {
     pane: {
       assetId: "pane"
@@ -10,6 +13,7 @@ function main() {
       color: "white"
     }
   };
+
   novel.engine.start(new novel.Scenario([
     new novel.Scene({
       label: "0",
@@ -21,6 +25,31 @@ function main() {
               data: {
                 assetId: "black",
                 layer: "background"
+              }
+            },
+            {
+              tag: "choice",
+              data: {
+                layer: "system",
+                direction: novel.Direction.Horizontal,
+                width: 100,
+                height: 32,
+                x: g.game.width - 220,
+                y: g.game.height - 40,
+                assetId: null,
+                windowTrigger: novel.Trigger.Enable,
+                values: [
+                  {
+                    tag: "noop",
+                    data: {},
+                    text: "メニュー1"
+                  },
+                  {
+                    tag: "noop",
+                    data: {},
+                    text: "メニュー2"
+                  }
+                ]
               }
             }
           ],
@@ -46,22 +75,25 @@ function main() {
           [
             {
               tag: "choice",
-              data: [
-                {
-                  tag: "jump",
-                  data: {
-                    label: "1"  
+              data: {
+                layer: "choice",
+                values: [
+                  {
+                    tag: "jump",
+                    data: {
+                      label: "1"  
+                    },
+                    text: "シーン1へ"
                   },
-                  text: "シーン1へ"
-                },
-                {
-                  tag: "jump",
-                  data: {
-                    label: "2"
-                  },
-                  text: "シーン2へ"
-                }
-              ]
+                  {
+                    tag: "jump",
+                    data: {
+                      label: "2"
+                    },
+                    text: "シーン2へ"
+                  }
+                ]
+              }
             }
           ]
         )

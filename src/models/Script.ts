@@ -20,6 +20,28 @@ export interface Script {
   data: any;
 }
 
-export interface Choice extends Script {
+export interface ChoiceItem extends Script {
   text: string;
+}
+
+export const enum Trigger {
+  Enable,
+  Disable
+}
+
+export const enum Direction {
+  Vertical,
+  Horizontal
+}
+
+export interface Choice {
+  layer: string;
+  values: ChoiceItem[];
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  direction?: Direction;
+  assetId?: string;
+  windowTrigger?: Trigger;
 }
