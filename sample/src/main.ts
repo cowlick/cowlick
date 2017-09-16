@@ -48,11 +48,17 @@ function main() {
               tag: "choice",
               data: [
                 {
-                  label: "1",
+                  tag: "jump",
+                  data: {
+                    label: "1"  
+                  },
                   text: "シーン1へ"
                 },
                 {
-                  label: "2",
+                  tag: "jump",
+                  data: {
+                    label: "2"
+                  },
                   text: "シーン2へ"
                 }
               ]

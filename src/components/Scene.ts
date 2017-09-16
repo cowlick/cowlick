@@ -7,11 +7,12 @@ import {Script} from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
 import {LayerGroup} from "./LayerGroup";
 import {Config} from "../Config";
+import {ScriptManager} from "../ScriptManager";
 
 export interface SceneParameters {
   game: g.Game;
   scenario: Scenario;
-  scripts: Map<string, any>;
+  scriptManager: ScriptManager;
   config: Config;
 }
 
@@ -19,7 +20,7 @@ export class Scene extends g.Scene {
 
   private messageWindow: MessageWindow;
   private scenario: ScenarioViewModel;
-  scripts: Map<string, any>;
+  private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
   private config: Config;
 
@@ -30,7 +31,7 @@ export class Scene extends g.Scene {
     });
 
     this.layerGroup = new LayerGroup(this);
-    this.scripts = params.scripts;
+    this.scriptManager = params.scriptManager;
     this.config = params.config;
 
     this.loaded.add(this.onLoaded, this);
@@ -59,13 +60,17 @@ export class Scene extends g.Scene {
     this.messageWindow.pointDown.remove(this.onMessageWindowPointDown, this);
   }
 
+  enableMessageWindowTrigger() {
+    this.messageWindow.pointDown.add(this.onMessageWindowPointDown, this);
+  }
+
   private onLoaded() {
 
     const frame = this.scenario.source.frame;
 
     this.messageWindow = new MessageWindow(this, this.config);
     this.messageWindow.touchable = true;
-    this.messageWindow.pointDown.add(this.onMessageWindowPointDown, this);
+    this.enableMessageWindowTrigger();
 
     if(frame) {
       this.applyScripts(frame.scripts);
@@ -93,10 +98,7 @@ export class Scene extends g.Scene {
         this.layerGroup.remove(name);
       });
       scripts.forEach(s => {
-        let f = this.scripts.get(s.tag);
-        if(f) {
-          f(this, s.data);
-        }
+        this.scriptManager.call(this, s);
       });
     }
   }

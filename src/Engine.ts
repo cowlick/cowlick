@@ -2,22 +2,24 @@
 import {Scenario} from "./models/Scenario";
 import {Image} from "./models/Image";
 import {Choice} from "./models/Choice";
+import {Jump} from "./models/Jump";
 import {Scene} from "./components/Scene";
 import {ChoiceButton} from "./components/ChoiceButton";
 import {Config, defaultConfig} from "./Config";
+import {ScriptManager, ScriptFunction} from "./ScriptManager";
 
 export class Engine {
 
   private game: g.Game;
-  private scripts: Map<string, any>;
+  private static scriptManager = new ScriptManager();
   private static _config = defaultConfig;
 
   constructor(game: g.Game) {
     this.game = game;
 
-    this.scripts = new Map<string, any>();
-    this.scripts.set("image", Engine.addImage);
-    this.scripts.set("choice", Engine.addChoice);
+    Engine.scriptManager.register("image", Engine.image);
+    Engine.scriptManager.register("jump", Engine.jump);
+    Engine.scriptManager.register("choice", Engine.choice);
   }
 
   set config(value: Config) {
@@ -31,21 +33,21 @@ export class Engine {
     const scene = new Scene({
       game: this.game,
       scenario,
-      scripts: this.scripts,
+      scriptManager: Engine.scriptManager,
       config: Engine.config
     });
     this.game.pushScene(scene);
   }
 
-  script(name: string, f: (scene: Scene, data: any) => void) {
-    this.scripts.set(name, f);
+  script(name: string, f: ScriptFunction) {
+    Engine.scriptManager.register(name, f);
   }
 
   private static get config() {
     return Engine._config;
   }
 
-  private static addImage(scene: Scene, image: Image) {
+  private static image(scene: Scene, image: Image) {
     const asset = <g.ImageAsset>scene.assets[image.assetId];
     let sprite: g.Sprite;
     if(image.frame) {
@@ -75,7 +77,22 @@ export class Engine {
     scene.appendE(image.layer, sprite);
   }
 
-  private static addChoice(scene: Scene, items: Choice[]) {
+  private static jump(scene: Scene, data: Jump) {
+    const game = scene.game;
+    if(scene.source.update(data.label)) {
+      game.pushScene(new Scene({
+        game,
+        scenario: scene.source,
+        scriptManager: Engine.scriptManager,
+        config: Engine.config
+      }));
+      } else {
+        // TODO: 続行不可能としてタイトルに戻る?
+        game.logger.warn("scene not found:" + data.label);
+      }
+  }
+
+  private static choice(scene: Scene, items: Choice[]) {
     scene.disableMessageWindowTrigger();
     const game = scene.game;
     const count = items.length;
@@ -92,17 +109,8 @@ export class Engine {
         choice
       });
       button.click.addOnce(() => {
-        if(scene.source.update(choice.label)) {
-        game.pushScene(new Scene({
-          game,
-          scenario: scene.source,
-          scripts: scene.scripts,
-          config: Engine.config
-        }));
-        } else {
-          // TODO: 続行不可能としてタイトルに戻る?
-          game.logger.warn("scene not found:" + choice.label);
-        }
+        scene.enableMessageWindowTrigger();
+        this.scriptManager.call(scene, choice);
       });
       button.setPosition(baseWidth / 2, baseY + (height + space) * i);
       scene.appendE("choice", button);
