@@ -1,4 +1,4 @@
 export interface Choice {
-  sceneId: string;
+  label: string;
   text: string;
 }

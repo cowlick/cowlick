@@ -49,8 +49,8 @@ export class Scenario {
     }
   }
 
-  update(sceneId: string) {
-    const i = this.scenes.findIndex(s => s.id === sceneId);
+  update(label: string) {
+    const i = this.scenes.findIndex(s => s.label === label);
     if(i > -1) {
       this.index = i;
     }

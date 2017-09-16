@@ -12,7 +12,7 @@ function main() {
   };
   novel.engine.start(new novel.Scenario([
     new novel.Scene({
-      id: "0",
+      label: "0",
       frames: [
         new novel.Frame(
           [
@@ -48,11 +48,11 @@ function main() {
               tag: "choice",
               data: [
                 {
-                  sceneId: "1",
+                  label: "1",
                   text: "シーン1へ"
                 },
                 {
-                  sceneId: "2",
+                  label: "2",
                   text: "シーン2へ"
                 }
               ]
@@ -62,7 +62,7 @@ function main() {
       ]
     }),
     new novel.Scene({
-      id: "1",
+      label: "1",
       frames: [
         new novel.Frame(
           [
@@ -79,7 +79,7 @@ function main() {
       ]
     }),
     new novel.Scene({
-      id: "2",
+      label: "2",
       frames: [
         new novel.Frame(
           [

@@ -91,7 +91,7 @@ export class Engine {
         choice
       });
       button.click.addOnce(() => {
-        scene.source.update(choice.sceneId);
+        scene.source.update(choice.label);
         scene.game.pushScene(new Scene({
           game: scene.game,
           scenario: scene.source,
