@@ -3,8 +3,10 @@ export interface Image {
   layer: string;
   x?: number;
   y?: number;
-  width?: number;
-  height?: number;
-  scale?: number;
-  frames?: number[];
+  frame?: {
+    width: number;
+    height: number;
+    scale: number;
+    frames: number[];
+  };
 }
