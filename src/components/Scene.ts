@@ -8,6 +8,7 @@ import {MessageWindow} from "./MessageWindow";
 import {LayerGroup} from "./LayerGroup";
 import {Config} from "../Config";
 import {ScriptManager} from "../ScriptManager";
+import {Layer} from "../Constant";
 
 export interface SceneParameters {
   game: g.Game;
@@ -41,7 +42,9 @@ export class Scene extends g.Scene {
     });
     this.scenario.nextFrame((frame: Frame) => {
       this.applyScripts(frame.scripts);
-      this.append(this.messageWindow);
+      if(this.messageWindow.visible()) {
+        this.layerGroup.top(Layer.system);
+      }
     });
   }
 
@@ -77,11 +80,13 @@ export class Scene extends g.Scene {
     this.messageWindow.touchable = true;
     this.enableMessageWindowTrigger();
 
+    this.layerGroup.appendE(Layer.system, this.messageWindow);
     if(frame) {
       this.applyScripts(frame.scripts);
     }
-
-    this.append(this.messageWindow);
+    if(this.messageWindow.visible()) {
+      this.layerGroup.top(Layer.system);
+    }
   }
 
   private onMessageWindowPointDown() {

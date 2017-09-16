@@ -46,4 +46,11 @@ export class LayerGroup {
       }
     }
   }
+
+  top(name: string) {
+    const layer = this.group.get(name);
+    if(layer) {
+      this.scene.append(layer);
+    }
+  }
 }
