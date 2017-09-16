@@ -1,8 +1,6 @@
 "use strict";
 import {Scenario} from "./models/Scenario";
-import {Image} from "./models/Image";
-import {Choice} from "./models/Choice";
-import {Jump} from "./models/Jump";
+import {Image, Choice, Jump} from "./models/Script";
 import {Scene} from "./components/Scene";
 import {ChoiceButton} from "./components/ChoiceButton";
 import {Config, defaultConfig} from "./Config";

@@ -1,5 +1,5 @@
 "use strict";
-import {Choice} from "../models/Choice";
+import {Choice} from "../models/Script";
 import {ButtonParameters, Button} from "./Button";
 import {Scene} from "./Scene";
 
