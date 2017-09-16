@@ -33,7 +33,7 @@ export class Label extends al.Label {
     this.counter = 0;
   }
 
-  onUpdated() {
+  private onUpdated() {
 
     // TODO: ルビを含めていい感じに表示する
     if(this.counter < this.characters.length) {

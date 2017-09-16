@@ -3,7 +3,7 @@ import {Label} from "./Label";
 
 export class MessageWindow extends g.Pane {
 
-  textLabel: Label;
+  private textLabel: Label;
 
   constructor(scene: g.Scene) {
     super({
