@@ -24,7 +24,7 @@ export class Label extends al.Label {
     });
 
     this.textAlign = g.TextAlign.Left;
-    this.update.handle(this, this.onUpdated);
+    this.update.add(this.onUpdated, this);
   }
 
   updateText(text: string) {
