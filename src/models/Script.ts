@@ -49,3 +49,8 @@ export interface Choice {
   assetId?: string;
   windowTrigger?: Trigger;
 }
+
+export interface Visibility {
+  layer: string;
+  visible: boolean;
+}

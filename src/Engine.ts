@@ -20,6 +20,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.jump, Engine.jump);
     Engine.scriptManager.register(Tag.choice, Engine.choice);
     Engine.scriptManager.register(Tag.text, Engine.text);
+    Engine.scriptManager.register(Tag.visible, Engine.visible);
   }
 
   set config(value: Config) {
@@ -134,5 +135,9 @@ export class Engine {
 
   private static text(scene: Scene, text: script.Text) {
     scene.updateText(text.value);
+  }
+
+  private static visible(scene: Scene, visibility: script.Visibility) {
+    scene.visible(visibility);
   }
 }

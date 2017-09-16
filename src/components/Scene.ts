@@ -3,7 +3,7 @@ import {ScenarioViewModel} from "../vm/ScenarioViewModel";
 import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
-import {Script} from "../models/Script";
+import {Script, Visibility} from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
 import {LayerGroup} from "./LayerGroup";
 import {Config} from "../Config";
@@ -55,6 +55,10 @@ export class Scene extends g.Scene {
 
   updateText(text: string) {
     this.messageWindow.updateText(text);
+  }
+
+  visible(visibility: Visibility) {
+    this.layerGroup.visible(visibility);
   }
 
   disableMessageWindowTrigger() {

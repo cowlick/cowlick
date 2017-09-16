@@ -1,4 +1,5 @@
 "use strict";
+import {Visibility} from "../models/Script";
 
 export class LayerGroup {
   private scene: g.Scene;
@@ -32,6 +33,17 @@ export class LayerGroup {
     if(this.group.delete(name)) {
       this.scene.remove(layer);
       layer.destroy();
+    }
+  }
+
+  visible(visibility: Visibility) {
+    let layer = this.group.get(visibility.layer);
+    if(layer) {
+      if(visibility.visible) {
+        layer.show();
+      } else {
+        layer.hide();
+      }
     }
   }
 }
