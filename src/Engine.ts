@@ -4,11 +4,13 @@ import {Image} from "./models/Image";
 import {Choice} from "./models/Choice";
 import {Scene} from "./components/Scene";
 import {ChoiceButton} from "./components/ChoiceButton";
+import {Config, defaultConfig} from "./Config";
 
 export class Engine {
 
   private game: g.Game;
   private scripts: Map<string, any>;
+  private static _config = defaultConfig;
 
   constructor(game: g.Game) {
     this.game = game;
@@ -18,6 +20,10 @@ export class Engine {
     this.scripts.set("choice", Engine.addChoice);
   }
 
+  set config(value: Config) {
+    Engine._config = value;
+  }
+
   start(scenario?: Scenario): void {
 
     const s = scenario ? scenario : Scenario.load();
@@ -25,13 +31,18 @@ export class Engine {
     const scene = new Scene({
       game: this.game,
       scenario,
-      scripts: this.scripts
+      scripts: this.scripts,
+      config: Engine.config
     });
     this.game.pushScene(scene);
   }
 
   script(name: string, f: (scene: Scene, data: any) => void) {
     this.scripts.set(name, f);
+  }
+
+  private static get config() {
+    return Engine._config;
   }
 
   private static addImage(scene: Scene, image: Image) {
@@ -76,6 +87,7 @@ export class Engine {
         scene,
         width: baseWidth * 3,
         height,
+        config: Engine.config,
         choice
       });
       button.click.addOnce(() => {
@@ -83,7 +95,8 @@ export class Engine {
         scene.game.pushScene(new Scene({
           game: scene.game,
           scenario: scene.source,
-          scripts: scene.scripts
+          scripts: scene.scripts,
+          config: Engine.config
         }));
       });
       button.setPosition(baseWidth / 2, baseY + (height + space) * i);

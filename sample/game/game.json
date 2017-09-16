@@ -15,11 +15,11 @@
 			"height": 480,
 			"path": "image/black.png"
 		},
-		"button": {
+		"pane": {
 			"type": "image",
 			"width": 32,
 			"height": 32,
-			"path": "image/button.png"
+			"path": "image/pane.png"
 		}
 	}
 }

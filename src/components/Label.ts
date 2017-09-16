@@ -1,12 +1,13 @@
 "use strict";
 import * as al from "@akashic-extension/akashic-label";
+import {FontConfig} from "../Config";
 
 export class Label extends al.Label {
 
   private counter = 0;
   private characters: string[] = [];
 
-  constructor(scene: g.Scene) {
+  constructor(scene: g.Scene, config: FontConfig) {
     super({
       scene,
       font: new g.DynamicFont({
@@ -16,7 +17,7 @@ export class Label extends al.Label {
       }),
       text: "",
       fontSize: 18,
-      textColor: "white",
+      textColor: config.color,
       width: scene.game.width - 40,
       x: 20,
       y: 20,

@@ -2,6 +2,14 @@
 import * as novel from "../../lib/index";
 
 function main() {
+  novel.engine.config = {
+    pane: {
+      assetId: "pane"
+    },
+    font: {
+      color: "white"
+    }
+  };
   novel.engine.start(new novel.Scenario([
     new novel.Scene({
       id: "0",

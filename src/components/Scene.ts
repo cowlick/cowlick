@@ -6,11 +6,13 @@ import {Frame} from "../models/Frame";
 import {Script} from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
 import {LayerGroup} from "./LayerGroup";
+import {Config} from "../Config";
 
 export interface SceneParameters {
   game: g.Game;
   scenario: Scenario;
   scripts: Map<string, any>;
+  config: Config;
 }
 
 export class Scene extends g.Scene {
@@ -19,15 +21,17 @@ export class Scene extends g.Scene {
   private scenario: ScenarioViewModel;
   scripts: Map<string, any>;
   private layerGroup: LayerGroup;
+  private config: Config;
 
   constructor(params: SceneParameters) {
     super({
       game: params.game,
-      assetIds: params.scenario.scene.assetIds.concat(["button"])
+      assetIds: params.scenario.scene.assetIds.concat([params.config.pane.assetId])
     });
 
     this.layerGroup = new LayerGroup(this);
     this.scripts = params.scripts;
+    this.config = params.config;
 
     this.loaded.add(this.onLoaded, this);
 
@@ -59,7 +63,7 @@ export class Scene extends g.Scene {
 
     const frame = this.scenario.source.frame;
 
-    this.messageWindow = new MessageWindow(this);
+    this.messageWindow = new MessageWindow(this, this.config);
     this.messageWindow.touchable = true;
     this.messageWindow.pointDown.add(this.onMessageWindowPointDown, this);
 

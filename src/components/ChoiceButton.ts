@@ -24,7 +24,7 @@ export class ChoiceButton extends Button {
         size: 18
       }),
       fontSize: 18,
-      textColor: "white"
+      textColor: params.config.font.color
     });
     label.aligning(this.width, g.TextAlign.Center);
     label.invalidate();

@@ -1,10 +1,12 @@
 "use strict";
 import {Scene} from "./Scene";
+import {Config} from "../Config";
 
 export interface ButtonParameters {
   scene: Scene;
   width: number;
   height: number;
+  config: Config;
 }
 
 export class Button extends g.Pane {
@@ -17,9 +19,9 @@ export class Button extends g.Pane {
       scene: params.scene,
       width: params.width,
       height: params.height,
-      backgroundImage: <g.ImageAsset>params.scene.assets["button"],
+      backgroundImage: <g.ImageAsset>params.scene.assets[params.config.pane.assetId],
       padding: 4,
-      backgroundEffector: new g.NinePatchSurfaceEffector(params.scene.game, 4)
+      backgroundEffector: new g.NinePatchSurfaceEffector(params.scene.game, params.config.pane.borderWidth)
     });
     this.touchable = true;
     this.pointDown.addOnce(this.onPointDown, this);
