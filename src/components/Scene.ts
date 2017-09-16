@@ -41,9 +41,6 @@ export class Scene extends g.Scene {
     });
     this.scenario.nextFrame((frame: Frame) => {
       this.applyScripts(frame.scripts);
-      if(frame.text) {
-        this.messageWindow.updateText(frame.text);
-      }
       this.append(this.messageWindow);
     });
   }
@@ -54,6 +51,10 @@ export class Scene extends g.Scene {
 
   appendE(layerName: string, e: g.E) {
     this.layerGroup.appendE(layerName, e);
+  }
+
+  updateText(text: string) {
+    this.messageWindow.updateText(text);
   }
 
   disableMessageWindowTrigger() {
@@ -74,9 +75,6 @@ export class Scene extends g.Scene {
 
     if(frame) {
       this.applyScripts(frame.scripts);
-      if(frame.text) {
-        this.messageWindow.updateText(frame.text);
-      }
     }
 
     this.append(this.messageWindow);

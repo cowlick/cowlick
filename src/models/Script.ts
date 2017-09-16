@@ -11,6 +11,10 @@ export interface Image {
   };
 }
 
+export interface Text {
+  value: string;
+}
+
 export interface Jump {
   label: string;
 }

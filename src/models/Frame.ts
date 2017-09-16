@@ -5,11 +5,9 @@ export class Frame {
 
   private index = -1;
   private _scripts: Script[];
-  private _text: string;
 
-  constructor(scripts: Script[], text?: string) {
+  constructor(scripts: Script[]) {
     this._scripts = scripts;
-    this._text = text;
   }
 
   get scripts(): Script[] {
@@ -24,9 +22,5 @@ export class Frame {
       }
     });
     return ids;
-  }
-
-  get text(): string {
-    return this._text;
   }
 }

@@ -5,6 +5,7 @@ import {Scene} from "./components/Scene";
 import {ChoiceButton} from "./components/ChoiceButton";
 import {Config, defaultConfig} from "./Config";
 import {ScriptManager, ScriptFunction} from "./ScriptManager";
+import {Tag} from "./Constant";
 
 export class Engine {
 
@@ -15,9 +16,10 @@ export class Engine {
   constructor(game: g.Game) {
     this.game = game;
 
-    Engine.scriptManager.register("image", Engine.image);
-    Engine.scriptManager.register("jump", Engine.jump);
-    Engine.scriptManager.register("choice", Engine.choice);
+    Engine.scriptManager.register(Tag.image, Engine.image);
+    Engine.scriptManager.register(Tag.jump, Engine.jump);
+    Engine.scriptManager.register(Tag.choice, Engine.choice);
+    Engine.scriptManager.register(Tag.text, Engine.text);
   }
 
   set config(value: Config) {
@@ -128,5 +130,9 @@ export class Engine {
       }
       scene.appendE(choice.layer, button);
     });
+  }
+
+  private static text(scene: Scene, text: script.Text) {
+    scene.updateText(text.value);
   }
 }
