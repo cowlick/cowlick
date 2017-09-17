@@ -16,14 +16,19 @@ export const logo = new novel.Scene({
         tag: novel.Tag.image,
         data: {
           assetId: "black",
-          layer: novel.Layer.background
+          layer: {
+            name: novel.Layer.background
+          }
         }
       },
       {
         tag: novel.Tag.image,
         data: {
           assetId: "logo",
-          layer: "logo",
+          layer: {
+            name: "logo",
+            opacity: 0
+          },
           x: 250,
           y: 170
         }

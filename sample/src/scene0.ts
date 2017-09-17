@@ -9,7 +9,9 @@ export const scene0 = new novel.Scene({
         tag: novel.Tag.image,
         data: {
           assetId: "black",
-          layer: novel.Layer.background
+          layer: {
+            name: novel.Layer.background
+          }
         }
       },
       {
@@ -49,7 +51,9 @@ export const scene0 = new novel.Scene({
         tag: novel.Tag.image,
         data: {
           assetId: "black",
-          layer: novel.Layer.background
+          layer: {
+            name: novel.Layer.background
+          }
         }
       },
       {

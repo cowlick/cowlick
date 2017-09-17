@@ -75,7 +75,7 @@ export class Engine {
       sprite.y = image.y;
     }
     sprite.invalidate();
-    scene.appendE(image.layer, sprite);
+    scene.appendE(sprite, image.layer);
   }
 
   private static jump(scene: Scene, data: script.Jump) {
@@ -130,7 +130,7 @@ export class Engine {
         button.move(baseX + (width + space) * i, baseY);
           break;
       }
-      scene.appendE(choice.layer, button);
+      scene.appendE(button, { name: choice.layer });
     });
   }
 

@@ -3,7 +3,7 @@ import {ScenarioViewModel} from "../vm/ScenarioViewModel";
 import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
-import {Script, Visibility} from "../models/Script";
+import {LayerConfig, Script, Visibility} from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
 import {LayerGroup} from "./LayerGroup";
 import {Config} from "../Config";
@@ -50,8 +50,8 @@ export class Scene extends g.Scene {
     return this.scenario.source;
   }
 
-  appendE(layerName: string, e: g.E) {
-    this.layerGroup.appendE(layerName, e);
+  appendE(e: g.E, config: LayerConfig) {
+    this.layerGroup.appendE(e, config);
   }
 
   updateText(text: string) {
@@ -84,10 +84,10 @@ export class Scene extends g.Scene {
 
     if(frame) {
       this.removeLayers(frame.scripts);
-      this.layerGroup.appendE(Layer.system, this.messageWindow);
+      this.layerGroup.appendE(this.messageWindow, { name: Layer.system });
       this.applyScripts(frame.scripts);
     } else {
-      this.layerGroup.appendE(Layer.system, this.messageWindow);
+      this.layerGroup.appendE(this.messageWindow, { name: Layer.system });
     }
     if(this.messageWindow.visible()) {
       this.layerGroup.top(Layer.system);

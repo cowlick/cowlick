@@ -1,5 +1,5 @@
 "use strict";
-import {Visibility} from "../models/Script";
+import {LayerConfig, Visibility} from "../models/Script";
 
 export class LayerGroup {
   private scene: g.Scene;
@@ -10,8 +10,8 @@ export class LayerGroup {
     this.group = new Map<string, g.Pane>();
   }
 
-  appendE(layerName: string, e: g.E) {
-    let layer = this.group.get(layerName);
+  appendE(e: g.E, config: LayerConfig) {
+    let layer = this.group.get(config.name);
     if(layer) {
       layer.append(e);
     } else {
@@ -20,11 +20,12 @@ export class LayerGroup {
         width: this.scene.game.width,
         height: this.scene.game.height,
         x: 0,
-        y: 0
+        y: 0,
+        opacity: config.opacity
       });
       layer.append(e);
       this.scene.append(layer);
-      this.group.set(layerName, layer);
+      this.group.set(config.name, layer);
     }
   }
 

@@ -20,7 +20,6 @@ function main() {
     scene.transition(
       data.layer,
       (layer) => {
-        layer.opacity = 0;
         let timeline = new tl.Timeline(scene);
         timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
           .fadeIn(data.duration)

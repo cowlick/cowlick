@@ -1,6 +1,11 @@
+export interface LayerConfig {
+  name: string;
+  opacity?: number;
+}
+
 export interface Image {
   assetId: string;
-  layer: string;
+  layer: LayerConfig;
   x?: number;
   y?: number;
   frame?: {
