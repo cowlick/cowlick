@@ -114,7 +114,7 @@ export class Engine {
         choice: item,
         assetId: choice.assetId
       });
-      button.click.addOnce(() => {
+      button.click.add(() => {
         if(choice.windowTrigger === script.Trigger.Disable) {
           scene.enableMessageWindowTrigger();
         }
