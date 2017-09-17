@@ -76,7 +76,7 @@ export const scene0 = new novel.Scene({
             {
               tag: novel.Tag.jump,
               data: {
-                label: "1"  
+                label: "1"
               },
               text: "シーン1へ"
             },

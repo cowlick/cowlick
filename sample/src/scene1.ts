@@ -12,10 +12,26 @@ export const scene1 = new novel.Scene({
           layer: novel.Layer.background
         }
       },
-      {
+     {
         tag: novel.Tag.text,
         data: {
           value: "シーン1です"
+        }
+      }
+    ]),
+    new novel.Frame([
+     {
+        tag: novel.Tag.text,
+        data: {
+          value: "タイトル画面に戻ります"
+        }
+      }
+    ]),
+    new novel.Frame([
+     {
+        tag: novel.Tag.jump,
+        data: {
+          label: "title"
         }
       }
     ])

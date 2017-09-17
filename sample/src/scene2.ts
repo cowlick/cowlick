@@ -18,6 +18,22 @@ export const scene2 = new novel.Scene({
           value: "シーン2です"
         }
       }
+    ]),
+    new novel.Frame([
+     {
+        tag: novel.Tag.text,
+        data: {
+          value: "タイトル画面に戻ります"
+        }
+      }
+    ]),
+    new novel.Frame([
+     {
+        tag: novel.Tag.jump,
+        data: {
+          label: "title"
+        }
+      }
     ])
   ]
 });

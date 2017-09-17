@@ -45,4 +45,8 @@ export class Scene {
       return undefined;
     }
   }
+
+  reset() {
+    this.index = 0;
+  }
 }

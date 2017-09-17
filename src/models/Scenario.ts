@@ -44,6 +44,7 @@ export class Scenario {
     const i = this.scenes.findIndex(s => s.label === label);
     if(i > -1) {
       this.index = i;
+      this.scenes[this.index].reset();
       return true;
     } else {
       return false;

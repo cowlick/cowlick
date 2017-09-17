@@ -20,7 +20,7 @@ export const title = new novel.Scene({
             {
               tag: novel.Tag.jump,
               data: {
-                label: "0"  
+                label: "0"
               },
               text: "はじめる"
             }

@@ -94,7 +94,8 @@ export class Engine {
   }
 
   private static choice(scene: Scene, choice: script.Choice) {
-    if(choice.windowTrigger === script.Trigger.Disable) {
+    const isEnabledTrigger = choice.windowTrigger !== undefined ? choice.windowTrigger : script.Trigger.Disable;
+    if(isEnabledTrigger === script.Trigger.Disable) {
       scene.disableMessageWindowTrigger();
     }
     const game = scene.game;
@@ -115,7 +116,7 @@ export class Engine {
         assetId: choice.assetId
       });
       button.click.add(() => {
-        if(choice.windowTrigger === script.Trigger.Disable) {
+        if(isEnabledTrigger === script.Trigger.Disable) {
           scene.enableMessageWindowTrigger();
         }
         Engine.scriptManager.call(scene, item);
