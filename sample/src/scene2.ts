@@ -20,7 +20,7 @@ export const scene2 = new novel.Scene({
       }
     ]),
     new novel.Frame([
-     {
+      {
         tag: novel.Tag.text,
         data: {
           value: "タイトル画面に戻ります"
@@ -28,7 +28,7 @@ export const scene2 = new novel.Scene({
       }
     ]),
     new novel.Frame([
-     {
+      {
         tag: novel.Tag.jump,
         data: {
           label: "title"
