@@ -40,13 +40,15 @@ export const logo = new novel.Scene({
           duration: 3000,
           wait: 5000
         }
-      }/*,
+      }
+    ]),
+    new novel.Frame([
       {
         tag: "jump",
         data: {
           label: "title"
         }
-      }*/
+      }
     ])
   ]
 });

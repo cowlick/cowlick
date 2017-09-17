@@ -24,7 +24,8 @@ function main() {
         timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
           .fadeIn(data.duration)
           .wait(data.wait)
-          .fadeOut(data.duration);
+          .fadeOut(data.duration)
+          .call(() => scene.requestNextFrame());
       }
     );
   });

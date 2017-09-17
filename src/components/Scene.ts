@@ -63,15 +63,21 @@ export class Scene extends g.Scene {
   }
 
   disableMessageWindowTrigger() {
-    this.messageWindow.pointDown.remove(this.onMessageWindowPointDown, this);
+    this.messageWindow.pointDown.remove(this.requestNextFrame, this);
   }
 
   enableMessageWindowTrigger() {
-    this.messageWindow.pointDown.add(this.onMessageWindowPointDown, this);
+    this.messageWindow.pointDown.add(this.requestNextFrame, this);
   }
 
   transition(layer: string, f: (e: g.Pane) => void) {
     this.layerGroup.evaluate(layer, f);
+  }
+
+  requestNextFrame() {
+    if(! this.scenario.next()) {
+      this.game.logger.warn("next frame not found: " + this.scenario.source.scene.label);
+    }
   }
 
   private onLoaded() {
@@ -91,12 +97,6 @@ export class Scene extends g.Scene {
     }
     if(this.messageWindow.visible()) {
       this.layerGroup.top(Layer.system);
-    }
-  }
-
-  private onMessageWindowPointDown() {
-    if(! this.scenario.next()) {
-      this.game.logger.warn("next frame not found: " + this.scenario.source.scene.label);
     }
   }
 
