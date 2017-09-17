@@ -87,10 +87,10 @@ export class Engine {
         scriptManager: Engine.scriptManager,
         config: Engine.config
       }));
-      } else {
-        // TODO: 続行不可能としてタイトルに戻る?
-        game.logger.warn("scene not found:" + data.label);
-      }
+    } else {
+      // TODO: 続行不可能としてタイトルに戻る?
+      game.logger.warn("scene not found:" + data.label);
+    }
   }
 
   private static choice(scene: Scene, choice: script.Choice) {
