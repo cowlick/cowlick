@@ -32,15 +32,6 @@ export class Scenario {
     }
   }
 
-  nextScene() {
-    if(this.index < this.scenes.length) {
-      this.index++;
-      return this.scenes[this.index];
-    } else {
-      return undefined;
-    }
-  }
-
   nextFrame() {
     if(this.index < this.scenes.length) {
       return this.scenes[this.index].next();

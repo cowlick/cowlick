@@ -38,8 +38,6 @@ export class Scene extends g.Scene {
     this.loaded.add(this.onLoaded, this);
 
     this.scenario = new ScenarioViewModel(params.scenario);
-    this.scenario.nextScene((scene: SceneModel) => {
-    });
     this.scenario.nextFrame((frame: Frame) => {
       this.applyScripts(frame.scripts);
       if(this.messageWindow.visible()) {
@@ -90,7 +88,9 @@ export class Scene extends g.Scene {
   }
 
   private onMessageWindowPointDown() {
-    this.scenario.next();
+    if(! this.scenario.next()) {
+      this.game.logger.warn("next frame not found: " + this.scenario.source.scene.label);
+    }
   }
 
   private applyScripts(scripts: Script[]) {
