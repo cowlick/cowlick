@@ -78,9 +78,12 @@ export class Scene extends g.Scene {
     this.messageWindow.touchable = true;
     this.enableMessageWindowTrigger();
 
-    this.layerGroup.appendE(Layer.system, this.messageWindow);
     if(frame) {
+      this.removeLayers(frame.scripts);
+      this.layerGroup.appendE(Layer.system, this.messageWindow);
       this.applyScripts(frame.scripts);
+    } else {
+      this.layerGroup.appendE(Layer.system, this.messageWindow);
     }
     if(this.messageWindow.visible()) {
       this.layerGroup.top(Layer.system);
@@ -93,20 +96,21 @@ export class Scene extends g.Scene {
     }
   }
 
+  private removeLayers(scripts: Script[]) {
+    const names = new Set<string>();
+    scripts.forEach((s: Script) => {
+      if(s.data.layer) {
+        names.add(s.data.layer);
+      }
+    });
+    names.forEach(name => {
+      this.layerGroup.remove(name);
+    });
+  }
+
   private applyScripts(scripts: Script[]) {
-    if(scripts.length > 0) {
-      const names = new Set<string>();
-      scripts.forEach((s: Script) => {
-        if(s.data.layer) {
-          names.add(s.data.layer);
-        }
-      });
-      names.forEach(name => {
-        this.layerGroup.remove(name);
-      });
-      scripts.forEach(s => {
-        this.scriptManager.call(this, s);
-      });
-    }
+    scripts.forEach(s => {
+      this.scriptManager.call(this, s);
+    });
   }
 }
