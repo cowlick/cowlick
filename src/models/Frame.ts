@@ -3,7 +3,6 @@ import {Script} from "./Script";
 
 export class Frame {
 
-  private index = -1;
   private _scripts: Script[];
 
   constructor(scripts: Script[]) {
