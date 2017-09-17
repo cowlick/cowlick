@@ -20,6 +20,12 @@
 			"width": 32,
 			"height": 32,
 			"path": "image/pane.png"
+		},
+		"logo": {
+			"type": "image",
+			"width": 140,
+			"height": 140,
+			"path": "image/logo.png"
 		}
 	}
 }

@@ -30,27 +30,37 @@ export class LayerGroup {
 
   remove(name: string) {
     const layer = this.group.get(name);
-    if(this.group.delete(name)) {
-      this.scene.remove(layer);
-      layer.destroy();
-    }
-  }
-
-  visible(visibility: Visibility) {
-    let layer = this.group.get(visibility.layer);
     if(layer) {
-      if(visibility.visible) {
-        layer.show();
-      } else {
-        layer.hide();
+      if(this.group.delete(name)) {
+        this.scene.remove(layer);
+        layer.destroy();
       }
     }
   }
 
+  visible(visibility: Visibility) {
+    this.evaluate(
+      visibility.layer,
+      (layer: g.Pane) => {
+        if(visibility.visible) {
+          layer.show();
+        } else {
+          layer.hide();
+        }
+      }
+    );
+  }
+
   top(name: string) {
+    this.evaluate(name, (layer) => this.scene.append(layer));
+  }
+
+  evaluate(name: string, f: (e: g.Pane) => void) {
     const layer = this.group.get(name);
     if(layer) {
-      this.scene.append(layer);
+      f(layer);
+    } else {
+      this.scene.game.logger.warn("layer not found: " + name);
     }
   }
 }

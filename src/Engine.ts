@@ -68,10 +68,10 @@ export class Engine {
         src: asset
       });
     }
-    if(image.x) {
+    if(image.x !== undefined) {
       sprite.x = image.x;
     }
-    if(image.y) {
+    if(image.y !== undefined) {
       sprite.y = image.y;
     }
     sprite.invalidate();

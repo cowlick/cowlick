@@ -70,6 +70,10 @@ export class Scene extends g.Scene {
     this.messageWindow.pointDown.add(this.onMessageWindowPointDown, this);
   }
 
+  transition(layer: string, f: (e: g.Pane) => void) {
+    this.layerGroup.evaluate(layer, f);
+  }
+
   private onLoaded() {
 
     const frame = this.scenario.source.frame;
