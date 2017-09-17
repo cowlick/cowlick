@@ -118,7 +118,7 @@ export class Engine {
         if(choice.windowTrigger === script.Trigger.Disable) {
           scene.enableMessageWindowTrigger();
         }
-        this.scriptManager.call(scene, item);
+        Engine.scriptManager.call(scene, item);
       });
       const direction = choice.direction ? choice.direction : script.Direction.Vertical;
       switch(direction) {
