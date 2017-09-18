@@ -23,6 +23,8 @@ export class Engine {
     Engine.scriptManager.register(Tag.visible, Engine.visible);
     Engine.scriptManager.register(Tag.playAudio, Engine.playAudio);
     Engine.scriptManager.register(Tag.stopAudio, Engine.stopAudio);
+    Engine.scriptManager.register(Tag.playVideo, Engine.playVideo);
+    Engine.scriptManager.register(Tag.stopVideo, Engine.stopVideo);
   }
 
   set config(value: Config) {
@@ -150,5 +152,13 @@ export class Engine {
 
   private static stopAudio(scene: Scene, audio: script.Audio) {
     scene.stopAudio(audio);
+  }
+
+  private static playVideo(scene: Scene, video: script.Video) {
+    scene.playVideo(video);
+  }
+
+  private static stopVideo(scene: Scene, video: script.Video) {
+    scene.stopVideo(video);
   }
 }

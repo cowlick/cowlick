@@ -6,6 +6,8 @@ export namespace Tag {
   export const visible = "visible";
   export const playAudio = "playAudio";
   export const stopAudio = "stopAudio";
+  export const playVideo = "playVideo";
+  export const stopVideo = "stopVideo";
 }
 
 export namespace Layer {

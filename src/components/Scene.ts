@@ -25,6 +25,7 @@ export class Scene extends g.Scene {
   private layerGroup: LayerGroup;
   private config: Config;
   private audios: g.AudioAsset[];
+  private videos: g.VideoAsset[];
 
   constructor(params: SceneParameters) {
     super({
@@ -36,6 +37,7 @@ export class Scene extends g.Scene {
     this.scriptManager = params.scriptManager;
     this.config = params.config;
     this.audios = [];
+    this.videos = [];
 
     this.loaded.add(this.onLoaded, this);
 
@@ -95,6 +97,25 @@ export class Scene extends g.Scene {
       this.audios.splice(i, 1);
     } else {
       this.game.logger.warn("audio not found: " + audio.assetId);
+    }
+  }
+
+  playVideo(video: script.Video) {
+    // TODO: 最後まで流し終わったことを検知できるようになったら作り直す
+    const v = (this.assets[video.assetId] as g.VideoAsset);
+    v.play();
+    this.videos.push(v);
+  }
+
+  stopVideo(video: script.Video) {
+    const i = this.audios.findIndex(asset => asset.id === video.assetId);
+    if(i > 0) {
+      const v = this.videos[i];
+      v.stop();
+      v.destroy();
+      this.videos.splice(i, 1);
+    } else {
+      this.game.logger.warn("video not found: " + video.assetId);
     }
   }
 

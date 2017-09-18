@@ -63,3 +63,7 @@ export interface Visibility {
 export interface Audio {
   assetId: string;
 }
+
+export interface Video {
+  assetId: string;
+}
