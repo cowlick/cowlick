@@ -8,6 +8,13 @@ export const title = new novel.Scene({
       {
         tag: "visible",
         data: {
+          layer: novel.Layer.message,
+          visible: false
+        }
+      },
+      {
+        tag: "visible",
+        data: {
           layer: novel.Layer.system,
           visible: false
         }

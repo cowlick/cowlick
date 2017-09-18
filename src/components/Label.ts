@@ -28,6 +28,10 @@ export class Label extends al.Label {
     this.update.add(this.onUpdated, this);
   }
 
+  appendText(text: string) {
+    this.characters.concat(text.split(""));
+  }
+
   updateText(text: string) {
     this.text = "";
     this.characters = text.split("");

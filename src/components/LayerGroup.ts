@@ -1,5 +1,6 @@
 "use strict";
 import {LayerConfig, Visibility} from "../models/Script";
+import {Layer} from "../Constant";
 
 export class LayerGroup {
   private scene: g.Scene;

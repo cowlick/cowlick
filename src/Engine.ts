@@ -17,6 +17,7 @@ export class Engine {
     this.game = game;
 
     Engine.scriptManager.register(Tag.image, Engine.image);
+    Engine.scriptManager.register(Tag.pane, Engine.pane);
     Engine.scriptManager.register(Tag.jump, Engine.jump);
     Engine.scriptManager.register(Tag.choice, Engine.choice);
     Engine.scriptManager.register(Tag.text, Engine.text);
@@ -83,6 +84,21 @@ export class Engine {
     scene.appendE(sprite, image.layer);
   }
 
+  private static pane(scene: Scene, pane: script.Pane) {
+    const p = new g.Pane({
+      scene,
+      width: pane.width,
+      height: pane.height,
+      x: pane.x,
+      y: pane.y,
+      backgroundImage: pane.backgroundImage ? scene.assets[pane.backgroundImage] as g.ImageAsset : undefined,
+      padding: pane.padding,
+      backgroundEffector: pane.backgroundEffector ? new g.NinePatchSurfaceEffector(scene.game, pane.backgroundEffector.borderWidth) : undefined
+    });
+    p.touchable = !!pane.touchable;
+    scene.appendE(p, pane.layer);
+  }
+
   private static jump(scene: Scene, data: script.Jump) {
     const game = scene.game;
     if(scene.source.update(data.label)) {
@@ -101,7 +117,7 @@ export class Engine {
   private static choice(scene: Scene, choice: script.Choice) {
     const isEnabledTrigger = choice.windowTrigger !== undefined ? choice.windowTrigger : script.Trigger.Disable;
     if(isEnabledTrigger === script.Trigger.Disable) {
-      scene.disableMessageWindowTrigger();
+      scene.disableNextFrameTrigger();
     }
     const game = scene.game;
     const count = choice.values.length;
@@ -122,7 +138,7 @@ export class Engine {
       });
       button.click.add(() => {
         if(isEnabledTrigger === script.Trigger.Disable) {
-          scene.enableMessageWindowTrigger();
+          scene.enableNextFrameTrigger();
         }
         Engine.scriptManager.call(scene, item);
       });

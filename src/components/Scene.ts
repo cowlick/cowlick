@@ -4,11 +4,11 @@ import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
 import * as script from "../models/Script";
-import {MessageWindow} from "./MessageWindow";
+import {Label} from "./Label";
 import {LayerGroup} from "./LayerGroup";
 import {Config} from "../Config";
 import {ScriptManager} from "../ScriptManager";
-import {Layer} from "../Constant";
+import {Tag, Layer} from "../Constant";
 
 export interface SceneParameters {
   game: g.Game;
@@ -19,7 +19,7 @@ export interface SceneParameters {
 
 export class Scene extends g.Scene {
 
-  private messageWindow: MessageWindow;
+  private text: Label;
   private scenario: ScenarioViewModel;
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
@@ -44,9 +44,8 @@ export class Scene extends g.Scene {
     this.scenario = new ScenarioViewModel(params.scenario);
     this.scenario.nextFrame((frame: Frame) => {
       this.applyScripts(frame.scripts);
-      if(this.messageWindow.visible()) {
-        this.layerGroup.top(Layer.system);
-      }
+      this.layerGroup.top(Layer.message);
+      this.layerGroup.top(Layer.system);
     });
   }
 
@@ -59,7 +58,7 @@ export class Scene extends g.Scene {
   }
 
   updateText(text: string) {
-    this.messageWindow.updateText(text);
+    this.text.updateText(text);
   }
 
   visible(visibility: script.Visibility) {
@@ -70,12 +69,16 @@ export class Scene extends g.Scene {
     this.pointUpCapture.addOnce(this.requestNextFrame, this);
   }
 
-  disableMessageWindowTrigger() {
-    this.messageWindow.pointDown.remove(this.requestNextFrame, this);
+  disableNextFrameTrigger() {
+    this.layerGroup.evaluate(Layer.message, (layer) => {
+      layer.pointDown.remove(this.requestNextFrame, layer);
+    });
   }
 
-  enableMessageWindowTrigger() {
-    this.messageWindow.pointDown.add(this.requestNextFrame, this);
+  enableNextFrameTrigger() {
+    this.layerGroup.evaluate(Layer.message, (layer) => {
+      layer.pointDown.add(this.requestNextFrame, layer);
+    });
   }
 
   transition(layer: string, f: (e: g.Pane) => void) {
@@ -127,19 +130,34 @@ export class Scene extends g.Scene {
 
     const frame = this.scenario.source.frame;
 
-    this.messageWindow = new MessageWindow(this, this.config);
-    this.messageWindow.touchable = true;
-    this.enableMessageWindowTrigger();
-
     if(frame) {
       this.removeLayers(frame.scripts);
-      this.layerGroup.appendE(this.messageWindow, { name: Layer.system });
+      this.createWindowLayer();
+      this.createSystemLayer();
       this.applyScripts(frame.scripts);
     } else {
-      this.layerGroup.appendE(this.messageWindow, { name: Layer.system });
+      this.createWindowLayer();
+      this.createSystemLayer();
     }
-    if(this.messageWindow.visible()) {
-      this.layerGroup.top(Layer.system);
+    this.layerGroup.top(Layer.message);
+    this.layerGroup.top(Layer.system);
+  }
+
+  private createWindowLayer() {
+    this.scriptManager.call(this, {
+      tag: Tag.pane,
+      data: this.config.window.message
+    });
+    this.layerGroup.evaluate(Layer.message, (layer) => {
+      this.text = new Label(this, this.config.font);
+      layer.append(this.text);
+    });
+    this.enableNextFrameTrigger();
+  }
+
+  private createSystemLayer() {
+    for(const s of this.config.window.system) {
+      this.scriptManager.call(this, s);
     }
   }
 

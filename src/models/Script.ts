@@ -16,6 +16,20 @@ export interface Image {
   };
 }
 
+export interface Pane {
+  layer: LayerConfig;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  backgroundImage?: string;
+  padding?: number;
+  backgroundEffector?: {
+    borderWidth: number;
+  }
+  touchable?: boolean;
+} 
+
 export interface Text {
   value: string;
 }

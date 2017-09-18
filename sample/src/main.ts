@@ -31,6 +31,50 @@ function main() {
   });
 
   novel.engine.config = {
+    window: {
+      message: {
+        layer: {
+          name: novel.Layer.message
+        },
+        width: g.game.width - 20,
+        height: g.game.height / 4,
+        x: 10,
+        y: g.game.height - g.game.height / 4 - 40,
+        backgroundImage: "pane",
+        padding: 4,
+        backgroundEffector: {
+          borderWidth: 4
+        },
+        touchable: true
+      },
+      system: [
+        {
+          tag: novel.Tag.choice,
+          data: {
+            layer: novel.Layer.system,
+            direction: novel.Direction.Horizontal,
+            width: 100,
+            height: 32,
+            x: g.game.width - 220,
+            y: g.game.height - 40,
+            assetId: null,
+            windowTrigger: novel.Trigger.Enable,
+            values: [
+              {
+                tag: "noop",
+                data: {},
+                text: "メニュー1"
+              },
+              {
+                tag: "noop",
+                data: {},
+                text: "メニュー2"
+              }
+            ]
+          }
+        }
+      ]
+    },
     pane: {
       assetId: "pane"
     },
