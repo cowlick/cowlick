@@ -40,6 +40,10 @@ export const logo = new novel.Scene({
           duration: 3000,
           wait: 5000
         }
+      },
+      {
+        tag: novel.Tag.click,
+        data: {}
       }
     ]),
     new novel.Frame([

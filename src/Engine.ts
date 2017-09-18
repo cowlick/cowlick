@@ -25,6 +25,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.stopAudio, Engine.stopAudio);
     Engine.scriptManager.register(Tag.playVideo, Engine.playVideo);
     Engine.scriptManager.register(Tag.stopVideo, Engine.stopVideo);
+    Engine.scriptManager.register(Tag.click, Engine.click);
   }
 
   set config(value: Config) {
@@ -160,5 +161,9 @@ export class Engine {
 
   private static stopVideo(scene: Scene, video: script.Video) {
     scene.stopVideo(video);
+  }
+
+  private static click(scene: Scene, data: any) {
+    scene.click();
   }
 }

@@ -66,6 +66,10 @@ export class Scene extends g.Scene {
     this.layerGroup.visible(visibility);
   }
 
+  click() {
+    this.pointUpCapture.addOnce(this.requestNextFrame, this);
+  }
+
   disableMessageWindowTrigger() {
     this.messageWindow.pointDown.remove(this.requestNextFrame, this);
   }

@@ -8,6 +8,7 @@ export namespace Tag {
   export const stopAudio = "stopAudio";
   export const playVideo = "playVideo";
   export const stopVideo = "stopVideo";
+  export const click = "click";
 }
 
 export namespace Layer {
