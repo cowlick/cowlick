@@ -21,6 +21,8 @@ export class Engine {
     Engine.scriptManager.register(Tag.choice, Engine.choice);
     Engine.scriptManager.register(Tag.text, Engine.text);
     Engine.scriptManager.register(Tag.visible, Engine.visible);
+    Engine.scriptManager.register(Tag.playAudio, Engine.playAudio);
+    Engine.scriptManager.register(Tag.stopAudio, Engine.stopAudio);
   }
 
   set config(value: Config) {
@@ -140,5 +142,13 @@ export class Engine {
 
   private static visible(scene: Scene, visibility: script.Visibility) {
     scene.visible(visibility);
+  }
+
+  private static playAudio(scene: Scene, audio: script.Audio) {
+    scene.playAudio(audio);
+  }
+
+  private static stopAudio(scene: Scene, audio: script.Audio) {
+    scene.stopAudio(audio);
   }
 }

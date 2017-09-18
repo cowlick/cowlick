@@ -4,6 +4,8 @@ export namespace Tag {
   export const jump = "jump";
   export const text = "text";
   export const visible = "visible";
+  export const playAudio = "playAudio";
+  export const stopAudio = "stopAudio";
 }
 
 export namespace Layer {

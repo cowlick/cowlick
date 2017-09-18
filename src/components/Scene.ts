@@ -3,7 +3,7 @@ import {ScenarioViewModel} from "../vm/ScenarioViewModel";
 import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
-import {LayerConfig, Script, Visibility} from "../models/Script";
+import * as script from "../models/Script";
 import {MessageWindow} from "./MessageWindow";
 import {LayerGroup} from "./LayerGroup";
 import {Config} from "../Config";
@@ -24,6 +24,7 @@ export class Scene extends g.Scene {
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
   private config: Config;
+  private audios: g.AudioAsset[];
 
   constructor(params: SceneParameters) {
     super({
@@ -34,6 +35,7 @@ export class Scene extends g.Scene {
     this.layerGroup = new LayerGroup(this);
     this.scriptManager = params.scriptManager;
     this.config = params.config;
+    this.audios = [];
 
     this.loaded.add(this.onLoaded, this);
 
@@ -50,7 +52,7 @@ export class Scene extends g.Scene {
     return this.scenario.source;
   }
 
-  appendE(e: g.E, config: LayerConfig) {
+  appendE(e: g.E, config: script.LayerConfig) {
     this.layerGroup.appendE(e, config);
   }
 
@@ -58,7 +60,7 @@ export class Scene extends g.Scene {
     this.messageWindow.updateText(text);
   }
 
-  visible(visibility: Visibility) {
+  visible(visibility: script.Visibility) {
     this.layerGroup.visible(visibility);
   }
 
@@ -77,6 +79,22 @@ export class Scene extends g.Scene {
   requestNextFrame() {
     if(! this.scenario.next()) {
       this.game.logger.warn("next frame not found: " + this.scenario.source.scene.label);
+    }
+  }
+
+  playAudio(audio: script.Audio) {
+    const a = (this.assets[audio.assetId] as g.AudioAsset);
+    a.play();
+    this.audios.push(a);
+  }
+
+  stopAudio(audio: script.Audio) {
+    const i = this.audios.findIndex(asset => asset.id === audio.assetId);
+    if(i > 0) {
+      this.audios[i].destroy();
+      this.audios.splice(i, 1);
+    } else {
+      this.game.logger.warn("audio not found: " + audio.assetId);
     }
   }
 
@@ -100,9 +118,9 @@ export class Scene extends g.Scene {
     }
   }
 
-  private removeLayers(scripts: Script[]) {
+  private removeLayers(scripts: script.Script[]) {
     const names = new Set<string>();
-    scripts.forEach((s: Script) => {
+    scripts.forEach((s: script.Script) => {
       if(s.data.layer) {
         names.add(s.data.layer);
       }
@@ -112,7 +130,7 @@ export class Scene extends g.Scene {
     });
   }
 
-  private applyScripts(scripts: Script[]) {
+  private applyScripts(scripts: script.Script[]) {
     scripts.forEach(s => {
       this.scriptManager.call(this, s);
     });

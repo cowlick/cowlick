@@ -59,3 +59,7 @@ export interface Visibility {
   layer: string;
   visible: boolean;
 }
+
+export interface Audio {
+  assetId: string;
+}
