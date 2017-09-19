@@ -50,6 +50,7 @@ export interface Text {
 
 export interface Jump {
   label: string;
+  frame?: number
 }
 
 export interface Script {
@@ -116,4 +117,8 @@ export interface Video {
 export interface Save {
   index: number;
   force?: boolean;
+}
+
+export interface Load {
+  index: number;
 }

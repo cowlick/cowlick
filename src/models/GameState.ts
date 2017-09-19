@@ -27,4 +27,8 @@ export class GameState {
       }
     }
   }
+
+  find(index: number): SaveData {
+    return this.data[index];
+  }
 }

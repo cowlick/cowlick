@@ -13,6 +13,7 @@ export namespace Tag {
   export const button = "button";
   export const trigger = "trigger";
   export const save = "save";
+  export const load = "load";
 }
 
 export namespace Layer {

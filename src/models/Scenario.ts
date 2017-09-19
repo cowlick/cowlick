@@ -1,6 +1,7 @@
 "use strict";
 import {Scene} from "./Scene";
 import {Frame} from "./Frame";
+import {Jump} from "./Script";
 
 export class Scenario {
 
@@ -40,11 +41,11 @@ export class Scenario {
     }
   }
 
-  update(label: string): boolean {
-    const i = this.scenes.findIndex(s => s.label === label);
+  update(target: Jump): boolean {
+    const i = this.scenes.findIndex(s => s.label === target.label);
     if(i > -1) {
       this.index = i;
-      this.scenes[this.index].reset();
+      this.scenes[this.index].reset(target.frame);
       return true;
     } else {
       return false;

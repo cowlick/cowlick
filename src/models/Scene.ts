@@ -47,8 +47,8 @@ export class Scene {
     }
   }
 
-  reset() {
-    this.index = 0;
+  reset(index?: number) {
+    this.index = index ? index : 0;
   }
 
   createSaveData(variables: any): SaveData {

@@ -34,6 +34,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.click, Engine.click);
     Engine.scriptManager.register(Tag.trigger, Engine.trigger);
     Engine.scriptManager.register(Tag.save, Engine.save);
+    Engine.scriptManager.register(Tag.load, Engine.load);
   }
 
   set config(value: Config) {
@@ -108,7 +109,7 @@ export class Engine {
 
   private static jump(scene: Scene, data: script.Jump) {
     const game = scene.game;
-    if(scene.source.update(data.label)) {
+    if(scene.source.update(data)) {
       game.pushScene(new Scene({
         game,
         scenario: scene.source,
@@ -217,6 +218,15 @@ export class Engine {
   private static save(scene: Scene, data: script.Save) {
     if(! Engine.state.save(scene.source.scene.createSaveData({}), data)) {
       scene.game.logger.warn("save data already exists: " + data.index);
+    }
+  }
+
+  private static load(scene: Scene, data: script.Load) {
+    const s = Engine.state.find(data.index);
+    if(s) {
+      Engine.jump(scene, s);
+    } else {
+      scene.game.logger.warn("save data not found: " + data.index);
     }
   }
 }
