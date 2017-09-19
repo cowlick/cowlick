@@ -76,6 +76,9 @@ export class Scene extends g.Scene {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = false;
       layer.pointDown.remove(this._requestNextFrame, layer);
+      for(const c of layer.children) {
+        c.pointDown.remove(this._requestNextFrame, c);
+      }
     });
   }
 
@@ -83,6 +86,9 @@ export class Scene extends g.Scene {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = true;
       layer.pointDown.add(this._requestNextFrame, layer);
+      for(const c of layer.children) {
+        c.pointDown.add(this._requestNextFrame, c);
+      }
     });
   }
 
