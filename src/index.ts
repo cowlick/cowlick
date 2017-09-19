@@ -7,5 +7,6 @@ export * from "./models/Scenario";
 export * from "./models/Scene";
 export * from "./models/Frame";
 export * from "./models/Script";
+export * from "./models/GameState";
 
 export const engine = new Engine(g.game);

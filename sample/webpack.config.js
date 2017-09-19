@@ -5,11 +5,14 @@ var srcDir = path.join(__dirname, "src");
 var outDir = path.join(__dirname, "game", "script");
 
 var config = {
-  entry: path.join(srcDir, "main.ts"),
+  entry: {
+    "main": path.join(srcDir, "main.ts"),
+    "eval": path.join(srcDir, "eval.ts")
+  },
   output : {
     path: outDir,
     filename: "[name].js",
-    library: "main",
+    library: "[name]",
     libraryTarget: "commonjs2"
   },
   module : {

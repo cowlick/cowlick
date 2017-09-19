@@ -14,6 +14,7 @@ export namespace Tag {
   export const trigger = "trigger";
   export const save = "save";
   export const load = "load";
+  export const evaluate = "eval";
 }
 
 export namespace Layer {

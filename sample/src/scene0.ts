@@ -40,6 +40,12 @@ export const scene0 = new novel.Scene({
     ]),
     new novel.Frame([
       {
+        tag: novel.Tag.evaluate,
+        data: {
+          path: "eval"
+        }
+      },
+      {
         tag: novel.Tag.text,
         data: {
           value: "画像が指定なされていない場合は前フレームを引き継ぐ"

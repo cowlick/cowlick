@@ -122,3 +122,7 @@ export interface Save {
 export interface Load {
   index: number;
 }
+
+export interface Eval {
+  path: string;
+}

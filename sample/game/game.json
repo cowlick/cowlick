@@ -26,6 +26,11 @@
 			"width": 140,
 			"height": 140,
 			"path": "image/logo.png"
+		},
+		"eval": {
+			"type": "script",
+			"path": "script/eval.js",
+			"global": true
 		}
 	}
 }
