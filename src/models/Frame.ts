@@ -1,5 +1,5 @@
 "use strict";
-import {Script} from "./Script";
+import {Script, collectAssetIds} from "./Script";
 
 export class Frame {
 
@@ -14,12 +14,6 @@ export class Frame {
   }
 
   get assetIds(): string[] {
-    let ids: string[] = [];
-    this._scripts.forEach(s => {
-      if(typeof(s.data) === "object" && s.data.assetId) {
-        ids.push(<string>s.data.assetId);
-      }
-    });
-    return ids;
+    return collectAssetIds(this._scripts);
   }
 }

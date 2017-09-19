@@ -27,10 +27,13 @@ export class Scene extends g.Scene {
   private audios: g.AudioAsset[];
   private videos: g.VideoAsset[];
 
+  // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
+  private _requestNextFrame = this.requestNextFrame.bind(this);
+
   constructor(params: SceneParameters) {
     super({
       game: params.game,
-      assetIds: params.scenario.scene.assetIds.concat([params.config.pane.assetId])
+      assetIds: Scene.collectAssetIds(params)
     });
 
     this.layerGroup = new LayerGroup(this);
@@ -44,7 +47,7 @@ export class Scene extends g.Scene {
     this.scenario = new ScenarioViewModel(params.scenario);
     this.scenario.nextFrame((frame: Frame) => {
       this.applyScripts(frame.scripts);
-      this.layerGroup.top(Layer.message);
+      this.topMessageLayer();
       this.layerGroup.top(Layer.system);
     });
   }
@@ -71,13 +74,15 @@ export class Scene extends g.Scene {
 
   disableNextFrameTrigger() {
     this.layerGroup.evaluate(Layer.message, (layer) => {
-      layer.pointDown.remove(this.requestNextFrame, layer);
+      layer.touchable = false;
+      layer.pointDown.remove(this._requestNextFrame, layer);
     });
   }
 
   enableNextFrameTrigger() {
     this.layerGroup.evaluate(Layer.message, (layer) => {
-      layer.pointDown.add(this.requestNextFrame, layer);
+      layer.touchable = true;
+      layer.pointDown.add(this._requestNextFrame, layer);
     });
   }
 
@@ -139,8 +144,16 @@ export class Scene extends g.Scene {
       this.createWindowLayer();
       this.createSystemLayer();
     }
-    this.layerGroup.top(Layer.message);
+    this.topMessageLayer();
     this.layerGroup.top(Layer.system);
+  }
+
+  private topMessageLayer() {
+    this.layerGroup.evaluate(Layer.message, (layer) => {
+      if(layer.touchable) {
+        this.layerGroup.top(Layer.message);
+      }
+    });
   }
 
   private createWindowLayer() {
@@ -149,7 +162,7 @@ export class Scene extends g.Scene {
       data: this.config.window.message
     });
     this.layerGroup.evaluate(Layer.message, (layer) => {
-      this.text = new Label(this, this.config.font);
+      this.text = new Label(this, this.config);
       layer.append(this.text);
     });
     this.enableNextFrameTrigger();
@@ -177,5 +190,14 @@ export class Scene extends g.Scene {
     scripts.forEach(s => {
       this.scriptManager.call(this, s);
     });
+  }
+
+  private static collectAssetIds(params: SceneParameters) {
+    const assetIds = params.scenario.scene.assetIds
+      .concat(script.collectAssetIds(params.config.window.system));
+    if(params.config.window.message.backgroundImage) {
+      assetIds.push(params.config.window.message.backgroundImage);
+    }
+    return assetIds;
   }
 }

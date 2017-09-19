@@ -1,11 +1,6 @@
 import {Pane, Script} from "./models/Script";
 import {Layer} from "./Constant";
 
-export interface PaneConfig {
-  assetId: string;
-  borderWidth?: number;
-}
-
 export interface FontConfig {
   color: string;
 }
@@ -18,7 +13,6 @@ export interface WindowConfig {
 
 export interface Config {
   window: WindowConfig;
-  pane: PaneConfig;
   font: FontConfig;
 }
 
@@ -35,9 +29,6 @@ export const defaultConfig: Config = {
       touchable: true
     },
     system: []
-  },
-  pane: {
-    assetId: "pane"
   },
   font: {
     color: "black"

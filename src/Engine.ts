@@ -2,7 +2,8 @@
 import {Scenario} from "./models/Scenario";
 import * as script from "./models/Script";
 import {Scene} from "./components/Scene";
-import {ChoiceButton} from "./components/ChoiceButton";
+import {Button} from "./components/Button";
+import {LabelButton} from "./components/LabelButton";
 import {Config, defaultConfig} from "./Config";
 import {ScriptManager, ScriptFunction} from "./ScriptManager";
 import {Tag} from "./Constant";
@@ -19,6 +20,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.image, Engine.image);
     Engine.scriptManager.register(Tag.pane, Engine.pane);
     Engine.scriptManager.register(Tag.jump, Engine.jump);
+    Engine.scriptManager.register(Tag.button, Engine.button);
     Engine.scriptManager.register(Tag.choice, Engine.choice);
     Engine.scriptManager.register(Tag.text, Engine.text);
     Engine.scriptManager.register(Tag.visible, Engine.visible);
@@ -27,6 +29,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.playVideo, Engine.playVideo);
     Engine.scriptManager.register(Tag.stopVideo, Engine.stopVideo);
     Engine.scriptManager.register(Tag.click, Engine.click);
+    Engine.scriptManager.register(Tag.trigger, Engine.trigger);
   }
 
   set config(value: Config) {
@@ -114,11 +117,25 @@ export class Engine {
     }
   }
 
+  private static button(scene: Scene, data: script.Button) {
+    const button = new Button({
+      scene,
+      width: data.width,
+      height: data.height,
+      backgroundImage: data.backgroundImage,
+      padding: data.padding,
+      backgroundEffector: data.backgroundEffector
+    });
+    button.move(data.x, data.y);
+    button.click.add(() => {
+      for(const s of data.scripts) {
+        Engine.scriptManager.call(scene, s);
+      }
+    });
+    scene.appendE(button, data.layer);
+  }
+
   private static choice(scene: Scene, choice: script.Choice) {
-    const isEnabledTrigger = choice.windowTrigger !== undefined ? choice.windowTrigger : script.Trigger.Disable;
-    if(isEnabledTrigger === script.Trigger.Disable) {
-      scene.disableNextFrameTrigger();
-    }
     const game = scene.game;
     const count = choice.values.length;
     // TODO: 計算式を書き直す
@@ -128,18 +145,17 @@ export class Engine {
     const baseX = choice.x ? choice.x : width / 6;
     const baseY = choice.y ? choice.y : (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
     choice.values.forEach((item: script.ChoiceItem, i: number) => {
-      let button = new ChoiceButton({
+      let button = new LabelButton({
         scene,
         width,
         height,
-        config: Engine.config,
-        choice: item,
-        assetId: choice.assetId
+        backgroundImage: choice.backgroundImage,
+        padding: choice.padding,
+        backgroundEffector: choice.backgroundEffector,
+        text: item.text,
+        config: Engine.config
       });
       button.click.add(() => {
-        if(isEnabledTrigger === script.Trigger.Disable) {
-          scene.enableNextFrameTrigger();
-        }
         Engine.scriptManager.call(scene, item);
       });
       const direction = choice.direction ? choice.direction : script.Direction.Vertical;
@@ -151,7 +167,7 @@ export class Engine {
         button.move(baseX + (width + space) * i, baseY);
           break;
       }
-      scene.appendE(button, { name: choice.layer });
+      scene.appendE(button, choice.layer);
     });
   }
 
@@ -181,5 +197,16 @@ export class Engine {
 
   private static click(scene: Scene, data: any) {
     scene.click();
+  }
+
+  private static trigger(scene: Scene, trigger: script.Trigger) {
+    switch(trigger) {
+      case script.Trigger.Off:
+        scene.disableNextFrameTrigger();
+        break;
+      case script.Trigger.On:
+        scene.enableNextFrameTrigger();
+        break;
+    }
   }
 }

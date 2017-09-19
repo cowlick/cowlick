@@ -26,9 +26,23 @@ export interface Pane {
   padding?: number;
   backgroundEffector?: {
     borderWidth: number;
-  }
+  };
   touchable?: boolean;
-} 
+}
+
+export interface Button {
+  layer: LayerConfig;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  backgroundImage?: string;
+  padding?: number;
+  backgroundEffector?: {
+    borderWidth: number;
+  };
+  scripts: Script[];
+}
 
 export interface Text {
   value: string;
@@ -43,13 +57,27 @@ export interface Script {
   data: any;
 }
 
+export function collectAssetIds(scripts: Script[]): string[] {
+  let ids: string[] = [];
+  for(const s of scripts) {
+    if(typeof(s.data) === "object") {
+      if(s.data.assetId) {
+        ids.push(<string>s.data.assetId);
+      } else if(s.data.backgroundImage) {
+        ids.push(<string>s.data.backgroundImage);
+      }
+    }
+  }
+  return ids;
+}
+
 export interface ChoiceItem extends Script {
   text: string;
 }
 
 export const enum Trigger {
-  Enable,
-  Disable
+  On,
+  Off
 }
 
 export const enum Direction {
@@ -58,15 +86,18 @@ export const enum Direction {
 }
 
 export interface Choice {
-  layer: string;
+  layer: LayerConfig;
   values: ChoiceItem[];
   x?: number;
   y?: number;
   width?: number;
   height?: number;
   direction?: Direction;
-  assetId?: string;
-  windowTrigger?: Trigger;
+  backgroundImage?: string;
+  padding?: number;
+  backgroundEffector?: {
+    borderWidth: number;
+  };
 }
 
 export interface Visibility {

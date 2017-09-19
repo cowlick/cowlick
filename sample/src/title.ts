@@ -31,7 +31,12 @@ export const title = new novel.Scene({
               },
               text: "はじめる"
             }
-          ]
+          ],
+          backgroundImage: "pane",
+          padding: 4,
+          backgroundEffector: {
+            borderWidth: 4
+          }
         }
       }
     ])

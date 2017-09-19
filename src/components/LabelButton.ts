@@ -2,22 +2,21 @@
 import {ChoiceItem} from "../models/Script";
 import {ButtonParameters, Button} from "./Button";
 import {Scene} from "./Scene";
+import {Config} from "../Config";
 
 export interface ChoiceButtonParameters extends ButtonParameters {
-  choice: ChoiceItem;
+  text: string;
+  config: Config;
 }
 
-export class ChoiceButton extends Button {
-
-  choice: ChoiceItem;
+export class LabelButton extends Button {
 
   constructor(params: ChoiceButtonParameters) {
     super(params);
-    this.choice = params.choice;
 
     let label = new g.Label({
       scene: this.scene,
-      text: this.choice.text,
+      text: params.text,
       font: new g.DynamicFont({
         game: this.scene.game,
         fontFamily: g.FontFamily.SansSerif,
@@ -29,13 +28,5 @@ export class ChoiceButton extends Button {
     label.aligning(this.width, g.TextAlign.Center);
     label.invalidate();
     this.append(label);
-  }
-
-  move(x: number, y: number) {
-
-    this.x = x;
-    this.y = y;
-
-    this.modified();
   }
 }

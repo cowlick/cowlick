@@ -50,7 +50,9 @@ export const scene0 = new novel.Scene({
       {
         tag: novel.Tag.choice,
         data: {
-          layer: novel.Layer.choice,
+          layer: {
+            name: novel.Layer.choice
+          },
           values: [
             {
               tag: novel.Tag.jump,
@@ -66,8 +68,17 @@ export const scene0 = new novel.Scene({
               },
               text: "シーン2へ"
             }
-          ]
+          ],
+          backgroundImage: "pane",
+          padding: 4,
+          backgroundEffector: {
+            borderWidth: 4
+          }
         }
+      },
+      {
+        tag: novel.Tag.trigger,
+        data: novel.Trigger.Off
       }
     ])
   ]

@@ -51,14 +51,14 @@ function main() {
         {
           tag: novel.Tag.choice,
           data: {
-            layer: novel.Layer.system,
+            layer: {
+              name: novel.Layer.system
+            },
             direction: novel.Direction.Horizontal,
             width: 100,
             height: 32,
             x: g.game.width - 220,
             y: g.game.height - 40,
-            assetId: null,
-            windowTrigger: novel.Trigger.Enable,
             values: [
               {
                 tag: "noop",
@@ -74,9 +74,6 @@ function main() {
           }
         }
       ]
-    },
-    pane: {
-      assetId: "pane"
     },
     font: {
       color: "white"

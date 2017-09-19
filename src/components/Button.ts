@@ -1,13 +1,15 @@
 "use strict";
 import {Scene} from "./Scene";
-import {Config} from "../Config";
 
 export interface ButtonParameters {
   scene: Scene;
   width: number;
   height: number;
-  config: Config;
-  assetId?: string;
+  backgroundImage?: string;
+  padding?: number;
+  backgroundEffector?: {
+    borderWidth: number;
+  }
 }
 
 export class Button extends g.Pane {
@@ -20,9 +22,9 @@ export class Button extends g.Pane {
       scene: params.scene,
       width: params.width,
       height: params.height,
-      backgroundImage: params.assetId === null ? undefined : <g.ImageAsset>params.scene.assets[params.config.pane.assetId],
-      padding: 4,
-      backgroundEffector: new g.NinePatchSurfaceEffector(params.scene.game, params.config.pane.borderWidth)
+      backgroundImage: params.backgroundImage ? params.scene.assets[params.backgroundImage] as g.ImageAsset : undefined,
+      padding: params.padding,
+      backgroundEffector: params.backgroundEffector ? new g.NinePatchSurfaceEffector(params.scene.game, params.backgroundEffector.borderWidth) : undefined
     });
     this.touchable = true;
     this.pointDown.addOnce(this.onPointDown, this);
@@ -30,6 +32,14 @@ export class Button extends g.Pane {
     this.pointUp.addOnce(this.onPointUp, this);
     this.click = new g.Trigger<Button>();
     this.pushed = false;
+  }
+
+  move(x: number, y: number) {
+    
+    this.x = x;
+    this.y = y;
+    
+    this.modified();
   }
 
   private onPointDown(e: g.PointDownEvent) {

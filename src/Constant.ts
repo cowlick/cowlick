@@ -10,6 +10,8 @@ export namespace Tag {
   export const playVideo = "playVideo";
   export const stopVideo = "stopVideo";
   export const click = "click";
+  export const button = "button";
+  export const trigger = "trigger";
 }
 
 export namespace Layer {
