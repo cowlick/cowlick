@@ -112,3 +112,8 @@ export interface Audio {
 export interface Video {
   assetId: string;
 }
+
+export interface Save {
+  index: number;
+  force?: boolean;
+}

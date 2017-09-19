@@ -1,5 +1,6 @@
 "use strict";
 import {Frame} from "./Frame";
+import {SaveData} from "./SaveData";
 
 export interface SceneParameters {
   label: string;
@@ -48,5 +49,13 @@ export class Scene {
 
   reset() {
     this.index = 0;
+  }
+
+  createSaveData(variables: any): SaveData {
+    return {
+      label: this._label,
+      frame: this.index,
+      variables
+    };
   }
 }

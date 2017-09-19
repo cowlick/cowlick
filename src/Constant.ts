@@ -12,6 +12,7 @@ export namespace Tag {
   export const click = "click";
   export const button = "button";
   export const trigger = "trigger";
+  export const save = "save";
 }
 
 export namespace Layer {

@@ -1,6 +1,7 @@
 "use strict";
 import {Scenario} from "./models/Scenario";
 import * as script from "./models/Script";
+import {GameState} from "./models/GameState";
 import {Scene} from "./components/Scene";
 import {Button} from "./components/Button";
 import {LabelButton} from "./components/LabelButton";
@@ -13,9 +14,11 @@ export class Engine {
   private game: g.Game;
   private static scriptManager = new ScriptManager();
   private static _config = defaultConfig;
+  private static state = new GameState();
 
   constructor(game: g.Game) {
     this.game = game;
+    game.vars = Engine.state;
 
     Engine.scriptManager.register(Tag.image, Engine.image);
     Engine.scriptManager.register(Tag.pane, Engine.pane);
@@ -30,6 +33,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.stopVideo, Engine.stopVideo);
     Engine.scriptManager.register(Tag.click, Engine.click);
     Engine.scriptManager.register(Tag.trigger, Engine.trigger);
+    Engine.scriptManager.register(Tag.save, Engine.save);
   }
 
   set config(value: Config) {
@@ -207,6 +211,12 @@ export class Engine {
       case script.Trigger.On:
         scene.enableNextFrameTrigger();
         break;
+    }
+  }
+
+  private static save(scene: Scene, data: script.Save) {
+    if(! Engine.state.save(scene.source.scene.createSaveData({}), data)) {
+      scene.game.logger.warn("save data already exists: " + data.index);
     }
   }
 }
