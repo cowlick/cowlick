@@ -44,8 +44,8 @@ export const logo = new novel.Scene({
         tag: "logo",
         data: {
           layer: "logo",
-          duration: 3000,
-          wait: 5000
+          duration: 1000,
+          wait: 3000
         }
       },
       {
