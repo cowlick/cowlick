@@ -1,11 +1,6 @@
 "use strict";
 import * as tl from "@akashic-extension/akashic-timeline";
 import * as novel from "../../lib/index";
-import {logo} from "./logo";
-import {title} from "./title";
-import {scene0} from "./scene0";
-import {scene1} from "./scene1";
-import {scene2} from "./scene2";
 
 interface Logo {
   layer: string;
@@ -80,13 +75,7 @@ function main() {
     }
   };
 
-  novel.engine.start(new novel.Scenario([
-    logo,
-    title,
-    scene0,
-    scene1,
-    scene2
-  ]));
+  novel.engine.start();
 }
 
 module.exports = main;

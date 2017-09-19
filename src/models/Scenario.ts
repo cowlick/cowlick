@@ -12,9 +12,8 @@ export class Scenario {
     this.scenes = scenes;
   }
 
-  static load(): Scenario {
-    // TODO: デフォルトのシナリオファイルを読み込む
-    return new Scenario([]);
+  static load(game: g.Game): Scenario {
+    return g._require(game, "scenario");
   }
 
   get scene() {

@@ -44,11 +44,11 @@ export class Engine {
 
   start(scenario?: Scenario): void {
 
-    const s = scenario ? scenario : Scenario.load();
+    const s = scenario ? scenario : Scenario.load(this.game);
 
     const scene = new Scene({
       game: this.game,
-      scenario,
+      scenario: s,
       scriptManager: Engine.scriptManager,
       config: Engine.config
     });
