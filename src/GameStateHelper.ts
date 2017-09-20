@@ -32,7 +32,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
               frame: 0,
               variables: {}
             }
-          }
+          };
           data[i] = s;
         }
         const keys = key.regionKey.split(".");
@@ -54,7 +54,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   return {
     data: data.map((kv) => kv.value),
     variables
-  }
+  };
 }
 
 export function loadGameState(scene: g.Scene, keys: g.StorageKey[], max: number): GameState {

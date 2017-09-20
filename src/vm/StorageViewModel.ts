@@ -1,5 +1,5 @@
 "use strict";
-import {GameState, Variables} from "../models/GameState";
+import {GameState} from "../models/GameState";
 import {Scene} from "../models/Scene";
 import {SaveData} from "../models/SaveData";
 import {Save} from "../models/Script";

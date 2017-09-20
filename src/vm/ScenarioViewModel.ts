@@ -1,6 +1,5 @@
 "use strict";
 import {Scenario} from "../models/Scenario";
-import {Scene} from "../models/Scene";
 import {Frame} from "../models/Frame";
 
 export class ScenarioViewModel {

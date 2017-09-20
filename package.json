@@ -7,7 +7,8 @@
     "postinstall": "cd sample && npm install",
     "build": "webpack --progress && npm run sample:build",
     "sample:build": "cd sample && npm run build",
-    "start": "cd sample && npm start"
+    "start": "cd sample && npm start",
+    "lint": "eslint --fix --ext .ts src"
   },
   "author": "pocketberserker",
   "license": "MIT",
@@ -18,8 +19,10 @@
   },
   "devDependencies": {
     "@types/node": "8.0.28",
+    "eslint": "4.7.1",
     "ts-loader": "2.3.7",
     "typescript": "2.5.2",
+    "typescript-eslint-parser": "github:eslint/typescript-eslint-parser",
     "uglify-save-license": "0.4.1",
     "webpack": "3.6.0"
   }

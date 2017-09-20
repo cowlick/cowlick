@@ -165,7 +165,7 @@ export class Engine {
           button.move(baseX, baseY + (height + space) * i);
           break;
         case script.Direction.Horizontal:
-        button.move(baseX + (width + space) * i, baseY);
+          button.move(baseX + (width + space) * i, baseY);
           break;
       }
       scene.appendLayer(button, choice.layer);

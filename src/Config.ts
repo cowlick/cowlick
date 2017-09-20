@@ -41,4 +41,4 @@ export const defaultConfig: Config = {
   system: {
     maxSaveCount: 100
   }
-}
+};
