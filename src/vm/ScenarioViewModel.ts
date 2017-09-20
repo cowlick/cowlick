@@ -17,17 +17,21 @@ export class ScenarioViewModel {
     return this.scenario;
   }
 
-  nextFrame(callback: (frame: Frame) => void) {
+  loadFrame(callback: (frame: Frame) => void) {
     this.frameTrigger.add(callback);
   }
 
-  next(): boolean {
-    const frame = this.source.nextFrame();
-    if(frame) {
-      this.frameTrigger.fire(frame);
+  load(frame?: Frame): boolean {
+    const f = frame ? frame : this.source.scene.frame;
+    if(f) {
+      this.frameTrigger.fire(f);
       return true;
     } else {
       return false;
     }
+  }
+
+  next(): boolean {
+    return this.load(this.source.nextFrame());
   }
 }

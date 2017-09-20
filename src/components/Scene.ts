@@ -63,7 +63,7 @@ export class Scene extends g.Scene {
     this.loaded.add(this.onLoaded, this);
 
     this.scenario = new ScenarioViewModel(params.scenario);
-    this.scenario.nextFrame(this._loadFrame);
+    this.scenario.loadFrame(this._loadFrame);
   }
 
   get source(): Scenario {
@@ -78,7 +78,9 @@ export class Scene extends g.Scene {
     const previous = this.source.scene.label;
     if(this.source.update(target)) {
       if(previous === this.source.scene.label) {
-        this.loadFrame(this.source.scene.frame);
+        if(! this.scenario.load()) {
+          this.game.logger.warn("scene not found", target);
+        }
       } else {
         this.game.pushScene(new Scene({
           game: this.game,
@@ -91,7 +93,7 @@ export class Scene extends g.Scene {
       }
     } else {
       // TODO: 続行不可能としてタイトルに戻る?
-      this.game.logger.warn("scene not found:" + target.label);
+      this.game.logger.warn("scene not found", target);
     }
   }
 
