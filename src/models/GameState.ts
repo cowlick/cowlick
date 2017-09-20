@@ -28,9 +28,9 @@ export class GameState {
     return typeof this.data[index] === "undefined";
   }
 
-  save(scene: Scene, info: Save): SaveData {
-    if(info.index > this.max) {
-      return undefined;
+  save(scene: Scene, info: Save): string | SaveData {
+    if(info.index > this.max || info.index < 0) {
+      return "storage out of range: " + info.index;
     }
     const saveData = scene.createSaveData(this._variables.current);
     if(info.force) {
@@ -38,7 +38,7 @@ export class GameState {
       return saveData;
     } else {
       if(this.exists(info.index)) {
-        return undefined;
+        return "save data already exists: " + info.index;
       } else {
         this.data[info.index] = saveData;
         return saveData;

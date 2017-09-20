@@ -20,16 +20,16 @@ export class StorageViewModel {
     return this.state.load(index);
   }
 
-  save(scene: Scene, info: Save): boolean {
-    const saveData = this.state.save(scene, info);
-    if(saveData) {
-      const prefix = "data" + info.index + ".";
-      this.saveVariables(saveData.variables, prefix + "variables.");
-      this.write(saveData.label, prefix + "label");
-      this.write(saveData.frame, prefix + "frame");
-      return true;
+  save(scene: Scene, info: Save): string | void {
+    const result = this.state.save(scene, info);
+    if(typeof result === "string") {
+      return result;
     } else {
-      return false;
+      const prefix = "data" + info.index + ".";
+      this.saveVariables(result.variables, prefix + "variables.");
+      this.write(result.label, prefix + "label");
+      this.write(result.frame, prefix + "frame");
+      return;
     }
   }
 

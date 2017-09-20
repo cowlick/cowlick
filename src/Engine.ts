@@ -226,8 +226,9 @@ export class Engine {
   }
 
   private static save(scene: Scene, data: script.Save) {
-    if(! scene.save(scene.source.scene, data)) {
-      scene.game.logger.warn("save data already exists: " + data.index);
+    const result = scene.save(scene.source.scene, data);
+    if(typeof result === "string") {
+      scene.game.logger.warn(result);
     }
   }
 

@@ -158,7 +158,7 @@ export class Scene extends g.Scene {
     }
   }
 
-  save(scene: SceneModel, info: script.Save) {
+  save(scene: SceneModel, info: script.Save): string | void {
     return this.storage.save(scene, info);
   }
 
