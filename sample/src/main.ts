@@ -75,6 +75,11 @@ function main() {
     },
     system: {
       maxSaveCount: 100
+    },
+    audio: {
+      se: 0.5,
+      bgm: 0.5,
+      voice: 0.5
     }
   };
 

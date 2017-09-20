@@ -32,6 +32,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.playAudio, Engine.playAudio);
     Engine.scriptManager.register(Tag.stopAudio, Engine.stopAudio);
     Engine.scriptManager.register(Tag.playVideo, Engine.playVideo);
+    Engine.scriptManager.register(Tag.changeVolume, Engine.changeVolume);
     Engine.scriptManager.register(Tag.stopVideo, Engine.stopVideo);
     Engine.scriptManager.register(Tag.click, Engine.click);
     Engine.scriptManager.register(Tag.trigger, Engine.trigger);
@@ -182,6 +183,10 @@ export class Engine {
 
   private static playAudio(scene: Scene, audio: script.Audio) {
     scene.playAudio(audio);
+  }
+
+  private static changeVolume(scene: Scene, data: script.ChangeVolume) {
+    scene.changeVolume(data);
   }
 
   private static stopAudio(scene: Scene, audio: script.Audio) {

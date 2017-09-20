@@ -9,6 +9,7 @@ import {GameState} from "../models/GameState";
 import {SaveData} from "../models/SaveData";
 import {Label} from "./Label";
 import {LayerGroup} from "./LayerGroup";
+import {AudioGroup} from "./AudioGroup";
 import {loadGameState} from "../GameStateHelper";
 import {Config} from "../Config";
 import {ScriptManager} from "../ScriptManager";
@@ -31,7 +32,7 @@ export class Scene extends g.Scene {
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
   private config: Config;
-  private audios: g.AudioAsset[];
+  private audioGroup: AudioGroup;
   private videos: g.VideoAsset[];
   private storage: StorageViewModel;
   private storageKeys: g.StorageKey[];
@@ -52,7 +53,7 @@ export class Scene extends g.Scene {
     this.layerGroup = new LayerGroup(this);
     this.scriptManager = params.scriptManager;
     this.config = params.config;
-    this.audios = [];
+    this.audioGroup = new AudioGroup(this.game, params.config.audio);
     this.videos = [];
     this.player = params.player;
     this.storageKeys = params.storageKeys;
@@ -145,18 +146,16 @@ export class Scene extends g.Scene {
 
   playAudio(audio: script.Audio) {
     const a = (this.assets[audio.assetId] as g.AudioAsset);
-    a.play();
-    this.audios.push(a);
+    const player = a.play();
+    this.audioGroup.add(audio.groupName, player);
+  }
+
+  changeVolume(data: script.ChangeVolume) {
+    this.audioGroup.changeVolume(data.groupName, data.volume);
   }
 
   stopAudio(audio: script.Audio) {
-    const i = this.audios.findIndex(asset => asset.id === audio.assetId);
-    if(i > 0) {
-      this.audios[i].destroy();
-      this.audios.splice(i, 1);
-    } else {
-      this.game.logger.warn("audio not found: " + audio.assetId);
-    }
+    this.audioGroup.remove(audio);
   }
 
   playVideo(video: script.Video) {
@@ -167,7 +166,7 @@ export class Scene extends g.Scene {
   }
 
   stopVideo(video: script.Video) {
-    const i = this.audios.findIndex(asset => asset.id === video.assetId);
+    const i = this.videos.findIndex(asset => asset.id === video.assetId);
     if(i > 0) {
       const v = this.videos[i];
       v.stop();

@@ -15,10 +15,17 @@ export interface SystemConfig {
   maxSaveCount: number;
 }
 
+export interface AudioConfig {
+  voice: number;
+  se: number;
+  bgm: number;
+}
+
 export interface Config {
   window: WindowConfig;
   font: FontConfig;
   system: SystemConfig;
+  audio: AudioConfig;
 }
 
 export const defaultConfig: Config = {
@@ -40,5 +47,10 @@ export const defaultConfig: Config = {
   },
   system: {
     maxSaveCount: 100
+  },
+  audio: {
+    voice: 0.5,
+    se: 0.5,
+    bgm: 0.5
   }
 };

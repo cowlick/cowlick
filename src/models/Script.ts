@@ -108,6 +108,12 @@ export interface Visibility {
 
 export interface Audio {
   assetId: string;
+  groupName?: string;
+}
+
+export interface ChangeVolume {
+  groupName: string;
+  volume: number;
 }
 
 export interface Video {
