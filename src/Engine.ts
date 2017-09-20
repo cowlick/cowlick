@@ -114,21 +114,8 @@ export class Engine {
     scene.appendLayer(p, pane.layer);
   }
 
-  private static jump(scene: Scene, data: script.Jump) {
-    const game = scene.game;
-    if(scene.source.update(data)) {
-      game.pushScene(new Scene({
-        game,
-        scenario: scene.source,
-        scriptManager: Engine.scriptManager,
-        config: Engine.config,
-        player: Engine.player,
-        state: scene.gameState
-      }));
-    } else {
-      // TODO: 続行不可能としてタイトルに戻る?
-      game.logger.warn("scene not found:" + data.label);
-    }
+  private static jump(scene: Scene, target: script.Jump) {
+    scene.jump(target);
   }
 
   private static button(scene: Scene, data: script.Button) {

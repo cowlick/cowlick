@@ -40,6 +40,7 @@ export class Scene extends g.Scene {
 
   // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
   private _requestNextFrame = this.requestNextFrame.bind(this);
+  private _loadFrame = this.loadFrame.bind(this);
 
   constructor(params: SceneParameters) {
     super({
@@ -62,11 +63,7 @@ export class Scene extends g.Scene {
     this.loaded.add(this.onLoaded, this);
 
     this.scenario = new ScenarioViewModel(params.scenario);
-    this.scenario.nextFrame((frame: Frame) => {
-      this.applyScripts(frame.scripts);
-      this.topMessageLayer();
-      this.layerGroup.top(Layer.system);
-    });
+    this.scenario.nextFrame(this._loadFrame);
   }
 
   get source(): Scenario {
@@ -75,6 +72,27 @@ export class Scene extends g.Scene {
 
   get gameState(): GameState {
     return this._gameState;
+  }
+
+  jump(target: script.Jump) {
+    const previous = this.source.scene.label;
+    if(this.source.update(target)) {
+      if(previous === this.source.scene.label) {
+        this.loadFrame(this.source.scene.frame);
+      } else {
+        this.game.pushScene(new Scene({
+          game: this.game,
+          scenario: this.source,
+          scriptManager: this.scriptManager,
+          config: this.config,
+          player: this.player,
+          state: this._gameState
+        }));
+      }
+    } else {
+      // TODO: 続行不可能としてタイトルに戻る?
+      this.game.logger.warn("scene not found:" + target.label);
+    }
   }
 
   appendLayer(e: g.E, config: script.LayerConfig) {
@@ -184,6 +202,12 @@ export class Scene extends g.Scene {
       this.createWindowLayer();
       this.createSystemLayer();
     }
+    this.topMessageLayer();
+    this.layerGroup.top(Layer.system);
+  }
+
+  private loadFrame(frame: Frame) {
+    this.applyScripts(frame.scripts);
     this.topMessageLayer();
     this.layerGroup.top(Layer.system);
   }
