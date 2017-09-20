@@ -18,7 +18,6 @@ export class Engine {
   private static _config = defaultConfig;
   // 仮置き
   static player: g.Player = { id: "0" };
-  private static storageKeys: g.StorageKey[] = [];
 
   constructor(game: g.Game) {
     this.game = game;
