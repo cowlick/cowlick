@@ -11,7 +11,7 @@ export class LayerGroup {
     this.group = new Map<string, g.Pane>();
   }
 
-  appendE(e: g.E, config: LayerConfig) {
+  append(e: g.E, config: LayerConfig) {
     let layer = this.group.get(config.name);
     if(layer) {
       layer.append(e);

@@ -77,8 +77,8 @@ export class Scene extends g.Scene {
     return this._gameState;
   }
 
-  appendE(e: g.E, config: script.LayerConfig) {
-    this.layerGroup.appendE(e, config);
+  appendLayer(e: g.E, config: script.LayerConfig) {
+    this.layerGroup.append(e, config);
   }
 
   updateText(text: string) {

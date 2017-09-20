@@ -97,7 +97,7 @@ export class Engine {
       sprite.y = image.y;
     }
     sprite.invalidate();
-    scene.appendE(sprite, image.layer);
+    scene.appendLayer(sprite, image.layer);
   }
 
   private static pane(scene: Scene, pane: script.Pane) {
@@ -112,7 +112,7 @@ export class Engine {
       backgroundEffector: pane.backgroundEffector ? new g.NinePatchSurfaceEffector(scene.game, pane.backgroundEffector.borderWidth) : undefined
     });
     p.touchable = !!pane.touchable;
-    scene.appendE(p, pane.layer);
+    scene.appendLayer(p, pane.layer);
   }
 
   private static jump(scene: Scene, data: script.Jump) {
@@ -147,7 +147,7 @@ export class Engine {
         Engine.scriptManager.call(scene, s);
       }
     });
-    scene.appendE(button, data.layer);
+    scene.appendLayer(button, data.layer);
   }
 
   private static choice(scene: Scene, choice: script.Choice) {
@@ -182,7 +182,7 @@ export class Engine {
         button.move(baseX + (width + space) * i, baseY);
           break;
       }
-      scene.appendE(button, choice.layer);
+      scene.appendLayer(button, choice.layer);
     });
   }
 
