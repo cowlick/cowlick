@@ -207,7 +207,10 @@ export class Scene extends g.Scene {
   }
 
   private loadFrame(frame: Frame) {
-    this.applyScripts(frame.scripts);
+    if(frame) {
+      this.removeLayers(frame.scripts);
+      this.applyScripts(frame.scripts);
+    }
     this.topMessageLayer();
     this.layerGroup.top(Layer.system);
   }
