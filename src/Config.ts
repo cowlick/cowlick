@@ -11,9 +11,14 @@ export interface WindowConfig {
   system: Script[];
 }
 
+export interface SystemConfig {
+  maxSaveCount: number;
+}
+
 export interface Config {
   window: WindowConfig;
   font: FontConfig;
+  system: SystemConfig;
 }
 
 export const defaultConfig: Config = {
@@ -32,5 +37,8 @@ export const defaultConfig: Config = {
   },
   font: {
     color: "black"
+  },
+  system: {
+    maxSaveCount: 100
   }
 }

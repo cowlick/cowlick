@@ -1,8 +1,8 @@
 "use strict";
-import {GameState} from "../../lib/index";
+import {Variables} from "../../lib/index";
 
-function sample(state: GameState) {
-  state.variables.current.sample = "sample";
+function sample(variables: Variables) {
+  variables.current.sample = "sample";
 }
 
 module.exports = sample;

@@ -72,6 +72,9 @@ function main() {
     },
     font: {
       color: "white"
+    },
+    system: {
+      maxSaveCount: 100
     }
   };
 

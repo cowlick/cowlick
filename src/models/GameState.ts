@@ -3,23 +3,24 @@ import {Scene} from "./Scene";
 import {SaveData} from "./SaveData";
 import {Save} from "./Script";
 
+export interface Variables {
+  system: any;
+  current: any;
+}
+
 export class GameState {
 
   private data: SaveData[];
-  private _variables: {
-    system: any;
-    current: any;
-  };
+  private _variables: Variables;
+  private max: number;
 
-  constructor() {
-    this.data = [];
-    this._variables = {
-      system: {},
-      current: {}
-    };
+  constructor(data: SaveData[], variables: Variables, max: number) {
+    this.data = data;
+    this._variables = variables;
+    this.max = max;
   }
 
-  get variables(): any {
+  get variables(): Variables {
     return this._variables;
   }
 
@@ -27,17 +28,20 @@ export class GameState {
     return typeof this.data[index] === "undefined";
   }
 
-  save(scene: Scene, info: Save): boolean {
+  save(scene: Scene, info: Save): SaveData {
+    if(info.index > this.max) {
+      return undefined;
+    }
     const saveData = scene.createSaveData(this._variables.current);
     if(info.force) {
       this.data[info.index] = saveData;
-      return true;
+      return saveData;
     } else {
       if(this.exists(info.index)) {
-        return false;
+        return undefined;
       } else {
         this.data[info.index] = saveData;
-        return true;
+        return saveData;
       }
     }
   }

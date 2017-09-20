@@ -1,11 +1,15 @@
 "use strict";
 import {ScenarioViewModel} from "../vm/ScenarioViewModel";
+import {StorageViewModel} from "../vm/StorageViewModel";
 import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
 import * as script from "../models/Script";
+import {GameState} from "../models/GameState";
+import {SaveData} from "../models/SaveData";
 import {Label} from "./Label";
 import {LayerGroup} from "./LayerGroup";
+import {loadGameState} from "../GameStateHelper";
 import {Config} from "../Config";
 import {ScriptManager} from "../ScriptManager";
 import {Tag, Layer} from "../Constant";
@@ -15,6 +19,9 @@ export interface SceneParameters {
   scenario: Scenario;
   scriptManager: ScriptManager;
   config: Config;
+  player: g.Player;
+  storageKeys?: g.StorageKey[];
+  state?: GameState;
 }
 
 export class Scene extends g.Scene {
@@ -26,6 +33,10 @@ export class Scene extends g.Scene {
   private config: Config;
   private audios: g.AudioAsset[];
   private videos: g.VideoAsset[];
+  private storage: StorageViewModel;
+  private storageKeys: g.StorageKey[];
+  private player: g.Player;
+  private _gameState: GameState;
 
   // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
   private _requestNextFrame = this.requestNextFrame.bind(this);
@@ -33,7 +44,8 @@ export class Scene extends g.Scene {
   constructor(params: SceneParameters) {
     super({
       game: params.game,
-      assetIds: Scene.collectAssetIds(params)
+      assetIds: Scene.collectAssetIds(params),
+      storageKeys: params.state ? undefined : params.storageKeys
     });
 
     this.layerGroup = new LayerGroup(this);
@@ -41,6 +53,11 @@ export class Scene extends g.Scene {
     this.config = params.config;
     this.audios = [];
     this.videos = [];
+    this.player = params.player;
+    this.storageKeys = params.storageKeys;
+    if(params.state) {
+      this._gameState = params.state;
+    }
 
     this.loaded.add(this.onLoaded, this);
 
@@ -54,6 +71,10 @@ export class Scene extends g.Scene {
 
   get source(): Scenario {
     return this.scenario.source;
+  }
+
+  get gameState(): GameState {
+    return this._gameState;
   }
 
   appendE(e: g.E, config: script.LayerConfig) {
@@ -137,9 +158,22 @@ export class Scene extends g.Scene {
     }
   }
 
+  save(scene: SceneModel, info: script.Save) {
+    return this.storage.save(scene, info);
+  }
+
+  load(index: number): SaveData {
+    return this.storage.load(index);
+  }
+
   private onLoaded() {
 
     const frame = this.scenario.source.frame;
+
+    if(! this._gameState) {
+      this._gameState = loadGameState(this, this.storageKeys, this.config.system.maxSaveCount);
+    }
+    this.storage = new StorageViewModel(this.game.storage, this.player, this._gameState);
 
     if(frame) {
       this.removeLayers(frame.scripts);

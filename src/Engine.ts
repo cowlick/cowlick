@@ -5,20 +5,23 @@ import {GameState} from "./models/GameState";
 import {Scene} from "./components/Scene";
 import {Button} from "./components/Button";
 import {LabelButton} from "./components/LabelButton";
+import {StorageViewModel} from "./vm/StorageViewModel";
 import {Config, defaultConfig} from "./Config";
 import {ScriptManager, ScriptFunction} from "./ScriptManager";
 import {Tag} from "./Constant";
+import {createStorageKeys} from "./GameStateHelper";
 
 export class Engine {
 
   private game: g.Game;
   private static scriptManager = new ScriptManager();
   private static _config = defaultConfig;
-  private static state = new GameState();
+  // 仮置き
+  static player: g.Player = { id: "0" };
+  private static storageKeys: g.StorageKey[] = [];
 
   constructor(game: g.Game) {
     this.game = game;
-    game.vars = Engine.state;
 
     Engine.scriptManager.register(Tag.image, Engine.image);
     Engine.scriptManager.register(Tag.pane, Engine.pane);
@@ -46,11 +49,15 @@ export class Engine {
 
     const s = scenario ? scenario : Scenario.load(this.game);
 
+    const storageKeys = createStorageKeys(Engine.player, Engine._config.system.maxSaveCount);
+
     const scene = new Scene({
       game: this.game,
       scenario: s,
       scriptManager: Engine.scriptManager,
-      config: Engine.config
+      config: Engine.config,
+      player: Engine.player,
+      storageKeys
     });
     this.game.pushScene(scene);
   }
@@ -115,7 +122,9 @@ export class Engine {
         game,
         scenario: scene.source,
         scriptManager: Engine.scriptManager,
-        config: Engine.config
+        config: Engine.config,
+        player: Engine.player,
+        state: scene.gameState
       }));
     } else {
       // TODO: 続行不可能としてタイトルに戻る?
@@ -217,13 +226,13 @@ export class Engine {
   }
 
   private static save(scene: Scene, data: script.Save) {
-    if(! Engine.state.save(scene.source.scene, data)) {
+    if(! scene.save(scene.source.scene, data)) {
       scene.game.logger.warn("save data already exists: " + data.index);
     }
   }
 
   private static load(scene: Scene, data: script.Load) {
-    const s = Engine.state.load(data.index);
+    const s = scene.load(data.index);
     if(s) {
       Engine.jump(scene, s);
     } else {
@@ -233,6 +242,6 @@ export class Engine {
 
   private static evaluate(scene: Scene, info: script.Eval) {
     const f = g._require(scene.game, info.path);
-    f(Engine.state);
+    f(scene.gameState.variables);
   }
 }
