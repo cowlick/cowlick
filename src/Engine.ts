@@ -174,7 +174,7 @@ export class Engine {
   }
 
   private static text(scene: Scene, text: script.Text) {
-    scene.updateText(text.value);
+    scene.updateText(text);
   }
 
   private static visible(scene: Scene, visibility: script.Visibility) {

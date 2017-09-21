@@ -44,8 +44,12 @@ export interface Button {
   scripts: Script[];
 }
 
-export interface Text {
+export interface RubyText {
   value: string;
+}
+
+export interface Text {
+  values: (string | RubyText[]) [];
 }
 
 export interface Jump {

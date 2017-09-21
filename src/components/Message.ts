@@ -1,11 +1,14 @@
 "use strict";
 import * as al from "@akashic-extension/akashic-label";
 import {Config} from "../Config";
+import {RubyText, Text} from "../models/Script";
 
 export class Message extends al.Label {
 
-  private counter = 0;
-  private characters: string[] = [];
+  private index: number;
+  private counter: number;
+  private original: Text;
+  private current: (string | RubyText)[];
 
   constructor(scene: g.Scene, config: Config) {
     super({
@@ -23,42 +26,79 @@ export class Message extends al.Label {
       y: config.window.message.y + 20
     });
 
+    this.index = 0;
+    this.counter = 0;
+    this.original = {
+      values: []
+    };
+    this.current = [];
     this.textAlign = g.TextAlign.Left;
     this.update.add(this.onUpdated, this);
   }
 
   get finished() {
-    return this.counter >= this.characters.length;
+    return this.index >= this.original.values.length;
   }
 
-  appendText(text: string) {
-    this.characters.concat(text.split(""));
+  appendText(text: Text) {
+    this.original = {
+      values: this.original.values.concat(text.values)
+    }
   }
 
-  updateText(text: string) {
+  updateText(text: Text) {
     this.text = "";
-    this.characters = text.split("");
+    this.original = text;
+    this.index = 0;
     this.counter = 0;
+    this.setCurrent();
   }
 
   showAll() {
     if(! this.finished) {
       // 自動更新を止めておかないと二重登録されかねない
       this.update.remove(this.onUpdated, this);
-      this.text += this.characters.slice(this.counter).join("");
-      this.counter = this.characters.length;
+      this.text = "";
+      for(const t of this.original.values) {
+        if(typeof t === "string") {
+          this.text += t;
+        } else {
+          this.text += t[t.length - 1].value;
+        }
+      }
+      this.index = this.original.values.length;
       this.invalidate();
       this.update.add(this.onUpdated, this);
     }
   }
 
   private onUpdated() {
-
-    // TODO: ルビを含めていい感じに表示する
+    if(! this.finished && this.counter >= this.current.length) {
+      this.counter = 0;
+      this.index++;
+      this.setCurrent();
+    }
     if(! this.finished) {
-      this.text += this.characters[this.counter];
+      const t = this.current[this.counter];
+      if(typeof t === "string") {
+        this.text += t;
+      } else {
+        if(this.counter !== 0) {
+          this.text = this.text.substring(0, this.text.length - t.value.length);
+        }
+        this.text += t.value;
+      }
       this.invalidate();
       this.counter++;
+    }
+  }
+
+  private setCurrent() {
+    const ts = this.original.values[this.index];
+    if(typeof ts === "string") {
+      this.current = ts.split(/.*?/);
+    } else {
+      this.current = ts;
     }
   }
 }

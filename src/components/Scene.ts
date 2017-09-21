@@ -103,7 +103,7 @@ export class Scene extends g.Scene {
     this.layerGroup.append(e, config);
   }
 
-  updateText(text: string) {
+  updateText(text: script.Text) {
     this._message.updateText(text);
     this.disableTrigger(this._requestNextFrame);
     this.enableWindowClick();

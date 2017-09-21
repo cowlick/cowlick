@@ -17,7 +17,9 @@ export const scene1 = new novel.Scene({
      {
         tag: novel.Tag.text,
         data: {
-          value: "シーン1です"
+          values: [
+            "シーン1です"
+          ]
         }
       }
     ]),
@@ -25,7 +27,9 @@ export const scene1 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
-          value: "タイトル画面に戻ります"
+          values: [
+            "タイトル画面に戻ります"
+          ]
         }
       }
     ]),
