@@ -202,16 +202,16 @@ export class Engine {
   }
 
   private static click(scene: Scene, data: any) {
-    scene.click();
+    scene.addSkipTrigger();
   }
 
   private static trigger(scene: Scene, trigger: script.Trigger) {
     switch(trigger) {
       case script.Trigger.Off:
-        scene.disableNextFrameTrigger();
+        scene.disableWindowClick();
         break;
       case script.Trigger.On:
-        scene.enableNextFrameTrigger();
+        scene.enableWindowClick();
         break;
     }
   }

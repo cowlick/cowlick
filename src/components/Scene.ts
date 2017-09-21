@@ -7,7 +7,7 @@ import {Frame} from "../models/Frame";
 import * as script from "../models/Script";
 import {GameState} from "../models/GameState";
 import {SaveData} from "../models/SaveData";
-import {Label} from "./Label";
+import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
 import {AudioGroup} from "./AudioGroup";
 import {loadGameState} from "../GameStateHelper";
@@ -27,7 +27,7 @@ export interface SceneParameters {
 
 export class Scene extends g.Scene {
 
-  private text: Label;
+  private _message: Message;
   private scenario: ScenarioViewModel;
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
@@ -40,6 +40,7 @@ export class Scene extends g.Scene {
   private _gameState: GameState;
 
   // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
+  private _showAllMessage = this.showAllMessage.bind(this);
   private _requestNextFrame = this.requestNextFrame.bind(this);
   private _loadFrame = this.loadFrame.bind(this);
 
@@ -103,33 +104,40 @@ export class Scene extends g.Scene {
   }
 
   updateText(text: string) {
-    this.text.updateText(text);
+    this._message.updateText(text);
+    this.disableTrigger(this._requestNextFrame);
+    this.enableWindowClick();
   }
 
   visible(visibility: script.Visibility) {
     this.layerGroup.visible(visibility);
   }
 
-  click() {
-    this.pointUpCapture.addOnce(this.requestNextFrame, this);
+  addSkipTrigger() {
+    this.pointUpCapture.addOnce(this._requestNextFrame, this);
   }
 
-  disableNextFrameTrigger() {
-    this.layerGroup.evaluate(Layer.message, (layer) => {
-      layer.touchable = false;
-      layer.pointDown.remove(this._requestNextFrame, layer);
-      for(const c of layer.children) {
-        c.pointDown.remove(this._requestNextFrame, c);
-      }
-    });
+  disableWindowClick() {
+    if(this._message.finished) {
+      this.disableTrigger(this._requestNextFrame);
+    } else {
+      this.disableTrigger(this._showAllMessage);
+    }
   }
 
-  enableNextFrameTrigger() {
+  enableWindowClick() {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = true;
-      layer.pointDown.add(this._requestNextFrame, layer);
-      for(const c of layer.children) {
-        c.pointDown.add(this._requestNextFrame, c);
+      if(this._message.finished) {
+        layer.pointUp.add(this._requestNextFrame, layer);
+        for(const c of layer.children) {
+          c.pointUp.add(this._requestNextFrame, c);
+        }
+      } else {
+        layer.pointUp.addOnce(this._showAllMessage, layer);
+        for(const c of layer.children) {
+          c.pointUp.addOnce(this._showAllMessage, c);
+        }
       }
     });
   }
@@ -207,6 +215,16 @@ export class Scene extends g.Scene {
     this.layerGroup.top(Layer.system);
   }
 
+  private disableTrigger(callback: () => void) {
+    this.layerGroup.evaluate(Layer.message, (layer) => {
+      layer.touchable = false;
+      layer.pointUp.remove(callback, layer);
+      for(const c of layer.children) {
+        c.pointUp.remove(callback, c);
+      }
+    });
+  }
+
   private loadFrame(frame: Frame) {
     if(frame) {
       this.removeLayers(frame.scripts);
@@ -230,10 +248,10 @@ export class Scene extends g.Scene {
       data: this.config.window.message
     });
     this.layerGroup.evaluate(Layer.message, (layer) => {
-      this.text = new Label(this, this.config);
-      layer.append(this.text);
+      this._message = new Message(this, this.config);
+      layer.append(this._message);
     });
-    this.enableNextFrameTrigger();
+    this.enableWindowClick();
   }
 
   private createSystemLayer() {
@@ -267,5 +285,14 @@ export class Scene extends g.Scene {
       assetIds.push(params.config.window.message.backgroundImage);
     }
     return assetIds;
+  }
+
+  private showAllMessage() {
+    if(! this._message.finished) {
+      this._message.showAll();
+      this.enableWindowClick();
+    } else {
+      this.requestNextFrame();
+    }
   }
 }
