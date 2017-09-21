@@ -40,7 +40,7 @@ export class Scene extends g.Scene {
   private _gameState: GameState;
 
   // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
-  private _showAllMessage = this.showAllMessage.bind(this);
+  private _onWindowClick = this.onWindowClick.bind(this);
   private _requestNextFrame = this.requestNextFrame.bind(this);
   private _loadFrame = this.loadFrame.bind(this);
 
@@ -121,7 +121,7 @@ export class Scene extends g.Scene {
     if(this._message.finished) {
       this.disableTrigger(this._requestNextFrame);
     } else {
-      this.disableTrigger(this._showAllMessage);
+      this.disableTrigger(this._onWindowClick);
     }
   }
 
@@ -134,9 +134,9 @@ export class Scene extends g.Scene {
           c.pointUp.add(this._requestNextFrame, c);
         }
       } else {
-        layer.pointUp.addOnce(this._showAllMessage, layer);
+        layer.pointUp.addOnce(this._onWindowClick, layer);
         for(const c of layer.children) {
-          c.pointUp.addOnce(this._showAllMessage, c);
+          c.pointUp.addOnce(this._onWindowClick, c);
         }
       }
     });
@@ -287,7 +287,7 @@ export class Scene extends g.Scene {
     return assetIds;
   }
 
-  private showAllMessage() {
+  private onWindowClick() {
     if(! this._message.finished) {
       this._message.showAll();
       this.enableWindowClick();
