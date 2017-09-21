@@ -2,7 +2,8 @@
   "scripts": {
     "build": "webpack --progress && npm run scan:assets",
     "start": "akashic-sandbox game",
-    "scan:assets": "cd ./game && akashic scan asset"
+    "scan:assets": "cd ./game && akashic scan asset",
+    "bundle": "cd ./game && akashic export html --output ../dist"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.3",

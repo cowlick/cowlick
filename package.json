@@ -7,6 +7,9 @@
     "postinstall": "cd sample && npm install",
     "build": "webpack --progress && npm run sample:build",
     "sample:build": "cd sample && npm run build",
+    "sample:bundle": "cd sample && npm run bundle",
+    "sample:publish": "gh-pages -d ./sample/dist -m \"Update `date +%Y-%m-%d:%H:%M:%s`\"",
+    "sample:deploy": "npm run sample:bundle && npm run sample:publish",
     "start": "cd sample && npm start",
     "lint": "eslint --fix --ext .ts src"
   },
@@ -20,6 +23,7 @@
   "devDependencies": {
     "@types/node": "8.0.28",
     "eslint": "4.7.1",
+    "gh-pages": "1.0.0",
     "ts-loader": "2.3.7",
     "typescript": "2.5.2",
     "typescript-eslint-parser": "github:eslint/typescript-eslint-parser",
