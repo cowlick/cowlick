@@ -34,7 +34,7 @@ export const scene0 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
-          value: "<ruby>ルビのテスト<rt>テスト</rt></ruby>"
+          value: '{ "rb": "ルビのテスト", "rt": "テスト" }'
         }
       }
     ]),
