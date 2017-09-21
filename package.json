@@ -11,7 +11,8 @@
     "sample:publish": "gh-pages -d ./sample/dist -m \"Update `date +%Y-%m-%d:%H:%M:%s`\"",
     "sample:deploy": "npm run sample:bundle && npm run sample:publish",
     "start": "cd sample && npm start",
-    "lint": "eslint --fix --ext .ts src"
+    "lint": "eslint --fix --ext .ts src",
+    "test": "mocha --compilers ts:espower-typescript/guess test/*.ts"
   },
   "author": "pocketberserker",
   "license": "MIT",
@@ -23,7 +24,10 @@
   "devDependencies": {
     "@types/node": "8.0.28",
     "eslint": "4.7.1",
+    "espower-typescript": "8.1.1",
     "gh-pages": "1.0.0",
+    "mocha": "3.5.3",
+    "power-assert": "1.4.4",
     "ts-loader": "2.3.7",
     "typescript": "2.5.2",
     "typescript-eslint-parser": "github:eslint/typescript-eslint-parser",
