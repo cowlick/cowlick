@@ -1,7 +1,7 @@
 "use strict";
 import {Engine} from "./Engine";
 export * from "./Config";
-export * from "./Constant";
+export {Tag, Layer} from "./Constant";
 export {ScriptFunction} from "./ScriptManager";
 export * from "./models/Scenario";
 export * from "./models/Scene";

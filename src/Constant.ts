@@ -24,3 +24,10 @@ export namespace Layer {
   export const choice = "choice";
   export const message = "message";
 }
+
+export const gameId = "$gameId";
+
+export namespace Region {
+  export const system = "system";
+  export const saveDataPrefix = "data";
+}

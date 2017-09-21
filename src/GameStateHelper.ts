@@ -1,14 +1,14 @@
 "use strict";
 import {GameState, Variables} from "./models/GameState";
 import {SaveData} from "./models/SaveData";
-
-const gameId = "$gameId";
-const systemKeys = "system.*";
+import {Region, gameId} from "./Constant";
 
 interface KeyValue {
   key: g.StorageKey;
   value: SaveData;
 }
+
+const prefixLength = Region.saveDataPrefix.length;
 
 function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   const variables: Variables = {
@@ -19,12 +19,13 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   for(const key of keys) {
     for(const value of scene.storageValues.get(key)) {
       const v = typeof value.data === "number" ? value.data : JSON.parse(value.data);
-      if(key.regionKey === systemKeys) {
-        variables.system[value.tag] = v;
+      if(key.regionKey === Region.system) {
+        variables.system = v;
       } else {
         let s = data.find((kv) => kv.key === value.storageKey);
+        const keys = key.regionKey.split(".");
         if(! s) {
-          const i = 0;
+          const i = parseInt(keys[0].substring(prefixLength), 10);
           s = {
             key: value.storageKey,
             value: {
@@ -35,7 +36,6 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
           };
           data[i] = s;
         }
-        const keys = key.regionKey.split(".");
         const label = keys[keys.length - 1];
         switch(label) {
           case "frame":
@@ -45,7 +45,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
             s.value.label = v;
             break;
           default:
-            s.value.variables[value.tag] = v;
+            s.value.variables = v;
             break;
         }
       }
@@ -64,17 +64,10 @@ export function loadGameState(scene: g.Scene, keys: g.StorageKey[], max: number)
 
 export function createStorageKeys(player: g.Player, max: number): g.StorageKey[] {
   const ks = [
-    {region: g.StorageRegion.Counts, regionKey: systemKeys, userId: player.id, gameId},
-    {region: g.StorageRegion.Values, regionKey: systemKeys, userId: player.id, gameId},
+    {region: g.StorageRegion.Values, regionKey: Region.system, userId: player.id, gameId},
   ];
   for(let i = 0; i < max - 1; i++) {
-    const prefix = "data" + i + ".";
-    ks.push({region: g.StorageRegion.Counts, regionKey: prefix + "variables.*", userId: player.id, gameId});
-    ks.push({region: g.StorageRegion.Counts, regionKey: prefix + "label", userId: player.id, gameId});
-    ks.push({region: g.StorageRegion.Counts, regionKey: prefix + "frame", userId: player.id, gameId});
-    ks.push({region: g.StorageRegion.Values, regionKey: prefix + "variables.*", userId: player.id, gameId});
-    ks.push({region: g.StorageRegion.Values, regionKey: prefix + "label", userId: player.id, gameId});
-    ks.push({region: g.StorageRegion.Values, regionKey: prefix + "frame", userId: player.id, gameId});
+    ks.push({region: g.StorageRegion.Values, regionKey: Region.saveDataPrefix + i, userId: player.id, gameId});
   }
   return ks;
 }
