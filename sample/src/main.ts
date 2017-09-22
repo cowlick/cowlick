@@ -44,26 +44,39 @@ function main() {
       },
       system: [
         {
-          tag: novel.Tag.choice,
+          tag: novel.Tag.link,
           data: {
             layer: {
               name: novel.Layer.system
             },
-            direction: novel.Direction.Horizontal,
             width: 100,
-            height: 32,
-            x: g.game.width - 220,
-            y: g.game.height - 40,
-            values: [
+            height: 24,
+            x: 420,
+            y: 450,
+            text: "メニュー1",
+            scripts: [
               {
                 tag: "noop",
-                data: {},
-                text: "メニュー1"
-              },
+                data: {}
+              }
+            ]
+          }
+        },
+        {
+          tag: novel.Tag.link,
+          data: {
+            layer: {
+              name: novel.Layer.system
+            },
+            width: 100,
+            height: 24,
+            x: 530,
+            y: 450,
+            text: "メニュー2",
+            scripts: [
               {
                 tag: "noop",
-                data: {},
-                text: "メニュー2"
+                data: {}
               }
             ]
           }

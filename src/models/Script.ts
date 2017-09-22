@@ -99,6 +99,21 @@ export interface Choice {
   };
 }
 
+export interface Link {
+  layer: LayerConfig;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  backgroundImage?: string;
+  padding?: number;
+  backgroundEffector?: {
+    borderWidth: number;
+  };
+  text: string
+  scripts: Script[];
+}
+
 export interface Visibility {
   layer: string;
   visible: boolean;

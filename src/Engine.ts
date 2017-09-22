@@ -28,6 +28,7 @@ export class Engine {
     Engine.scriptManager.register(Tag.jump, Engine.jump);
     Engine.scriptManager.register(Tag.button, Engine.button);
     Engine.scriptManager.register(Tag.choice, Engine.choice);
+    Engine.scriptManager.register(Tag.link, Engine.link);
     Engine.scriptManager.register(Tag.text, Engine.text);
     Engine.scriptManager.register(Tag.visible, Engine.visible);
     Engine.scriptManager.register(Tag.playAudio, Engine.playAudio);
@@ -139,6 +140,27 @@ export class Engine {
       }
       scene.appendLayer(button, choice.layer);
     });
+  }
+
+  private static link(scene: Scene, link: script.Link) {
+    const game = scene.game;
+    const button = new LabelButton({
+      scene,
+      width: link.width,
+      height: link.height,
+      backgroundImage: link.backgroundImage,
+      padding: link.padding,
+      backgroundEffector: link.backgroundEffector,
+      text: link.text,
+      config: Engine.config
+    });
+    for(const script of link.scripts) {
+      button.click.add(() => {
+        Engine.scriptManager.call(scene, script);
+      });
+    }
+    button.move(link.x, link.y);
+    scene.appendLayer(button, link.layer);
   }
 
   private static text(scene: Scene, text: script.Text) {
