@@ -3,8 +3,9 @@ import {Scenario} from "./models/Scenario";
 import * as script from "./models/Script";
 import {GameState} from "./models/GameState";
 import {Scene} from "./components/Scene";
-import {Button} from "./components/Button";
+import {ImageButton} from "./components/ImageButton";
 import {LabelButton} from "./components/LabelButton";
+import {createImage} from "./components/Image";
 import {StorageViewModel} from "./vm/StorageViewModel";
 import {Config, defaultConfig} from "./Config";
 import {ScriptManager, ScriptFunction} from "./ScriptManager";
@@ -71,33 +72,7 @@ export class Engine {
   }
 
   private static image(scene: Scene, image: script.Image) {
-    const asset = <g.ImageAsset>scene.assets[image.assetId];
-    let sprite: g.Sprite;
-    if(image.frame) {
-      let s = new g.FrameSprite({
-        scene,
-        src: asset,
-        width: image.frame.width,
-        height: image.frame.height
-      });
-      s.frames = image.frame.frames;
-      s.interval = 1000;
-      s.start();
-      sprite = s;
-    } else {
-      sprite = new g.Sprite({
-        scene,
-        src: asset
-      });
-    }
-    if(image.x !== undefined) {
-      sprite.x = image.x;
-    }
-    if(image.y !== undefined) {
-      sprite.y = image.y;
-    }
-    sprite.invalidate();
-    scene.appendLayer(sprite, image.layer);
+    scene.appendLayer(createImage(scene, image), image.layer);
   }
 
   private static pane(scene: Scene, pane: script.Pane) {
@@ -120,14 +95,7 @@ export class Engine {
   }
 
   private static button(scene: Scene, data: script.Button) {
-    const button = new Button({
-      scene,
-      width: data.width,
-      height: data.height,
-      backgroundImage: data.backgroundImage,
-      padding: data.padding,
-      backgroundEffector: data.backgroundEffector
-    });
+    const button = ImageButton.create(scene, data);
     button.move(data.x, data.y);
     button.click.add(() => {
       for(const s of data.scripts) {

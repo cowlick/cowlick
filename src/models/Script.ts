@@ -32,15 +32,9 @@ export interface Pane {
 
 export interface Button {
   layer: LayerConfig;
+  assetId: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
-  backgroundImage?: string;
-  padding?: number;
-  backgroundEffector?: {
-    borderWidth: number;
-  };
   scripts: Script[];
 }
 

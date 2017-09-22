@@ -1,17 +1,16 @@
 "use strict";
-import {ChoiceItem} from "../models/Script";
 import {ButtonParameters, Button} from "./Button";
 import {Scene} from "./Scene";
 import {Config} from "../Config";
 
-export interface ChoiceButtonParameters extends ButtonParameters {
+export interface LabelButtonParameters extends ButtonParameters {
   text: string;
   config: Config;
 }
 
 export class LabelButton extends Button {
 
-  constructor(params: ChoiceButtonParameters) {
+  constructor(params: LabelButtonParameters) {
     super(params);
 
     let label = new g.Label({

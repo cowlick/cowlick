@@ -2,7 +2,7 @@
 import {Scene} from "./Scene";
 
 export interface ButtonParameters {
-  scene: Scene;
+  scene: g.Scene;
   width: number;
   height: number;
   backgroundImage?: string;
@@ -27,18 +27,18 @@ export class Button extends g.Pane {
       backgroundEffector: params.backgroundEffector ? new g.NinePatchSurfaceEffector(params.scene.game, params.backgroundEffector.borderWidth) : undefined
     });
     this.touchable = true;
-    this.pointDown.addOnce(this.onPointDown, this);
+    this.pointDown.add(this.onPointDown, this);
     this.pointMove.add(this.onPointMove, this);
-    this.pointUp.addOnce(this.onPointUp, this);
+    this.pointUp.add(this.onPointUp, this);
     this.click = new g.Trigger<Button>();
     this.pushed = false;
   }
 
   move(x: number, y: number) {
-    
+
     this.x = x;
     this.y = y;
-    
+
     this.modified();
   }
 
