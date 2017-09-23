@@ -25,7 +25,6 @@
   "devDependencies": {
     "@types/mocha": "2.2.43",
     "@types/node": "8.0.28",
-    "@types/mocha": "2.2.43",
     "eslint": "4.7.1",
     "espower-typescript": "8.1.1",
     "gh-pages": "1.0.0",
