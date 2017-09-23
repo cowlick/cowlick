@@ -13,7 +13,7 @@
     "start": "cd sample && npm start",
     "lint": "eslint --fix --ext .ts src",
     "test": "mocha --compilers ts:espower-typescript/guess test/*.ts",
-    "pegjs": "pegjs --output ./tools/kag.js ./tools/kag.pegjs"
+    "pegjs": "pegjs --output ./resources/kag.js ./resources/kag.pegjs"
   },
   "author": "pocketberserker",
   "license": "MIT",
