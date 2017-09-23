@@ -66,4 +66,5 @@ typings/
 lib/
 sample/game/script/
 dist/
+resources/kag.js
 

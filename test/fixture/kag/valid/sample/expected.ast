@@ -1,0 +1,31 @@
+[
+  [
+    {
+      "tag": "image",
+      "data": {
+        "assetId": "bg",
+        "layer": {
+          "name": "base"
+        }
+      }
+    },
+    {
+      "tag": "text",
+      "data": {
+        "values": [
+          "サンプルです。"
+        ]
+      }
+    }
+  ],
+  [
+    {
+      "tag": "text",
+      "data": {
+        "values": [
+          "改行\nできます。"
+        ]
+      }
+    }
+  ]
+]
