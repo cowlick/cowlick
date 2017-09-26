@@ -9,6 +9,8 @@ export interface WindowConfig {
   message: Pane;
   // TODO: 制限を強める
   system: Script[];
+  load: Script[];
+  save: Script[];
 }
 
 export interface SystemConfig {
@@ -40,7 +42,9 @@ export const defaultConfig: Config = {
       y: 10,
       touchable: true
     },
-    system: []
+    system: [],
+    load: [],
+    save: []
   },
   font: {
     color: "black"

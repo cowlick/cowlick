@@ -25,6 +25,64 @@ function main() {
     );
   });
 
+  const maxSaveCount = 100;
+  const saveButtons: novel.Script[] = [];
+  const loadButtons: novel.Script[] = [];
+  for(let i = 0; i < maxSaveCount; i++) {
+    saveButtons.push({
+      tag: novel.Tag.link,
+      data: {
+        layer: {
+          name: novel.Layer.system
+        },
+        width: g.game.width - 20,
+        height: g.game.height / 11,
+        x: 10 ,
+        y: 10 + g.game.height / 11 * i,
+        backgroundImage: "pane",
+        padding: 4,
+        backgroundEffector: {
+          borderWidth: 4
+        },
+        text: i,
+        scripts: [
+          {
+            tag: novel.Tag.save,
+            data: {
+              index: i
+            }
+          }
+        ]
+      }
+    });
+    loadButtons.push({
+      tag: novel.Tag.link,
+      data: {
+        layer: {
+          name: novel.Layer.system
+        },
+        width: g.game.width - 20,
+        height: g.game.height / 11,
+        x: 10 ,
+        y: 10 + g.game.height / 11 * i,
+        backgroundImage: "pane",
+        padding: 4,
+        backgroundEffector: {
+          borderWidth: 4
+        },
+        text: i,
+        scripts: [
+          {
+            tag: novel.Tag.load,
+            data: {
+              index: i
+            }
+          }
+        ]
+      }
+    });
+  }
+
   novel.engine.config = {
     window: {
       message: {
@@ -81,13 +139,15 @@ function main() {
             ]
           }
         }
-      ]
+      ],
+      load: loadButtons,
+      save: saveButtons
     },
     font: {
       color: "white"
     },
     system: {
-      maxSaveCount: 100
+      maxSaveCount
     },
     audio: {
       se: 0.5,
