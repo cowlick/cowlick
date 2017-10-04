@@ -18,7 +18,9 @@ Frame
   / text:PlainText Newline? { return [text]; }
 
 Tags
-  = c:Tag cs:(Newline Tag)* { return b.contents(c, cs.map(function(c) { return c[1]; })); }
+  = Comments c:Tag cs:(Newline Comments Tag)* {
+    return b.contents(c, cs.map(function(c) { return c[2]; }));
+  }
 
 Tag
   = Image
@@ -36,13 +38,15 @@ ImageOption
   / "left=" y:Digits { return { name: "y", value: y }; }
 
 PlainText
-  = CM Newline text:TextBlock { return text; }
+  = Comments CM Newline text:TextBlock { return text; }
 
 CM
   = "[cm]"
 
 TextBlock
-  = t:Text ts:(Newline Text)* { return b.text(t, ts.map(function(t) { return t[1]; })); }
+  = Comments t:Text ts:(Newline Comments Text)* {
+    return b.text(t, ts.map(function(t) { return t[2]; }));
+  }
 
 Text
   = $( ( !Newline !EOF !CM !Tag . )+ )
@@ -65,6 +69,12 @@ Newline
   = "\r\n"
   / "\n"
   ;
+
+Comments
+  = (Comment (Newline / EOF))*
+
+Comment
+  = ";" ( !Newline !EOF . )*
 
 _ "spacer"
   = $([ \t\r\n]*)

@@ -1,0 +1,21 @@
+[
+  [
+    {
+      "tag": "image",
+      "data": {
+        "assetId": "bg",
+        "layer": {
+          "name": "base"
+        }
+      }
+    },
+    {
+      "tag": "text",
+      "data": {
+        "values": [
+          "コメントテスト"
+        ]
+      }
+    }
+  ]
+]
