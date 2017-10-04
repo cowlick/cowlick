@@ -35,18 +35,18 @@ function image(assetId, layer, options) {
 }
 
 function text(t, ts) {
-  var result = [t];
+  var result = t;
   if (ts) {
     if (Array.isArray(ts)) {
-      ts.forEach(function(t) { result.push(t); });
+      ts.forEach(function(t) { result += t; });
     } else {
-      result.push(ts);
+      result + ts;
     }
   }
   return {
     tag: "text",
     data: {
-      values: [ result.join("\n") ]
+      values: [ result ]
     }
   };
 }

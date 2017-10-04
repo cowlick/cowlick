@@ -48,8 +48,13 @@ TextBlock
     return b.text(t, ts.map(function(t) { return t[2]; }));
   }
 
+R
+  = "[r]"
+
 Text
-  = $( ( !Newline !EOF !CM !Tag . )+ )
+  = text:$(( !Newline !EOF !CM !R !Tag . )+) r:R? {
+    return r ? text + "\n" : text;
+  }
 
 Attribute
   = $( ( !Newline !EOF !Space !'"' !"]" . )+ )
