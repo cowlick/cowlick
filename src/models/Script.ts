@@ -43,6 +43,7 @@ export interface RubyText {
 }
 
 export interface Text {
+  clear?: boolean;
   values: (string | RubyText[]) [];
 }
 

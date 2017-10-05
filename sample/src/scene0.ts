@@ -17,6 +17,7 @@ export const scene0 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
+          clear: true,
           values: [
             "Hello\nAkashic Novel!"
           ]
@@ -36,6 +37,7 @@ export const scene0 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
+          clear: true,
           values: [
             [
               {
@@ -71,6 +73,7 @@ export const scene0 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
+          clear: true,
           values: [
             "画像が指定なされていない場合は前フレームを引き継ぐ"
           ]

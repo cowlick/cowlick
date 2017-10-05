@@ -40,18 +40,18 @@ export class Message extends al.Label {
     return this.index >= this.original.values.length;
   }
 
-  appendText(text: Text) {
-    this.original = {
-      values: this.original.values.concat(text.values)
-    }
-  }
-
   updateText(text: Text) {
-    this.text = "";
-    this.original = text;
-    this.index = 0;
-    this.counter = 0;
-    this.setCurrent();
+    if(text.clear) {
+      this.text = "";
+      this.original = text;
+      this.index = 0;
+      this.counter = 0;
+      this.setCurrent();
+    } else {
+      this.original = {
+        values: this.original.values.concat(text.values)
+      }
+    }
   }
 
   showAll() {

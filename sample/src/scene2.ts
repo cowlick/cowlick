@@ -17,6 +17,7 @@ export const scene2 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
+          clear: true,
           values: [
             "シーン2です"
           ]
@@ -27,6 +28,7 @@ export const scene2 = new novel.Scene({
       {
         tag: novel.Tag.text,
         data: {
+          clear: true,
           values: [
             "タイトル画面に戻ります"
           ]
