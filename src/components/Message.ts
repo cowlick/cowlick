@@ -50,7 +50,7 @@ export class Message extends al.Label {
     } else {
       this.original = {
         values: this.original.values.concat(text.values)
-      }
+      };
     }
   }
 

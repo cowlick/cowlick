@@ -53,7 +53,7 @@ export class AudioGroup {
           player.stop();
         }
       } else {
-          this.game.logger.warn("audio group not found", audio);
+        this.game.logger.warn("audio group not found", audio);
       }
     }
   }
