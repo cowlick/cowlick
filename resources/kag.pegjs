@@ -38,8 +38,8 @@ ImageOption
   / "left=" y:Digits { return { name: "y", value: y }; }
 
 Text
-  = Comments cm:CM? Newline? text:TextBlock EndTextBlock {
-    return b.text(text, cm);
+  = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
+    return b.text(values, cm);
   }
 
 L
@@ -57,14 +57,19 @@ R
   = "[r]"
 
 TextLine
-  = top:R? Newline? text:$(( !Newline !EOF !CM !L !R !Tag . )+) end:R? {
-    if(top) {
-      text = "\n" + text;
-    }
-    if(end) {
-      text += "\n";
-    }
-    return text;
+  = top:R? Newline? values:(Ruby / PlainText)+ end:R? {
+    return b.textLine(values, top, end);
+  }
+
+PlainText
+  = $(Character+)
+
+Character
+  = $( !Newline !EOF !CM !L !R !Tag . )
+
+Ruby
+  = "[ruby" _ "text=" rt:StringLiteral "]" rb:Character {
+    return b.ruby(rb, rt);
   }
 
 EndTextBlock
