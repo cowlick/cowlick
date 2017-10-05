@@ -1,6 +1,6 @@
 "use strict";
-import {Scene} from "./components/Scene";
-import {Script} from "./models/Script";
+import {Scene} from "../components/Scene";
+import {Script} from "../models/Script";
 
 export type ScriptFunction = (scene: Scene, data: any) => void;
 
@@ -8,8 +8,8 @@ export class ScriptManager {
 
   private scripts: Map<string, ScriptFunction>;
 
-  constructor() {
-    this.scripts = new Map<string, ScriptFunction>();
+  constructor(scripts: Map<string, ScriptFunction>) {
+    this.scripts = scripts;
   }
 
   register(name: string, f: ScriptFunction) {

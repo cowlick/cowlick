@@ -2,7 +2,7 @@
 import {Engine} from "./Engine";
 export * from "./Config";
 export {Tag, Layer} from "./Constant";
-export {ScriptFunction} from "./ScriptManager";
+export {ScriptFunction} from "./scripts/ScriptManager";
 export * from "./models/Scenario";
 export * from "./models/Scene";
 export * from "./models/Frame";

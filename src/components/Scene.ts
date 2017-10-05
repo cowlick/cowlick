@@ -7,12 +7,12 @@ import {Frame} from "../models/Frame";
 import * as script from "../models/Script";
 import {GameState} from "../models/GameState";
 import {SaveData} from "../models/SaveData";
+import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
 import {AudioGroup} from "./AudioGroup";
 import {loadGameState} from "../GameStateHelper";
 import {Config} from "../Config";
-import {ScriptManager} from "../ScriptManager";
 import {Tag, Layer} from "../Constant";
 
 export interface SceneParameters {
