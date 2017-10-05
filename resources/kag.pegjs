@@ -78,16 +78,13 @@ StringLiteral
 
 Digits
   = $(Digit+)
-  ;
 
 Digit
   = [0-9]
-  ;
 
 Newline
   = "\r\n"
   / "\n"
-  ;
 
 Comments
   = (Comment (Newline / EOF))*
@@ -97,12 +94,9 @@ Comment
 
 _ "spacer"
   = $([ \t\r\n]*)
-  ;
 
 Space "space"
   = [ 　\t]
-  ;
 
 EOF
   = !.
-  ;
