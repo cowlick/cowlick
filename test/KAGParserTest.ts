@@ -7,7 +7,8 @@ function appendSyntaxErrorinfo(e: any) {
 
   if (e instanceof kag.SyntaxError) {
     const se: kag.SyntaxError = e;
-    const info = "raised: offset = " + se.offset + ", line = " + se.line + ", column = " + se.column;
+    const l = se.location.start;
+    const info = "raised: offset = " + l.offset + ", line = " + l.line + ", column = " + l.column;
     se.message = info + ". " + se.message;
   }
 }

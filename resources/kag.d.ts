@@ -1,12 +1,22 @@
 export function parse(input: string): any;
 
-export class SyntaxError {
-  line: number;
-  column: number;
-  offset: number;
+export interface Location {
+  start:{
+      offset: number,
+      line: number,
+      column: number
+  }
+  end: {
+      offset: number,
+      line: number,
+      column: number
+  }
+}
 
+export class SyntaxError {
   expected: any[];
   found: any;
   name: string;
   message: string;
+  location: Location;
 }
