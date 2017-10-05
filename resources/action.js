@@ -117,11 +117,33 @@ function ruby(rb, rt) {
   }];
 }
 
+function playAudio(assetId, name) {
+  return {
+    tag: "playAudio",
+    data: {
+      assetId: assetId,
+      groupName: name
+    }
+  };
+}
+
+function stopAudio(name) {
+  return {
+    tag: "stopAudio",
+    data: {
+      assetId: null,
+      groupName: name
+    }
+  };
+}
+
 module.exports = {
   contents: contents,
   image: image,
   text: text,
   textBlock: textBlock,
   textLine: textLine,
-  ruby: ruby
+  ruby: ruby,
+  playAudio: playAudio,
+  stopAudio: stopAudio
 };

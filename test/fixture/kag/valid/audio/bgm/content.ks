@@ -1,0 +1,2 @@
+[playbgm storage="test"]
+[stopbgm]

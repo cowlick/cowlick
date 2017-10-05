@@ -1,0 +1,18 @@
+[
+  [
+    {
+      "tag": "playAudio",
+      "data": {
+        "assetId": "test",
+        "groupName": "bgm"
+      }
+    },
+    {
+      "tag": "stopAudio",
+      "data": {
+        "assetId": null,
+        "groupName": "bgm"
+      }
+    }
+  ]
+]

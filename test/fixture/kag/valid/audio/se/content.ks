@@ -1,0 +1,2 @@
+[playse storage="test"]
+[stopse]

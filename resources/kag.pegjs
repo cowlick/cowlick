@@ -24,6 +24,10 @@ Tags
 
 Tag
   = Image
+  / PlayBgm
+  / StopBgm
+  / PlaySe
+  / StopSe
 
 Image
   = "[image" _ "storage=" assetId:StringLiteral _ "layer=" layer:Attribute options:ImageOptions "]" {
@@ -36,6 +40,22 @@ ImageOptions
 ImageOption
   = "top=" x:Digits { return { name: "x", value: x }; }
   / "left=" y:Digits { return { name: "y", value: y }; }
+
+PlayBgm
+  = "[playbgm" _ "storage=" assetId:StringLiteral _ "]" {
+    return b.playAudio(assetId, "bgm");
+  }
+
+StopBgm
+  = "[stopbgm]" { return b.stopAudio("bgm"); }
+
+PlaySe
+  = "[playse" _ "storage=" assetId:StringLiteral _ "]" {
+    return b.playAudio(assetId, "se");
+  }
+
+StopSe
+  = "[stopse]" { return b.stopAudio("se"); }
 
 Text
   = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
