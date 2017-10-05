@@ -8,7 +8,7 @@
     "build": "webpack --progress && npm run pegjs && npm run sample:build",
     "sample:build": "cd sample && npm run build",
     "sample:bundle": "cd sample && npm run bundle",
-    "sample:publish": "gh-pages -d ./sample/dist -m \"Update `date +%Y-%m-%d:%H:%M:%s`\"",
+    "sample:publish": "gh-pages -d ./sample/dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
     "sample:deploy": "npm run sample:bundle && npm run sample:publish",
     "start": "cd sample && npm start",
     "lint": "eslint --fix --ext .ts src",
