@@ -12,6 +12,7 @@
     {
       "tag": "text",
       "data": {
+        "clear": true,
         "values": [
           "サンプルです。"
         ]
@@ -22,6 +23,7 @@
     {
       "tag": "text",
       "data": {
+        "clear": true,
         "values": [
           "改行\nできます。"
         ]

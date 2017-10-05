@@ -34,7 +34,20 @@ function image(assetId, layer, options) {
   return result;
 }
 
-function text(t, ts) {
+function text(value, cm) {
+  var result = {
+    tag: "text",
+    data: {
+      values: [ value ]
+    }
+  };
+  if(cm) {
+    result.data["clear"] = true;
+  }
+  return result;
+}
+
+function textBlock(t, ts) {
   var result = t;
   if (ts) {
     if (Array.isArray(ts)) {
@@ -43,16 +56,12 @@ function text(t, ts) {
       result + ts;
     }
   }
-  return {
-    tag: "text",
-    data: {
-      values: [ result ]
-    }
-  };
+  return result;
 }
 
 module.exports = {
   contents: contents,
   image: image,
-  text: text
+  text: text,
+  textBlock: textBlock
 };

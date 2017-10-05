@@ -9,13 +9,13 @@ Frames
   = fs:Frame+ EOF { return fs; }
 
 Frame
-  = ts:Tags text:(Newline PlainText Newline?)? {
+  = ts:Tags text:(Newline Text)? {
     if(text) {
       ts.push(text[1]);
     }
     return ts;
   }
-  / text:PlainText Newline? { return [text]; }
+  / text:Text { return [text]; }
 
 Tags
   = Comments c:Tag cs:(Newline Comments Tag)* {
@@ -37,24 +37,38 @@ ImageOption
   = "top=" x:Digits { return { name: "x", value: x }; }
   / "left=" y:Digits { return { name: "y", value: y }; }
 
-PlainText
-  = Comments CM Newline text:TextBlock { return text; }
+Text
+  = Comments cm:CM? Newline? text:TextBlock EndTextBlock {
+    return b.text(text, cm);
+  }
+
+L
+  = "[l]"
 
 CM
   = "[cm]"
 
 TextBlock
-  = Comments t:Text ts:(Newline Comments Text)* {
-    return b.text(t, ts.map(function(t) { return t[2]; }));
+  = Comments t:TextLine ts:(Newline Comments TextLine)* {
+    return b.textBlock(t, ts.map(function(t) { return t[2]; }));
   }
 
 R
   = "[r]"
 
-Text
-  = text:$(( !Newline !EOF !CM !R !Tag . )+) r:R? {
-    return r ? text + "\n" : text;
+TextLine
+  = top:R? Newline? text:$(( !Newline !EOF !CM !L !R !Tag . )+) end:R? {
+    if(top) {
+      text = "\n" + text;
+    }
+    if(end) {
+      text += "\n";
+    }
+    return text;
   }
+
+EndTextBlock
+  = (L Newline? / Newline / EOF)?
 
 Attribute
   = $( ( !Newline !EOF !Space !'"' !"]" . )+ )

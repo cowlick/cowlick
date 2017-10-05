@@ -1,6 +1,6 @@
 [image storage="bg" layer=base]
 [cm]
-サンプルです。
+サンプルです。[l]
 [cm]
 改行[r]
 できます。

@@ -12,6 +12,7 @@
     {
       "tag": "text",
       "data": {
+        "clear": true,
         "values": [
           "コメントテスト"
         ]
