@@ -163,6 +163,13 @@ function evaluate(scene: Scene, info: script.Eval) {
   f(scene.gameState.variables);
 }
 
+function condition(scene: Scene, cond: script.Condition) {
+  const f = g._require(scene.game, cond.path);
+  if(f(scene.gameState.variables)) {
+    Engine.scriptManager.call(scene, cond.script);
+  }
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -181,5 +188,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.trigger, trigger],
   [Tag.save, save],
   [Tag.load, load],
-  [Tag.evaluate, evaluate]
+  [Tag.evaluate, evaluate],
+  [Tag.condition, condition]
 ]);

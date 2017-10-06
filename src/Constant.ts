@@ -19,6 +19,7 @@ export namespace Tag {
   export const link = "link";
   export const openSaveWindow = "openSaveWindow";
   export const openLoadWindow = "openLoadWindow";
+  export const condition = "condition";
 }
 
 export namespace Layer {

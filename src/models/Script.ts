@@ -146,3 +146,7 @@ export interface Load {
 export interface Eval {
   path: string;
 }
+
+export interface Condition extends Eval {
+  script: Script;
+}
