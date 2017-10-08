@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "postinstall": "cd sample && npm install",
-    "build": "tsc -p . && npm run pegjs && npm run sample:build",
+    "build": "tsc -p . && npm run pegjs",
     "sample:build": "cd sample && npm run build",
     "sample:bundle": "cd sample && npm run bundle",
     "sample:publish": "gh-pages -d ./sample/dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
