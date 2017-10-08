@@ -30,7 +30,7 @@ Tag
   / StopSe
 
 Image
-  = "[image" _ "storage=" assetId:StringLiteral _ "layer=" layer:Attribute options:ImageOptions "]" {
+  = "[image" _ "storage=" assetId:Attribute _ "layer=" layer:Attribute options:ImageOptions "]" {
     return b.image(assetId, layer, options);
   }
 
@@ -42,7 +42,7 @@ ImageOption
   / "left=" y:Digits { return { name: "y", value: y }; }
 
 PlayBgm
-  = "[playbgm" _ "storage=" assetId:StringLiteral _ "]" {
+  = "[playbgm" _ "storage=" assetId:Attribute _ "]" {
     return b.playAudio(assetId, "bgm");
   }
 
@@ -50,7 +50,7 @@ StopBgm
   = "[stopbgm]" { return b.stopAudio("bgm"); }
 
 PlaySe
-  = "[playse" _ "storage=" assetId:StringLiteral _ "]" {
+  = "[playse" _ "storage=" assetId:Attribute _ "]" {
     return b.playAudio(assetId, "se");
   }
 
@@ -88,7 +88,7 @@ Character
   = $( !Newline !EOF !CM !L !R !Tag !Ruby . )
 
 Ruby
-  = "[ruby" _ "text=" rt:StringLiteral "]" rb:Character {
+  = "[ruby" _ "text=" rt:Attribute "]" rb:Character {
     return b.ruby(rb, rt);
   }
 
@@ -96,10 +96,13 @@ EndTextBlock
   = (L Newline? / Newline / EOF)?
 
 Attribute
-  = $( ( !Newline !EOF !Space !'"' !"]" . )+ )
+  = StringLiteral / AttributeValue
+
+AttributeValue
+  = $( ( !Newline !EOF !Space !"]" . )+ )
 
 StringLiteral
-  = '"' l:$( ( !Newline !Space !EOF !'"' . )+ ) '"' { return l; }
+  = '"' l:$( ( !'"' . )+ ) '"' { return l; }
 
 Digits
   = $(Digit+)
