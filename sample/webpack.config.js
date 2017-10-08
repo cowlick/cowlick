@@ -1,4 +1,5 @@
 var webpack = require("webpack");
+var UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 var path = require("path");
 
 var srcDir = path.join(__dirname, "src");
@@ -28,6 +29,17 @@ var config = {
     extensions: [".js", ".ts"]
   },
   plugins: [
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        ecma: 6,
+        compress: {
+          warnings: false
+        },
+        output  : {
+          comments: require("uglify-save-license")
+        }
+      }
+    })
   ],
   node: {
     fs: "empty"
