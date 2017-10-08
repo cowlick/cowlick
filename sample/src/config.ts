@@ -1,7 +1,7 @@
 "use strict";
 import * as novel from "../../lib/index";
 
-const maxSaveCount = 100;
+const maxSaveCount = novel.defaultConfig.system.maxSaveCount;
 const saveButtons: novel.Script[] = [];
 const loadButtons: novel.Script[] = [];
 for(let i = 0; i < maxSaveCount; i++) {
@@ -85,7 +85,7 @@ const config: novel.Config = {
           },
           width: 100,
           height: 24,
-          x: 420,
+          x: 310,
           y: 450,
           text: "メニュー1",
           scripts: [
@@ -104,12 +104,31 @@ const config: novel.Config = {
           },
           width: 100,
           height: 24,
-          x: 530,
+          x: 420,
           y: 450,
           text: "メニュー2",
           scripts: [
             {
               tag: "noop",
+              data: {}
+            }
+          ]
+        }
+      },
+      {
+        tag: novel.Tag.link,
+        data: {
+          layer: {
+            name: novel.Layer.system
+          },
+          width: 100,
+          height: 24,
+          x: 530,
+          y: 450,
+          text: "ログ",
+          scripts: [
+            {
+              tag: novel.Tag.backlog,
               data: {}
             }
           ]
@@ -122,14 +141,8 @@ const config: novel.Config = {
   font: {
     color: "white"
   },
-  system: {
-    maxSaveCount
-  },
-  audio: {
-    se: 0.5,
-    bgm: 0.5,
-    voice: 0.5
-  }
+  system: novel.defaultConfig.system,
+  audio: novel.defaultConfig.audio
 };
 
 module.exports = config;

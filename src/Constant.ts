@@ -20,6 +20,8 @@ export namespace Tag {
   export const openSaveWindow = "openSaveWindow";
   export const openLoadWindow = "openLoadWindow";
   export const condition = "condition";
+  export const backlog = "backlog";
+  export const removeLayer = "removeLayer";
 }
 
 export namespace Layer {
@@ -27,6 +29,7 @@ export namespace Layer {
   export const background = "background";
   export const choice = "choice";
   export const message = "message";
+  export const backlog = "backlog";
 }
 
 export const gameId = "$gameId";

@@ -76,6 +76,10 @@ export class Scene extends g.Scene {
     return this._gameState;
   }
 
+  get backlog(): Frame[] {
+    return this.scenario.backlog;
+  }
+
   jump(target: script.Jump) {
     const previous = this.source.scene.label;
     if(this.source.update(target)) {
@@ -101,6 +105,10 @@ export class Scene extends g.Scene {
 
   appendLayer(e: g.E, config: script.LayerConfig) {
     this.layerGroup.append(e, config);
+  }
+
+  removeLayer(name: string) {
+    this.layerGroup.remove(name);
   }
 
   updateText(text: script.Text) {
@@ -248,7 +256,13 @@ export class Scene extends g.Scene {
       data: this.config.window.message
     });
     this.layerGroup.evaluate(Layer.message, (layer) => {
-      this._message = new Message(this, this.config);
+      this._message = new Message({
+        scene: this,
+        config: this.config,
+        width: this.game.width - 40,
+        x: this.config.window.message.x + 20,
+        y: this.config.window.message.y + 20
+      });
       layer.append(this._message);
     });
     this.enableWindowClick();

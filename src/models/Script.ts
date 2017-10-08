@@ -150,3 +150,7 @@ export interface Eval {
 export interface Condition extends Eval {
   script: Script;
 }
+
+export interface RemoveLayer {
+  name: string;
+}

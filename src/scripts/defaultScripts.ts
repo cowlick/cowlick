@@ -4,8 +4,9 @@ import {Scene} from "../components/Scene";
 import {ImageButton} from "../components/ImageButton";
 import {LabelButton} from "../components/LabelButton";
 import {createImage} from "../components/Image";
+import {Message} from "../components/Message";
 import {ScriptFunction} from "./ScriptManager";
-import {Tag} from "../Constant";
+import {Tag, Layer} from "../Constant";
 import {Engine} from "../Engine";
 
 function image(scene: Scene, image: script.Image) {
@@ -170,6 +171,50 @@ function condition(scene: Scene, cond: script.Condition) {
   }
 }
 
+function backlog(scene: Scene, data: any) {
+  const layer = { name: Layer.backlog };
+
+  const message = new Message({
+    scene,
+    config: Engine.config,
+    width: scene.game.width - 20,
+    x: 20,
+    y: 20
+  });
+  let values: (string | script.RubyText[])[] = [];
+  for(const frame of scene.backlog) {
+    for(const vs of frame.scripts.filter(s => s.tag === Tag.text).map(s => (s.data as script.Text).values)) {
+      values = values.concat("\n", vs);
+    }
+  }
+  message.updateText({ values });
+  message.showAll();
+  scene.appendLayer(message, layer);
+
+  const width = 100;
+  const l = {
+    layer,
+    x: scene.game.width - width - 10,
+    y: 10,
+    width,
+    height: 24,
+    text: "close",
+    scripts: [
+      {
+        tag: Tag.removeLayer,
+        data: {
+          name: layer.name
+        }
+      }
+    ]
+  };
+  link(scene, l);
+}
+
+function removeLayer(scene: Scene, target: script.RemoveLayer) {
+  scene.removeLayer(target.name);
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -189,5 +234,7 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.save, save],
   [Tag.load, load],
   [Tag.evaluate, evaluate],
-  [Tag.condition, condition]
+  [Tag.condition, condition],
+  [Tag.backlog, backlog],
+  [Tag.removeLayer, removeLayer]
 ]);

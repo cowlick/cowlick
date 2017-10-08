@@ -3,6 +3,14 @@ import * as al from "@akashic-extension/akashic-label";
 import {Config} from "../Config";
 import {RubyText, Text} from "../models/Script";
 
+export interface MessageParameters {
+  scene: g.Scene;
+  config: Config;
+  width: number;
+  x: number;
+  y: number;
+}
+
 export class Message extends al.Label {
 
   private index: number;
@@ -10,20 +18,20 @@ export class Message extends al.Label {
   private original: Text;
   private current: (string | RubyText)[];
 
-  constructor(scene: g.Scene, config: Config) {
+  constructor(params: MessageParameters) {
     super({
-      scene,
+      scene: params.scene,
       font: new g.DynamicFont({
-        game: scene.game,
+        game: params.scene.game,
         fontFamily: g.FontFamily.SansSerif,
         size: 18
       }),
       text: "",
       fontSize: 18,
-      textColor: config.font.color,
-      width: scene.game.width - 40,
-      x: config.window.message.x + 20,
-      y: config.window.message.y + 20
+      textColor: params.config.font.color,
+      width: params.width,
+      x: params.x,
+      y: params.y
     });
 
     this.index = 0;

@@ -6,14 +6,20 @@ export class ScenarioViewModel {
 
   private frameTrigger: g.Trigger<Frame>;
   private scenario: Scenario;
+  private log: Frame[];
 
   constructor(scenario: Scenario) {
     this.scenario = scenario;
     this.frameTrigger = new g.Trigger<Frame>();
+    this.log = [];
   }
 
   get source() {
     return this.scenario;
+  }
+
+  get backlog() {
+    return this.log;
   }
 
   loadFrame(callback: (frame: Frame) => void) {
@@ -21,7 +27,7 @@ export class ScenarioViewModel {
   }
 
   load(frame?: Frame): boolean {
-    const f = frame ? frame : this.source.scene.frame;
+    const f = frame ? frame : this.source.frame;
     if(f) {
       this.frameTrigger.fire(f);
       return true;
@@ -31,6 +37,12 @@ export class ScenarioViewModel {
   }
 
   next(): boolean {
-    return this.load(this.source.nextFrame());
+    const previous = this.source.frame;
+    if(this.load(this.source.nextFrame())) {
+      this.log.push(previous);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
