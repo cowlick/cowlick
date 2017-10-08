@@ -9,7 +9,8 @@ var config = {
   entry: {
     "main": path.join(srcDir, "main.ts"),
     "eval": path.join(srcDir, "eval.ts"),
-    "scenario": path.join(srcDir, "scenario.ts")
+    "scenario": path.join(srcDir, "scenario.ts"),
+    "config": path.join(srcDir, "config.ts"),
   },
   output : {
     path: outDir,

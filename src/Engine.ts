@@ -16,6 +16,11 @@ export class Engine {
 
   constructor(game: g.Game) {
     this.game = game;
+
+    const c = g._require(game, "config");
+    if(c) {
+      Engine._config = c;
+    }
   }
 
   set config(value: Config) {

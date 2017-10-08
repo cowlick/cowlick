@@ -36,6 +36,11 @@
 			"type": "script",
 			"path": "script/scenario.js",
 			"global": true
+		},
+		"config": {
+			"type": "script",
+			"path": "script/config.js",
+			"global": true
 		}
 	},
 	"environment": {
