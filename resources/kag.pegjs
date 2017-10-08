@@ -1,5 +1,5 @@
 {
-  var b = require("./action");
+  var b = require("../lib/peg/action");
 }
 
 Start

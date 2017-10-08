@@ -1,6 +1,7 @@
 "use strict";
+import * as script from "../models/Script";
 
-function contents(c, cs) {
+export function contents(c: any, cs: any[]) {
   "use strict";
 
   var result = [c];
@@ -14,8 +15,8 @@ function contents(c, cs) {
   return result;
 }
 
-function image(assetId, layer, options) {
-  var result = {
+export function image(assetId: string, layer: string, options: { name: string, value: any }) {
+  const result: script.Script = {
     tag: "image",
     data: {
       layer: {
@@ -34,8 +35,8 @@ function image(assetId, layer, options) {
   return result;
 }
 
-function text(values, cm) {
-  var result = {
+export function text(values: (string | script.RubyText[])[], cm: any) {
+  const result: script.Script = {
     tag: "text",
     data: {
       values: values
@@ -47,9 +48,9 @@ function text(values, cm) {
   return result;
 }
 
-function textBlock(t, ts) {
-  var result = [];
-  var text = "";
+export function textBlock(t: string | script.RubyText[], ts: (string | script.RubyText[])[]) {
+  const result: (string | script.RubyText[])[] = [];
+  let text = "";
   if(Array.isArray(t)) {
     t.forEach(function(v) {
       if(Array.isArray(v)) {
@@ -78,12 +79,12 @@ function textBlock(t, ts) {
   return result;
 }
 
-function textLine(values, top, end) {
+export function textLine(values: (string | script.RubyText[])[], top: any, end: any) {
   if(top) {
     if(typeof values[0] === "string") {
       values[0] = "\n" + values[0];
     } else {
-      values = ["\n"].concat(values);
+      values = (["\n"] as (string | script.RubyText[])[]).concat(values);
     }
   }
   if(end) {
@@ -94,8 +95,8 @@ function textLine(values, top, end) {
       values.push("\n");
     }
   }
-  var vs = [];
-  var text = "";
+  const vs: (string | script.RubyText[])[] = [];
+  let text = "";
   values.forEach(function(v) {
     if(Array.isArray(v)) {
       vs.push(text);
@@ -108,7 +109,7 @@ function textLine(values, top, end) {
   return vs.length === 0 ? text : vs;
 }
 
-function ruby(rb, rt) {
+export function ruby(rb: string, rt: string): script.RubyText[] {
   return [{
     value: JSON.stringify({
       rb: rb,
@@ -117,7 +118,7 @@ function ruby(rb, rt) {
   }];
 }
 
-function playAudio(assetId, name) {
+export function playAudio(assetId: string, name: string): script.Script {
   return {
     tag: "playAudio",
     data: {
@@ -127,7 +128,7 @@ function playAudio(assetId, name) {
   };
 }
 
-function stopAudio(name) {
+export function stopAudio(name: string): script.Script {
   return {
     tag: "stopAudio",
     data: {
@@ -136,14 +137,3 @@ function stopAudio(name) {
     }
   };
 }
-
-module.exports = {
-  contents: contents,
-  image: image,
-  text: text,
-  textBlock: textBlock,
-  textLine: textLine,
-  ruby: ruby,
-  playAudio: playAudio,
-  stopAudio: stopAudio
-};
