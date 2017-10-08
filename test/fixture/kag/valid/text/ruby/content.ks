@@ -1,1 +1,1 @@
-[ruby text="かん"]漢[ruby text="じ"]字
+テスト[ruby text="かん"]漢[ruby text="じ"]字テスト

@@ -48,30 +48,26 @@ export function text(values: (string | script.RubyText[])[], cm: any) {
   return result;
 }
 
-export function textBlock(t: string | script.RubyText[], ts: (string | script.RubyText[])[]) {
-  const result: (string | script.RubyText[])[] = [];
-  let text = "";
-  if(Array.isArray(t)) {
-    t.forEach(function(v) {
-      if(Array.isArray(v)) {
-        result.push(v);
-      } else {
-        text += v;
-      }
-    });
-  } else {
-    text += t;
-  }
-  if (ts) {
-    ts.forEach(function(t) {
-      if(Array.isArray(t)) {
+function flatten(result: (string | script.RubyText[])[], text: string, values: (string | script.RubyText[])[]) {
+  for(const v of values) {
+    if(Array.isArray(v)) {
+      if(text) {
         result.push(text);
         text = "";
-        result.push(t);
-      } else {
-        text += t;
       }
-    });
+      result.push(v);
+    } else {
+      text += v;
+    }
+  }
+  return text;
+}
+
+export function textBlock(t: (string | script.RubyText[])[], ts: (string | script.RubyText[])[][]) {
+  const result: (string | script.RubyText[])[] = [];
+  let text = flatten(result, "", t);
+  for(const t of ts) {
+    text = flatten(result, text, t);
   }
   if(text) {
     result.push(text);
@@ -95,18 +91,12 @@ export function textLine(values: (string | script.RubyText[])[], top: any, end: 
       values.push("\n");
     }
   }
-  const vs: (string | script.RubyText[])[] = [];
-  let text = "";
-  values.forEach(function(v) {
-    if(Array.isArray(v)) {
-      vs.push(text);
-      text = "";
-      vs.push(v);
-    } else {
-      text += v;
-    }
-  });
-  return vs.length === 0 ? text : vs;
+  const result: (string | script.RubyText[])[] = [];
+  let text = flatten(result, "", values);
+  if(text) {
+    result.push(text);
+  }
+  return result;
 }
 
 export function ruby(rb: string, rt: string): script.RubyText[] {

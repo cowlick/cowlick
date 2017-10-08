@@ -85,7 +85,7 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag . )
+  = $( !Newline !EOF !CM !L !R !Tag !Ruby . )
 
 Ruby
   = "[ruby" _ "text=" rt:StringLiteral "]" rb:Character {
