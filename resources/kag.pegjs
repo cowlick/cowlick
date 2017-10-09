@@ -23,6 +23,10 @@ Tags
   }
 
 Tag
+  = "@" content:TagContent &(Newline / EOF) { return content; }
+  / "[" content:TagContent _ "]" { return content; }
+
+TagContent
   = Image
   / PlayBgm
   / StopBgm
@@ -31,7 +35,7 @@ Tag
   / UserDefined
 
 Image
-  = "[image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:ImageOptions _ "]" {
+  = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:ImageOptions {
     return b.image(assetId, layer, options);
   }
 
@@ -43,23 +47,23 @@ ImageOption
   / "left=" y:Digits { return { name: "y", value: y }; }
 
 PlayBgm
-  = "[playbgm" _ "storage=" assetId:AttributeValue _ "]" {
+  = "playbgm" _ "storage=" assetId:AttributeValue {
     return b.playAudio(assetId, "bgm");
   }
 
 StopBgm
-  = "[stopbgm]" { return b.stopAudio("bgm"); }
+  = "stopbgm" { return b.stopAudio("bgm"); }
 
 PlaySe
-  = "[playse" _ "storage=" assetId:AttributeValue _ "]" {
+  = "playse" _ "storage=" assetId:AttributeValue {
     return b.playAudio(assetId, "se");
   }
 
 StopSe
-  = "[stopse]" { return b.stopAudio("se"); }
+  = "stopse" { return b.stopAudio("se"); }
 
 UserDefined
-  = "[" name:TagName attrs:(_ AttributeName "=" AttributeValue)* _ "]" {
+  = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
     return b.tag(name, attrs.map(function(attr) { return { name: attr[1], value: attr[3]}; }));
   }
 
