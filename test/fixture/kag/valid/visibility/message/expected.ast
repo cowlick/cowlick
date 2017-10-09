@@ -1,0 +1,11 @@
+[
+  [
+    {
+      "tag": "visible",
+      "data": {
+        "layer": "message",
+        "visible": false
+      }
+    }
+  ]
+]

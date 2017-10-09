@@ -38,6 +38,7 @@ TagContent
   / StopSe
   / Eval
   / S
+  / HideMessage
   / UserDefined
 
 Image
@@ -75,6 +76,9 @@ Eval
 
 S
   = "s" { return b.trigger(false); }
+
+HideMessage
+  = "hidemessage" { return b.visible("message", false); }
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
