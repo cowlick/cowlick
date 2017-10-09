@@ -17,4 +17,3 @@ export interface ChoiceItem extends Script<Jump> {
 export interface Eval {
   expression: string;
 }
-  

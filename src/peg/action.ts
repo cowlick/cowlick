@@ -130,7 +130,7 @@ export function tag(name: string, attrs: { name: string, value: any }[]) {
   const result: script.Script<any> = {
     tag: name,
     data: {}
-  }
+  };
   for(const attr of attrs) {
     result.data[attr.name] = attr.value;
   }
