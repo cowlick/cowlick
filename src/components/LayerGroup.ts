@@ -51,16 +51,20 @@ export class LayerGroup {
             layer.hide();
           }
         }
-        if(config.opacity) {
+        let changed = false;
+        if(config.opacity !== undefined) {
           layer.opacity = config.opacity;
+          changed = true;
         }
-        if(config.x) {
+        if(config.x !== undefined) {
           layer.x = config.x;
+          changed = true;
         }
-        if(config.y) {
+        if(config.y !== undefined) {
           layer.y = config.y;
+          changed = true;
         }
-        if(config.x || config.y || config.opacity) {
+        if(changed) {
           layer.modified();
         }
       }

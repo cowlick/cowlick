@@ -11,6 +11,11 @@ import {Engine} from "../Engine";
 
 function image(scene: Scene, image: script.Image) {
   scene.appendLayer(createImage(scene, image), image.layer);
+  scene.applyLayerConfig({
+    name: image.layer.name,
+    opacity: image.layer.opacity,
+    visible: image.layer.visible
+  });
 }
 
 function pane(scene: Scene, pane: script.Pane) {

@@ -9,8 +9,6 @@ export interface LayerConfig {
 export interface Image {
   assetId: string;
   layer: LayerConfig;
-  x?: number;
-  y?: number;
   frame?: {
     width: number;
     height: number;

@@ -43,16 +43,9 @@ TagContent
   / UserDefined
 
 Image
-  = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:ImageOptions {
+  = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:LayOptOptions {
     return b.image(assetId, layer, options);
   }
-
-ImageOptions
-  = os:(_ ImageOption)* { return os.map(function(o) { return o[1]; }); }
-
-ImageOption
-  = "top=" x:Digits { return { key: "x", value: x }; }
-  / "left=" y:Digits { return { key: "y", value: y }; }
 
 PlayBgm
   = "playbgm" _ "storage=" assetId:AttributeValue {

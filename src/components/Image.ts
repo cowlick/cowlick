@@ -21,11 +21,11 @@ export function createImage(scene: g.Scene, image: Image) {
       src: asset
     });
   }
-  if(image.x !== undefined) {
-    sprite.x = image.x;
+  if(image.layer.x !== undefined) {
+    sprite.x = image.layer.x;
   }
-  if(image.y !== undefined) {
-    sprite.y = image.y;
+  if(image.layer.y !== undefined) {
+    sprite.y = image.layer.y;
   }
   sprite.invalidate();
   return sprite;

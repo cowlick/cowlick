@@ -33,7 +33,7 @@ export function image(assetId: string, layer: string, options: KeyValuePair[]) {
     }
   };
   options.forEach(function (option) {
-    result.data[option.key] = option.value;
+    result.data.layer[option.key] = option.value;
   });
   return result;
 }

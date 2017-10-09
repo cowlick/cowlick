@@ -34,10 +34,10 @@ export const logo = new novel.Scene({
           assetId: "cowlick",
           layer: {
             name: "logo",
-            opacity: 0
-          },
-          x: 256,
-          y: 176
+            opacity: 0,
+            x: 256,
+            y: 176
+          }
         }
       },
       {
