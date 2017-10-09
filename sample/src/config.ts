@@ -2,8 +2,8 @@
 import * as novel from "../../lib/index";
 
 const maxSaveCount = novel.defaultConfig.system.maxSaveCount;
-const saveButtons: novel.Script[] = [];
-const loadButtons: novel.Script[] = [];
+const saveButtons: novel.Script<novel.Link>[] = [];
+const loadButtons: novel.Script<novel.Link>[] = [];
 for(let i = 0; i < maxSaveCount; i++) {
   saveButtons.push({
     tag: novel.Tag.link,
@@ -20,7 +20,7 @@ for(let i = 0; i < maxSaveCount; i++) {
       backgroundEffector: {
         borderWidth: 4
       },
-      text: i,
+      text: String(i),
       scripts: [
         {
           tag: novel.Tag.save,
@@ -46,7 +46,7 @@ for(let i = 0; i < maxSaveCount; i++) {
       backgroundEffector: {
         borderWidth: 4
       },
-      text: i,
+      text: String(i),
       scripts: [
         {
           tag: novel.Tag.load,

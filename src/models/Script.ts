@@ -111,7 +111,7 @@ export interface Link {
   backgroundEffector?: {
     borderWidth: number;
   };
-  text: string
+  text: string;
   scripts: Script<any>[];
 }
 
