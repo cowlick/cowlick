@@ -127,3 +127,14 @@ export function stopAudio(name: string): script.Script {
     }
   };
 }
+
+export function tag(name: string, attrs: { name: string, value: any }[]) {
+  const result: script.Script = {
+    tag: name,
+    data: {}
+  }
+  for(const attr of attrs) {
+    result.data[attr.name] = attr.value;
+  }
+  return result;
+}

@@ -28,9 +28,10 @@ Tag
   / StopBgm
   / PlaySe
   / StopSe
+  / UserDefined
 
 Image
-  = "[image" _ "storage=" assetId:Attribute _ "layer=" layer:Attribute options:ImageOptions "]" {
+  = "[image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:ImageOptions _ "]" {
     return b.image(assetId, layer, options);
   }
 
@@ -42,7 +43,7 @@ ImageOption
   / "left=" y:Digits { return { name: "y", value: y }; }
 
 PlayBgm
-  = "[playbgm" _ "storage=" assetId:Attribute _ "]" {
+  = "[playbgm" _ "storage=" assetId:AttributeValue _ "]" {
     return b.playAudio(assetId, "bgm");
   }
 
@@ -50,12 +51,20 @@ StopBgm
   = "[stopbgm]" { return b.stopAudio("bgm"); }
 
 PlaySe
-  = "[playse" _ "storage=" assetId:Attribute _ "]" {
+  = "[playse" _ "storage=" assetId:AttributeValue _ "]" {
     return b.playAudio(assetId, "se");
   }
 
 StopSe
   = "[stopse]" { return b.stopAudio("se"); }
+
+UserDefined
+  = "[" name:TagName attrs:(_ AttributeName "=" AttributeValue)* _ "]" {
+    return b.tag(name, attrs.map(function(attr) { return { name: attr[1], value: attr[3]}; }));
+  }
+
+TagName
+  = $( ( !Newline !EOF !Space !"=" . )+ )
 
 Text
   = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
@@ -88,18 +97,19 @@ Character
   = $( !Newline !EOF !CM !L !R !Tag !Ruby . )
 
 Ruby
-  = "[ruby" _ "text=" rt:Attribute "]" rb:Character {
+  = "[ruby" _ "text=" rt:AttributeValue "]" rb:Character {
     return b.ruby(rb, rt);
   }
 
 EndTextBlock
   = (L Newline? / Newline / EOF)?
 
-Attribute
-  = StringLiteral / AttributeValue
+AttributeName
+  = $( ( !Newline !EOF !Space !"=" . )+ )
 
 AttributeValue
-  = $( ( !Newline !EOF !Space !"]" . )+ )
+  = StringLiteral
+  / $( ( !Newline !EOF !Space !"]" . )+ )
 
 StringLiteral
   = '"' l:$( ( !'"' . )+ ) '"' { return l; }
