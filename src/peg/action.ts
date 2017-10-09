@@ -1,5 +1,6 @@
 "use strict";
 import * as script from "../models/Script";
+import {Tag} from "../Constant";
 
 export function contents(c: any, cs: any[]) {
   "use strict";
@@ -17,7 +18,7 @@ export function contents(c: any, cs: any[]) {
 
 export function image(assetId: string, layer: string, options: { name: string, value: any }) {
   const result: script.Script = {
-    tag: "image",
+    tag: Tag.image,
     data: {
       layer: {
         name: layer
@@ -37,7 +38,7 @@ export function image(assetId: string, layer: string, options: { name: string, v
 
 export function text(values: (string | script.RubyText[])[], cm: any) {
   const result: script.Script = {
-    tag: "text",
+    tag: Tag.text,
     data: {
       values: values
     }
@@ -110,7 +111,7 @@ export function ruby(rb: string, rt: string): script.RubyText[] {
 
 export function playAudio(assetId: string, name: string): script.Script {
   return {
-    tag: "playAudio",
+    tag: Tag.playAudio,
     data: {
       assetId: assetId,
       groupName: name
@@ -120,7 +121,7 @@ export function playAudio(assetId: string, name: string): script.Script {
 
 export function stopAudio(name: string): script.Script {
   return {
-    tag: "stopAudio",
+    tag: Tag.stopAudio,
     data: {
       assetId: null,
       groupName: name
@@ -137,4 +138,13 @@ export function tag(name: string, attrs: { name: string, value: any }[]) {
     result.data[attr.name] = attr.value;
   }
   return result;
+}
+
+export function evaluate(expression: string) {
+  return {
+    tag: Tag.evaluate,
+    data: {
+      expression
+    }
+  };
 }

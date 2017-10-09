@@ -32,6 +32,7 @@ TagContent
   / StopBgm
   / PlaySe
   / StopSe
+  / Eval
   / UserDefined
 
 Image
@@ -61,6 +62,11 @@ PlaySe
 
 StopSe
   = "stopse" { return b.stopAudio("se"); }
+
+Eval
+  = "eval" _ "exp=" expression:AttributeValue {
+    return b.evaluate(expression);
+  }
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
