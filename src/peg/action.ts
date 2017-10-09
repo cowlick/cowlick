@@ -137,7 +137,7 @@ export function tag(name: string, attrs: { name: string, value: any }[]) {
   return result;
 }
 
-export function evaluate(expression: string) {
+export function evaluate(expression: string): script.Script<ast.Eval> {
   return {
     tag: Tag.evaluate,
     data: {
@@ -146,14 +146,14 @@ export function evaluate(expression: string) {
   };
 }
 
-export function trigger(enabled: boolean) {
+export function trigger(enabled: boolean): script.Script<script.Trigger> {
   return {
     tag: Tag.trigger,
     data: enabled ? script.Trigger.On : script.Trigger.Off
   };
 }
 
-export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]) {
+export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): script.Script<ast.Choice> {
   return {
     tag: Tag.choice,
     data: {
