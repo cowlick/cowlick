@@ -1,5 +1,5 @@
 "use strict";
-import {LayerConfig, Visibility} from "../models/Script";
+import {LayerConfig} from "../models/Script";
 import {Layer} from "../Constant";
 
 export class LayerGroup {
@@ -40,14 +40,18 @@ export class LayerGroup {
     }
   }
 
-  visible(visibility: Visibility) {
+  applyConfig(config: LayerConfig) {
     this.evaluate(
-      visibility.layer,
+      config.name,
       (layer: g.Pane) => {
-        if(visibility.visible) {
+        if(config.visible) {
           layer.show();
         } else {
           layer.hide();
+        }
+        if(config.opacity) {
+          layer.opacity = config.opacity;
+          layer.modified();
         }
       }
     );

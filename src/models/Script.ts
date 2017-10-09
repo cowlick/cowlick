@@ -1,6 +1,7 @@
 export interface LayerConfig {
   name: string;
   opacity?: number;
+  visible?: boolean;
 }
 
 export interface Image {
@@ -113,11 +114,6 @@ export interface Link {
   };
   text: string;
   scripts: Script<any>[];
-}
-
-export interface Visibility {
-  layer: string;
-  visible: boolean;
 }
 
 export interface Audio {

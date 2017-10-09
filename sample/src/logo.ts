@@ -6,16 +6,16 @@ export const logo = new novel.Scene({
   frames: [
     new novel.Frame([
       {
-        tag: novel.Tag.visible,
+        tag: novel.Tag.layerConfig,
         data: {
-          layer: novel.Layer.message,
+          name: novel.Layer.message,
           visible: false
         }
       },
       {
-        tag: novel.Tag.visible,
+        tag: novel.Tag.layerConfig,
         data: {
-          layer: novel.Layer.system,
+          name: novel.Layer.system,
           visible: false
         }
       },

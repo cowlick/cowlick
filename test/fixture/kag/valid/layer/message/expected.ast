@@ -1,9 +1,9 @@
 [
   [
     {
-      "tag": "visible",
+      "tag": "layerConfig",
       "data": {
-        "layer": "message",
+        "name": "message",
         "visible": false
       }
     }

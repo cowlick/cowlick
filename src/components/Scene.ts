@@ -117,8 +117,8 @@ export class Scene extends g.Scene {
     this.enableWindowClick();
   }
 
-  visible(visibility: script.Visibility) {
-    this.layerGroup.visible(visibility);
+  applyLayerConfig(config: script.LayerConfig) {
+    this.layerGroup.applyConfig(config);
   }
 
   addSkipTrigger() {

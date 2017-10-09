@@ -4,7 +4,7 @@ export namespace Tag {
   export const pane = "pane";
   export const jump = "jump";
   export const text = "text";
-  export const visible = "visible";
+  export const layerConfig = "layerConfig";
   export const playAudio = "playAudio";
   export const changeVolume = "changeVolume";
   export const stopAudio = "stopAudio";

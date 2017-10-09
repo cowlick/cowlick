@@ -78,7 +78,12 @@ S
   = "s" { return b.trigger(false); }
 
 HideMessage
-  = "hidemessage" { return b.visible("message", false); }
+  = "hidemessage" {
+    return b.layerConfig({
+      name: "message",
+      visible: false
+    });
+  }
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {

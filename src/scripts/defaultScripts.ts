@@ -104,8 +104,8 @@ function text(scene: Scene, text: script.Text) {
   scene.updateText(text);
 }
 
-function visible(scene: Scene, visibility: script.Visibility) {
-  scene.visible(visibility);
+function layerConfig(scene: Scene, config: script.LayerConfig) {
+  scene.applyLayerConfig(config);
 }
 
 function playAudio(scene: Scene, audio: script.Audio) {
@@ -223,7 +223,7 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.choice, choice],
   [Tag.link, link],
   [Tag.text, text],
-  [Tag.visible, visible],
+  [Tag.layerConfig, layerConfig],
   [Tag.playAudio, playAudio],
   [Tag.stopAudio, stopAudio],
   [Tag.playVideo, playVideo],

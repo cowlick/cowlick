@@ -179,12 +179,9 @@ export function choiceItem(frame: string, text: string, scene?: string) {
   return result;
 }
 
-export function visible(layer: string, visible: boolean): script.Script<script.Visibility> {
+export function layerConfig(data: script.LayerConfig): script.Script<script.LayerConfig> {
   return {
-    tag: Tag.visible,
-    data: {
-      layer,
-      visible
-    }
+    tag: Tag.layerConfig,
+    data
   };
 }
