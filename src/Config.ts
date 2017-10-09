@@ -8,9 +8,9 @@ export interface FontConfig {
 export interface WindowConfig {
   message: Pane;
   // TODO: 制限を強める
-  system: Script[];
-  load: Script[];
-  save: Script[];
+  system: Script<any>[];
+  load: Script<any>[];
+  save: Script<any>[];
 }
 
 export interface SystemConfig {

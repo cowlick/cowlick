@@ -17,8 +17,8 @@ export function contents(c: any, cs: any[]) {
   return result;
 }
 
-export function image(assetId: string, layer: string, options: { name: string, value: any }) {
-  const result: script.Script = {
+export function image(assetId: string, layer: string, options: { name: string, value: any }[]) {
+  const result: script.Script<any> = {
     tag: Tag.image,
     data: {
       layer: {
@@ -27,25 +27,21 @@ export function image(assetId: string, layer: string, options: { name: string, v
       assetId: assetId
     }
   };
-  if(options) {
-    if(Array.isArray(options)) {
-      options.forEach(function (option) {
-        result.data[option.name] = option.value;
-      });
-    }
-  }
+  options.forEach(function (option) {
+    result.data[option.name] = option.value;
+  });
   return result;
 }
 
 export function text(values: (string | script.RubyText[])[], cm: any) {
-  const result: script.Script = {
+  const result: script.Script<script.Text> = {
     tag: Tag.text,
     data: {
       values: values
     }
   };
   if(cm) {
-    result.data["clear"] = true;
+    result.data.clear = true;
   }
   return result;
 }
@@ -110,7 +106,7 @@ export function ruby(rb: string, rt: string): script.RubyText[] {
   }];
 }
 
-export function playAudio(assetId: string, name: string): script.Script {
+export function playAudio(assetId: string, name: string): script.Script<script.Audio> {
   return {
     tag: Tag.playAudio,
     data: {
@@ -120,7 +116,7 @@ export function playAudio(assetId: string, name: string): script.Script {
   };
 }
 
-export function stopAudio(name: string): script.Script {
+export function stopAudio(name: string): script.Script<script.Audio> {
   return {
     tag: Tag.stopAudio,
     data: {
@@ -131,7 +127,7 @@ export function stopAudio(name: string): script.Script {
 }
 
 export function tag(name: string, attrs: { name: string, value: any }[]) {
-  const result: script.Script = {
+  const result: script.Script<any> = {
     tag: name,
     data: {}
   }

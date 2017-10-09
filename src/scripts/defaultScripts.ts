@@ -164,7 +164,7 @@ function evaluate(scene: Scene, info: script.Eval) {
   f(scene.gameState.variables);
 }
 
-function condition(scene: Scene, cond: script.Condition) {
+function condition(scene: Scene, cond: script.Condition<any>) {
   const f = g._require(scene.game, cond.path);
   if(f(scene.gameState.variables)) {
     Engine.scriptManager.call(scene, cond.script);

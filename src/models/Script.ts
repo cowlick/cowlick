@@ -35,7 +35,7 @@ export interface Button {
   assetId: string;
   x: number;
   y: number;
-  scripts: Script[];
+  scripts: Script<any>[];
 }
 
 export interface RubyText {
@@ -52,12 +52,12 @@ export interface Jump {
   frame?: number
 }
 
-export interface Script {
+export interface Script<T> {
   tag: string;
-  data: any;
+  data: T;
 }
 
-export function collectAssetIds(scripts: Script[]): string[] {
+export function collectAssetIds(scripts: Script<any>[]): string[] {
   let ids: string[] = [];
   for(const s of scripts) {
     if(typeof(s.data) === "object") {
@@ -71,7 +71,7 @@ export function collectAssetIds(scripts: Script[]): string[] {
   return ids;
 }
 
-export interface ChoiceItem extends Script {
+export interface ChoiceItem extends Script<Jump> {
   text: string;
 }
 
@@ -112,7 +112,7 @@ export interface Link {
     borderWidth: number;
   };
   text: string
-  scripts: Script[];
+  scripts: Script<any>[];
 }
 
 export interface Visibility {
@@ -147,8 +147,8 @@ export interface Eval {
   path: string;
 }
 
-export interface Condition extends Eval {
-  script: Script;
+export interface Condition<T> extends Eval {
+  script: Script<T>;
 }
 
 export interface RemoveLayer {

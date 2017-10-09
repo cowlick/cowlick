@@ -274,9 +274,9 @@ export class Scene extends g.Scene {
     }
   }
 
-  private removeLayers(scripts: script.Script[]) {
+  private removeLayers(scripts: script.Script<any>[]) {
     const names = new Set<string>();
-    scripts.forEach((s: script.Script) => {
+    scripts.forEach(s => {
       if(s.data.layer) {
         names.add(s.data.layer);
       }
@@ -286,7 +286,7 @@ export class Scene extends g.Scene {
     });
   }
 
-  private applyScripts(scripts: script.Script[]) {
+  private applyScripts(scripts: script.Script<any>[]) {
     scripts.forEach(s => {
       this.scriptManager.call(this, s);
     });

@@ -16,7 +16,7 @@ export class ScriptManager {
     this.scripts.set(name, f);
   }
 
-  call(scene: Scene, script: Script) {
+  call(scene: Scene, script: Script<any>) {
     let f = this.scripts.get(script.tag);
     if(f) {
       f(scene, script.data);

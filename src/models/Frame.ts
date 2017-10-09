@@ -3,13 +3,13 @@ import {Script, collectAssetIds} from "./Script";
 
 export class Frame {
 
-  private _scripts: Script[];
+  private _scripts: Script<any>[];
 
-  constructor(scripts: Script[]) {
+  constructor(scripts: Script<any>[]) {
     this._scripts = scripts;
   }
 
-  get scripts(): Script[] {
+  get scripts(): Script<any>[] {
     return this._scripts;
   }
 
