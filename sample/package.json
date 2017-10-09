@@ -3,7 +3,7 @@
     "build": "webpack --progress && npm run scan:assets",
     "start": "akashic-sandbox game",
     "scan:assets": "cd ./game && akashic scan asset",
-    "bundle": "cd ./game && akashic export html --output ../dist"
+    "bundle": "cd ./game && akashic export html --output ../dist && cp ../../docs/images/favicon.ico ../dist"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
@@ -14,6 +14,7 @@
     "@akashic/akashic-cli": "1.2.1",
     "@akashic/akashic-sandbox": "0.13.4",
     "@types/node": "8.0.33",
+    "copy-webpack-plugin": "4.1.1",
     "ts-loader": "2.3.7",
     "typescript": "2.5.3",
     "uglify-save-license": "0.4.1",

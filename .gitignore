@@ -65,6 +65,7 @@ typings/
 
 lib/
 sample/game/script/
+sample/game/image/cowlick.png
 dist/
 resources/kag.js
 

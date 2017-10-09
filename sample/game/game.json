@@ -21,12 +21,6 @@
 			"height": 32,
 			"path": "image/pane.png"
 		},
-		"logo": {
-			"type": "image",
-			"width": 140,
-			"height": 140,
-			"path": "image/logo.png"
-		},
 		"eval": {
 			"type": "script",
 			"path": "script/eval.js",
@@ -41,6 +35,12 @@
 			"type": "script",
 			"path": "script/config.js",
 			"global": true
+		},
+		"cowlick": {
+			"type": "image",
+			"width": 128,
+			"height": 128,
+			"path": "image/cowlick.png"
 		}
 	},
 	"environment": {

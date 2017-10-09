@@ -31,13 +31,13 @@ export const logo = new novel.Scene({
       {
         tag: novel.Tag.image,
         data: {
-          assetId: "logo",
+          assetId: "cowlick",
           layer: {
             name: "logo",
             opacity: 0
           },
-          x: 250,
-          y: 170
+          x: 256,
+          y: 176
         }
       },
       {
