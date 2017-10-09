@@ -44,13 +44,23 @@ export class LayerGroup {
     this.evaluate(
       config.name,
       (layer: g.Pane) => {
-        if(config.visible) {
-          layer.show();
-        } else {
-          layer.hide();
+        if(config.visible !== undefined) {
+          if(config.visible) {
+            layer.show();
+          } else {
+            layer.hide();
+          }
         }
         if(config.opacity) {
           layer.opacity = config.opacity;
+        }
+        if(config.x) {
+          layer.x = config.x;
+        }
+        if(config.y) {
+          layer.y = config.y;
+        }
+        if(config.x || config.y || config.opacity) {
           layer.modified();
         }
       }

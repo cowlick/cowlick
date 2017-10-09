@@ -39,6 +39,7 @@ TagContent
   / Eval
   / S
   / HideMessage
+  / LayOpt
   / UserDefined
 
 Image
@@ -50,8 +51,8 @@ ImageOptions
   = os:(_ ImageOption)* { return os.map(function(o) { return o[1]; }); }
 
 ImageOption
-  = "top=" x:Digits { return { name: "x", value: x }; }
-  / "left=" y:Digits { return { name: "y", value: y }; }
+  = "top=" x:Digits { return { key: "x", value: x }; }
+  / "left=" y:Digits { return { key: "y", value: y }; }
 
 PlayBgm
   = "playbgm" _ "storage=" assetId:AttributeValue {
@@ -79,15 +80,26 @@ S
 
 HideMessage
   = "hidemessage" {
-    return b.layerConfig({
-      name: "message",
-      visible: false
-    });
+    return b.layerConfig("message", [{ key: "visible", value: false }]);
   }
+
+LayOpt
+  = "layopt" _ "layer=" name:AttributeValue options:LayOptOptions {
+    return b.layerConfig(name, options);
+  }
+
+LayOptOptions
+  = os:(_ LayOptOption)* { return os.map(function(o) { return o[1]; }); }
+
+LayOptOption
+  = "top=" x:Digits { return { key: "x", value: x }; }
+  / "left=" y:Digits { return { key: "y", value: y }; }
+  / "visible=" visible:Boolean { return { key: "visible", value: visible }; }
+  / "opacity=" opacity:Digits { return { key: "opacity", value: opacity }; }
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
-    return b.tag(name, attrs.map(function(attr) { return { name: attr[1], value: attr[3]}; }));
+    return b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3]}; }));
   }
 
 TagName
@@ -177,6 +189,10 @@ Digits
 
 Digit
   = [0-9]
+
+Boolean
+  = "true" { return true; }
+  / "false" { return false; }
 
 Newline
   = "\r\n"

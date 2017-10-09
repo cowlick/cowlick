@@ -3,6 +3,11 @@ import * as script from "../models/Script";
 import * as ast from "../parser/Ast";
 import {Tag, Layer} from "../Constant";
 
+export interface KeyValuePair {
+  key: string;
+  value: any;
+}
+
 export function contents(c: any, cs: any[]) {
   "use strict";
 
@@ -17,7 +22,7 @@ export function contents(c: any, cs: any[]) {
   return result;
 }
 
-export function image(assetId: string, layer: string, options: { name: string, value: any }[]) {
+export function image(assetId: string, layer: string, options: KeyValuePair[]) {
   const result: script.Script<any> = {
     tag: Tag.image,
     data: {
@@ -28,7 +33,7 @@ export function image(assetId: string, layer: string, options: { name: string, v
     }
   };
   options.forEach(function (option) {
-    result.data[option.name] = option.value;
+    result.data[option.key] = option.value;
   });
   return result;
 }
@@ -126,13 +131,13 @@ export function stopAudio(name: string): script.Script<script.Audio> {
   };
 }
 
-export function tag(name: string, attrs: { name: string, value: any }[]) {
+export function tag(name: string, attrs: KeyValuePair[]) {
   const result: script.Script<any> = {
     tag: name,
     data: {}
   };
   for(const attr of attrs) {
-    result.data[attr.name] = attr.value;
+    result.data[attr.key] = attr.value;
   }
   return result;
 }
@@ -179,9 +184,15 @@ export function choiceItem(frame: string, text: string, scene?: string) {
   return result;
 }
 
-export function layerConfig(data: script.LayerConfig): script.Script<script.LayerConfig> {
-  return {
+export function layerConfig(name: string, options: KeyValuePair[]) {
+  const result: script.Script<any> = {
     tag: Tag.layerConfig,
-    data
+    data: {
+      name
+    }
   };
+  for(const option of options) {
+    result.data[option.key] = option.value;
+  }
+  return result;
 }

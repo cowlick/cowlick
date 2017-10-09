@@ -1,5 +1,7 @@
 export interface LayerConfig {
   name: string;
+  x?: number;
+  y?: number;
   opacity?: number;
   visible?: boolean;
 }

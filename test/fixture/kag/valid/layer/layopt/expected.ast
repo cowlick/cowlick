@@ -1,0 +1,14 @@
+[
+  [
+    {
+      "tag": "layerConfig",
+      "data": {
+        "name": "test",
+        "x": 0,
+        "y": 0,
+        "opacity": 0,
+        "visible": true
+      }
+    }
+  ]
+]
