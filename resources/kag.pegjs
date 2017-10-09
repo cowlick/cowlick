@@ -23,6 +23,10 @@ Tags
   }
 
 Tag
+  = Links
+  / SingleTag
+
+SingleTag
   = "@" content:TagContent &(Newline / EOF) { return content; }
   / "[" content:TagContent _ "]" { return content; }
 
@@ -33,6 +37,7 @@ TagContent
   / PlaySe
   / StopSe
   / Eval
+  / S
   / UserDefined
 
 Image
@@ -68,6 +73,9 @@ Eval
     return b.evaluate(expression);
   }
 
+S
+  = "s" { return b.trigger(false); }
+
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
     return b.tag(name, attrs.map(function(attr) { return { name: attr[1], value: attr[3]}; }));
@@ -76,6 +84,31 @@ UserDefined
 TagName
   = $( ( !Newline !EOF !Space !"=" . )+ )
 
+Links
+  = l:Link ls:(Newline Comments Link)* {
+    return b.choice(l, ls.map(function(l) { return l[2]; }));
+  }
+
+Link
+  = "@link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue) Newline text:PlainText Newline EndLink {
+    if(scene) {
+      return b.choiceItem(frame[1], text, scene[1]);
+    } else {
+      return b.choiceItem(frame[1], text);
+    }
+  }
+  / "[link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue) _ "]" Newline? text:PlainText EndLink {
+    if(scene) {
+      return b.choiceItem(frame[1], text, scene[1]);
+    } else {
+      return b.choiceItem(frame[1], text);
+    }
+  }
+
+EndLink
+  = "@endlink" ( (Newline R) / &(Newline / EOF) )
+  / Newline? "[endlink]" (Newline? R)?
+
 Text
   = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
     return b.text(values, cm);
@@ -83,9 +116,11 @@ Text
 
 L
   = "[l]"
+  / "@l" &(Newline / EOF)
 
 CM
   = "[cm]"
+  / "@cm" &(Newline / EOF)
 
 TextBlock
   = Comments t:TextLine ts:(Newline Comments TextLine)* {
@@ -94,6 +129,7 @@ TextBlock
 
 R
   = "[r]"
+  / "@r" &(Newline / EOF)
 
 TextLine
   = top:R? Newline? values:(Ruby / PlainText)+ end:R? {
@@ -104,10 +140,13 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag !Ruby . )
+  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby . )
 
 Ruby
-  = "[ruby" _ "text=" rt:AttributeValue "]" rb:Character {
+  = "@ruby" _ "text=" rt:AttributeValue Newline rb:Character {
+    return b.ruby(rb, rt);
+  }
+  / "[ruby" _ "text=" rt:AttributeValue "]" rb:Character {
     return b.ruby(rb, rt);
   }
 

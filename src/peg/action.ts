@@ -1,6 +1,7 @@
 "use strict";
 import * as script from "../models/Script";
-import {Tag} from "../Constant";
+import * as ast from "../parser/Ast";
+import {Tag, Layer} from "../Constant";
 
 export function contents(c: any, cs: any[]) {
   "use strict";
@@ -147,4 +148,37 @@ export function evaluate(expression: string) {
       expression
     }
   };
+}
+
+export function trigger(enabled: boolean) {
+  return {
+    tag: Tag.trigger,
+    data: enabled ? script.Trigger.On : script.Trigger.Off
+  };
+}
+
+export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]) {
+  return {
+    tag: Tag.choice,
+    data: {
+      layer: {
+        name: Layer.choice
+      },
+      values: [l].concat(ls)
+    }
+  };
+}
+
+export function choiceItem(frame: string, text: string, scene?: string) {
+  const result: ast.ChoiceItem = {
+    tag: Tag.jump,
+    data: {
+      frame
+    },
+    text
+  };
+  if(scene) {
+    result.data.scene = scene;
+  }
+  return result;
 }
