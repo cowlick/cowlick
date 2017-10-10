@@ -260,8 +260,8 @@ export class Scene extends g.Scene {
         scene: this,
         config: this.config,
         width: this.game.width - 40,
-        x: this.config.window.message.x + 20,
-        y: this.config.window.message.y + 20,
+        x: this.config.window.message.layer.x + 20,
+        y: this.config.window.message.layer.y + 20,
         gameState: this.gameState
       });
       layer.append(this._message);

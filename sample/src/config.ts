@@ -63,12 +63,12 @@ const config: novel.Config = {
   window: {
     message: {
       layer: {
-        name: novel.Layer.message
+        name: novel.Layer.message,
+        x: 10,
+        y: g.game.height - g.game.height / 4 - 40
       },
       width: g.game.width - 20,
       height: g.game.height / 4,
-      x: 10,
-      y: g.game.height - g.game.height / 4 - 40,
       backgroundImage: "pane",
       padding: 4,
       backgroundEffector: {
@@ -129,7 +129,29 @@ const config: novel.Config = {
           scripts: [
             {
               tag: novel.Tag.backlog,
-              data: {}
+              data: {
+                scripts: [
+                  {
+                    tag: novel.Tag.pane,
+                    data: {
+                      layer: {
+                        name: novel.Layer.backlog,
+                        opacity: 100,
+                        x: 10,
+                        y: 10,
+                      },
+                      width: g.game.width - 20,
+                      height: g.game.height - 20,
+                      backgroundImage: "pane",
+                      padding: 4,
+                      backgroundEffector: {
+                        borderWidth: 4
+                      },
+                      touchable: true
+                    }
+                  }
+                ]
+              }
             }
           ]
         }

@@ -19,8 +19,6 @@ export interface Image {
 
 export interface Pane {
   layer: LayerConfig;
-  x?: number;
-  y?: number;
   width?: number;
   height?: number;
   backgroundImage?: string;
@@ -154,4 +152,8 @@ export interface Condition<T> extends Eval {
 
 export interface RemoveLayer {
   name: string;
+}
+
+export interface Backlog {
+  scripts: Script<any>[];
 }

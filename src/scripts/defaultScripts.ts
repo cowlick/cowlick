@@ -23,8 +23,8 @@ function pane(scene: Scene, pane: script.Pane) {
     scene,
     width: pane.width,
     height: pane.height,
-    x: pane.x,
-    y: pane.y,
+    x: pane.layer.x,
+    y: pane.layer.y,
     backgroundImage: pane.backgroundImage ? scene.assets[pane.backgroundImage] as g.ImageAsset : undefined,
     padding: pane.padding,
     backgroundEffector: pane.backgroundEffector ? new g.NinePatchSurfaceEffector(scene.game, pane.backgroundEffector.borderWidth) : undefined
@@ -176,8 +176,14 @@ function condition(scene: Scene, cond: script.Condition<any>) {
   }
 }
 
-function backlog(scene: Scene, data: any) {
+function backlog(scene: Scene, data: script.Backlog) {
   const layer = { name: Layer.backlog };
+
+  for(const s of data.scripts) {
+    Engine.scriptManager.call(scene, s);
+  }
+
+  trigger(scene, script.Trigger.Off);
 
   const message = new Message({
     scene,
@@ -198,22 +204,24 @@ function backlog(scene: Scene, data: any) {
   message.showAll();
   scene.appendLayer(message, layer);
 
+  const scripts: script.Script<any>[] = [
+    {
+      tag: Tag.removeLayer,
+      data: {
+        name: layer.name
+      }
+    }
+  ];
+
   const width = 100;
   const l = {
     layer,
     x: scene.game.width - width - 10,
-    y: 10,
+    y: 20,
     width,
     height: 24,
     text: "close",
-    scripts: [
-      {
-        tag: Tag.removeLayer,
-        data: {
-          name: layer.name
-        }
-      }
-    ]
+    scripts
   };
   link(scene, l);
 }

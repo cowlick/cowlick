@@ -34,12 +34,12 @@ export const defaultConfig: Config = {
   window: {
     message: {
       layer: {
-        name: Layer.message
+        name: Layer.message,
+        x: 10,
+        y: 10
       },
       width: g.game.width - 20,
       height: g.game.height - 20,
-      x: 10,
-      y: 10,
       touchable: true
     },
     system: [],
