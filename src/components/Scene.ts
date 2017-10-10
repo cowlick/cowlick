@@ -88,7 +88,7 @@ export class Scene extends g.Scene {
           this.game.logger.warn("scene not found", target);
         }
       } else {
-        this.game.pushScene(new Scene({
+        this.game.replaceScene(new Scene({
           game: this.game,
           scenario: this.source,
           scriptManager: this.scriptManager,
