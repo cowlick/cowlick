@@ -28,19 +28,19 @@ export class GameState {
     return typeof this.data[index] !== "undefined";
   }
 
-  save(scene: Scene, info: Save): string | SaveData {
-    if(info.index > this.max || info.index < 0) {
-      return "storage out of range: " + info.index;
+  save(scene: Scene, config: Save): string | SaveData {
+    if(config.index > this.max || config.index < 0) {
+      return "storage out of range: " + config.index;
     }
     const saveData = scene.createSaveData(this._variables.current);
-    if(info.force) {
-      this.data[info.index] = saveData;
+    if(config.force) {
+      this.data[config.index] = saveData;
       return saveData;
     } else {
-      if(this.exists(info.index)) {
-        return "save data already exists: " + info.index;
+      if(this.exists(config.index)) {
+        return "save data already exists: " + config.index;
       } else {
-        this.data[info.index] = saveData;
+        this.data[config.index] = saveData;
         return saveData;
       }
     }
