@@ -1,8 +1,8 @@
 "use strict";
-import {Scene} from "../components/Scene";
+import {SceneController} from "../components/SceneController";
 import {Script} from "../models/Script";
 
-export type ScriptFunction = (scene: Scene, data: any) => void;
+export type ScriptFunction = (scene: SceneController, data: any) => void;
 
 export class ScriptManager {
 
@@ -16,12 +16,12 @@ export class ScriptManager {
     this.scripts.set(name, f);
   }
 
-  call(scene: Scene, script: Script<any>) {
+  call(controller: SceneController, script: Script<any>) {
     let f = this.scripts.get(script.tag);
     if(f) {
-      f(scene, script.data);
+      f(controller, script.data);
     } else {
-      scene.game.logger.warn("script not found: " + script.tag);
+      controller.game.logger.warn("script not found: " + script.tag);
     }
   }
 }

@@ -10,8 +10,9 @@ interface Logo {
 
 function main() {
 
-  novel.engine.script("noop", (scene, data) => {});
-  novel.engine.script("logo", (scene, data: Logo) => {
+  novel.engine.script("noop", (controller, data) => {});
+  novel.engine.script("logo", (controller, data: Logo) => {
+    const scene = controller.current;
     scene.transition(
       data.layer,
       (layer) => {

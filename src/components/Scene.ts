@@ -11,15 +11,17 @@ import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
 import {AudioGroup} from "./AudioGroup";
+import {SceneController} from "./SceneController";
 import {loadGameState} from "../GameStateHelper";
 import {Config} from "../Config";
 import {Tag, Layer} from "../Constant";
 
 export interface SceneParameters {
   game: g.Game;
-  scenario: Scenario;
+  scenario: ScenarioViewModel;
   scriptManager: ScriptManager;
   config: Config;
+  controller: SceneController;
   player: g.Player;
   storageKeys?: g.StorageKey[];
   state?: GameState;
@@ -32,12 +34,14 @@ export class Scene extends g.Scene {
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
   private config: Config;
+  private controller: SceneController;
   private audioGroup: AudioGroup;
   private videos: g.VideoAsset[];
   private storage: StorageViewModel;
   private storageKeys: g.StorageKey[];
   private player: g.Player;
   private _gameState: GameState;
+  private enabledWindowClick: boolean;
 
   // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
   private _onWindowClick = this.onWindowClick.bind(this);
@@ -54,6 +58,7 @@ export class Scene extends g.Scene {
     this.layerGroup = new LayerGroup(this);
     this.scriptManager = params.scriptManager;
     this.config = params.config;
+    this.controller = params.controller;
     this.audioGroup = new AudioGroup(this.game, params.config.audio);
     this.videos = [];
     this.player = params.player;
@@ -64,43 +69,12 @@ export class Scene extends g.Scene {
 
     this.loaded.add(this.onLoaded, this);
 
-    this.scenario = new ScenarioViewModel(params.scenario);
-    this.scenario.loadFrame(this._loadFrame);
-  }
-
-  get source(): Scenario {
-    return this.scenario.source;
+    this.scenario = params.scenario;
+    this.scenario.frame.add(this._loadFrame);
   }
 
   get gameState(): GameState {
     return this._gameState;
-  }
-
-  get backlog(): Frame[] {
-    return this.scenario.backlog;
-  }
-
-  jump(target: script.Jump) {
-    const previous = this.source.scene.label;
-    if(this.source.update(target)) {
-      if(previous === this.source.scene.label) {
-        if(! this.scenario.load()) {
-          this.game.logger.warn("scene not found", target);
-        }
-      } else {
-        this.game.replaceScene(new Scene({
-          game: this.game,
-          scenario: this.source,
-          scriptManager: this.scriptManager,
-          config: this.config,
-          player: this.player,
-          state: this._gameState
-        }));
-      }
-    } else {
-      // TODO: 続行不可能としてタイトルに戻る?
-      this.game.logger.warn("scene not found", target);
-    }
   }
 
   appendLayer(e: g.E, config: script.LayerConfig) {
@@ -131,15 +105,16 @@ export class Scene extends g.Scene {
     } else {
       this.disableTrigger(this._onWindowClick);
     }
+    this.enabledWindowClick = false;
   }
 
   enableWindowClick() {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = true;
       if(this._message.finished) {
-        layer.pointUp.add(this._requestNextFrame, layer);
+        layer.pointUp.addOnce(this._requestNextFrame, layer);
         for(const c of layer.children) {
-          c.pointUp.add(this._requestNextFrame, c);
+          c.pointUp.addOnce(this._requestNextFrame, c);
         }
       } else {
         layer.pointUp.addOnce(this._onWindowClick, layer);
@@ -148,6 +123,7 @@ export class Scene extends g.Scene {
         }
       }
     });
+    this.enabledWindowClick = true;
   }
 
   transition(layer: string, f: (e: g.Pane) => void) {
@@ -155,8 +131,11 @@ export class Scene extends g.Scene {
   }
 
   requestNextFrame() {
+    // 連打対策
+    this.disableWindowClick();
+
     if(! this.scenario.next()) {
-      this.game.logger.warn("next frame not found: " + this.scenario.source.scene.label);
+      this.game.logger.warn("next frame not found", this.scenario.source.scene);
     }
   }
 
@@ -251,7 +230,7 @@ export class Scene extends g.Scene {
   }
 
   private createWindowLayer() {
-    this.scriptManager.call(this, {
+    this.scriptManager.call(this.controller, {
       tag: Tag.pane,
       data: this.config.window.message
     });
@@ -271,7 +250,7 @@ export class Scene extends g.Scene {
 
   private createSystemLayer() {
     for(const s of this.config.window.system) {
-      this.scriptManager.call(this, s);
+      this.scriptManager.call(this.controller, s);
     }
   }
 
@@ -289,12 +268,12 @@ export class Scene extends g.Scene {
 
   private applyScripts(scripts: script.Script<any>[]) {
     scripts.forEach(s => {
-      this.scriptManager.call(this, s);
+      this.scriptManager.call(this.controller, s);
     });
   }
 
   private static collectAssetIds(params: SceneParameters) {
-    const assetIds = params.scenario.scene.assetIds
+    const assetIds = params.scenario.source.scene.assetIds
       .concat(script.collectAssetIds(params.config.window.system));
     if(params.config.window.message.backgroundImage) {
       assetIds.push(params.config.window.message.backgroundImage);
@@ -303,11 +282,13 @@ export class Scene extends g.Scene {
   }
 
   private onWindowClick() {
-    if(! this._message.finished) {
-      this._message.showAll();
-      this.enableWindowClick();
-    } else {
-      this.requestNextFrame();
+    if(this.enabledWindowClick) {
+      if(this._message.finished) {
+        this.requestNextFrame();
+      } else {
+        this._message.showAll();
+        this.enableWindowClick();
+      }
     }
   }
 }

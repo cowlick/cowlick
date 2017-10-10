@@ -1,6 +1,6 @@
 "use strict";
 import {Scenario} from "./models/Scenario";
-import {Scene} from "./components/Scene";
+import {SceneController} from "./components/SceneController";
 import {Config, defaultConfig} from "./Config";
 import {ScriptManager, ScriptFunction} from "./scripts/ScriptManager";
 import {defaultSctipts} from "./scripts/defaultScripts";
@@ -41,7 +41,7 @@ export class Engine {
 
     const storageKeys = createStorageKeys(Engine.player, Engine._config.system.maxSaveCount);
 
-    const scene = new Scene({
+    const controller = new SceneController({
       game: this.game,
       scenario: s,
       scriptManager: Engine.scriptManager,
@@ -49,7 +49,7 @@ export class Engine {
       player: Engine.player,
       storageKeys
     });
-    this.game.pushScene(scene);
+    controller.pushScene();
   }
 
   script(name: string, f: ScriptFunction) {

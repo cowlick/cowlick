@@ -1,6 +1,6 @@
 "use strict";
 import * as script from "../models/Script";
-import {Scene} from "../components/Scene";
+import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
 import {LabelButton} from "../components/LabelButton";
 import {createImage} from "../components/Image";
@@ -9,7 +9,8 @@ import {ScriptFunction} from "./ScriptManager";
 import {Tag, Layer} from "../Constant";
 import {Engine} from "../Engine";
 
-function image(scene: Scene, image: script.Image) {
+function image(controller: SceneController, image: script.Image) {
+  const scene = controller.current;
   scene.appendLayer(createImage(scene, image), image.layer);
   scene.applyLayerConfig({
     name: image.layer.name,
@@ -18,7 +19,8 @@ function image(scene: Scene, image: script.Image) {
   });
 }
 
-function pane(scene: Scene, pane: script.Pane) {
+function pane(controller: SceneController, pane: script.Pane) {
+  const scene = controller.current;
   const p = new g.Pane({
     scene,
     width: pane.width,
@@ -33,23 +35,23 @@ function pane(scene: Scene, pane: script.Pane) {
   scene.appendLayer(p, pane.layer);
 }
 
-function jump(scene: Scene, target: script.Jump) {
-  scene.jump(target);
+function jump(controller: SceneController, target: script.Jump) {
+  controller.jump(target);
 }
 
-function button(scene: Scene, data: script.Button) {
-  const button = ImageButton.create(scene, data);
+function button(controller: SceneController, data: script.Button) {
+  const button = ImageButton.create(controller.current, data);
   button.move(data.x, data.y);
   button.click.add(() => {
     for(const s of data.scripts) {
-      Engine.scriptManager.call(scene, s);
+      Engine.scriptManager.call(controller, s);
     }
   });
-  scene.appendLayer(button, data.layer);
+  controller.current.appendLayer(button, data.layer);
 }
 
-function choice(scene: Scene, choice: script.Choice) {
-  const game = scene.game;
+function choice(controller: SceneController, choice: script.Choice) {
+  const game = controller.game;
   const count = choice.values.length;
   // TODO: 計算式を書き直す
   const width = choice.width ? choice.width : game.width / 4 * 3;
@@ -59,7 +61,7 @@ function choice(scene: Scene, choice: script.Choice) {
   const baseY = choice.y ? choice.y : (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
   choice.values.forEach((item: script.ChoiceItem, i: number) => {
     let button = new LabelButton({
-      scene,
+      scene: controller.current,
       width,
       height,
       backgroundImage: choice.backgroundImage,
@@ -69,7 +71,7 @@ function choice(scene: Scene, choice: script.Choice) {
       config: Engine.config
     });
     button.click.add(() => {
-      Engine.scriptManager.call(scene, item);
+      Engine.scriptManager.call(controller, item);
     });
     const direction = choice.direction ? choice.direction : script.Direction.Vertical;
     switch(direction) {
@@ -80,14 +82,14 @@ function choice(scene: Scene, choice: script.Choice) {
         button.move(baseX + (width + space) * i, baseY);
         break;
     }
-    scene.appendLayer(button, choice.layer);
+    controller.current.appendLayer(button, choice.layer);
   });
 }
 
-function link(scene: Scene, link: script.Link) {
-  const game = scene.game;
+function link(controller: SceneController, link: script.Link) {
+  const game = controller.game;
   const button = new LabelButton({
-    scene,
+    scene: controller.current,
     width: link.width,
     height: link.height,
     backgroundImage: link.backgroundImage,
@@ -98,104 +100,105 @@ function link(scene: Scene, link: script.Link) {
   });
   for(const script of link.scripts) {
     button.click.add(() => {
-      Engine.scriptManager.call(scene, script);
+      Engine.scriptManager.call(controller, script);
     });
   }
   button.move(link.x, link.y);
-  scene.appendLayer(button, link.layer);
+  controller.current.appendLayer(button, link.layer);
 }
 
-function text(scene: Scene, text: script.Text) {
-  scene.updateText(text);
+function text(controller: SceneController, text: script.Text) {
+  controller.current.updateText(text);
 }
 
-function layerConfig(scene: Scene, config: script.LayerConfig) {
-  scene.applyLayerConfig(config);
+function layerConfig(controller: SceneController, config: script.LayerConfig) {
+  controller.current.applyLayerConfig(config);
 }
 
-function playAudio(scene: Scene, audio: script.Audio) {
-  scene.playAudio(audio);
+function playAudio(controller: SceneController, audio: script.Audio) {
+  controller.current.playAudio(audio);
 }
 
-function changeVolume(scene: Scene, data: script.ChangeVolume) {
-  scene.changeVolume(data);
+function changeVolume(controller: SceneController, data: script.ChangeVolume) {
+  controller.current.changeVolume(data);
 }
 
-function stopAudio(scene: Scene, audio: script.Audio) {
-  scene.stopAudio(audio);
+function stopAudio(controller: SceneController, audio: script.Audio) {
+  controller.current.stopAudio(audio);
 }
 
-function playVideo(scene: Scene, video: script.Video) {
-  scene.playVideo(video);
+function playVideo(controller: SceneController, video: script.Video) {
+  controller.current.playVideo(video);
 }
 
-function stopVideo(scene: Scene, video: script.Video) {
-  scene.stopVideo(video);
+function stopVideo(controller: SceneController, video: script.Video) {
+  controller.current.stopVideo(video);
 }
 
-function click(scene: Scene, data: any) {
-  scene.addSkipTrigger();
+function click(controller: SceneController, data: any) {
+  controller.current.addSkipTrigger();
 }
 
-function trigger(scene: Scene, trigger: script.Trigger) {
+function trigger(controller: SceneController, trigger: script.Trigger) {
   switch(trigger) {
     case script.Trigger.Off:
-      scene.disableWindowClick();
+      controller.current.disableWindowClick();
       break;
     case script.Trigger.On:
-      scene.enableWindowClick();
+      controller.current.enableWindowClick();
       break;
   }
 }
 
-function save(scene: Scene, data: script.Save) {
-  const result = scene.save(scene.source.scene, data);
+function save(controller: SceneController, data: script.Save) {
+  const result = controller.current.save(controller.source.scene, data);
   if(typeof result === "string") {
-    scene.game.logger.warn(result);
+    controller.game.logger.warn(result);
   }
 }
 
-function load(scene: Scene, data: script.Load) {
-  const s = scene.load(data.index);
+function load(controller: SceneController, data: script.Load) {
+  const s = controller.current.load(data.index);
   if(s) {
-    jump(scene, s);
+    jump(controller, s);
   } else {
-    scene.game.logger.warn("save data not found: " + data.index);
+    controller.game.logger.warn("save data not found: " + data.index);
   }
 }
 
-function evaluate(scene: Scene, info: script.Eval) {
-  const f = g._require(scene.game, info.path);
-  f(scene.gameState.variables);
+function evaluate(controller: SceneController, info: script.Eval) {
+  const f = g._require(controller.game, info.path);
+  f(controller.current.gameState.variables);
 }
 
-function condition(scene: Scene, cond: script.Condition<any>) {
-  const f = g._require(scene.game, cond.path);
-  if(f(scene.gameState.variables)) {
-    Engine.scriptManager.call(scene, cond.script);
+function condition(controller: SceneController, cond: script.Condition<any>) {
+  const f = g._require(controller.game, cond.path);
+  if(f(controller.current.gameState.variables)) {
+    Engine.scriptManager.call(controller, cond.script);
   }
 }
 
-function backlog(scene: Scene, data: script.Backlog) {
+function backlog(controller: SceneController, data: script.Backlog) {
   const layer = { name: Layer.backlog };
 
   for(const s of data.scripts) {
-    Engine.scriptManager.call(scene, s);
+    Engine.scriptManager.call(controller, s);
   }
 
-  trigger(scene, script.Trigger.Off);
+  trigger(controller, script.Trigger.Off);
 
+  const scene = controller.current;
   const message = new Message({
     scene,
     config: Engine.config,
-    width: scene.game.width - 20,
+    width: controller.game.width - 20,
     x: 20,
     y: 20,
     gameState: scene.gameState
   });
   // FIXME: このタイミングで構築したら最新の変数が取れてしまう
   let values: (string | script.Ruby[] | script.Variable)[] = [];
-  for(const frame of scene.backlog) {
+  for(const frame of controller.backlog) {
     for(const vs of frame.scripts.filter(s => s.tag === Tag.text).map(s => (s.data as script.Text).values)) {
       values = values.concat("\n", vs);
     }
@@ -216,18 +219,18 @@ function backlog(scene: Scene, data: script.Backlog) {
   const width = 100;
   const l = {
     layer,
-    x: scene.game.width - width - 10,
+    x: controller.game.width - width - 10,
     y: 20,
     width,
     height: 24,
     text: "close",
     scripts
   };
-  link(scene, l);
+  link(controller, l);
 }
 
-function removeLayer(scene: Scene, target: script.RemoveLayer) {
-  scene.removeLayer(target.name);
+function removeLayer(controller: SceneController, target: script.RemoveLayer) {
+  controller.current.removeLayer(target.name);
 }
 
 export const defaultSctipts = new Map<string, ScriptFunction>([

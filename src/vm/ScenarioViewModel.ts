@@ -4,13 +4,13 @@ import {Frame} from "../models/Frame";
 
 export class ScenarioViewModel {
 
-  private frameTrigger: g.Trigger<Frame>;
+  frame: g.Trigger<Frame>;
   private scenario: Scenario;
   private log: Frame[];
 
   constructor(scenario: Scenario) {
     this.scenario = scenario;
-    this.frameTrigger = new g.Trigger<Frame>();
+    this.frame = new g.Trigger<Frame>();
     this.log = [];
   }
 
@@ -22,14 +22,14 @@ export class ScenarioViewModel {
     return this.log;
   }
 
-  loadFrame(callback: (frame: Frame) => void) {
-    this.frameTrigger.add(callback);
+  set backlog(values: Frame[]) {
+    this.log = values;
   }
 
   load(frame?: Frame): boolean {
     const f = frame ? frame : this.source.frame;
     if(f) {
-      this.frameTrigger.fire(f);
+      this.frame.fire(f);
       return true;
     } else {
       return false;
