@@ -1,4 +1,4 @@
-"strict";
+"use strict";
 import * as assert from "assert";
 import * as g from "@akashic/akashic-engine";
 import * as mock from "./helpers/mock";
