@@ -25,7 +25,7 @@ export class GameState {
   }
 
   exists(index: number): boolean {
-    return typeof this.data[index] === "undefined";
+    return typeof this.data[index] !== "undefined";
   }
 
   save(scene: Scene, info: Save): string | SaveData {
