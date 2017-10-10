@@ -40,7 +40,7 @@
     "mocha": "3.5.3",
     "pegjs": "0.10.0",
     "power-assert": "1.4.4",
-    "typescript": "2.5.2",
-    "typescript-eslint-parser": "github:eslint/typescript-eslint-parser"
+    "typescript": "2.5.3",
+    "typescript-eslint-parser": "8.0.0"
   }
 }
