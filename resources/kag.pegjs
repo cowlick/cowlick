@@ -146,7 +146,7 @@ R
   / "@r" &(Newline / EOF)
 
 TextLine
-  = top:R? Newline? values:(Ruby / PlainText)+ end:R? {
+  = top:R? Newline? values:(Ruby / PlainText / Emb)+ end:R? {
     return b.textLine(values, top, end);
   }
 
@@ -154,7 +154,7 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby . )
+  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb . )
 
 Ruby
   = "@ruby" _ "text=" rt:AttributeValue Newline rb:Character {
@@ -162,6 +162,14 @@ Ruby
   }
   / "[ruby" _ "text=" rt:AttributeValue "]" rb:Character {
     return b.ruby(rb, rt);
+  }
+
+Emb
+  = "@emb" _ "exp=" exp:AttributeValue &(Newline / EOF) {
+    return b.variable(exp);
+  }
+  / "[emb" _ "exp=" exp:AttributeValue _ "]" {
+    return b.variable(exp);
   }
 
 EndTextBlock

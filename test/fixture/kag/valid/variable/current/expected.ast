@@ -1,0 +1,18 @@
+[
+  [
+    {
+      "tag": "text",
+      "data": {
+        "clear": true,
+        "values": [
+          "テスト: ",
+          {
+            "type": "current",
+            "name": "test"
+          },
+          "\ntest"
+        ]
+      }
+    }
+  ]
+]
