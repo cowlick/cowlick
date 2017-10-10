@@ -38,7 +38,7 @@ export function image(assetId: string, layer: string, options: KeyValuePair[]) {
   return result;
 }
 
-export function text(values: (string | script.RubyText[])[], cm: any) {
+export function text(values: (string | script.Ruby[])[], cm: any) {
   const result: script.Script<script.Text> = {
     tag: Tag.text,
     data: {
@@ -51,7 +51,7 @@ export function text(values: (string | script.RubyText[])[], cm: any) {
   return result;
 }
 
-function flatten(result: (string | script.RubyText[])[], text: string, values: (string | script.RubyText[])[]) {
+function flatten(result: (string | script.Ruby[])[], text: string, values: (string | script.Ruby[])[]) {
   for(const v of values) {
     if(Array.isArray(v)) {
       if(text) {
@@ -66,8 +66,8 @@ function flatten(result: (string | script.RubyText[])[], text: string, values: (
   return text;
 }
 
-export function textBlock(t: (string | script.RubyText[])[], ts: (string | script.RubyText[])[][]) {
-  const result: (string | script.RubyText[])[] = [];
+export function textBlock(t: (string | script.Ruby[])[], ts: (string | script.Ruby[])[][]) {
+  const result: (string | script.Ruby[])[] = [];
   let text = flatten(result, "", t);
   for(const t of ts) {
     text = flatten(result, text, t);
@@ -78,12 +78,12 @@ export function textBlock(t: (string | script.RubyText[])[], ts: (string | scrip
   return result;
 }
 
-export function textLine(values: (string | script.RubyText[])[], top: any, end: any) {
+export function textLine(values: (string | script.Ruby[])[], top: any, end: any) {
   if(top) {
     if(typeof values[0] === "string") {
       values[0] = "\n" + values[0];
     } else {
-      values = (["\n"] as (string | script.RubyText[])[]).concat(values);
+      values = (["\n"] as (string | script.Ruby[])[]).concat(values);
     }
   }
   if(end) {
@@ -94,7 +94,7 @@ export function textLine(values: (string | script.RubyText[])[], top: any, end: 
       values.push("\n");
     }
   }
-  const result: (string | script.RubyText[])[] = [];
+  const result: (string | script.Ruby[])[] = [];
   let text = flatten(result, "", values);
   if(text) {
     result.push(text);
@@ -102,7 +102,7 @@ export function textLine(values: (string | script.RubyText[])[], top: any, end: 
   return result;
 }
 
-export function ruby(rb: string, rt: string): script.RubyText[] {
+export function ruby(rb: string, rt: string): script.Ruby[] {
   return [{
     value: JSON.stringify({
       rb: rb,

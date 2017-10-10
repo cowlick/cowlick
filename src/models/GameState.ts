@@ -1,7 +1,7 @@
 "use strict";
 import {Scene} from "./Scene";
 import {SaveData} from "./SaveData";
-import {Save} from "./Script";
+import {Save, Variable} from "./Script";
 
 export interface Variables {
   system: any;
@@ -52,5 +52,15 @@ export class GameState {
       this._variables.current = saveData.variables;
     }
     return saveData;
+  }
+
+  getStringValue(variable: Variable): string {
+    const target = variable.type === "system" ? this._variables.system : this._variables.current;
+    const result = target[variable.name];
+    if(result) {
+      return String(result);
+    } else {
+      return undefined;
+    }
   }
 }

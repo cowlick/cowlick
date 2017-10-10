@@ -1,7 +1,8 @@
 "use strict";
 import * as al from "@akashic-extension/akashic-label";
 import {Config} from "../Config";
-import {RubyText, Text} from "../models/Script";
+import {Ruby, Text} from "../models/Script";
+import {GameState} from "../models/GameState";
 
 export interface MessageParameters {
   scene: g.Scene;
@@ -9,6 +10,7 @@ export interface MessageParameters {
   width: number;
   x: number;
   y: number;
+  gameState: GameState;
 }
 
 export class Message extends al.Label {
@@ -16,7 +18,8 @@ export class Message extends al.Label {
   private index: number;
   private counter: number;
   private original: Text;
-  private current: (string | RubyText)[];
+  private current: (string | Ruby)[];
+  private gameState: GameState;
 
   constructor(params: MessageParameters) {
     super({
@@ -40,6 +43,7 @@ export class Message extends al.Label {
       values: []
     };
     this.current = [];
+    this.gameState = params.gameState;
     this.textAlign = g.TextAlign.Left;
     this.update.add(this.onUpdated, this);
   }
@@ -70,8 +74,15 @@ export class Message extends al.Label {
       for(const t of this.original.values) {
         if(typeof t === "string") {
           this.text += t;
-        } else {
+        } else if(Array.isArray(t)) {
           this.text += t[t.length - 1].value;
+        } else {
+          const result = this.gameState.getStringValue(t);
+          if(result) {
+            this.text += result;
+          } else {
+            this.scene.game.logger.warn("変数の取得に失敗しました", t);
+          }
         }
       }
       this.index = this.original.values.length;
@@ -84,7 +95,9 @@ export class Message extends al.Label {
     if(! this.finished && this.counter >= this.current.length) {
       this.counter = 0;
       this.index++;
-      this.setCurrent();
+      if(! this.finished) {
+        this.setCurrent();
+      }
     }
     if(! this.finished) {
       const t = this.current[this.counter];
@@ -105,8 +118,15 @@ export class Message extends al.Label {
     const ts = this.original.values[this.index];
     if(typeof ts === "string") {
       this.current = ts.split(/.*?/);
-    } else {
+    } else if(Array.isArray(ts)) {
       this.current = ts;
+    } else {
+      const result = this.gameState.getStringValue(ts);
+      if(result) {
+        this.current = result.split(/.*?/);
+      } else {
+        this.scene.game.logger.warn("変数の取得に失敗しました", ts);
+      }
     }
   }
 }

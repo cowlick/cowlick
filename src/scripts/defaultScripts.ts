@@ -184,9 +184,11 @@ function backlog(scene: Scene, data: any) {
     config: Engine.config,
     width: scene.game.width - 20,
     x: 20,
-    y: 20
+    y: 20,
+    gameState: scene.gameState
   });
-  let values: (string | script.RubyText[])[] = [];
+  // FIXME: このタイミングで構築したら最新の変数が取れてしまう
+  let values: (string | script.Ruby[] | script.Variable)[] = [];
   for(const frame of scene.backlog) {
     for(const vs of frame.scripts.filter(s => s.tag === Tag.text).map(s => (s.data as script.Text).values)) {
       values = values.concat("\n", vs);

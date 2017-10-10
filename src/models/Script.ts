@@ -39,13 +39,18 @@ export interface Button {
   scripts: Script<any>[];
 }
 
-export interface RubyText {
+export interface Ruby {
   value: string;
+}
+
+export interface Variable {
+  type: string;
+  name: string;
 }
 
 export interface Text {
   clear?: boolean;
-  values: (string | RubyText[]) [];
+  values: (string | Ruby[] | Variable) [];
 }
 
 export interface Jump {

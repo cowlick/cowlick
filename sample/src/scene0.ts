@@ -82,6 +82,21 @@ export const scene0 = new novel.Scene({
     ]),
     new novel.Frame([
       {
+        tag: novel.Tag.text,
+        data: {
+          clear: true,
+          values: [
+            "変数表示のサンプル: ",
+            {
+              type: "current",
+              name: "sample"
+            }
+          ]
+        }
+      }
+    ]),
+    new novel.Frame([
+      {
         tag: novel.Tag.choice,
         data: {
           layer: {
