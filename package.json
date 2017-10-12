@@ -4,6 +4,7 @@
   "description": "novel engine for Akashic Engine",
   "main": "index.js",
   "files": [
+    "bin",
     "lib",
     "resources",
     "index.js"
@@ -29,7 +30,8 @@
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
-    "@akashic/akashic-engine": "2.0.0"
+    "@akashic/akashic-engine": "2.0.0",
+    "commandpost": "1.2.1"
   },
   "devDependencies": {
     "@types/mocha": "2.2.43",
