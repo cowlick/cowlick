@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "novel engine for Akashic Engine",
   "main": "index.js",
+  "bin": {
+    "cowlick": "./bin/cowlick"
+  },
   "files": [
     "bin",
     "lib",
