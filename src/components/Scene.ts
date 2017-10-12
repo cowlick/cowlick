@@ -43,11 +43,6 @@ export class Scene extends g.Scene {
   private _gameState: GameState;
   private enabledWindowClick: boolean;
 
-  // 実行時のthisの問題やTrigger.removeできない問題を回避するための措置
-  private _onWindowClick = this.onWindowClick.bind(this);
-  private _requestNextFrame = this.requestNextFrame.bind(this);
-  private _loadFrame = this.loadFrame.bind(this);
-
   constructor(params: SceneParameters) {
     super({
       game: params.game,
@@ -70,7 +65,7 @@ export class Scene extends g.Scene {
     this.loaded.add(this.onLoaded, this);
 
     this.scenario = params.scenario;
-    this.scenario.frame.add(this._loadFrame);
+    this.scenario.frame.add(this.loadFrame, this);
   }
 
   get gameState(): GameState {
@@ -87,7 +82,7 @@ export class Scene extends g.Scene {
 
   updateText(text: script.Text) {
     this._message.updateText(text);
-    this.disableTrigger(this._requestNextFrame);
+    this.disableTrigger(this.requestNextFrame);
     this.enableWindowClick();
   }
 
@@ -97,9 +92,9 @@ export class Scene extends g.Scene {
 
   disableWindowClick() {
     if(this._message.finished) {
-      this.disableTrigger(this._requestNextFrame);
+      this.disableTrigger(this.requestNextFrame);
     } else {
-      this.disableTrigger(this._onWindowClick);
+      this.disableTrigger(this.onWindowClick);
     }
     this.enabledWindowClick = false;
   }
@@ -108,14 +103,14 @@ export class Scene extends g.Scene {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = true;
       if(this._message.finished) {
-        layer.pointUp.addOnce(this._requestNextFrame, layer);
+        layer.pointUp.addOnce(this.requestNextFrame, this);
         for(const c of layer.children) {
-          c.pointUp.addOnce(this._requestNextFrame, c);
+          c.pointUp.addOnce(this.requestNextFrame, this);
         }
       } else {
-        layer.pointUp.addOnce(this._onWindowClick, layer);
+        layer.pointUp.addOnce(this.onWindowClick, this);
         for(const c of layer.children) {
-          c.pointUp.addOnce(this._onWindowClick, c);
+          c.pointUp.addOnce(this.onWindowClick, this);
         }
       }
     });
@@ -201,9 +196,9 @@ export class Scene extends g.Scene {
   private disableTrigger(callback: () => void) {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = false;
-      layer.pointUp.remove(callback, layer);
+      layer.pointUp.remove(callback, this);
       for(const c of layer.children) {
-        c.pointUp.remove(callback, c);
+        c.pointUp.remove(callback, this);
       }
     });
   }
