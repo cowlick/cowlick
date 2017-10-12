@@ -50,7 +50,12 @@ export const logo = new novel.Scene({
       },
       {
         tag: novel.Tag.click,
-        data: {}
+        data: [
+          {
+            tag: novel.Tag.skip,
+            data: {}
+          }
+        ]
       }
     ]),
     new novel.Frame([

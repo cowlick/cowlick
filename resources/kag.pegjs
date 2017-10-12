@@ -44,41 +44,44 @@ TagContent
 
 Image
   = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:LayerOptions {
-    return b.image(assetId, layer, options);
+    return [b.image(assetId, layer, options)];
   }
 
 PlayBgm
   = "playbgm" _ "storage=" assetId:AttributeValue {
-    return b.playAudio(assetId, "bgm");
+    return [b.playAudio(assetId, "bgm")];
   }
 
 StopBgm
-  = "stopbgm" { return b.stopAudio("bgm"); }
+  = "stopbgm" { return [b.stopAudio("bgm")]; }
 
 PlaySe
   = "playse" _ "storage=" assetId:AttributeValue {
-    return b.playAudio(assetId, "se");
+    return [b.playAudio(assetId, "se")];
   }
 
 StopSe
-  = "stopse" { return b.stopAudio("se"); }
+  = "stopse" { return [b.stopAudio("se")]; }
 
 Eval
   = "eval" _ "exp=" expression:AttributeValue {
-    return b.evaluate(expression);
+    return [b.evaluate(expression)];
   }
 
 S
-  = "s" { return b.trigger(false); }
+  = "s" { return [b.trigger(false)]; }
 
 HideMessage
   = "hidemessage" {
-    return b.layerConfig("message", [{ key: "visible", value: false }]);
+    return [
+      b.layerConfig("message", [{ key: "visible", value: false }]),
+      b.click([b.layerConfig("message", [{ key: "visible", value: true }])])
+    ];
   }
 
 LayOpt
   = "layopt" _ "layer=" name:AttributeValue options:LayerOptions {
-    return b.layerConfig(name, options);
+    return [b.layerConfig(name, options)];
   }
 
 LayerOptions
@@ -92,7 +95,7 @@ LayerOption
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
-    return b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3]}; }));
+    return [b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3]}; }))];
   }
 
 TagName
@@ -100,7 +103,7 @@ TagName
 
 Links
   = l:Link ls:(Newline Comments Link)* {
-    return b.choice(l, ls.map(function(l) { return l[2]; }));
+    return [b.choice(l, ls.map(function(l) { return l[2]; }))];
   }
 
 Link

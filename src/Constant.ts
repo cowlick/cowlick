@@ -11,6 +11,7 @@ export namespace Tag {
   export const playVideo = "playVideo";
   export const stopVideo = "stopVideo";
   export const click = "click";
+  export const skip = "skip";
   export const button = "button";
   export const trigger = "trigger";
   export const save = "save";

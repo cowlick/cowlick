@@ -95,10 +95,6 @@ export class Scene extends g.Scene {
     this.layerGroup.applyConfig(config);
   }
 
-  addSkipTrigger() {
-    this.pointUpCapture.addOnce(this._requestNextFrame, this);
-  }
-
   disableWindowClick() {
     if(this._message.finished) {
       this.disableTrigger(this._requestNextFrame);

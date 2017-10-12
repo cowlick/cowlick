@@ -8,16 +8,12 @@ export interface KeyValuePair {
   value: any;
 }
 
-export function contents(c: any, cs: any[]) {
+export function contents(c: script.Script<any>[], cs: script.Script<any>[][]) {
   "use strict";
 
-  var result = [c];
-  if (cs) {
-    if (Array.isArray(cs)) {
-      cs.forEach(function(c) { result.push(c); });
-    } else {
-      result.push(cs);
-    }
+  var result = c;
+  for(const c of cs) {
+    result = result.concat(c);
   }
   return result;
 }
@@ -210,4 +206,11 @@ export function layerConfig(name: string, options: KeyValuePair[]) {
     result.data[option.key] = option.value;
   }
   return result;
+}
+
+export function click(scripts: script.Script<any>[]): script.Script<script.Script<any>[]> {
+  return {
+    tag: Tag.click,
+    data: scripts
+  };
 }

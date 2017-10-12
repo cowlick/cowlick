@@ -6,6 +6,18 @@
         "name": "message",
         "visible": false
       }
+    },
+    {
+      "tag": "click",
+      "data": [
+        {
+          "tag": "layerConfig",
+          "data": {
+            "name": "message",
+            "visible": true
+          }
+        }
+      ]
     }
   ]
 ]

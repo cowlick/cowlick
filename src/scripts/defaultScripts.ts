@@ -135,8 +135,17 @@ function stopVideo(controller: SceneController, video: script.Video) {
   controller.current.stopVideo(video);
 }
 
-function click(controller: SceneController, data: any) {
-  controller.current.addSkipTrigger();
+function click(controller: SceneController, scripts: script.Script<any>[]) {
+  const scene = controller.current;
+  scene.pointUpCapture.addOnce(() => {
+    for(const s of scripts) {
+      Engine.scriptManager.call(controller, s);
+    }
+  }, scene);
+}
+
+function skip(controller: SceneController, data: any) {
+  controller.current.requestNextFrame();
 }
 
 function trigger(controller: SceneController, trigger: script.Trigger) {
@@ -248,6 +257,7 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.changeVolume, changeVolume],
   [Tag.stopVideo, stopVideo],
   [Tag.click, click],
+  [Tag.skip, skip],
   [Tag.trigger, trigger],
   [Tag.save, save],
   [Tag.load, load],
