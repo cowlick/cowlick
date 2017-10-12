@@ -43,7 +43,7 @@ TagContent
   / UserDefined
 
 Image
-  = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:LayOptOptions {
+  = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:LayerOptions {
     return b.image(assetId, layer, options);
   }
 
@@ -77,14 +77,14 @@ HideMessage
   }
 
 LayOpt
-  = "layopt" _ "layer=" name:AttributeValue options:LayOptOptions {
+  = "layopt" _ "layer=" name:AttributeValue options:LayerOptions {
     return b.layerConfig(name, options);
   }
 
-LayOptOptions
-  = os:(_ LayOptOption)* { return os.map(function(o) { return o[1]; }); }
+LayerOptions
+  = os:(_ LayerOption)* { return os.map(function(o) { return o[1]; }); }
 
-LayOptOption
+LayerOption
   = "top=" x:Digits { return { key: "x", value: x }; }
   / "left=" y:Digits { return { key: "y", value: y }; }
   / "visible=" visible:Boolean { return { key: "visible", value: visible }; }
