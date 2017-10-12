@@ -2,7 +2,7 @@
 import * as assert from "assert";
 import * as g from "@akashic/akashic-engine";
 import * as mock from "./helpers/mock";
-import {StorageViewModel as Storage} from "../src/vm/StorageViewModel";
+import {Storage} from "../src/models/Storage";
 import {GameState} from "../src/models/GameState";
 
 describe("Storage", () => {

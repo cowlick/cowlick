@@ -2,7 +2,6 @@
 import {Scenario} from "../models/Scenario";
 import {Frame} from "../models/Frame";
 import * as script from "../models/Script";
-import {ScenarioViewModel} from "../vm/ScenarioViewModel";
 import {Scene} from "./Scene";
 import {SaveLoadScene} from "./SaveLoadScene";
 import {ScriptManager} from "../scripts/ScriptManager";
@@ -22,7 +21,7 @@ export class SceneController {
   game: g.Game;
   private player: g.Player;
   private config: Config;
-  private scenario: ScenarioViewModel;
+  private scenario: Scenario;
   private scriptManager: ScriptManager;
 
   private _current: Scene;
@@ -30,7 +29,7 @@ export class SceneController {
 
   constructor(params: SceneControllerParameters) {
     this.game = params.game;
-    this.scenario = new ScenarioViewModel(params.scenario);
+    this.scenario = params.scenario;
     this.scriptManager = params.scriptManager;
     this.config = params.config;
     this.player = params.player;
@@ -45,15 +44,11 @@ export class SceneController {
     });
     this.saveLoadScene = new SaveLoadScene({
       game: this.game,
-      scene: this.scenario.source.scene,
+      scene: this.scenario.scene,
       config: this.config,
       scriptManager: this.scriptManager,
       assetIds: this.collectSaveDataAssetIds()
     });
-  }
-
-  get source(): Scenario {
-    return this.scenario.source;
   }
 
   get current(): Scene {
@@ -69,9 +64,9 @@ export class SceneController {
   }
 
   jump(target: script.Jump) {
-    const previous = this.source.scene.label;
-    if(this.source.update(target)) {
-      if(previous === this.source.scene.label) {
+    const previous = this.scenario.scene.label;
+    if(this.scenario.update(target)) {
+      if(previous === this.scenario.scene.label) {
         if(! this.scenario.load()) {
           this.game.logger.warn("scene not found", target);
         }
@@ -94,7 +89,7 @@ export class SceneController {
 
   private loadScene() {
     this.scenario.backlog = [];
-    this.scenario.frame.removeAll();
+    this.scenario.trigger.removeAll();
     this._current = new Scene({
       game: this.game,
       scenario: this.scenario,
@@ -107,7 +102,7 @@ export class SceneController {
     this.saveLoadScene.destroy();
     this.saveLoadScene = new SaveLoadScene({
       game: this.game,
-      scene: this.scenario.source.scene,
+      scene: this.scenario.scene,
       config: this.config,
       scriptManager: this.scriptManager,
       assetIds: this.collectSaveDataAssetIds()

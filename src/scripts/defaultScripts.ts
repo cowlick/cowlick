@@ -160,7 +160,7 @@ function trigger(controller: SceneController, trigger: script.Trigger) {
 }
 
 function save(controller: SceneController, data: script.Save) {
-  const result = controller.current.save(controller.source.scene, data);
+  const result = controller.current.save(controller.current.source, data);
   if(typeof result === "string") {
     controller.game.logger.warn(result);
   }

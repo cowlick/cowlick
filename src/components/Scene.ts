@@ -1,6 +1,5 @@
 "use strict";
-import {ScenarioViewModel} from "../vm/ScenarioViewModel";
-import {StorageViewModel} from "../vm/StorageViewModel";
+import {Storage} from "../models/Storage";
 import {Scenario} from "../models/Scenario";
 import {Scene as SceneModel} from "../models/Scene";
 import {Frame} from "../models/Frame";
@@ -18,7 +17,7 @@ import {Tag, Layer} from "../Constant";
 
 export interface SceneParameters {
   game: g.Game;
-  scenario: ScenarioViewModel;
+  scenario: Scenario;
   scriptManager: ScriptManager;
   config: Config;
   controller: SceneController;
@@ -30,14 +29,14 @@ export interface SceneParameters {
 export class Scene extends g.Scene {
 
   private _message: Message;
-  private scenario: ScenarioViewModel;
+  private scenario: Scenario;
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
   private config: Config;
   private controller: SceneController;
   private audioGroup: AudioGroup;
   private videos: g.VideoAsset[];
-  private storage: StorageViewModel;
+  private storage: Storage;
   private storageKeys: g.StorageKey[];
   private player: g.Player;
   private _gameState: GameState;
@@ -65,7 +64,11 @@ export class Scene extends g.Scene {
     this.loaded.add(this.onLoaded, this);
 
     this.scenario = params.scenario;
-    this.scenario.frame.add(this.loadFrame, this);
+    this.scenario.trigger.add(this.loadFrame, this);
+  }
+
+  get source() {
+    return this.scenario.scene;
   }
 
   get gameState(): GameState {
@@ -126,7 +129,7 @@ export class Scene extends g.Scene {
     this.disableWindowClick();
 
     if(! this.scenario.next()) {
-      this.game.logger.warn("next frame not found", this.scenario.source.scene);
+      this.game.logger.warn("next frame not found", this.scenario.scene);
     }
   }
 
@@ -173,12 +176,12 @@ export class Scene extends g.Scene {
 
   private onLoaded() {
 
-    const frame = this.scenario.source.frame;
+    const frame = this.scenario.frame;
 
     if(! this._gameState) {
       this._gameState = loadGameState(this, this.storageKeys, this.config.system.maxSaveCount);
     }
-    this.storage = new StorageViewModel(this.game.storage, this.player, this._gameState);
+    this.storage = new Storage(this.game.storage, this.player, this._gameState);
 
     if(frame) {
       this.removeLayers(frame.scripts);
@@ -264,7 +267,7 @@ export class Scene extends g.Scene {
   }
 
   private static collectAssetIds(params: SceneParameters) {
-    const assetIds = params.scenario.source.scene.assetIds
+    const assetIds = params.scenario.scene.assetIds
       .concat(script.collectAssetIds(params.config.window.system));
     if(params.config.window.message.backgroundImage) {
       assetIds.push(params.config.window.message.backgroundImage);

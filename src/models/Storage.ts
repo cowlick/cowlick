@@ -1,11 +1,11 @@
 "use strict";
-import {GameState} from "../models/GameState";
-import {Scene} from "../models/Scene";
-import {SaveData} from "../models/SaveData";
-import {Save} from "../models/Script";
+import {GameState} from "./GameState";
+import {Scene} from "./Scene";
+import {SaveData} from "./SaveData";
+import {Save} from "./Script";
 import {Region, gameId} from "../Constant";
 
-export class StorageViewModel {
+export class Storage {
 
   private state: GameState;
   private storage: g.Storage;
