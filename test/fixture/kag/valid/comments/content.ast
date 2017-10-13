@@ -1,0 +1,24 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "image",
+        "data": {
+          "assetId": "bg",
+          "layer": {
+            "name": "base"
+          }
+        }
+      },
+      {
+        "tag": "text",
+        "data": {
+          "clear": true,
+          "values": [
+            "コメントテスト"
+          ]
+        }
+      }
+    ]
+  }
+]

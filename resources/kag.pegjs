@@ -13,9 +13,9 @@ Frame
     if(text) {
       ts.push(text[1]);
     }
-    return ts;
+    return b.frame(ts);
   }
-  / text:Text { return [text]; }
+  / text:Text { return b.frame([text]); }
 
 Tags
   = Comments c:Tag cs:(Newline Comments Tag)* {

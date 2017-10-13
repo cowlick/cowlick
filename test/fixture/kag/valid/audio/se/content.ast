@@ -1,0 +1,20 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "playAudio",
+        "data": {
+          "assetId": "test",
+          "groupName": "se"
+        }
+      },
+      {
+        "tag": "stopAudio",
+        "data": {
+          "assetId": null,
+          "groupName": "se"
+        }
+      }
+    ]
+  }
+]

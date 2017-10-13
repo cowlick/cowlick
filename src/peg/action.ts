@@ -18,6 +18,12 @@ export function contents(c: script.Script<any>[], cs: script.Script<any>[][]) {
   return result;
 }
 
+export function frame(scripts: script.Script<any>[]): ast.Frame {
+  return {
+    scripts
+  };
+}
+
 export function image(assetId: string, layer: string, options: KeyValuePair[]) {
   const result: script.Script<any> = {
     tag: Tag.image,

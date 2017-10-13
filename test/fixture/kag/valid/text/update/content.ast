@@ -1,0 +1,15 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "text",
+        "data": {
+          "clear": true,
+          "values": [
+            "テスト\n1"
+          ]
+        }
+      }
+    ]
+  }
+]

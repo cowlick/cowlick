@@ -1,5 +1,7 @@
 "use strict";
 import * as assert from "assert";
+import * as fs from "fs";
+import * as glob from "glob";
 import * as kag from "../resources/kag";
 
 function appendSyntaxErrorinfo(e: any) {
@@ -15,8 +17,6 @@ function appendSyntaxErrorinfo(e: any) {
 
 describe("KAGParser", () => {
 
-  let fs = require("fs");
-  let glob = require("glob");
   describe("正しい構文が処理できる", () => {
     const path = "test/fixture/kag/valid/";
 
@@ -27,7 +27,7 @@ describe("KAGParser", () => {
         const baseName = filePath
           .substr(0, filePath.length - "/content.ks".length)
           .substr(path.length);
-        const astFilePath = `${path}${baseName}/expected.ast`;
+        const astFilePath = `${path}${baseName}/content.ast`;
         it(`${filePath}`, () => {
           const text = fs.readFileSync(filePath, "utf8");
           try {

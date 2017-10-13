@@ -1,0 +1,26 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "text",
+        "data": {
+          "values": [
+            "テスト"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "scripts": [
+      {
+        "tag": "text",
+        "data": {
+          "values": [
+            "\n1"
+          ]
+        }
+      }
+    ]
+  }
+]
