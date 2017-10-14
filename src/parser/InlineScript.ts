@@ -1,5 +1,5 @@
 "use strict";
-import {Program} from "estree";
+import {Node} from "estree";
 import * as escodegen from "escodegen";
 import * as fs from "fs";
 import * as path from "path";
@@ -8,14 +8,14 @@ export interface InlineScriptParameters {
   scene: string;
   frame: number;
   index: number;
-  source: Program;
+  source: Node;
 }
 
 export class InlineScript {
   private scene: string;
   private frame: number;
   private index: number;
-  source: Program;
+  source: Node;
 
   constructor(params: InlineScriptParameters) {
     this.scene = params.scene;
@@ -24,8 +24,12 @@ export class InlineScript {
     this.source = params.source;
   }
 
+  get assetId(): string {
+    return `${this.scene}_${this.frame}_${this.index}`;
+  }
+
   get name(): string {
-    return `${this.scene}_${this.frame}_${this.index}.js`;
+    return `${this.assetId}.js`;
   }
 
   generate(): string {

@@ -1,5 +1,6 @@
 "use strict";
 import * as estree from "estree";
+import * as estraverse from "estraverse";
 import * as script from "../models/Script";
 import * as ast from "./ast";
 import {InlineScript} from "./InlineScript";
@@ -10,6 +11,7 @@ export interface Result {
   scripts: InlineScript[];
 }
 
+const Program = "Program";
 const ExpressionStatement = "ExpressionStatement";
 const AssignmentExpression = "AssignmentExpression";
 const MemberExpression = "MemberExpression";
@@ -37,7 +39,7 @@ const Frame: estree.Identifier = {
 
 function program(body: (estree.Statement | estree.ModuleDeclaration)[]): estree.Program {
   return {
-    type: "Program",
+    type: Program,
     body,
     sourceType: "module"
   };
@@ -169,17 +171,87 @@ function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
   return scriptAst(original.tag, [assetId(original.data.assetId), property("groupName", literal(original.data.groupName))]);
 }
 
-function click(original: script.Script<any>[], scene: string, index: number, scripts: InlineScript[]): estree.ObjectExpression {
+function click(original: script.Script<any>[], scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
   return object([
     property("tag", literal(Tag.click)),
     property(
       "data",
       {
         type: ArrayExpression,
-        elements: original.map(s => visit(scene, index, s, scripts))
+        elements: original.map(s => visit(s, scene, frame, index, scripts))
       }
     )
   ]);
+}
+
+function programToExportFunction(original: estree.Program) {
+  const body: estree.Statement[] = [];
+  for(const b of original.body) {
+    switch(b.type) {
+      case "ExpressionStatement":
+      case "BlockStatement":
+      case "EmptyStatement":
+      case "DebuggerStatement":
+      case "WithStatement":
+      case "ReturnStatement":
+      case "LabeledStatement":
+      case "BreakStatement":
+      case "ContinueStatement":
+      case "IfStatement":
+      case "SwitchStatement":
+      case "ThrowStatement":
+      case "TryStatement":
+      case "WhileStatement":
+      case "DoWhileStatement":
+      case "ForStatement":
+      case "ForInStatement":
+      case "ForOfStatement":
+        body.push(b);
+        break;
+      default:
+        throw new Error(`unexpected statement: ${JSON.stringify(b)}`);
+    }
+  }
+  return moduleExports({
+    type: "FunctionExpression",
+    id: null,
+    expression: false,
+    generator: false,
+    async: false,
+    params: [
+      {
+        type: Identifier,
+        name: "variables"
+      }
+    ],
+    body: {
+      type: "BlockStatement",
+      body
+    }
+  });
+}
+
+function evaluate(original: estree.Program, scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
+  const source = estraverse.replace(original, {
+    leave: (node, path) => {
+      switch(node.type) {
+        case Program:
+          node.body = [programToExportFunction(node)];
+          node.sourceType = "module";
+          break;
+        default:
+          break;
+      }
+    }
+  });
+  const s = new InlineScript({
+    scene,
+    frame,
+    index,
+    source
+  });
+  scripts.push(s);
+  return scriptAst(Tag.evaluate, [property("path", literal(s.assetId))]);
 }
 
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
@@ -192,7 +264,7 @@ function userDefined(original: script.Script<any>): estree.ObjectExpression {
   return scriptAst(original.tag, ps);
 }
 
-function visit(scene: string, index: number, original: script.Script<any>, scripts: InlineScript[]): estree.ObjectExpression {
+function visit(original: script.Script<any>, scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
   switch(original.tag) {
     case Tag.text:
       return text(original.data);
@@ -204,20 +276,22 @@ function visit(scene: string, index: number, original: script.Script<any>, scrip
     case Tag.stopAudio:
       return audio(original);
     case Tag.click:
-      return click(original.data, scene, index, scripts);
+      return click(original.data, scene, frame, index, scripts);
+    case Tag.evaluate:
+      return evaluate(original.data, scene, frame, index, scripts);
     default:
       return userDefined(original);
   }
 }
 
-function frame(scene: string, original: ast.Frame, scripts: InlineScript[]): estree.NewExpression {
+function frame(original: ast.Frame, scene: string, index: number, scripts: InlineScript[]): estree.NewExpression {
   return {
     type: NewExpression,
     callee: Frame,
     arguments: [
       {
         type: ArrayExpression,
-        elements: original.scripts.map((s, i) => visit(scene, i, s, scripts))
+        elements: original.scripts.map((s, i) => visit(s, scene, index, i, scripts))
       }
     ]
   };
@@ -234,7 +308,7 @@ function scene(original: ast.Scene, scripts: InlineScript[]): estree.NewExpressi
           "frames",
           {
             type: ArrayExpression,
-            elements: original.frames.map(f => frame(original.label, f, scripts))
+            elements: original.frames.map((f, i) => frame(f, original.label, i, scripts))
           }
         )
       ])

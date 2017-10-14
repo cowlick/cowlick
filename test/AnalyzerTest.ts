@@ -11,7 +11,7 @@ describe("Analyzer", () => {
   describe("スクリプト ASTをJavaScript ASTに変換できる", () => {
     const path = "test/fixture/kag/valid/";
 
-    let files = glob.sync(`${path}**/*.js`);
+    let files = glob.sync(`${path}**/content.js`);
 
     files
       .forEach((filePath: string) => {
@@ -29,6 +29,11 @@ describe("Analyzer", () => {
           const actual = analyze(scriptAst);
           const expectedAST = esprima.parseModule(fs.readFileSync(filePath, "utf8"));
           assert.deepEqual(actual.scenario, expectedAST);
+
+          for(const script of actual.scripts) {
+            const expectedScript = esprima.parseModule(fs.readFileSync(`${path}${baseName}/${script.name}`, "utf8"));
+            assert.deepEqual(script.source, expectedScript);
+          }
         });
       });
   });
