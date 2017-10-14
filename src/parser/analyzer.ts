@@ -165,15 +165,24 @@ function image(original: script.Image): estree.ObjectExpression {
   return scriptAst(Tag.image, [assetId(original.assetId), layerConfig(original.layer)]);
 }
 
+function userDefined(original: script.Script<any>): estree.ObjectExpression {
+  const ps: estree.Property[] = [];
+  for(const key of Object.keys(original.data)) {
+    // TODO: リテラル以外のデータを解析できるようにする
+    const value = literal(original.data[key]);
+    ps.push(property(key, value));
+  }
+  return scriptAst(original.tag, ps);
+}
+
 function visit(scene: string, index: number, original: script.Script<any>, scripts: InlineScript[]): estree.ObjectExpression {
   switch(original.tag) {
     case Tag.text:
       return text(original.data);
     case Tag.image:
       return image(original.data);
-    // TODO: ユーザ定義スクリプトとして生成する
     default:
-      throw new Error("not implemented!");
+      return userDefined(original);
   }
 }
 
