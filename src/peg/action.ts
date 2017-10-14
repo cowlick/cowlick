@@ -251,6 +251,13 @@ export function trigger(enabled: boolean): script.Script<script.Trigger> {
   };
 }
 
+export function jump(data: ast.Jump): script.Script<ast.Jump> {
+  return {
+    tag: Tag.jump,
+    data
+  };
+}
+
 export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): script.Script<ast.Choice> {
   return {
     tag: Tag.choice,
@@ -263,18 +270,12 @@ export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): script.Script<a
   };
 }
 
-export function choiceItem(frame: string, text: string, scene?: string) {
-  const result: ast.ChoiceItem = {
+export function choiceItem(text: string, data: ast.Jump): ast.ChoiceItem {
+  return {
     tag: Tag.jump,
-    data: {
-      frame
-    },
+    data,
     text
   };
-  if(scene) {
-    result.data.scene = scene;
-  }
-  return result;
 }
 
 export function layerConfig(name: string, options: KeyValuePair[]) {

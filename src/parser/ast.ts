@@ -19,7 +19,7 @@ export interface Choice {
 
 export interface Jump {
   scene?: string;
-  frame: string;
+  frame?: string;
 }
 
 export interface ChoiceItem extends Script<Jump> {

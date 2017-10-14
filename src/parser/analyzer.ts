@@ -279,7 +279,9 @@ function jump(original: ast.Jump, scene: string, state: State): estree.ObjectExp
     property("tag", literal(Tag.jump)),
     property("data", data)
   ]);
-  state.replaces.push(f => f(data, scene, original.frame));
+  if(original.frame) {
+    state.replaces.push(f => f(data, scene, original.frame));
+  }
   return result;
 }
 

@@ -46,6 +46,7 @@ TagContent
   / S
   / HideMessage
   / LayOpt
+  / Jump
   / UserDefined
 
 Image
@@ -99,6 +100,18 @@ LayerOption
   / "visible=" visible:Boolean { return { key: "visible", value: visible }; }
   / "opacity=" opacity:Digits { return { key: "opacity", value: opacity }; }
 
+Jump
+  = "jump" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? {
+    var data = {};
+    if(scene) {
+      data.scene = scene[1];
+    }
+    if(frame) {
+      data.frame = frame[1];
+    }
+    return [b.jump(data)];
+  }
+
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
     return [b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3]}; }))];
@@ -113,19 +126,25 @@ Links
   }
 
 Link
-  = "@link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue) Newline text:PlainText Newline EndLink {
+  = "@link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? Newline text:PlainText Newline EndLink {
+    var data = {};
     if(scene) {
-      return b.choiceItem(frame[1], text, scene[1]);
-    } else {
-      return b.choiceItem(frame[1], text);
+      data.scene = scene[1];
     }
+    if(frame) {
+      data.frame = frame[1];
+    }
+    return b.choiceItem(text, data);
   }
-  / "[link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue) _ "]" Newline? text:PlainText EndLink {
+  / "[link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? _ "]" Newline? text:PlainText EndLink {
+    var data = {};
     if(scene) {
-      return b.choiceItem(frame[1], text, scene[1]);
-    } else {
-      return b.choiceItem(frame[1], text);
+      data.scene = scene[1];
     }
+    if(frame) {
+      data.frame = frame[1];
+    }
+    return b.choiceItem(text, data);
   }
 
 EndLink
