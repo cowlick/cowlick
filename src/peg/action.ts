@@ -9,7 +9,6 @@ export interface KeyValuePair {
 }
 
 export function contents(c: script.Script<any>[], cs: script.Script<any>[][]) {
-  "use strict";
 
   var result = c;
   for(const c of cs) {
