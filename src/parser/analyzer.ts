@@ -165,6 +165,10 @@ function image(original: script.Image): estree.ObjectExpression {
   return scriptAst(Tag.image, [assetId(original.assetId), layerConfig(original.layer)]);
 }
 
+function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
+  return scriptAst(original.tag, [assetId(original.data.assetId), property("groupName", literal(original.data.groupName))]);
+}
+
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -181,6 +185,9 @@ function visit(scene: string, index: number, original: script.Script<any>, scrip
       return text(original.data);
     case Tag.image:
       return image(original.data);
+    case Tag.playAudio:
+    case Tag.stopAudio:
+      return audio(original);
     default:
       return userDefined(original);
   }
