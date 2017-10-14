@@ -11,6 +11,20 @@ export interface Result {
   scripts: InlineScript[];
 }
 
+type ReplaceLabel = (expression: estree.ObjectExpression, scene: string, frame: string) => void;
+
+interface State {
+  replaces: ((f: ReplaceLabel) => void)[];
+  scripts: InlineScript[];
+  indexes: LabelIndex[];
+}
+
+interface LabelIndex {
+  scene: string;
+  frame: string;
+  index: number;
+}
+
 const Program = "Program";
 const ExpressionStatement = "ExpressionStatement";
 const AssignmentExpression = "AssignmentExpression";
@@ -171,14 +185,14 @@ function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
   return scriptAst(original.tag, [assetId(original.data.assetId), property("groupName", literal(original.data.groupName))]);
 }
 
-function click(original: script.Script<any>[], scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
+function click(original: script.Script<any>[], scene: string, frame: number, index: number, state: State): estree.ObjectExpression {
   return object([
     property("tag", literal(Tag.click)),
     property(
       "data",
       {
         type: ArrayExpression,
-        elements: original.map(s => visit(s, scene, frame, index, scripts))
+        elements: original.map(s => visit(s, scene, frame, index, state))
       }
     )
   ]);
@@ -254,6 +268,17 @@ function evaluate(original: estree.Program, scene: string, frame: number, index:
   return scriptAst(Tag.evaluate, [property("path", literal(s.assetId))]);
 }
 
+function jump(original: ast.Jump, scene: string, state: State): estree.ObjectExpression {
+  const s = original.scene ? original.scene : scene;
+  const data = object([property("label", literal(s))]);
+  const result = object([
+    property("tag", literal(Tag.jump)),
+    property("data", data)
+  ]);
+  state.replaces.push(f => f(data, scene, original.frame));
+  return result;
+}
+
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -264,7 +289,7 @@ function userDefined(original: script.Script<any>): estree.ObjectExpression {
   return scriptAst(original.tag, ps);
 }
 
-function visit(original: script.Script<any>, scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
+function visit(original: script.Script<any>, scene: string, frame: number, index: number, state: State): estree.ObjectExpression {
   switch(original.tag) {
     case Tag.text:
       return text(original.data);
@@ -276,28 +301,38 @@ function visit(original: script.Script<any>, scene: string, frame: number, index
     case Tag.stopAudio:
       return audio(original);
     case Tag.click:
-      return click(original.data, scene, frame, index, scripts);
+      return click(original.data, scene, frame, index, state);
     case Tag.evaluate:
-      return evaluate(original.data, scene, frame, index, scripts);
+      return evaluate(original.data, scene, frame, index, state.scripts);
+    case Tag.jump:
+      return jump(original.data, scene, state);
     default:
       return userDefined(original);
   }
 }
 
-function frame(original: ast.Frame, scene: string, index: number, scripts: InlineScript[]): estree.NewExpression {
-  return {
+function frame(original: ast.Frame, scene: string, index: number, state: State): estree.NewExpression {
+  const result: estree.NewExpression = {
     type: NewExpression,
     callee: Frame,
     arguments: [
       {
         type: ArrayExpression,
-        elements: original.scripts.map((s, i) => visit(s, scene, index, i, scripts))
+        elements: original.scripts.map((s, i) => visit(s, scene, index, i, state))
       }
     ]
   };
+  if(original.label) {
+    state.indexes.push({
+      scene,
+      frame: original.label,
+      index
+    });
+  }
+  return result;
 }
 
-function scene(original: ast.Scene, scripts: InlineScript[]): estree.NewExpression {
+function scene(original: ast.Scene, state: State): estree.NewExpression {
   return {
     type: NewExpression,
     callee: Scene,
@@ -308,7 +343,7 @@ function scene(original: ast.Scene, scripts: InlineScript[]): estree.NewExpressi
           "frames",
           {
             type: ArrayExpression,
-            elements: original.frames.map((f, i) => frame(f, original.label, i, scripts))
+            elements: original.frames.map((f, i) => frame(f, original.label, i, state))
           }
         )
       ])
@@ -338,14 +373,14 @@ const importCowlick: estree.ImportDeclaration = {
   source: literal("cowlick")
 };
 
-function scenario(original: ast.Scenario, scripts: InlineScript[]): estree.Program {
+function scenario(original: ast.Scenario, state: State): estree.Program {
   const result: estree.NewExpression = {
     type: NewExpression,
     callee: Scenario,
     arguments: [
       {
         type: ArrayExpression,
-        elements: original.map(s => scene(s, scripts))
+        elements: original.map(s => scene(s, state))
       }
     ]
   };
@@ -353,10 +388,24 @@ function scenario(original: ast.Scenario, scripts: InlineScript[]): estree.Progr
 }
 
 export function analyze(original: ast.Scenario): Result {
-  const scripts: InlineScript[] = [];
-  const result = scenario(original, scripts);
+  const state: State = {
+    replaces: [],
+    scripts: [],
+    indexes: []
+  };
+  const result = scenario(original, state);
+  for(const replace of state.replaces) {
+    replace((expression, scene, frame) => {
+      const i = state.indexes.find(i => i.scene === scene && i.frame === frame);
+      if(i) {
+        expression.properties.push(property("frame", literal(i.index)));
+      } else {
+        throw new Error(`label(scene = ${scene}, frame = ${frame}) not found.`);
+      }
+    });
+  }
   return {
     scenario: result,
-    scripts
+    scripts: state.scripts
   };
 }
