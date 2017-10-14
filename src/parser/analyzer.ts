@@ -88,56 +88,89 @@ function property(name: string, value: estree.Expression): estree.Property {
   };
 }
 
+function literal(value: any): estree.Literal {
+  let raw: string;
+  if(typeof value === "string") {
+    raw = JSON.stringify(value);
+  } else {
+    raw = String(value);
+  }
+  return {
+    type: Literal,
+    value,
+    raw
+  };
+}
+
+function scriptAst(tag: string, data: estree.Property[]): estree.ObjectExpression {
+  return object([
+    property("tag", literal(tag)),
+    property("data", object(data))
+  ]);
+}
+
+function name(value: string): estree.Property {
+  return property("name", literal(value));
+}
+
 function text(original: script.Text): estree.ObjectExpression {
   const data: estree.Property[] = [];
   if(original.clear) {
-    data.push(
-      property(
-        "clear",
-        {
-          type: Literal,
-          value: original.clear,
-          raw: String(original.clear)
-        }
-      )
-    );
+    data.push(property("clear", literal(original.clear)));
   }
   const values: estree.Expression[] = [];
   for(const value of original.values) {
     if(typeof value === "string") {
-      values.push({
-        type: Literal,
-        value,
-        raw: JSON.stringify(value)
-      });
+      values.push(literal(value));
     } else if(Array.isArray(value)) {
       values.push({
         type: ArrayExpression,
-        elements: value.map(v => object([property("value", { type: Literal, value: v.value, raw: JSON.stringify(v.value) })]))
+        elements: value.map(v => object([property("value", literal(v.value))]))
       });
     } else {
       values.push(
         object([
-          property("type", { type: Literal, value: value.type, raw: `"${value.type}"` }),
-          property("name", { type: Literal, value: value.name, raw: `"${value.name}"` })
+          property("type", literal(value.type)),
+          name(value.name)
         ])
       );
     }
   }
   data.push(property("values", { type: ArrayExpression, elements: values }));
-  return object([
-    property("tag", { type: Literal, value: Tag.text, raw: `"${Tag.text}"` }),
-    property(
-      "data",
-      object(data)
-    )
-  ]);
+  return scriptAst(Tag.text, data);
+}
+
+function assetId(id: string): estree.Property {
+  return property("assetId", literal(id));
+}
+
+function layerConfig(config: script.LayerConfig): estree.Property {
+  const ps: estree.Property[] = [name(config.name)];
+  if(config.opacity) {
+    ps.push(property("opacity", literal(config.opacity)));
+  }
+  if(config.visible) {
+    ps.push(property("visible", literal(config.visible)));
+  }
+  if(typeof config.x !== "undefined") {
+    ps.push(property("x", literal(config.x)));
+  }
+  if(typeof config.y !== "undefined") {
+    ps.push(property("y", literal(config.y)));
+  }
+  return property("layer", object(ps));
+}
+
+function image(original: script.Image): estree.ObjectExpression {
+  return scriptAst(Tag.image, [assetId(original.assetId), layerConfig(original.layer)]);
 }
 
 function visit(scene: string, index: number, original: script.Script<any>, scripts: InlineScript[]): estree.ObjectExpression {
   switch(original.tag) {
     case Tag.text:
       return text(original.data);
+    case Tag.image:
+      return image(original.data);
     // TODO: ユーザ定義スクリプトとして生成する
     default:
       throw new Error("not implemented!");
@@ -163,7 +196,7 @@ function scene(original: ast.Scene, scripts: InlineScript[]): estree.NewExpressi
     callee: Scene,
     arguments: [
       object([
-        property("label", { type: Literal, value: original.label, raw: `"${original.label}"` }),
+        property("label", literal(original.label)),
         property(
           "frames",
           {
@@ -195,11 +228,7 @@ const importCowlick: estree.ImportDeclaration = {
       local: Frame
     }
   ],
-  source: {
-    type: Literal,
-    value: "cowlick",
-    raw: "\"cowlick\""
-  }
+  source: literal("cowlick")
 };
 
 function scenario(original: ast.Scenario, scripts: InlineScript[]): estree.Program {
