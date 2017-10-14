@@ -1,6 +1,6 @@
 "use strict";
 import * as script from "../models/Script";
-import * as ast from "../parser/Ast";
+import * as ast from "../parser/ast";
 import {Tag, Layer} from "../Constant";
 
 export interface KeyValuePair {
