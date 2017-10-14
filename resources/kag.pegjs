@@ -48,6 +48,7 @@ TagContent
   / HideMessage
   / LayOpt
   / Jump
+  / ClearSysVar
   / ClearVar
   / UserDefined
 
@@ -112,6 +113,11 @@ Jump
       data.frame = frame[1];
     }
     return [b.jump(data)];
+  }
+
+ClearSysVar
+  = "clearsysvar" {
+    return [b.clearSystemVariables()];
   }
 
 ClearVar

@@ -298,6 +298,13 @@ export function click(scripts: script.Script<any>[]): script.Script<script.Scrip
   };
 }
 
+export function clearSystemVariables(): script.Script<any> {
+  return {
+    tag: Tag.clearSystemVariables,
+    data: {}
+  }
+}
+
 export function clearCurrentVariables(): script.Script<any> {
   return {
     tag: Tag.clearCurrentVariables,

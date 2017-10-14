@@ -6,6 +6,10 @@ module.exports = new Scenario([
     frames: [
       new Frame([
         {
+          tag: "clearSystemVariables",
+          data: {}
+        },
+        {
           tag: "clearCurrentVariables",
           data: {}
         }

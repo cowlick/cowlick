@@ -242,6 +242,10 @@ function removeLayer(controller: SceneController, target: script.RemoveLayer) {
   controller.current.removeLayer(target.name);
 }
 
+function clearSystemVariables(controller: SceneController, data: any) {
+  controller.current.gameState.variables.system = {};
+}
+
 function clearCurrentVariables(controller: SceneController, data: any) {
   controller.current.gameState.variables.current = {};
 }
@@ -269,5 +273,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.condition, condition],
   [Tag.backlog, backlog],
   [Tag.removeLayer, removeLayer],
+  [Tag.clearSystemVariables, clearSystemVariables],
   [Tag.clearCurrentVariables, clearCurrentVariables]
 ]);
