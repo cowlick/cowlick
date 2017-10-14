@@ -144,29 +144,42 @@ function assetId(id: string): estree.Property {
   return property("assetId", literal(id));
 }
 
-function layerConfig(config: script.LayerConfig): estree.Property {
+function layerConfig(config: script.LayerConfig): estree.Property[] {
   const ps: estree.Property[] = [name(config.name)];
-  if(config.opacity) {
-    ps.push(property("opacity", literal(config.opacity)));
-  }
-  if(config.visible) {
-    ps.push(property("visible", literal(config.visible)));
-  }
   if(typeof config.x !== "undefined") {
     ps.push(property("x", literal(config.x)));
   }
   if(typeof config.y !== "undefined") {
     ps.push(property("y", literal(config.y)));
   }
-  return property("layer", object(ps));
+  if(typeof config.opacity !== "undefined") {
+    ps.push(property("opacity", literal(config.opacity)));
+  }
+  if(typeof config.visible !== "undefined") {
+    ps.push(property("visible", literal(config.visible)));
+  }
+  return ps;
 }
 
 function image(original: script.Image): estree.ObjectExpression {
-  return scriptAst(Tag.image, [assetId(original.assetId), layerConfig(original.layer)]);
+  return scriptAst(Tag.image, [assetId(original.assetId), property("layer", object(layerConfig(original.layer)))]);
 }
 
 function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
   return scriptAst(original.tag, [assetId(original.data.assetId), property("groupName", literal(original.data.groupName))]);
+}
+
+function click(original: script.Script<any>[], scene: string, index: number, scripts: InlineScript[]): estree.ObjectExpression {
+  return object([
+    property("tag", literal(Tag.click)),
+    property(
+      "data",
+      {
+        type: ArrayExpression,
+        elements: original.map(s => visit(scene, index, s, scripts))
+      }
+    )
+  ]);
 }
 
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
@@ -185,9 +198,13 @@ function visit(scene: string, index: number, original: script.Script<any>, scrip
       return text(original.data);
     case Tag.image:
       return image(original.data);
+    case Tag.layerConfig:
+      return scriptAst(Tag.layerConfig, layerConfig(original.data));
     case Tag.playAudio:
     case Tag.stopAudio:
       return audio(original);
+    case Tag.click:
+      return click(original.data, scene, index, scripts);
     default:
       return userDefined(original);
   }
