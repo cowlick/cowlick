@@ -9,13 +9,19 @@ Frames
   = fs:Frame+ EOF { return fs; }
 
 Frame
-  = ts:Tags text:(Newline Text)? {
+  = label:Label? ts:Tags text:(Newline Text)? {
     if(text) {
       ts.push(text[1]);
     }
-    return b.frame(ts);
+    return b.frame(ts, label);
   }
-  / text:Text { return b.frame([text]); }
+  / label:Label? text:Text { return b.frame([text], label); }
+
+Label
+  = "*" label:LabelValue Newline { return label; }
+
+LabelValue
+  = $( ( !Newline !EOF !Space !"|" . )+ )
 
 Tags
   = Comments c:Tag cs:(Newline Comments Tag)* {

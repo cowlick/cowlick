@@ -1,5 +1,6 @@
 [
   {
+    "label": "test",
     "scripts": [
       {
         "tag": "choice",
@@ -11,15 +12,15 @@
             {
               "tag": "jump",
               "data": {
-                "frame": "test1"
+                "frame": "test"
               },
               "text": "test1"
             },
             {
               "tag": "jump",
               "data": {
-                "scene": "test",
-                "frame": "test2"
+                "scene": "content",
+                "frame": "test"
               },
               "text": "test2"
             }

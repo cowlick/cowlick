@@ -1,7 +1,8 @@
-@link target=*test1
+*test
+@link target=*test
 test1
 @endlink
-@link storage=test target=*test2
+@link storage=content target=*test
 test2
 @endlink
 @r

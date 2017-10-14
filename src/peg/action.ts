@@ -20,10 +20,14 @@ export function contents(c: script.Script<any>[], cs: script.Script<any>[][]) {
   return result;
 }
 
-export function frame(scripts: script.Script<any>[]): ast.Frame {
-  return {
+export function frame(scripts: script.Script<any>[], label?: string): ast.Frame {
+  const result: ast.Frame = {
     scripts
   };
+  if(label) {
+    result.label = label;
+  }
+  return result;
 }
 
 export function image(assetId: string, layer: string, options: KeyValuePair[]) {
