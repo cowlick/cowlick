@@ -25,8 +25,3 @@ export interface Jump {
 export interface ChoiceItem extends Script<Jump> {
   text: string;
 }
-
-export interface Eval {
-  expression: string;
-}
-

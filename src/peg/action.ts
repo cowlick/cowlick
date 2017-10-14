@@ -1,4 +1,7 @@
 "use strict";
+import * as estree from "estree";
+import * as esprima from "esprima";
+import * as estraverse from "estraverse";
 import * as script from "../models/Script";
 import * as ast from "../parser/ast";
 import {Tag, Layer} from "../Constant";
@@ -118,13 +121,45 @@ export function ruby(rb: string, rt: string): script.Ruby[] {
   }];
 }
 
+const system = "system";
+const current = "current";
+const varSf = "sf";
+const varF = "f";
+
 export function variable(expression: string): script.Variable {
-  // TODO: 真面目に解析する
-  const value = expression.split(".");
-  return {
-    type: value[0] === "sf" ? "system" : "current",
-    name: value[1]
-  };
+  let value: script.Variable;
+  estraverse.traverse(esprima.parseScript(expression), {
+    enter: function(node, parent) {
+      if(node.type === "Program" && node.body.length === 1) {
+        const statement = node.body[0];
+        if(statement.type === "ExpressionStatement") {
+          const e = statement.expression;
+          if(e.type === "MemberExpression" && e.object.type === "Identifier" && e.property.type === "Identifier") {
+            switch(e.object.name) {
+              case varSf:
+                value = {
+                  type: system,
+                  name: e.property.name
+                };
+                break;
+              case varF:
+                value = {
+                  type: current,
+                  name: e.property.name
+                };
+                break;
+            }
+            this.break();
+          }
+        }
+      }
+    }
+  });
+  if(value) {
+    return value;
+  } else {
+    throw new Error(`illegal expression(call variable): ${expression}`);
+  }
 }
 
 export function playAudio(assetId: string, name: string): script.Script<script.Audio> {
@@ -158,12 +193,50 @@ export function tag(name: string, attrs: KeyValuePair[]) {
   return result;
 }
 
-export function evaluate(expression: string): script.Script<ast.Eval> {
+function newMemberExpression(name: string): estree.MemberExpression {
+  return {
+    type: "MemberExpression",
+    object: {
+      type: "Identifier",
+      name: "variables"
+    },
+    property: {
+      type: "Identifier",
+      name
+    },
+    computed: false
+  };
+}
+
+function traverseEval(original: estree.Program): estree.Program {
+  estraverse.traverse(original, {
+    leave: (node, parent) => {
+      if(node.type === "MemberExpression") {
+        const object = node.object;
+        if(object.type === "Identifier") {
+          let newObject: estree.MemberExpression;
+          switch(object.name) {
+            case varSf:
+              newObject = newMemberExpression(system);
+              break;
+            case varF:
+              newObject = newMemberExpression(current);
+              break;
+            default:
+              throw new Error(`"${object.name}" is a invalid variable name.`);
+          }
+          node.object = newObject;
+        }
+      }
+    }
+  });
+  return original;
+}
+
+export function evaluate(expression: string): script.Script<estree.Program> {
   return {
     tag: Tag.evaluate,
-    data: {
-      expression
-    }
+    data: traverseEval(esprima.parseScript(expression))
   };
 }
 
