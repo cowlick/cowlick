@@ -297,3 +297,10 @@ export function click(scripts: script.Script<any>[]): script.Script<script.Scrip
     data: scripts
   };
 }
+
+export function clearCurrentVariables(): script.Script<any> {
+  return {
+    tag: Tag.clearCurrentVariables,
+    data: {}
+  }
+}

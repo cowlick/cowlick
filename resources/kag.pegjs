@@ -48,6 +48,7 @@ TagContent
   / HideMessage
   / LayOpt
   / Jump
+  / ClearVar
   / UserDefined
 
 Image
@@ -111,6 +112,11 @@ Jump
       data.frame = frame[1];
     }
     return [b.jump(data)];
+  }
+
+ClearVar
+  = "clearvar" {
+    return [b.clearCurrentVariables()];
   }
 
 UserDefined

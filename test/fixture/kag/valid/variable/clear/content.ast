@@ -1,0 +1,10 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "clearCurrentVariables",
+        "data": {}
+      }
+    ]
+  }
+]

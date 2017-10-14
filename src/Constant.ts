@@ -23,6 +23,7 @@ export namespace Tag {
   export const condition = "condition";
   export const backlog = "backlog";
   export const removeLayer = "removeLayer";
+  export const clearCurrentVariables = "clearCurrentVariables";
 }
 
 export namespace Layer {
