@@ -177,8 +177,12 @@ function layerConfig(config: script.LayerConfig): estree.Property[] {
   return ps;
 }
 
+function layerProperty(config: script.LayerConfig): estree.Property {
+  return property("layer", object(layerConfig(config)));
+}
+
 function image(original: script.Image): estree.ObjectExpression {
-  return scriptAst(Tag.image, [assetId(original.assetId), property("layer", object(layerConfig(original.layer)))]);
+  return scriptAst(Tag.image, [assetId(original.assetId), layerProperty(original.layer)]);
 }
 
 function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
@@ -279,6 +283,28 @@ function jump(original: ast.Jump, scene: string, state: State): estree.ObjectExp
   return result;
 }
 
+function choiceItem(value: ast.ChoiceItem, scene: string, state: State): estree.ObjectExpression {
+  const result = jump(value.data, scene, state);
+  result.properties.push(property("text", literal(value.text)));
+  return result;
+}
+
+function choice(original: ast.Choice, scene: string, state: State): estree.ObjectExpression {
+  return scriptAst(
+    Tag.choice,
+    [
+      layerProperty(original.layer),
+      property(
+        "values",
+        {
+          type: ArrayExpression,
+          elements: original.values.map(v => choiceItem(v, scene, state))
+        }
+      )
+    ]
+  );
+}
+
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -306,6 +332,8 @@ function visit(original: script.Script<any>, scene: string, frame: number, index
       return evaluate(original.data, scene, frame, index, state.scripts);
     case Tag.jump:
       return jump(original.data, scene, state);
+    case Tag.choice:
+      return choice(original.data, scene, state);
     default:
       return userDefined(original);
   }
