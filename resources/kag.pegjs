@@ -30,6 +30,7 @@ Tags
 
 Tag
   = Links
+  / IScript
   / SingleTag
 
 SingleTag
@@ -150,6 +151,21 @@ Link
 EndLink
   = "@endlink" ( (Newline R) / &(Newline / EOF) )
   / Newline? "[endlink]" (Newline? R)?
+
+IScript
+  = "[iscript]" Newline script:IScriptValue Newline EndScript {
+    return [b.evaluate(script)];
+  }
+  / "@iscript" Newline script:IScriptValue Newline EndScript {
+    return [b.evaluate(script)];
+  }
+
+IScriptValue
+  = $( ( !(Newline EndScript) . )* )
+
+EndScript
+  = "@endscript"
+  / "[endscript]"
 
 Text
   = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
