@@ -2,6 +2,7 @@
 import {Scene} from "./Scene";
 import {Frame} from "./Frame";
 import {Jump} from "./Script";
+import {SaveData} from "./SaveData";
 
 export class Scenario {
 
@@ -65,6 +66,10 @@ export class Scenario {
     } else {
       return false;
     }
+  }
+
+  findScene(data: SaveData): Scene {
+    return this.scenes.find(s => s.label === data.label);
   }
 
   private nextFrame() {

@@ -1,4 +1,5 @@
 "use strict";
+import {Scenario} from "./Scenario";
 import {Scene} from "./Scene";
 import {SaveData} from "./SaveData";
 import {Save, Variable} from "./Script";
@@ -62,5 +63,13 @@ export class GameState {
     } else {
       return undefined;
     }
+  }
+
+  collectAssetIds(scenario: Scenario): string[] {
+    let ids: string[] =[];
+    for(const d of this.data) {
+      ids = ids.concat(scenario.findScene(d).assetIds);
+    }
+    return ids;
   }
 }

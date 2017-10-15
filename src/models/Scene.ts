@@ -12,6 +12,7 @@ export class Scene {
   private index: number = 0;
   private _label: string;
   private frames: Frame[];
+  private cacheAssetIds: string[];
 
   constructor(params: SceneParameters) {
     this._label = params.label;
@@ -31,11 +32,13 @@ export class Scene {
   }
 
   get assetIds(): string[] {
-    let ids: string[] = [];
-    this.frames.forEach(f => {
-      ids = ids.concat(f.assetIds);
-    });
-    return ids;
+    if(! this.cacheAssetIds) {
+      this.cacheAssetIds = [];
+      for(const f of this.frames) {
+        this.cacheAssetIds = this.cacheAssetIds.concat(f.assetIds);
+      }
+    }
+    return this.cacheAssetIds;
   }
 
   next() {

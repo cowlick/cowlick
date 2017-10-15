@@ -4,6 +4,7 @@ import {Script, collectAssetIds} from "./Script";
 export class Frame {
 
   private _scripts: Script<any>[];
+  private cacheAssetIds: string[];
 
   constructor(scripts: Script<any>[]) {
     this._scripts = scripts;
@@ -14,6 +15,9 @@ export class Frame {
   }
 
   get assetIds(): string[] {
-    return collectAssetIds(this._scripts);
+    if(! this.cacheAssetIds) {
+      this.cacheAssetIds = collectAssetIds(this._scripts);
+    }
+    return this.cacheAssetIds;
   }
 }

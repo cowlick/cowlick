@@ -42,13 +42,16 @@ export class SceneController {
       player: this.player,
       storageKeys: params.storageKeys
     });
-    this.saveLoadScene = new SaveLoadScene({
-      game: this.game,
-      scene: this.scenario.scene,
-      config: this.config,
-      scriptManager: this.scriptManager,
-      assetIds: this.collectSaveDataAssetIds()
-    });
+    this._current.loaded.addOnce(() => {
+      this.saveLoadScene = new SaveLoadScene({
+        game: this.game,
+        scene: this.scenario.scene,
+        config: this.config,
+        scriptManager: this.scriptManager,
+        assetIds: this.collectAssetIds()
+      });
+      this.saveLoadScene.prefetch();
+    }, this);
   }
 
   get current(): Scene {
@@ -90,6 +93,7 @@ export class SceneController {
   private loadScene() {
     this.scenario.backlog = [];
     this.scenario.trigger.removeAll();
+    const previous = this.saveLoadScene;
     this._current = new Scene({
       game: this.game,
       scenario: this.scenario,
@@ -99,19 +103,22 @@ export class SceneController {
       player: this.player,
       state: this._current.gameState
     });
-    this.saveLoadScene.destroy();
-    this.saveLoadScene = new SaveLoadScene({
-      game: this.game,
-      scene: this.scenario.scene,
-      config: this.config,
-      scriptManager: this.scriptManager,
-      assetIds: this.collectSaveDataAssetIds()
-    });
-    this.saveLoadScene.prefetch();
+    this._current.loaded.addOnce(() => {
+      this.saveLoadScene = new SaveLoadScene({
+        game: this.game,
+        scene: this.scenario.scene,
+        config: this.config,
+        scriptManager: this.scriptManager,
+        assetIds: this.collectAssetIds()
+      });
+      this.saveLoadScene.prefetch();
+    }, this);
+    previous.destroy();
     this.game.replaceScene(this._current);
   }
 
-  private collectSaveDataAssetIds(): string[] {
-    return [];
+  private collectAssetIds(): string[] {
+    return this._current.gameState.collectAssetIds(this.scenario)
+      .concat(this.scenario.scene.assetIds);
   }
 }
