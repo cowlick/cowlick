@@ -33,6 +33,7 @@ const Identifier = "Identifier";
 const ObjectExpression = "ObjectExpression";
 const NewExpression = "NewExpression";
 const ArrayExpression = "ArrayExpression";
+const ReturnStatement = "ReturnStatement";
 const ImportDeclaration = "ImportDeclaration";
 const ImportSpecifier = "ImportSpecifier";
 const Property = "Property";
@@ -202,16 +203,26 @@ function click(original: script.Script<any>[], scene: string, frame: number, ind
   ]);
 }
 
-function programToExportFunction(original: estree.Program) {
+function programToExportFunction(original: estree.Program, requireReturn: boolean) {
   const body: estree.Statement[] = [];
+  let index = 0;
   for(const b of original.body) {
     switch(b.type) {
-      case "ExpressionStatement":
+      case ExpressionStatement:
+        if(requireReturn && index + 1 === original.body.length) {
+          body.push({
+            type: ReturnStatement,
+            argument: b.expression
+          });
+        } else {
+          body.push(b);
+        }
+        break;
       case "BlockStatement":
       case "EmptyStatement":
       case "DebuggerStatement":
       case "WithStatement":
-      case "ReturnStatement":
+      case ReturnStatement:
       case "LabeledStatement":
       case "BreakStatement":
       case "ContinueStatement":
@@ -229,6 +240,7 @@ function programToExportFunction(original: estree.Program) {
       default:
         throw new Error(`unexpected statement: ${JSON.stringify(b)}`);
     }
+    index++;
   }
   return moduleExports({
     type: "FunctionExpression",
@@ -249,12 +261,12 @@ function programToExportFunction(original: estree.Program) {
   });
 }
 
-function evaluate(original: estree.Program, scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
-  const source = estraverse.replace(original, {
+function exportFunction(original: estree.Program, requireReturn: boolean) {
+  return estraverse.replace(original, {
     leave: (node, path) => {
       switch(node.type) {
         case Program:
-          node.body = [programToExportFunction(node)];
+          node.body = [programToExportFunction(node, requireReturn)];
           node.sourceType = "module";
           break;
         default:
@@ -262,14 +274,34 @@ function evaluate(original: estree.Program, scene: string, frame: number, index:
       }
     }
   });
+}
+
+function evaluate(original: estree.Program, scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
   const s = new InlineScript({
     scene,
     frame,
     index,
-    source
+    source: exportFunction(original, false)
   });
   scripts.push(s);
   return scriptAst(Tag.evaluate, [property("path", literal(s.assetId))]);
+}
+
+function condition(original: ast.Condition<any>, scene: string, frame: number, index: number, state: State): estree.ObjectExpression {
+  const s = new InlineScript({
+    scene,
+    frame,
+    index,
+    source: exportFunction(original.expression, true)
+  });
+  state.scripts.push(s);
+  return scriptAst(
+    Tag.condition,
+    [
+      property("path", literal(s.assetId)),
+      property("script", visit(original.script, scene, frame, index, state))
+    ]
+  );
 }
 
 function jump(original: ast.Jump, scene: string, state: State): estree.ObjectExpression {
@@ -332,6 +364,8 @@ function visit(original: script.Script<any>, scene: string, frame: number, index
       return click(original.data, scene, frame, index, state);
     case Tag.evaluate:
       return evaluate(original.data, scene, frame, index, state.scripts);
+    case Tag.condition:
+      return condition(original.data, scene, frame, index, state);
     case Tag.jump:
       return jump(original.data, scene, state);
     case Tag.choice:

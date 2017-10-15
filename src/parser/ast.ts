@@ -1,3 +1,4 @@
+import * as estree from "estree";
 import {LayerConfig, Script} from "../models/Script";
 
 export type Scenario = Scene[];
@@ -24,4 +25,9 @@ export interface Jump {
 
 export interface ChoiceItem extends Script<Jump> {
   text: string;
+}
+
+export interface Condition<T> {
+  expression: estree.Program;
+  script: Script<T>;
 }
