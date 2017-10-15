@@ -4,7 +4,7 @@ import {SceneController} from "./components/SceneController";
 import {Config, defaultConfig} from "./Config";
 import {ScriptManager, ScriptFunction} from "./scripts/ScriptManager";
 import {defaultSctipts} from "./scripts/defaultScripts";
-import {createStorageKeys} from "./GameStateHelper";
+import {createStorageKeys} from "./components/GameStateHelper";
 
 export class Engine {
 

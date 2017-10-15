@@ -1,7 +1,7 @@
 "use strict";
-import {GameState, Variables} from "./models/GameState";
-import {SaveData} from "./models/SaveData";
-import {Region, gameId} from "./Constant";
+import {GameState, Variables} from "../models/GameState";
+import {SaveData} from "../models/SaveData";
+import {Region, gameId} from "../Constant";
 
 interface KeyValue {
   key: g.StorageKey;

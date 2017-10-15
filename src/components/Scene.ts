@@ -11,7 +11,7 @@ import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
 import {AudioGroup} from "./AudioGroup";
 import {SceneController} from "./SceneController";
-import {loadGameState} from "../GameStateHelper";
+import {loadGameState} from "./GameStateHelper";
 import {Config} from "../Config";
 import {Tag, Layer} from "../Constant";
 
