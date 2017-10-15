@@ -244,6 +244,16 @@ export function evaluate(expression: string): script.Script<estree.Program> {
   };
 }
 
+export function condition(expression: string, scripts: script.Script<any>[]): script.Script<ast.Condition> {
+  return {
+    tag: Tag.condition,
+    data: {
+      expression: traverseEval(esprima.parseScript(expression)),
+      scripts
+    }
+  };
+}
+
 export function trigger(enabled: boolean): script.Script<script.Trigger> {
   return {
     tag: Tag.trigger,
@@ -270,12 +280,16 @@ export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): script.Script<a
   };
 }
 
-export function choiceItem(text: string, data: ast.Jump): ast.ChoiceItem {
-  return {
+export function choiceItem(text: string, data: ast.Jump, condition?: string): ast.ChoiceItem {
+  const result: ast.ChoiceItem = {
     tag: Tag.jump,
     data,
     text
   };
+  if(condition) {
+    result.condition = traverseEval(esprima.parseScript(condition))
+  }
+  return result;
 }
 
 export function layerConfig(name: string, options: KeyValuePair[]) {

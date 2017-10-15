@@ -77,6 +77,7 @@ export function collectAssetIds(scripts: Script<any>[]): string[] {
 
 export interface ChoiceItem extends Script<Jump> {
   text: string;
+  path?: string;
 }
 
 export const enum Trigger {
@@ -146,8 +147,8 @@ export interface Eval {
   path: string;
 }
 
-export interface Condition<T> extends Eval {
-  script: Script<T>;
+export interface Condition extends Eval {
+  scripts: Script<any>[];
 }
 
 export interface RemoveLayer {

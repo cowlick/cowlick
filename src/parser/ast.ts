@@ -25,9 +25,10 @@ export interface Jump {
 
 export interface ChoiceItem extends Script<Jump> {
   text: string;
+  condition?: estree.Program;
 }
 
-export interface Condition<T> {
+export interface Condition {
   expression: estree.Program;
-  script: Script<T>;
+  scripts: Script<any>[];
 }

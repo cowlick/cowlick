@@ -25,6 +25,13 @@ interface LabelIndex {
   index: number;
 }
 
+interface VisitorOptions {
+  scene: string;
+  frame: number;
+  indexes: number[];
+  state: State;
+}
+
 const Program = "Program";
 const ExpressionStatement = "ExpressionStatement";
 const AssignmentExpression = "AssignmentExpression";
@@ -190,14 +197,23 @@ function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
   return scriptAst(original.tag, [assetId(original.data.assetId), property("groupName", literal(original.data.groupName))]);
 }
 
-function click(original: script.Script<any>[], scene: string, frame: number, index: number, state: State): estree.ObjectExpression {
+function nestOptions(options: VisitorOptions, i: number): VisitorOptions {
+  return {
+    scene: options.scene,
+    frame: options.frame,
+    indexes: options.indexes.concat(i),
+    state: options.state
+  };
+}
+
+function click(original: script.Script<any>[], options: VisitorOptions): estree.ObjectExpression {
   return object([
     property("tag", literal(Tag.click)),
     property(
       "data",
       {
         type: ArrayExpression,
-        elements: original.map(s => visit(s, scene, frame, index, state))
+        elements: original.map((s, i) => visit(s, nestOptions(options, i)))
       }
     )
   ]);
@@ -276,54 +292,70 @@ function exportFunction(original: estree.Program, requireReturn: boolean) {
   });
 }
 
-function evaluate(original: estree.Program, scene: string, frame: number, index: number, scripts: InlineScript[]): estree.ObjectExpression {
+function evaluate(original: estree.Program, options: VisitorOptions): estree.ObjectExpression {
   const s = new InlineScript({
-    scene,
-    frame,
-    index,
+    scene: options.scene,
+    frame: options.frame,
+    indexes: options.indexes,
     source: exportFunction(original, false)
   });
-  scripts.push(s);
+  options.state.scripts.push(s);
   return scriptAst(Tag.evaluate, [property("path", literal(s.assetId))]);
 }
 
-function condition(original: ast.Condition<any>, scene: string, frame: number, index: number, state: State): estree.ObjectExpression {
+function condition(original: ast.Condition, options: VisitorOptions): estree.ObjectExpression {
   const s = new InlineScript({
-    scene,
-    frame,
-    index,
+    scene: options.scene,
+    frame: options.frame,
+    indexes: options.indexes,
     source: exportFunction(original.expression, true)
   });
-  state.scripts.push(s);
+  options.state.scripts.push(s);
   return scriptAst(
     Tag.condition,
     [
       property("path", literal(s.assetId)),
-      property("script", visit(original.script, scene, frame, index, state))
+      property(
+        "scripts",
+        {
+          type: ArrayExpression,
+          elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+        }
+      )
     ]
   );
 }
 
-function jump(original: ast.Jump, scene: string, state: State): estree.ObjectExpression {
-  const s = original.scene ? original.scene : scene;
+function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpression {
+  const s: string = original.scene ? original.scene : options.scene;
   const data = object([property("label", literal(s))]);
   const result = object([
     property("tag", literal(Tag.jump)),
     property("data", data)
   ]);
   if(original.frame) {
-    state.replaces.push(f => f(data, scene, original.frame));
+    options.state.replaces.push(f => f(data, options.scene, original.frame));
   }
   return result;
 }
 
-function choiceItem(value: ast.ChoiceItem, scene: string, state: State): estree.ObjectExpression {
-  const result = jump(value.data, scene, state);
+function choiceItem(value: ast.ChoiceItem, options: VisitorOptions): estree.ObjectExpression {
+  const result = jump(value.data, options);
   result.properties.push(property("text", literal(value.text)));
+  if(value.condition) {
+    const s = new InlineScript({
+      scene: options.scene,
+      frame: options.frame,
+      indexes: options.indexes,
+      source: exportFunction(value.condition, true)
+    });
+    options.state.scripts.push(s);
+    result.properties.push(property("path", literal(s.assetId)));
+  }
   return result;
 }
 
-function choice(original: ast.Choice, scene: string, state: State): estree.ObjectExpression {
+function choice(original: ast.Choice, options: VisitorOptions): estree.ObjectExpression {
   return scriptAst(
     Tag.choice,
     [
@@ -332,7 +364,7 @@ function choice(original: ast.Choice, scene: string, state: State): estree.Objec
         "values",
         {
           type: ArrayExpression,
-          elements: original.values.map(v => choiceItem(v, scene, state))
+          elements: original.values.map((v, i) => choiceItem(v, nestOptions(options, i)))
         }
       )
     ]
@@ -349,7 +381,7 @@ function userDefined(original: script.Script<any>): estree.ObjectExpression {
   return scriptAst(original.tag, ps);
 }
 
-function visit(original: script.Script<any>, scene: string, frame: number, index: number, state: State): estree.ObjectExpression {
+function visit(original: script.Script<any>, options: VisitorOptions): estree.ObjectExpression {
   switch(original.tag) {
     case Tag.text:
       return text(original.data);
@@ -361,15 +393,15 @@ function visit(original: script.Script<any>, scene: string, frame: number, index
     case Tag.stopAudio:
       return audio(original);
     case Tag.click:
-      return click(original.data, scene, frame, index, state);
+      return click(original.data, options);
     case Tag.evaluate:
-      return evaluate(original.data, scene, frame, index, state.scripts);
+      return evaluate(original.data, options);
     case Tag.condition:
-      return condition(original.data, scene, frame, index, state);
+      return condition(original.data, options);
     case Tag.jump:
-      return jump(original.data, scene, state);
+      return jump(original.data, options);
     case Tag.choice:
-      return choice(original.data, scene, state);
+      return choice(original.data, options);
     default:
       return userDefined(original);
   }
@@ -382,7 +414,7 @@ function frame(original: ast.Frame, scene: string, index: number, state: State):
     arguments: [
       {
         type: ArrayExpression,
-        elements: original.scripts.map((s, i) => visit(s, scene, index, i, state))
+        elements: original.scripts.map((s, i) => visit(s, { scene, frame: index, indexes: [i], state }))
       }
     ]
   };

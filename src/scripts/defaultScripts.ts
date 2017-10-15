@@ -59,7 +59,14 @@ function choice(controller: SceneController, choice: script.Choice) {
   const space = 10;
   const baseX = choice.x ? choice.x : width / 6;
   const baseY = choice.y ? choice.y : (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
-  choice.values.forEach((item: script.ChoiceItem, i: number) => {
+  let index = 0;
+  for(const item of choice.values) {
+    if(item.path) {
+      const f = g._require(game, item.path);
+      if(! f(controller.current.gameState.variables)) {
+        continue;
+      }
+    }
     let button = new LabelButton({
       scene: controller.current,
       width,
@@ -76,14 +83,15 @@ function choice(controller: SceneController, choice: script.Choice) {
     const direction = choice.direction ? choice.direction : script.Direction.Vertical;
     switch(direction) {
       case script.Direction.Vertical:
-        button.move(baseX, baseY + (height + space) * i);
+        button.move(baseX, baseY + (height + space) * index);
         break;
       case script.Direction.Horizontal:
-        button.move(baseX + (width + space) * i, baseY);
+        button.move(baseX + (width + space) * index, baseY);
         break;
     }
     controller.current.appendLayer(button, choice.layer);
-  });
+    index++;
+  }
 }
 
 function link(controller: SceneController, link: script.Link) {
@@ -180,10 +188,12 @@ function evaluate(controller: SceneController, info: script.Eval) {
   f(controller.current.gameState.variables);
 }
 
-function condition(controller: SceneController, cond: script.Condition<any>) {
+function condition(controller: SceneController, cond: script.Condition) {
   const f = g._require(controller.game, cond.path);
   if(f(controller.current.gameState.variables)) {
-    Engine.scriptManager.call(controller, cond.script);
+    for(const s of cond.scripts) {
+      Engine.scriptManager.call(controller, s);
+    }
   }
 }
 

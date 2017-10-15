@@ -34,8 +34,20 @@ Tag
   / SingleTag
 
 SingleTag
-  = "@" content:TagContent &(Newline / EOF) { return content; }
-  / "[" content:TagContent _ "]" { return content; }
+  = "@" content:TagContent condition:(_ Condition)? &(Newline / EOF) {
+    if(condition) {
+      return [b.condition(condition[1], content)];
+    } else {
+      return content;
+    }
+  }
+  / "[" content:TagContent _ condition:Condition? _ "]" {
+    if(condition) {
+      return [b.condition(condition, content)];
+    } else {
+      return content;
+    }
+  }
 
 TagContent
   = Image
@@ -133,13 +145,18 @@ UserDefined
 TagName
   = $( ( !Newline !EOF !Space !"=" . )+ )
 
+Condition
+  = "cond=" expression:AttributeValue {
+    return expression;
+  }
+
 Links
   = l:Link ls:(Newline Comments Link)* {
     return [b.choice(l, ls.map(function(l) { return l[2]; }))];
   }
 
 Link
-  = "@link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? Newline text:PlainText Newline EndLink {
+  = "@link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
     var data = {};
     if(scene) {
       data.scene = scene[1];
@@ -147,9 +164,13 @@ Link
     if(frame) {
       data.frame = frame[1];
     }
-    return b.choiceItem(text, data);
+    if(condition) {
+      return b.choiceItem(text, data, condition[1]);
+    } else {
+      return b.choiceItem(text, data);
+    }
   }
-  / "[link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? _ "]" Newline? text:PlainText EndLink {
+  / "[link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
     var data = {};
     if(scene) {
       data.scene = scene[1];
@@ -157,7 +178,7 @@ Link
     if(frame) {
       data.frame = frame[1];
     }
-    return b.choiceItem(text, data);
+    return b.choiceItem(text, data, condition);
   }
 
 EndLink

@@ -7,25 +7,25 @@ import * as path from "path";
 export interface InlineScriptParameters {
   scene: string;
   frame: number;
-  index: number;
+  indexes: number[];
   source: Node;
 }
 
 export class InlineScript {
   private scene: string;
   private frame: number;
-  private index: number;
+  private indexes: number[];
   source: Node;
 
   constructor(params: InlineScriptParameters) {
     this.scene = params.scene;
     this.frame = params.frame;
-    this.index = params.index;
+    this.indexes = params.indexes;
     this.source = params.source;
   }
 
   get assetId(): string {
-    return `${this.scene}_${this.frame}_${this.index}`;
+    return `${this.scene}_${this.frame}_${this.indexes.join("_")}`;
   }
 
   get name(): string {
