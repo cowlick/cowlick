@@ -1,9 +1,9 @@
 "use strict";
 import * as assert from "assert";
-import {Scene} from "../src/components/Scene";
+import {SceneController} from "../src/components/SceneController";
 import {ScriptManager, ScriptFunction} from "../src/scripts/ScriptManager";
 
-function fail(scene: Scene, data: any) {
+function fail(controller: SceneController, data: any) {
   assert.fail("失敗するスクリプトを実行しました");
 }
 
@@ -14,7 +14,7 @@ describe("ScriptManager", () => {
     const manager = new ScriptManager(new Map<string, ScriptFunction>([
       [tag, fail]
     ]));
-    manager.register(tag, (scene: Scene, data: any) => {});
+    manager.register(tag, (controller: SceneController, data: any) => {});
     manager.call(null, { tag, data: null });
   });
 });
