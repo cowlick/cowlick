@@ -25,6 +25,8 @@ export namespace Tag {
   export const removeLayer = "removeLayer";
   export const clearCurrentVariables = "clearCurrentVariables";
   export const clearSystemVariables = "clearSystemVariables";
+  export const fadeIn = "fadeIn";
+  export const fadeOut = "fadeOut";
 }
 
 export namespace Layer {

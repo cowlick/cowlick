@@ -158,3 +158,8 @@ export interface RemoveLayer {
 export interface Backlog {
   scripts: Script<any>[];
 }
+
+export interface Fade {
+  layer: string;
+  duration: number;
+}

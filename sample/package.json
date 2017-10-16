@@ -7,11 +7,11 @@
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
-    "@akashic-extension/akashic-timeline": "0.4.2",
-    "@akashic/akashic-engine": "2.0.0"
+    "@akashic-extension/akashic-timeline": "0.4.2"
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.2.1",
+    "@akashic/akashic-engine": "2.0.0",
     "@akashic/akashic-sandbox": "0.13.4",
     "@types/node": "8.0.33",
     "copy-webpack-plugin": "4.1.1",

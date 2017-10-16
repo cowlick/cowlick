@@ -2,9 +2,7 @@
 import * as tl from "@akashic-extension/akashic-timeline";
 import * as novel from "../../lib/index";
 
-interface Logo {
-  layer: string;
-  duration: number;
+interface Logo extends novel.Fade {
   wait: number;
 }
 

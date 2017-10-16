@@ -33,13 +33,14 @@
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
-    "@akashic/akashic-engine": "2.0.0",
+    "@akashic-extension/akashic-timeline": "0.4.2",
     "commandpost": "1.2.1",
     "escodegen": "1.9.0",
     "esprima": "4.0.0",
     "estraverse": "4.2.0"
   },
   "devDependencies": {
+    "@akashic/akashic-engine": "2.0.0",
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.1",
     "@types/estraverse": "0.0.6",

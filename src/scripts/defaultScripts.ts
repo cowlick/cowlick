@@ -1,4 +1,5 @@
 "use strict";
+import * as tl from "@akashic-extension/akashic-timeline";
 import * as script from "../models/Script";
 import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
@@ -260,6 +261,22 @@ function clearCurrentVariables(controller: SceneController, data: any) {
   controller.current.gameState.variables.current = {};
 }
 
+function fadeIn(controller: SceneController, info: script.Fade) {
+  controller.current.transition(info.layer, (layer) => {
+    let timeline = new tl.Timeline(controller.current);
+    timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
+      .fadeIn(info.duration);
+  });
+}
+
+function fadeOut(controller: SceneController, info: script.Fade) {
+  controller.current.transition(info.layer, (layer) => {
+    let timeline = new tl.Timeline(controller.current);
+    timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
+      .fadeOut(info.duration);
+  });
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -284,5 +301,7 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.backlog, backlog],
   [Tag.removeLayer, removeLayer],
   [Tag.clearSystemVariables, clearSystemVariables],
-  [Tag.clearCurrentVariables, clearCurrentVariables]
+  [Tag.clearCurrentVariables, clearCurrentVariables],
+  [Tag.fadeIn, fadeIn],
+  [Tag.fadeOut, fadeOut]
 ]);
