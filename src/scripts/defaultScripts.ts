@@ -1,5 +1,6 @@
 "use strict";
 import * as tl from "@akashic-extension/akashic-timeline";
+import {Scrollable} from "@xnv/akashic-scrollable";
 import * as script from "../models/Script";
 import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
@@ -208,24 +209,39 @@ function backlog(controller: SceneController, data: script.Backlog) {
   trigger(controller, script.Trigger.Off);
 
   const scene = controller.current;
+  const scrollable = new Scrollable({
+      scene,
+      x: 20,
+      y: 50,
+      width: controller.game.width - 50,
+      height: controller.game.height - 70,
+      vertical: true,
+      horizontal: false
+  });
+  scene.appendLayer(scrollable, layer);
+
   const message = new Message({
     scene,
     config: Engine.config,
-    width: controller.game.width - 20,
-    x: 20,
-    y: 20,
+    width: controller.game.width - 60,
+    x: 0,
+    y: 0,
     gameState: scene.gameState
   });
   // FIXME: このタイミングで構築したら最新の変数が取れてしまう
-  let values: (string | script.Ruby[] | script.Variable)[] = [];
+  let values: (string | script.Ruby[] | script.Variable)[];
   for(const frame of controller.backlog) {
     for(const vs of frame.scripts.filter(s => s.tag === Tag.text).map(s => (s.data as script.Text).values)) {
-      values = values.concat("\n", vs);
+      if(values) {
+        values = values.concat("\n", vs);
+      } else {
+        values = vs;
+      }
     }
   }
   message.updateText({ values });
   message.showAll();
-  scene.appendLayer(message, layer);
+  scrollable.content.append(message);
 
   const scripts: script.Script<any>[] = [
     {
@@ -236,7 +252,7 @@ function backlog(controller: SceneController, data: script.Backlog) {
     }
   ];
 
-  const width = 100;
+  const width = 80;
   const l = {
     layer,
     x: controller.game.width - width - 10,
