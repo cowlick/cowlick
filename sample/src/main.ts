@@ -15,7 +15,7 @@ function main() {
       data.layer,
       (layer) => {
         let timeline = new tl.Timeline(scene);
-        timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
+        timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed})
           .fadeIn(data.duration)
           .wait(data.wait)
           .fadeOut(data.duration)

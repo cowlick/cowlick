@@ -5,7 +5,7 @@ import {Layer} from "../Constant";
 export class LayerGroup {
   private scene: g.Scene;
   private root: g.E;
-  private group: Map<string, g.Pane>;
+  private group: Map<string, g.E>;
 
   constructor(scene: g.Scene) {
     this.scene = scene;
@@ -22,7 +22,7 @@ export class LayerGroup {
     if(layer) {
       layer.append(e);
     } else {
-      layer = new g.Pane({
+      layer = new g.E({
         scene: this.scene,
         parent: this.root,
         width: this.scene.game.width,
@@ -41,7 +41,6 @@ export class LayerGroup {
     const layer = this.group.get(name);
     if(layer) {
       if(this.group.delete(name)) {
-        this.root.remove(layer);
         layer.destroy();
       }
     }
@@ -50,7 +49,7 @@ export class LayerGroup {
   applyConfig(config: LayerConfig) {
     this.evaluate(
       config.name,
-      (layer: g.Pane) => {
+      (layer: g.E) => {
         if(config.visible !== undefined) {
           if(config.visible) {
             layer.show();
@@ -82,7 +81,7 @@ export class LayerGroup {
     this.evaluate(name, (layer) => this.root.append(layer));
   }
 
-  evaluate(name: string, f: (e: g.Pane) => void) {
+  evaluate(name: string, f: (e: g.E) => void) {
     const layer = this.group.get(name);
     if(layer) {
       f(layer);

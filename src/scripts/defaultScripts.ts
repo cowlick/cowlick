@@ -280,7 +280,7 @@ function clearCurrentVariables(controller: SceneController, data: any) {
 function fadeIn(controller: SceneController, info: script.Fade) {
   controller.current.transition(info.layer, (layer) => {
     let timeline = new tl.Timeline(controller.current);
-    timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
+    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed})
       .fadeIn(info.duration);
   });
 }
@@ -288,7 +288,7 @@ function fadeIn(controller: SceneController, info: script.Fade) {
 function fadeOut(controller: SceneController, info: script.Fade) {
   controller.current.transition(info.layer, (layer) => {
     let timeline = new tl.Timeline(controller.current);
-    timeline.create(layer, {modified: layer.invalidate, destroyed: layer.destroyed})
+    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed})
       .fadeOut(info.duration);
   });
 }

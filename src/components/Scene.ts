@@ -120,7 +120,7 @@ export class Scene extends g.Scene {
     this.enabledWindowClick = true;
   }
 
-  transition(layer: string, f: (e: g.Pane) => void) {
+  transition(layer: string, f: (e: g.E) => void) {
     this.layerGroup.evaluate(layer, f);
   }
 
