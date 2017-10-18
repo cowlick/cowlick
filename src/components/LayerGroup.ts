@@ -10,8 +10,7 @@ export class LayerGroup {
   constructor(scene: g.Scene) {
     this.scene = scene;
     this.root = new g.E({
-      scene,
-      parent: scene
+      scene
     });
     this.scene.append(this.root);
     this.group = new Map<string, g.Pane>();
@@ -24,7 +23,6 @@ export class LayerGroup {
     } else {
       layer = new g.E({
         scene: this.scene,
-        parent: this.root,
         width: this.scene.game.width,
         height: this.scene.game.height,
         x: 0,
