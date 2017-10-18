@@ -229,7 +229,7 @@ function backlog(controller: SceneController, data: script.Backlog) {
     gameState: scene.gameState
   });
   // FIXME: このタイミングで構築したら最新の変数が取れてしまう
-  let values: (string | script.Ruby[] | script.Variable)[];
+  let values: (string | script.Ruby[] | script.Variable)[] = [];
   for(const frame of controller.backlog) {
     for(const vs of frame.scripts.filter(s => s.tag === Tag.text).map(s => (s.data as script.Text).values)) {
       if(values) {
