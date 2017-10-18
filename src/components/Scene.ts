@@ -228,17 +228,15 @@ export class Scene extends g.Scene {
       tag: Tag.pane,
       data: this.config.window.message
     });
-    this.layerGroup.evaluate(Layer.message, (layer) => {
-      this._message = new Message({
-        scene: this,
-        config: this.config,
-        width: this.game.width - 40,
-        x: this.config.window.message.layer.x + 20,
-        y: this.config.window.message.layer.y + 20,
-        gameState: this.gameState
-      });
-      layer.append(this._message);
+    this._message = new Message({
+      scene: this,
+      config: this.config,
+      width: this.game.width - 40,
+      x: this.config.window.message.layer.x + 20,
+      y: this.config.window.message.layer.y + 20,
+      gameState: this.gameState
     });
+    this.layerGroup.append(this._message, { name: Layer.message });
     this.enableWindowClick();
   }
 

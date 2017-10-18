@@ -4,10 +4,16 @@ import {Layer} from "../Constant";
 
 export class LayerGroup {
   private scene: g.Scene;
+  private root: g.E;
   private group: Map<string, g.Pane>;
 
   constructor(scene: g.Scene) {
     this.scene = scene;
+    this.root = new g.E({
+      scene,
+      parent: scene
+    });
+    this.scene.append(this.root);
     this.group = new Map<string, g.Pane>();
   }
 
@@ -18,6 +24,7 @@ export class LayerGroup {
     } else {
       layer = new g.Pane({
         scene: this.scene,
+        parent: this.root,
         width: this.scene.game.width,
         height: this.scene.game.height,
         x: 0,
@@ -25,7 +32,7 @@ export class LayerGroup {
         opacity: config.opacity
       });
       layer.append(e);
-      this.scene.append(layer);
+      this.root.append(layer);
       this.group.set(config.name, layer);
     }
   }
@@ -34,7 +41,7 @@ export class LayerGroup {
     const layer = this.group.get(name);
     if(layer) {
       if(this.group.delete(name)) {
-        this.scene.remove(layer);
+        this.root.remove(layer);
         layer.destroy();
       }
     }
@@ -72,7 +79,7 @@ export class LayerGroup {
   }
 
   top(name: string) {
-    this.evaluate(name, (layer) => this.scene.append(layer));
+    this.evaluate(name, (layer) => this.root.append(layer));
   }
 
   evaluate(name: string, f: (e: g.Pane) => void) {
