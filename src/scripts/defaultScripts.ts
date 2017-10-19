@@ -206,9 +206,12 @@ function backlog(controller: SceneController, data: script.Backlog) {
     Engine.scriptManager.call(controller, s);
   }
 
-  trigger(controller, script.Trigger.Off);
-
   const scene = controller.current;
+  const enabled = scene.enabledWindowClick;
+  if(enabled) {
+    trigger(controller, script.Trigger.Off);
+  }
+
   const scrollable = new Scrollable({
       scene,
       x: 20,
@@ -251,6 +254,12 @@ function backlog(controller: SceneController, data: script.Backlog) {
       }
     }
   ];
+  if(enabled) {
+    scripts.push({
+      tag: Tag.trigger,
+      data: script.Trigger.On
+    });
+  }
 
   const width = 80;
   const l = {

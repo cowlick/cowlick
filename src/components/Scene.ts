@@ -40,7 +40,7 @@ export class Scene extends g.Scene {
   private storageKeys: g.StorageKey[];
   private player: g.Player;
   private _gameState: GameState;
-  private enabledWindowClick: boolean;
+  private _enabledWindowClick: boolean;
 
   constructor(params: SceneParameters) {
     super({
@@ -75,6 +75,10 @@ export class Scene extends g.Scene {
     return this._gameState;
   }
 
+  get enabledWindowClick(): boolean {
+    return this._enabledWindowClick;
+  }
+
   appendLayer(e: g.E, config: script.LayerConfig) {
     this.layerGroup.append(e, config);
   }
@@ -99,7 +103,7 @@ export class Scene extends g.Scene {
     } else {
       this.disableTrigger(this.onWindowClick);
     }
-    this.enabledWindowClick = false;
+    this._enabledWindowClick = false;
   }
 
   enableWindowClick() {
@@ -117,7 +121,7 @@ export class Scene extends g.Scene {
         }
       }
     });
-    this.enabledWindowClick = true;
+    this._enabledWindowClick = true;
   }
 
   transition(layer: string, f: (e: g.E) => void) {
@@ -274,7 +278,7 @@ export class Scene extends g.Scene {
   }
 
   private onWindowClick() {
-    if(this.enabledWindowClick) {
+    if(this._enabledWindowClick) {
       if(this._message.finished) {
         this.requestNextFrame();
       } else {
