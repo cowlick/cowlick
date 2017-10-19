@@ -8,7 +8,7 @@
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
     "@akashic-extension/akashic-timeline": "0.4.2",
-    "@xnv/akashic-scrollable": "0.0.1"
+    "@xnv/akashic-scrollable": "0.0.2"
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.2.1",
