@@ -91,8 +91,7 @@ export class SceneController {
   }
 
   private loadScene() {
-    this.scenario.backlog = [];
-    this.scenario.trigger.removeAll();
+    this.scenario.clear();
     const previous = this.saveLoadScene;
     this._current = new Scene({
       game: this.game,

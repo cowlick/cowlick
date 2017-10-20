@@ -8,12 +8,12 @@ export class Scenario {
 
   private index = 0;
   private scenes: Scene[];
-  trigger: g.Trigger<Frame>;
+  onLoaded: g.Trigger<Frame>;
   backlog: Frame[];
 
   constructor(scenes: Scene[]) {
     this.scenes = scenes;
-    this.trigger = new g.Trigger<Frame>();
+    this.onLoaded = new g.Trigger<Frame>();
     this.backlog = [];
   }
 
@@ -51,7 +51,7 @@ export class Scenario {
   load(frame?: Frame): boolean {
     const f = frame ? frame : this.frame;
     if(f) {
-      this.trigger.fire(f);
+      this.onLoaded.fire(f);
       return true;
     } else {
       return false;
@@ -70,6 +70,11 @@ export class Scenario {
 
   findScene(data: SaveData): Scene {
     return this.scenes.find(s => s.label === data.label);
+  }
+
+  clear() {
+    this.backlog = [];
+    this.onLoaded.removeAll();
   }
 
   private nextFrame() {

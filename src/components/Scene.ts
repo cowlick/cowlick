@@ -64,7 +64,7 @@ export class Scene extends g.Scene {
     this.loaded.add(this.onLoaded, this);
 
     this.scenario = params.scenario;
-    this.scenario.trigger.add(this.loadFrame, this);
+    this.scenario.onLoaded.add(this.loadFrame, this);
   }
 
   get source() {
