@@ -213,13 +213,13 @@ function backlog(controller: SceneController, data: script.Backlog) {
   }
 
   const scrollable = new Scrollable({
-      scene,
-      x: 20,
-      y: 50,
-      width: controller.game.width - 50,
-      height: controller.game.height - 70,
-      vertical: true,
-      horizontal: false
+    scene,
+    x: 20,
+    y: 50,
+    width: controller.game.width - 50,
+    height: controller.game.height - 70,
+    vertical: true,
+    horizontal: false
   });
   scene.appendLayer(scrollable, layer);
 

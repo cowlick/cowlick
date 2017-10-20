@@ -287,7 +287,7 @@ export function choiceItem(text: string, data: ast.Jump, condition?: string): as
     text
   };
   if(condition) {
-    result.condition = traverseEval(esprima.parseScript(condition))
+    result.condition = traverseEval(esprima.parseScript(condition));
   }
   return result;
 }
@@ -316,12 +316,12 @@ export function clearSystemVariables(): script.Script<any> {
   return {
     tag: Tag.clearSystemVariables,
     data: {}
-  }
+  };
 }
 
 export function clearCurrentVariables(): script.Script<any> {
   return {
     tag: Tag.clearCurrentVariables,
     data: {}
-  }
+  };
 }
