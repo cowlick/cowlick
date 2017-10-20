@@ -1,6 +1,7 @@
 "use strict";
 import {Scenario} from "../models/Scenario";
 import {Frame} from "../models/Frame";
+import {Log} from "../models/Log";
 import * as script from "../models/Script";
 import {Scene} from "./Scene";
 import {SaveLoadScene} from "./SaveLoadScene";
@@ -58,7 +59,7 @@ export class SceneController {
     return this._current;
   }
 
-  get backlog(): Frame[] {
+  get backlog(): Log[] {
     return this.scenario.backlog;
   }
 

@@ -6,6 +6,7 @@ import {Frame} from "../models/Frame";
 import * as script from "../models/Script";
 import {GameState} from "../models/GameState";
 import {SaveData} from "../models/SaveData";
+import {Log} from "../models/Log";
 import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
@@ -185,11 +186,11 @@ export class Scene extends g.Scene {
 
     if(frame) {
       this.removeLayers(frame.scripts);
-      this.createWindowLayer();
+      this.createMessageLayer();
       this.createSystemLayer();
       this.applyScripts(frame.scripts);
     } else {
-      this.createWindowLayer();
+      this.createMessageLayer();
       this.createSystemLayer();
     }
     this.topMessageLayer();
@@ -223,7 +224,7 @@ export class Scene extends g.Scene {
     });
   }
 
-  private createWindowLayer() {
+  private createMessageLayer() {
     this.scriptManager.call(this.controller, {
       tag: Tag.pane,
       data: this.config.window.message
@@ -236,6 +237,12 @@ export class Scene extends g.Scene {
       y: this.config.window.message.layer.y + 20,
       gameState: this.gameState
     });
+    this._message.onFinished.add(
+      (text) => {
+        this.scenario.pushLog({ text, frame: this.scenario.frame });
+      },
+      this
+    );
     this.layerGroup.append(this._message, { name: Layer.message });
     this.enableWindowClick();
   }

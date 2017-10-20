@@ -15,6 +15,7 @@ export interface MessageParameters {
 
 export class Message extends al.Label {
 
+  onFinished: g.Trigger<string>;
   private index: number;
   private counter: number;
   private original: Text;
@@ -45,6 +46,7 @@ export class Message extends al.Label {
     this.current = [];
     this.gameState = params.gameState;
     this.textAlign = g.TextAlign.Left;
+    this.onFinished = new g.Trigger<string>();
     this.update.add(this.onUpdated, this);
   }
 
@@ -64,11 +66,11 @@ export class Message extends al.Label {
         values: this.original.values.concat(text.values)
       };
     }
+    this.update.add(this.onUpdated, this);
   }
 
   showAll() {
     if(! this.finished) {
-      // 自動更新を止めておかないと二重登録されかねない
       this.update.remove(this.onUpdated, this);
       this.text = "";
       for(const t of this.original.values) {
@@ -86,8 +88,8 @@ export class Message extends al.Label {
         }
       }
       this.index = this.original.values.length;
+      this.onFinished.fire(this.text);
       this.invalidate();
-      this.update.add(this.onUpdated, this);
     }
   }
 
@@ -111,6 +113,10 @@ export class Message extends al.Label {
       }
       this.invalidate();
       this.counter++;
+    }
+    if(this.finished) {
+      this.update.remove(this.onUpdated, this);
+      this.onFinished.fire(this.text);
     }
   }
 

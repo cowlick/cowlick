@@ -8,5 +8,6 @@ export * from "./models/Scene";
 export * from "./models/Frame";
 export * from "./models/Script";
 export * from "./models/GameState";
+export {Log} from "./models/Log";
 
 export const engine = new Engine(g.game);

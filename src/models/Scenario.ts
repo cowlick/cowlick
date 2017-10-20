@@ -3,22 +3,27 @@ import {Scene} from "./Scene";
 import {Frame} from "./Frame";
 import {Jump} from "./Script";
 import {SaveData} from "./SaveData";
+import {Log} from "./Log";
 
 export class Scenario {
 
   private index = 0;
   private scenes: Scene[];
   onLoaded: g.Trigger<Frame>;
-  backlog: Frame[];
+  private log: Log[];
 
   constructor(scenes: Scene[]) {
     this.scenes = scenes;
     this.onLoaded = new g.Trigger<Frame>();
-    this.backlog = [];
+    this.log = [];
   }
 
   static load(game: g.Game): Scenario {
     return g._require(game, "scenario");
+  }
+
+  get backlog() {
+    return this.log;
   }
 
   get scene() {
@@ -59,13 +64,7 @@ export class Scenario {
   }
 
   next(): boolean {
-    const previous = this.frame;
-    if(this.load(this.nextFrame())) {
-      this.backlog.push(previous);
-      return true;
-    } else {
-      return false;
-    }
+    return this.load(this.nextFrame());
   }
 
   findScene(data: SaveData): Scene {
@@ -73,8 +72,12 @@ export class Scenario {
   }
 
   clear() {
-    this.backlog = [];
+    this.log = [];
     this.onLoaded.removeAll();
+  }
+
+  pushLog(log: Log) {
+    this.log.push(log);
   }
 
   private nextFrame() {
