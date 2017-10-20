@@ -89,7 +89,7 @@ export class Scene extends g.Scene {
 
   updateText(text: script.Text) {
     this._message.updateText(text);
-    this.disableTrigger(this.requestNextFrame);
+    this.disableWindowClick();
     this.enableWindowClick();
   }
 
@@ -98,11 +98,7 @@ export class Scene extends g.Scene {
   }
 
   disableWindowClick() {
-    if(this._message.finished) {
-      this.disableTrigger(this.requestNextFrame);
-    } else {
-      this.disableTrigger(this.onWindowClick);
-    }
+    this.disableTrigger();
     this._enabledWindowClick = false;
   }
 
@@ -200,12 +196,12 @@ export class Scene extends g.Scene {
     this.layerGroup.top(Layer.system);
   }
 
-  private disableTrigger(callback: () => void) {
+  private disableTrigger() {
     this.layerGroup.evaluate(Layer.message, (layer) => {
       layer.touchable = false;
-      layer.pointUp.remove(callback, this);
+      layer.pointUp.removeAll();
       for(const c of layer.children) {
-        c.pointUp.remove(callback, this);
+        c.pointUp.removeAll();
       }
     });
   }
