@@ -24,19 +24,18 @@ interface CompileOpts {
 }
 
 interface CompileArgs {
-  scenario: string;
+  inputDir: string;
 }
 
 root
-  .subCommand<CompileOpts, CompileArgs>("compile [scenario]")
-  .description("compile cowlick scenario")
-  .option("-o, --output <output>", "output format of scenario")
+  .subCommand<CompileOpts, CompileArgs>("kag [inputDir]")
+  .description("compile KAG scenario")
+  .option("-o, --output <output>", "output dir")
   .action((opts, args) => {
     const output: string = opts.output[0] || "script";
     const outputPath = path.resolve(process.cwd(), output);
-    const targetPath = path.resolve(process.cwd(), args.scenario);
-    const basePath = path.dirname(targetPath);
-    const result = analyze(parse(targetPath, basePath));
+    const basePath = path.resolve(process.cwd(), args.inputDir);
+    const result = analyze(parse(basePath));
     if (! fs.existsSync(outputPath)) {
       fs.mkdirSync(outputPath);
     }

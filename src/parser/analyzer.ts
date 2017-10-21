@@ -2,6 +2,7 @@
 import * as estree from "estree";
 import * as estraverse from "estraverse";
 import * as script from "../models/Script";
+import {filename} from "./util";
 import * as ast from "./ast";
 import {InlineScript} from "./InlineScript";
 import {Tag} from "../Constant";
@@ -327,14 +328,14 @@ function condition(original: ast.Condition, options: VisitorOptions): estree.Obj
 }
 
 function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpression {
-  const s: string = original.scene ? original.scene : options.scene;
-  const data = object([property("label", literal(s))]);
+  const label = original.scene ? filename(original.scene) : options.scene;
+  const data = object([property("label", literal(label))]);
   const result = object([
     property("tag", literal(Tag.jump)),
     property("data", data)
   ]);
   if(original.frame) {
-    options.state.replaces.push(f => f(data, options.scene, original.frame));
+    options.state.replaces.push(f => f(data, label, original.frame));
   }
   return result;
 }

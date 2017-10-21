@@ -11,6 +11,8 @@ export interface KeyValuePair {
   value: any;
 }
 
+export let dependencies: string[];
+
 export function contents(c: script.Script<any>[], cs: script.Script<any>[][]) {
 
   var result = c;
@@ -262,6 +264,9 @@ export function trigger(enabled: boolean): script.Script<script.Trigger> {
 }
 
 export function jump(data: ast.Jump): script.Script<ast.Jump> {
+  if (data.scene) {
+    dependencies.push(data.scene);
+  }
   return {
     tag: Tag.jump,
     data
@@ -281,6 +286,9 @@ export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): script.Script<a
 }
 
 export function choiceItem(text: string, data: ast.Jump, condition?: string): ast.ChoiceItem {
+  if (data.scene) {
+    dependencies.push(data.scene);
+  }
   const result: ast.ChoiceItem = {
     tag: Tag.jump,
     data,

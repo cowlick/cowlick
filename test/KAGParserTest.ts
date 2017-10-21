@@ -33,7 +33,7 @@ describe("KAGParser", () => {
           try {
             const actual = kag.parse(text);
             const expectedAST = fs.readFileSync(astFilePath, "utf8");
-            assert.deepEqual(actual, JSON.parse(expectedAST));
+            assert.deepEqual(actual.frames, JSON.parse(expectedAST));
           } catch(e) {
             appendSyntaxErrorinfo(e);
             throw e;

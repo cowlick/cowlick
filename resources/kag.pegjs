@@ -1,12 +1,18 @@
 {
   var b = require("../lib/peg/action");
+  b.dependencies = [];
 }
 
 Start
   = Frames
 
 Frames
-  = fs:Frame+ EOF { return fs; }
+  = fs:Frame+ EOF {
+    return {
+      dependencies: b.dependencies,
+      frames: fs
+    };
+  }
 
 Frame
   = label:Label? ts:Tags text:(Newline Text)? {
