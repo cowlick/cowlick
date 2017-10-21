@@ -163,3 +163,8 @@ export interface Fade {
   layer: string;
   duration: number;
 }
+
+export interface Timeout {
+  milliseconds: number;
+  scripts: Script<any>[];
+}

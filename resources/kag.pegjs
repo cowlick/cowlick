@@ -68,6 +68,7 @@ TagContent
   / Jump
   / ClearSysVar
   / ClearVar
+  / Timeout
   / UserDefined
 
 Image
@@ -142,6 +143,30 @@ ClearVar
   = "clearvar" {
     return [b.clearCurrentVariables()];
   }
+
+Timeout
+   = "timeout" _ time:("time=" AttributeValue) _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? options:TimeoutOptions {
+    var j = {};
+    if(scene) {
+      j.scene = scene[1];
+    }
+    if(frame) {
+      j.frame = frame[1];
+    }
+    options.push(b.jump(j));
+    var data = {
+      milliseconds: time[1],
+      scripts: options
+    };
+    return [b.timeout(data)];
+  }
+
+TimeoutOptions
+  = os:(_ TimeoutOption)* { return os.map(function(o) { return o[1]; }); }
+
+TimeoutOption
+  = "exp=" expression:AttributeValue { return b.evaluate(expression); }
+  / "se=" assetId:AttributeValue { return b.playAudio(assetId, "se"); }
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {

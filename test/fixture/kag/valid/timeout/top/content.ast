@@ -1,0 +1,18 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "timeout",
+        "data": {
+          "milliseconds": 0,
+          "scripts": [
+            {
+              "tag": "jump",
+              "data": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -299,6 +299,17 @@ function fadeOut(controller: SceneController, info: script.Fade) {
   });
 }
 
+function timeout(controller: SceneController, info: script.Timeout) {
+  controller.current.setTimeout(
+    () => {
+      for(const s of info.scripts) {
+        Engine.scriptManager.call(controller, s);
+      }
+    },
+    info.milliseconds
+  );
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -325,5 +336,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.clearSystemVariables, clearSystemVariables],
   [Tag.clearCurrentVariables, clearCurrentVariables],
   [Tag.fadeIn, fadeIn],
-  [Tag.fadeOut, fadeOut]
+  [Tag.fadeOut, fadeOut],
+  [Tag.timeout, timeout]
 ]);

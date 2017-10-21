@@ -333,3 +333,10 @@ export function clearCurrentVariables(): script.Script<any> {
     data: {}
   };
 }
+
+export function timeout(data: script.Timeout): script.Script<script.Timeout> {
+  return {
+    tag: Tag.timeout,
+    data
+  }
+}

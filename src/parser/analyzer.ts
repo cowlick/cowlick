@@ -372,6 +372,22 @@ function choice(original: ast.Choice, options: VisitorOptions): estree.ObjectExp
   );
 }
 
+function timeout(original: script.Timeout, options: VisitorOptions): estree.ObjectExpression {
+  return scriptAst(
+    Tag.timeout,
+    [
+      property("milliseconds", literal(original.milliseconds)),
+      property(
+        "scripts",
+        {
+          type: ArrayExpression,
+          elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+        }
+      )
+    ]
+  );
+}
+
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -403,6 +419,8 @@ function visit(original: script.Script<any>, options: VisitorOptions): estree.Ob
       return jump(original.data, options);
     case Tag.choice:
       return choice(original.data, options);
+    case Tag.timeout:
+      return timeout(original.data, options);
     default:
       return userDefined(original);
   }

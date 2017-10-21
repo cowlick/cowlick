@@ -1,0 +1,25 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "timeout",
+        "data": {
+          "milliseconds": 0,
+          "scripts": [
+            {
+              "tag": "playAudio",
+              "data": {
+                "assetId": "test",
+                "groupName": "se"
+              }
+            },
+            {
+              "tag": "jump",
+              "data": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

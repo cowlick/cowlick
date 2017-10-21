@@ -1,0 +1,36 @@
+[
+  {
+    "label": "test",
+    "scripts": [
+      {
+        "tag": "timeout",
+        "data": {
+          "milliseconds": 0,
+          "scripts": [
+            {
+              "tag": "jump",
+              "data": {
+                "scene": "content"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tag": "timeout",
+        "data": {
+          "milliseconds": 0,
+          "scripts": [
+            {
+              "tag": "jump",
+              "data": {
+                "scene": "content",
+                "frame": "test"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
