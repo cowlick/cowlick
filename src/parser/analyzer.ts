@@ -304,26 +304,35 @@ function evaluate(original: estree.Program, options: VisitorOptions): estree.Obj
   return scriptAst(Tag.evaluate, [property("path", literal(s.assetId))]);
 }
 
-function condition(original: ast.Condition, options: VisitorOptions): estree.ObjectExpression {
-  const s = new InlineScript({
+function conditionBody(is: InlineScript, scripts: script.Script<any>[], options: VisitorOptions): estree.Property[] {
+  return [
+    property("path", literal(is.assetId)),
+    property(
+      "scripts",
+      {
+        type: ArrayExpression,
+        elements: scripts.map((s, i) => visit(s, nestOptions(options, i)))
+      }
+    )
+  ];
+}
+
+function createInlineScript(expression: estree.Program, options: VisitorOptions) {
+  const is = new InlineScript({
     scene: options.scene,
     frame: options.frame,
     indexes: options.indexes,
-    source: exportFunction(original.expression, true)
+    source: exportFunction(expression, true)
   });
-  options.state.scripts.push(s);
+  options.state.scripts.push(is);
+  return is;
+}
+
+function condition(original: ast.Condition, options: VisitorOptions): estree.ObjectExpression {
+  const is = createInlineScript(original.expression, options);
   return scriptAst(
     Tag.condition,
-    [
-      property("path", literal(s.assetId)),
-      property(
-        "scripts",
-        {
-          type: ArrayExpression,
-          elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
-        }
-      )
-    ]
+    conditionBody(is, original.scripts, options)
   );
 }
 
@@ -388,6 +397,33 @@ function timeout(original: script.Timeout, options: VisitorOptions): estree.Obje
   );
 }
 
+function ifElse(original:ast.IfElse, options: VisitorOptions): estree.ObjectExpression {
+  const l = original.conditions.length;
+  return scriptAst(
+    Tag.ifElse,
+    [
+      property(
+        "conditions",
+        {
+          type: ArrayExpression,
+          elements: original.conditions.map((c, i) => {
+            const nested = nestOptions(options, i);
+            const is = createInlineScript(c.expression, nested);
+            return object(conditionBody(is, c.scripts, nested));
+          })
+        }
+      ),
+      property(
+        "elseBody",
+        {
+          type: ArrayExpression,
+          elements: original.elseBody.map((s, i) => visit(s, nestOptions(options, l + i)))
+        }
+      )
+    ]
+  );
+}
+
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -421,6 +457,8 @@ function visit(original: script.Script<any>, options: VisitorOptions): estree.Ob
       return choice(original.data, options);
     case Tag.timeout:
       return timeout(original.data, options);
+    case Tag.ifElse:
+      return ifElse(original.data, options);
     default:
       return userDefined(original);
   }

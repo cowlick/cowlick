@@ -340,3 +340,10 @@ export function timeout(data: script.Timeout): script.Script<script.Timeout> {
     data
   }
 }
+
+export function ifExpression(data: ast.IfElse): script.Script<ast.IfElse> {
+  return {
+    tag: Tag.ifElse,
+    data
+  };
+}

@@ -196,7 +196,9 @@ function condition(controller: SceneController, cond: script.Condition) {
     for(const s of cond.scripts) {
       Engine.scriptManager.call(controller, s);
     }
+    return true;
   }
+  return false;
 }
 
 function backlog(controller: SceneController, data: script.Backlog) {
@@ -310,6 +312,17 @@ function timeout(controller: SceneController, info: script.Timeout) {
   );
 }
 
+function ifElse(controller: SceneController, data: script.IfElse) {
+  for(const c of data.conditions) {
+    if(condition(controller, c)) {
+      return;
+    }
+  }
+  for(const s of data.elseBody) {
+    Engine.scriptManager.call(controller, s);
+  }
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -337,5 +350,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.clearCurrentVariables, clearCurrentVariables],
   [Tag.fadeIn, fadeIn],
   [Tag.fadeOut, fadeOut],
-  [Tag.timeout, timeout]
+  [Tag.timeout, timeout],
+  [Tag.ifElse, ifElse]
 ]);

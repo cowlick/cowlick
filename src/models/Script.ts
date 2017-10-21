@@ -168,3 +168,8 @@ export interface Timeout {
   milliseconds: number;
   scripts: Script<any>[];
 }
+
+export interface IfElse {
+  conditions: Condition[];
+  elseBody: Script<any>[];
+}

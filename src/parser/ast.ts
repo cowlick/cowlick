@@ -32,3 +32,8 @@ export interface Condition {
   expression: estree.Program;
   scripts: Script<any>[];
 }
+
+export interface IfElse {
+  conditions: Condition[];
+  elseBody: Script<any>[];
+}

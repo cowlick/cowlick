@@ -37,6 +37,7 @@ Tags
 Tag
   = Links
   / IScript
+  / IfExpression
   / SingleTag
 
 SingleTag
@@ -93,9 +94,12 @@ StopSe
   = "stopse" { return [b.stopAudio("se")]; }
 
 Eval
-  = "eval" _ "exp=" expression:AttributeValue {
+  = "eval" _ expression:ExpressionAttribute {
     return [b.evaluate(expression)];
   }
+
+ExpressionAttribute
+  = "exp=" expression:AttributeValue { return expression; }
 
 S
   = "s" { return [b.trigger(false)]; }
@@ -165,7 +169,7 @@ TimeoutOptions
   = os:(_ TimeoutOption)* { return os.map(function(o) { return o[1]; }); }
 
 TimeoutOption
-  = "exp=" expression:AttributeValue { return b.evaluate(expression); }
+  = expression:ExpressionAttribute { return b.evaluate(expression); }
   / "se=" assetId:AttributeValue { return b.playAudio(assetId, "se"); }
 
 UserDefined
@@ -231,6 +235,55 @@ EndScript
   = "@endscript"
   / "[endscript]"
 
+IfExpression
+  = i:If is:Elsif* e:Else? EndIf {
+    var result = {
+      conditions: [i].concat(is)
+    };
+    if(e) {
+      result.elseBody = e;
+    } else {
+      result.elseBody = [];
+    }
+    return [b.ifExpression(result)];
+  }
+
+If
+  = "[if" _ expression:ExpressionAttribute _ "]" Newline? body:IfBody {
+    return b.condition(expression, body).data;
+  }
+  / "@if" _ expression:ExpressionAttribute Newline body:IfBody {
+    return b.condition(expression, body).data;
+  }
+
+IfBody
+  = ts:Tags text:(Newline Text)? {
+    if(text) {
+      ts.push(text[1]);
+    }
+    return ts;
+  }
+  / text:Text { return [text]; }
+
+Elsif
+  = "[elsif" _ expression:ExpressionAttribute _ "]" Newline? body:IfBody {
+    return b.condition(expression, body).data;
+  }
+  / "@elsif" _ expression:ExpressionAttribute Newline body:IfBody {
+    return b.condition(expression, body).data;
+  }
+
+Else
+  = "[else]" Newline? body:IfBody {
+    return body;
+  }
+  / "@else" Newline body:IfBody {
+    return body;
+  }
+
+EndIf
+  = "[endif]" / "@endif"
+
 Text
   = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
     return b.text(values, cm);
@@ -262,7 +315,7 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb . )
+  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf . )
 
 Ruby
   = "@ruby" _ "text=" rt:AttributeValue Newline rb:Character {
