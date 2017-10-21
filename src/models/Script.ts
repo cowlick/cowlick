@@ -122,7 +122,7 @@ export interface Link {
 
 export interface Audio {
   assetId: string;
-  groupName?: string;
+  group?: string;
 }
 
 export interface ChangeVolume {

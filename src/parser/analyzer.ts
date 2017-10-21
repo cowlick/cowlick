@@ -195,7 +195,7 @@ function image(original: script.Image): estree.ObjectExpression {
 }
 
 function audio(original: script.Script<script.Audio>): estree.ObjectExpression {
-  return scriptAst(original.tag, [assetId(original.data.assetId), property("groupName", literal(original.data.groupName))]);
+  return scriptAst(original.tag, [assetId(original.data.assetId), property("group", literal(original.data.group))]);
 }
 
 function nestOptions(options: VisitorOptions, i: number): VisitorOptions {

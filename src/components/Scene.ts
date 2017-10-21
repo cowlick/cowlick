@@ -137,7 +137,7 @@ export class Scene extends g.Scene {
   playAudio(audio: script.Audio) {
     const a = (this.assets[audio.assetId] as g.AudioAsset);
     const player = a.play();
-    this.audioGroup.add(audio.groupName, player);
+    this.audioGroup.add(audio.group, player);
   }
 
   changeVolume(data: script.ChangeVolume) {

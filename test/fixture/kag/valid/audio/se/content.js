@@ -9,14 +9,14 @@ module.exports = new Scenario([
           tag: "playAudio",
           data: {
             assetId: "test",
-            groupName: "se"
+            group: "se"
           }
         },
         {
           tag: "stopAudio",
           data: {
             assetId: null,
-            groupName: "se"
+            group: "se"
           }
         }
       ])

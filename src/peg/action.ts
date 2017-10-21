@@ -168,22 +168,22 @@ export function variable(expression: string): script.Variable {
   }
 }
 
-export function playAudio(assetId: string, name: string): script.Script<script.Audio> {
+export function playAudio(assetId: string, group: string): script.Script<script.Audio> {
   return {
     tag: Tag.playAudio,
     data: {
       assetId: assetId,
-      groupName: name
+      group
     }
   };
 }
 
-export function stopAudio(name: string): script.Script<script.Audio> {
+export function stopAudio(group: string): script.Script<script.Audio> {
   return {
     tag: Tag.stopAudio,
     data: {
       assetId: null,
-      groupName: name
+      group
     }
   };
 }

@@ -14,7 +14,7 @@ module.exports = new Scenario([
                 tag: "playAudio",
                 data: {
                   assetId: "test",
-                  groupName: "se"
+                  group: "se"
                 }
               },
               {

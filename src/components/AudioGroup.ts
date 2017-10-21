@@ -38,7 +38,7 @@ export class AudioGroup {
   }
 
   remove(audio: Audio) {
-    let ps = this.group.get(audio.groupName);
+    let ps = this.group.get(audio.group);
     if(ps) {
       if(audio.assetId) {
         const i = ps.findIndex(p => p.currentAudio.id === audio.assetId);
@@ -48,7 +48,7 @@ export class AudioGroup {
         } else {
           this.game.logger.warn("audio not found", audio);
         }
-      } else if(this.group.delete(audio.groupName)) {
+      } else if(this.group.delete(audio.group)) {
         for(const player of ps) {
           player.stop();
         }
