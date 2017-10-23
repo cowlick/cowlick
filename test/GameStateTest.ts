@@ -66,6 +66,32 @@ describe("GameState", () => {
     assertSaveData(expected, actual);
   });
 
+  it("description付きで保存できる", () => {
+    const vars = {
+      current: {
+        test: 0
+      },
+      system: {}
+    };
+    const state = new GameState([], vars, 1);
+    const scene = new Scene({
+      label: "test",
+      frames: [
+        new Frame([])
+      ]
+    });
+    const expected: SaveData = {
+      label: "test",
+      frame: 0,
+      variables: {
+        test: 0
+      },
+      description: "test"
+    };
+    const actual = state.save(scene, { index: 0, description: "test" });
+    assertSaveData(expected, actual);
+  });
+
   it("forceオプションがついている場合は上書きする", () => {
     const vars = {
       current: {

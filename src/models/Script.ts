@@ -137,6 +137,7 @@ export interface Video {
 export interface Save {
   index: number;
   force?: boolean;
+  description?: string;
 }
 
 export interface Load {

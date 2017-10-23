@@ -33,7 +33,7 @@ export class GameState {
     if(config.index > this.max || config.index < 0) {
       return "storage out of range: " + config.index;
     }
-    const saveData = scene.createSaveData(this._variables.current);
+    const saveData = scene.createSaveData(this._variables.current, config.description);
     if(config.force) {
       this.data[config.index] = saveData;
       return saveData;

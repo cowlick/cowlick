@@ -54,11 +54,15 @@ export class Scene {
     this.index = index ? index : 0;
   }
 
-  createSaveData(variables: any): SaveData {
-    return {
+  createSaveData(variables: any, description?: string): SaveData {
+    const result: SaveData = {
       label: this._label,
       frame: this.index,
       variables
     };
+    if(description) {
+      result.description = description;
+    }
+    return result;
   }
 }
