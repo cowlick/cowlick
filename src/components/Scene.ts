@@ -90,6 +90,12 @@ export class Scene extends g.Scene {
 
   updateText(text: script.Text) {
     this._message.updateText(text);
+    this._message.onFinished.addOnce(
+      (text) => {
+        this.scenario.pushLog({ text, frame: this.scenario.frame });
+      },
+      this
+    );
     this.disableWindowClick();
     this.enableWindowClick();
   }
@@ -237,12 +243,6 @@ export class Scene extends g.Scene {
       y: this.config.window.message.layer.y + 20,
       gameState: this.gameState
     });
-    this._message.onFinished.add(
-      (text) => {
-        this.scenario.pushLog({ text, frame: this.scenario.frame });
-      },
-      this
-    );
     this.layerGroup.append(this._message, { name: Layer.message });
     this.enableWindowClick();
   }
