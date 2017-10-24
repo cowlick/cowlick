@@ -44,6 +44,9 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
           case "label":
             s.value.label = v;
             break;
+          case "description":
+            s.value.description = v;
+            break;
           default:
             s.value.variables = v;
             break;

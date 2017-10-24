@@ -30,6 +30,9 @@ export class Storage {
       this.write(result.variables, prefix + "variables");
       this.write(result.label, prefix + "label");
       this.write(result.frame, prefix + "frame");
+      if(result.description) {
+        this.write(result.description, prefix + "description");
+      }
       return;
     }
   }
