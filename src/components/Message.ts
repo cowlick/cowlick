@@ -3,6 +3,7 @@ import * as al from "@akashic-extension/akashic-label";
 import {Config} from "../Config";
 import {Ruby, Text} from "../models/Script";
 import {GameState} from "../models/GameState";
+import {GameError} from "../models/GameError";
 
 export interface MessageParameters {
   scene: g.Scene;
@@ -83,7 +84,7 @@ export class Message extends al.Label {
           if(result) {
             this.text += result;
           } else {
-            this.scene.game.logger.warn("変数の取得に失敗しました", t);
+            throw new GameError("変数の取得に失敗しました", t);
           }
         }
       }
@@ -131,7 +132,7 @@ export class Message extends al.Label {
       if(result) {
         this.current = result.split(/.*?/);
       } else {
-        this.scene.game.logger.warn("変数の取得に失敗しました", ts);
+        throw new GameError("変数の取得に失敗しました", ts);
       }
     }
   }

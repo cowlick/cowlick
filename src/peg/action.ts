@@ -338,7 +338,7 @@ export function timeout(data: script.Timeout): script.Script<script.Timeout> {
   return {
     tag: Tag.timeout,
     data
-  }
+  };
 }
 
 export function ifExpression(data: ast.IfElse): script.Script<ast.IfElse> {

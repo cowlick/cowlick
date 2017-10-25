@@ -7,6 +7,7 @@ import * as script from "../models/Script";
 import {GameState} from "../models/GameState";
 import {SaveData} from "../models/SaveData";
 import {Log} from "../models/Log";
+import {GameError} from "../models/GameError";
 import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
@@ -135,9 +136,7 @@ export class Scene extends g.Scene {
     // 連打対策
     this.disableWindowClick();
 
-    if(! this.scenario.next()) {
-      this.game.logger.warn("next frame not found", this.scenario.scene);
-    }
+    this.scenario.next();
   }
 
   playAudio(audio: script.Audio) {
@@ -169,12 +168,12 @@ export class Scene extends g.Scene {
       v.destroy();
       this.videos.splice(i, 1);
     } else {
-      this.game.logger.warn("video not found: " + video.assetId);
+      throw new GameError("video not found", video);
     }
   }
 
-  save(scene: SceneModel, info: script.Save): string | void {
-    return this.storage.save(scene, info);
+  save(scene: SceneModel, info: script.Save) {
+    this.storage.save(scene, info);
   }
 
   load(index: number): SaveData {

@@ -29,6 +29,7 @@ export namespace Tag {
   export const fadeOut = "fadeOut";
   export const timeout = "timeout";
   export const ifElse = "ifElse";
+  export const exception = "exception";
 }
 
 export namespace Layer {

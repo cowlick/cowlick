@@ -2,6 +2,7 @@
 import * as tl from "@akashic-extension/akashic-timeline";
 import {Scrollable} from "@xnv/akashic-scrollable";
 import * as script from "../models/Script";
+import {GameError} from "../models/GameError";
 import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
 import {LabelButton} from "../components/LabelButton";
@@ -170,10 +171,7 @@ function trigger(controller: SceneController, trigger: script.Trigger) {
 }
 
 function save(controller: SceneController, data: script.Save) {
-  const result = controller.current.save(controller.current.source, data);
-  if(typeof result === "string") {
-    controller.game.logger.warn(result);
-  }
+  controller.current.save(controller.current.source, data);
 }
 
 function load(controller: SceneController, data: script.Load) {
@@ -181,7 +179,7 @@ function load(controller: SceneController, data: script.Load) {
   if(s) {
     jump(controller, s);
   } else {
-    controller.game.logger.warn("save data not found: " + data.index);
+    throw new GameError("save data not found", data);
   }
 }
 
@@ -323,6 +321,14 @@ function ifElse(controller: SceneController, data: script.IfElse) {
   }
 }
 
+function exception(controller: SceneController, e: Error) {
+  if(e instanceof GameError) {
+    controller.game.logger.warn(e.message, e.data);
+  } else {
+    controller.game.logger.warn(e.message);
+  }
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -351,5 +357,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.fadeIn, fadeIn],
   [Tag.fadeOut, fadeOut],
   [Tag.timeout, timeout],
-  [Tag.ifElse, ifElse]
+  [Tag.ifElse, ifElse],
+  [Tag.exception, exception]
 ]);

@@ -69,17 +69,11 @@ export class SceneController {
 
   jump(target: script.Jump) {
     const previous = this.scenario.scene.label;
-    if(this.scenario.update(target)) {
-      if(previous === this.scenario.scene.label) {
-        if(! this.scenario.load()) {
-          this.game.logger.warn("scene not found", target);
-        }
-      } else {
-        this.loadScene();
-      }
+    this.scenario.update(target);
+    if(previous === this.scenario.scene.label) {
+      this.scenario.load();
     } else {
-      // TODO: 続行不可能としてタイトルに戻る?
-      this.game.logger.warn("scene not found", target);
+      this.loadScene();
     }
   }
 

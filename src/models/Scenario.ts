@@ -4,6 +4,7 @@ import {Frame} from "./Frame";
 import {Jump} from "./Script";
 import {SaveData} from "./SaveData";
 import {Log} from "./Log";
+import {GameError} from "./GameError";
 
 export class Scenario {
 
@@ -30,41 +31,35 @@ export class Scenario {
     if(this.index < this.scenes.length) {
       return this.scenes[this.index];
     } else {
-      return undefined;
+      throw new GameError("scene not found", { index: this.index });
     }
   }
 
   get frame() {
-    if(this.index < this.scenes.length) {
-      return this.scenes[this.index].frame;
-    } else {
-      return undefined;
-    }
+    return this.scene.frame;
   }
 
-  update(target: Jump): boolean {
+  update(target: Jump) {
     const i = this.scenes.findIndex(s => s.label === target.label);
     if(i > -1) {
       this.index = i;
       this.scenes[this.index].reset(target.frame);
-      return true;
     } else {
-      return false;
+      throw new GameError("scene not found", target);
     }
   }
 
-  load(frame?: Frame): boolean {
+  load(frame?: Frame) {
     const f = frame ? frame : this.frame;
     if(f) {
       this.onLoaded.fire(f);
-      return true;
     } else {
-      return false;
+      throw new GameError("target frame not found");
     }
   }
 
-  next(): boolean {
-    return this.load(this.nextFrame());
+  next() {
+    this.load(this.scene.next());
   }
 
   findScene(data: SaveData): Scene {
@@ -78,13 +73,5 @@ export class Scenario {
 
   pushLog(log: Log) {
     this.log.push(log);
-  }
-
-  private nextFrame() {
-    if(this.index < this.scenes.length) {
-      return this.scenes[this.index].next();
-    } else {
-      return undefined;
-    }
   }
 }

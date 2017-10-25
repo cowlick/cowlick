@@ -2,6 +2,7 @@
 import {Scenario} from "./Scenario";
 import {Scene} from "./Scene";
 import {SaveData} from "./SaveData";
+import {GameError} from "./GameError";
 import {Save, Variable} from "./Script";
 
 export interface Variables {
@@ -29,9 +30,9 @@ export class GameState {
     return typeof this.data[index] !== "undefined";
   }
 
-  save(scene: Scene, config: Save): string | SaveData {
+  save(scene: Scene, config: Save): SaveData {
     if(config.index > this.max || config.index < 0) {
-      return "storage out of range: " + config.index;
+      throw new GameError("storage out of range", config);
     }
     const saveData = scene.createSaveData(this._variables.current, config.description);
     if(config.force) {
@@ -39,7 +40,7 @@ export class GameState {
       return saveData;
     } else {
       if(this.exists(config.index)) {
-        return "save data already exists: " + config.index;
+        throw new GameError("save data already exists", config);
       } else {
         this.data[config.index] = saveData;
         return saveData;

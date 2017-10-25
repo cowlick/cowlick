@@ -1,5 +1,6 @@
 "use strict";
 import {LayerConfig} from "../models/Script";
+import {GameError} from "../models/GameError";
 import {Layer} from "../Constant";
 
 export class LayerGroup {
@@ -84,7 +85,7 @@ export class LayerGroup {
     if(layer) {
       f(layer);
     } else {
-      this.scene.game.logger.warn("layer not found: " + name);
+      throw new GameError("layer not found", { name });
     }
   }
 }

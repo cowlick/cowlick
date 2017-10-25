@@ -1,6 +1,8 @@
 "use strict";
 import {SceneController} from "../components/SceneController";
 import {Script} from "../models/Script";
+import {GameError} from "../models/GameError";
+import {Tag} from "../Constant";
 
 export type ScriptFunction = (scene: SceneController, data: any) => void;
 
@@ -19,9 +21,14 @@ export class ScriptManager {
   call(controller: SceneController, script: Script<any>) {
     let f = this.scripts.get(script.tag);
     if(f) {
-      f(controller, script.data);
+      try {
+        f(controller, script.data);
+      } catch(e) {
+        this.call(controller, { tag: Tag.exception, data: e });
+      }
     } else {
-      controller.game.logger.warn("script not found: " + script.tag);
+      const data = new GameError("script tag was not registered", script);
+      this.call(controller, { tag: Tag.exception, data });
     }
   }
 }

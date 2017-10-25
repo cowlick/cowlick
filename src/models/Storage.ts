@@ -21,19 +21,14 @@ export class Storage {
     return this.state.load(index);
   }
 
-  save(scene: Scene, info: Save): string | void {
+  save(scene: Scene, info: Save) {
     const result = this.state.save(scene, info);
-    if(typeof result === "string") {
-      return result;
-    } else {
-      const prefix = Region.saveDataPrefix + info.index + ".";
-      this.write(result.variables, prefix + "variables");
-      this.write(result.label, prefix + "label");
-      this.write(result.frame, prefix + "frame");
-      if(result.description) {
-        this.write(result.description, prefix + "description");
-      }
-      return;
+    const prefix = Region.saveDataPrefix + info.index + ".";
+    this.write(result.variables, prefix + "variables");
+    this.write(result.label, prefix + "label");
+    this.write(result.frame, prefix + "frame");
+    if(result.description) {
+      this.write(result.description, prefix + "description");
     }
   }
 

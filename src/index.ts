@@ -9,5 +9,6 @@ export * from "./models/Frame";
 export * from "./models/Script";
 export * from "./models/GameState";
 export {Log} from "./models/Log";
+export * from "./models/GameError";
 
 export const engine = new Engine(g.game);

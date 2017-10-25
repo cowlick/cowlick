@@ -1,5 +1,6 @@
 "use strict";
 import {Audio} from "../models/Script";
+import {GameError} from "../models/GameError";
 import {AudioConfig} from "../Config";
 
 export class AudioGroup {
@@ -46,14 +47,14 @@ export class AudioGroup {
           ps[i].stop();
           ps.splice(i, 1);
         } else {
-          this.game.logger.warn("audio not found", audio);
+          throw new GameError("audio not found", audio);
         }
       } else if(this.group.delete(audio.group)) {
         for(const player of ps) {
           player.stop();
         }
       } else {
-        this.game.logger.warn("audio group not found", audio);
+        throw new GameError("audio group not found", audio);
       }
     }
   }

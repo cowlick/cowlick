@@ -4,6 +4,7 @@ import {GameState} from "../src/models/GameState";
 import {SaveData} from "../src/models/SaveData";
 import {Scene} from "../src/models/Scene";
 import {Frame} from "../src/models/Frame";
+import {GameError} from "../src/models/GameError";
 
 function assertSaveData(expected: SaveData, actual: string | SaveData) {
   if(typeof actual === "string") {
@@ -134,17 +135,12 @@ describe("GameState", () => {
         new Frame([])
       ]
     });
-    scene.next();
-    const expected: SaveData = {
-      label: "test",
-      frame: 1,
-      variables: {
-        test: 0
-      }
-    };
-    const actual = state.save(scene, { index: 0 });
-    if(typeof actual !== "string") {
-      assert.fail("expected save failed, but succeeded.");
-    }
+    assert.throws(
+      () => {
+        scene.next();
+        state.save(scene, { index: 0 });
+      },
+      GameError
+    );
   });
 });
