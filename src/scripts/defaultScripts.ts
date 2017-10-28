@@ -330,6 +330,9 @@ function exception(controller: SceneController, e: Error) {
 }
 
 function waitTransition(controller: SceneController, data: script.WaitTransition) {
+  if(typeof data.skippable !== "undefined" && ! data.skippable) {
+    trigger(controller, script.Trigger.Off);
+  }
   for(const s of data.scripts) {
     Engine.scriptManager.call(controller, s);
   }
