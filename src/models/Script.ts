@@ -117,6 +117,7 @@ export interface Link {
     borderWidth: number;
   };
   text: string;
+  fontSize?: number;
   scripts: Script<any>[];
 }
 

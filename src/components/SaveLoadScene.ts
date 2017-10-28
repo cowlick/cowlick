@@ -40,6 +40,7 @@ export class SaveLoadScene extends g.Scene {
       width: 100,
       height: 24,
       text: "close",
+      fontSize: 18,
       config: this.config
     });
     this.button.move(this.game.width - 110, 10);

@@ -24,20 +24,7 @@ export class Message extends al.Label {
   private gameState: GameState;
 
   constructor(params: MessageParameters) {
-    super({
-      scene: params.scene,
-      font: new g.DynamicFont({
-        game: params.scene.game,
-        fontFamily: g.FontFamily.SansSerif,
-        size: 18
-      }),
-      text: "",
-      fontSize: 18,
-      textColor: params.config.font.color,
-      width: params.width,
-      x: params.x,
-      y: params.y
-    });
+    super(Message.toLabelParameters(params));
 
     this.index = 0;
     this.counter = 0;
@@ -135,5 +122,19 @@ export class Message extends al.Label {
         throw new GameError("変数の取得に失敗しました", ts);
       }
     }
+  }
+
+  private static toLabelParameters(params: MessageParameters): al.LabelParameterObject {
+    const font = params.config.font.list[params.config.font.selected]
+    return {
+      scene: params.scene,
+      font,
+      text: "",
+      fontSize: font.size,
+      textColor: params.config.font.color,
+      width: params.width,
+      x: params.x,
+      y: params.y
+    };
   }
 }

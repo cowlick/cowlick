@@ -2,6 +2,8 @@ import {Pane, Script} from "./models/Script";
 import {Layer} from "./Constant";
 
 export interface FontConfig {
+  list: g.Font[];
+  selected: number;
   color: string;
 }
 
@@ -47,6 +49,14 @@ export const defaultConfig: Config = {
     save: []
   },
   font: {
+    list: [
+      new g.DynamicFont({
+        game: g.game,
+        fontFamily: g.FontFamily.SansSerif,
+        size: 18
+      })
+    ],
+    selected: 0,
     color: "black"
   },
   system: {

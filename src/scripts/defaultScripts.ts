@@ -5,7 +5,7 @@ import * as script from "../models/Script";
 import {GameError} from "../models/GameError";
 import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
-import {LabelButton} from "../components/LabelButton";
+import {LabelButton, LabelButtonParameters} from "../components/LabelButton";
 import {createImage} from "../components/Image";
 import {Message} from "../components/Message";
 import {ScriptFunction} from "./ScriptManager";
@@ -99,7 +99,7 @@ function choice(controller: SceneController, choice: script.Choice) {
 
 function link(controller: SceneController, link: script.Link) {
   const game = controller.game;
-  const button = new LabelButton({
+  const params: LabelButtonParameters = {
     scene: controller.current,
     width: link.width,
     height: link.height,
@@ -108,7 +108,11 @@ function link(controller: SceneController, link: script.Link) {
     backgroundEffector: link.backgroundEffector,
     text: link.text,
     config: Engine.config
-  });
+  };
+  if(link.fontSize) {
+    params.fontSize = link.fontSize;
+  }
+  const button = new LabelButton(params);
   for(const script of link.scripts) {
     button.click.add(() => {
       Engine.scriptManager.call(controller, script);
@@ -259,7 +263,7 @@ function backlog(controller: SceneController, data: script.Backlog) {
   }
 
   const width = 80;
-  const l = {
+  const l: script.Link = {
     layer,
     x: controller.game.width - width - 10,
     y: 20,

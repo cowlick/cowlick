@@ -161,6 +161,14 @@ const config: novel.Config = {
     save: saveButtons
   },
   font: {
+    list: [
+      new g.DynamicFont({
+        game: g.game,
+        fontFamily: g.FontFamily.SansSerif,
+        size: 18
+      })
+    ],
+    selected: 0,
     color: "white"
   },
   system: novel.defaultConfig.system,
