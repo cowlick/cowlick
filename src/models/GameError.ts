@@ -5,8 +5,7 @@ export class GameError extends Error {
 
   constructor(message: string, target?: any) {
     super(message);
+    Object.setPrototypeOf(this, new.target.prototype);
     this.data = target;
   }
 }
-
-Object.setPrototypeOf(GameError, Error);
