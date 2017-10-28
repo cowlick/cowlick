@@ -19,7 +19,6 @@ describe("KAGParser", () => {
 
   describe("正しい構文が処理できる", () => {
     const path = "test/fixture/kag/valid/";
-
     let files = glob.sync(`${path}**/*.ks`);
 
     files
@@ -41,4 +40,29 @@ describe("KAGParser", () => {
         });
       });
   });
+
+  describe("正しくない構文のファイルが処理できる", () => {
+    let path = "test/fixture/kag/invalid/";
+    let files = glob.sync(`${path}**/*.ks`);
+    files
+      .forEach((filePath: string) => {
+        let baseName = filePath
+          .substr(0, filePath.length - "/content.ks".length)
+          .substr(path.length);
+
+        it(`${filePath}`, () => {
+          let data = fs.readFileSync(filePath, "utf8");
+          try {
+            kag.parse(data);
+            throw new Error("正しく処理できてしまった");
+          } catch (e) {
+            if (e instanceof kag.SyntaxError) {
+              // ok
+            } else {
+              throw e;
+            }
+          }
+        });
+    });
+});
 });
