@@ -188,13 +188,30 @@ export function stopAudio(group: string): script.Script<script.Audio> {
   };
 }
 
+export function tryParseLiteral(value: string) {
+  let parsed: any = parseInt(value, 10);
+  if(isNaN(parsed)) {
+    parsed = parseFloat(value);
+  }
+  if(isNaN(parsed)) {
+    if(value === "true") {
+      parsed = true;
+    } else if(value === "false") {
+      parsed = false;
+    } else {
+      parsed = value;
+    }
+  }
+  return parsed;
+}
+
 export function tag(name: string, attrs: KeyValuePair[]) {
   const result: script.Script<any> = {
     tag: name,
     data: {}
   };
   for(const attr of attrs) {
-    result.data[attr.key] = attr.value;
+    result.data[attr.key] = tryParseLiteral(attr.value);
   }
   return result;
 }
@@ -346,4 +363,17 @@ export function ifExpression(data: ast.IfElse): script.Script<ast.IfElse> {
     tag: Tag.ifElse,
     data
   };
+}
+
+export function waitTransition(scripts: script.Script<any>[], skippable?: boolean): script.Script<any>[] {
+  const result: script.Script<script.WaitTransition> = {
+    tag: Tag.waitTransition,
+    data: {
+      scripts
+    }
+  };
+  if(typeof skippable !== "undefined") {
+    result.data.skippable = skippable;
+  }
+  return [result];
 }

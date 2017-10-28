@@ -155,7 +155,7 @@ function click(controller: SceneController, scripts: script.Script<any>[]) {
   }, scene);
 }
 
-function skip(controller: SceneController, data: any) {
+function skip(controller: SceneController, data?: any) {
   controller.current.requestNextFrame();
 }
 
@@ -329,6 +329,13 @@ function exception(controller: SceneController, e: Error) {
   }
 }
 
+function waitTransition(controller: SceneController, data: script.WaitTransition) {
+  for(const s of data.scripts) {
+    Engine.scriptManager.call(controller, s);
+  }
+  skip(controller);
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -358,5 +365,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.fadeOut, fadeOut],
   [Tag.timeout, timeout],
   [Tag.ifElse, ifElse],
-  [Tag.exception, exception]
+  [Tag.exception, exception],
+  [Tag.waitTransition, waitTransition]
 ]);

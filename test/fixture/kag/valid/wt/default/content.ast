@@ -1,0 +1,32 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "waitTransition",
+        "data": {
+          "scripts": [
+            {
+              "tag": "fadeIn",
+              "data": {
+                "layer": "test",
+                "duration": 10
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "scripts": [
+      {
+        "tag": "text",
+        "data": {
+          "values": [
+            "テスト"
+          ]
+        }
+      }
+    ]
+  }
+]

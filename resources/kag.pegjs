@@ -15,7 +15,10 @@ Frames
   }
 
 Frame
-  = label:Label? ts:Tags text:(Newline Text)? {
+  = label:Label? ts:Tags Newline skippable:WT {
+    return b.frame(b.waitTransition(ts, skippable), label);
+  }
+  / label:Label? ts:Tags text:(Newline Text)? {
     if(text) {
       ts.push(text[1]);
     }
@@ -174,11 +177,11 @@ TimeoutOption
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
-    return [b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3]}; }))];
+    return [b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3] }; }))];
   }
 
 TagName
-  = $( ( !Newline !EOF !Space !"=" . )+ )
+  = $( ( !Newline !EOF !Space !"=" !WTName . )+ )
 
 Condition
   = "cond=" expression:AttributeValue {
@@ -284,6 +287,24 @@ Else
 EndIf
   = "[endif]" / "@endif"
 
+WT
+  = "[" WTName _ skippable:("canskip=" AttributeValue)? _ "]" {
+    if(skippable) {
+      return b.tryParseLiteral(skippable[1]);
+    } else {
+      return undefined;
+    }
+  }
+  / "@" WTName _ skippable:("canskip=" AttributeValue)? &(Newline / EOF) {
+    if(skippable) {
+      return b.tryParseLiteral(skippable[1]);
+    } else {
+      return undefined;
+    }
+  }
+
+WTName = "wt"
+
 Text
   = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
     return b.text(values, cm);
@@ -315,7 +336,7 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf . )
+  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf !WT . )
 
 Ruby
   = "@ruby" _ "text=" rt:AttributeValue Newline rb:Character {

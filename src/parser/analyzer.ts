@@ -424,6 +424,25 @@ function ifElse(original:ast.IfElse, options: VisitorOptions): estree.ObjectExpr
   );
 }
 
+function waitTransition(original: script.WaitTransition, options: VisitorOptions): estree.ObjectExpression {
+  const ps = [
+    property(
+      "scripts",
+      {
+        type: ArrayExpression,
+        elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+      }
+    )
+  ];
+  if(typeof original.skippable !== "undefined") {
+    ps.push(property("skippable", literal(original.skippable)));
+  }
+  return scriptAst(
+    Tag.waitTransition,
+    ps
+  );
+}
+
 function userDefined(original: script.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -459,6 +478,8 @@ function visit(original: script.Script<any>, options: VisitorOptions): estree.Ob
       return timeout(original.data, options);
     case Tag.ifElse:
       return ifElse(original.data, options);
+    case Tag.waitTransition:
+      return waitTransition(original.data, options);
     default:
       return userDefined(original);
   }
