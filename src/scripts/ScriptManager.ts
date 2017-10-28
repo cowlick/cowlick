@@ -5,7 +5,7 @@ import {GameError} from "../models/GameError";
 import {Tag} from "../Constant";
 
 /**
- * スクリプトを実行する関数
+ * スクリプトの実態を表す関数
  */
 export type ScriptFunction = (scene: SceneController, data: any) => void;
 
