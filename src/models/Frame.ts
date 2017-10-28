@@ -1,6 +1,9 @@
 "use strict";
 import {Script, collectAssetIds} from "./Script";
 
+/**
+ * シーンの1フレームを表す。
+ */
 export class Frame {
 
   private _scripts: Script<any>[];

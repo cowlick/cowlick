@@ -7,6 +7,9 @@ export interface SceneParameters {
   frames: Frame[];
 }
 
+/**
+ * シーンデータ。
+ */
 export class Scene {
 
   private index: number = 0;
@@ -41,6 +44,9 @@ export class Scene {
     return this.cacheAssetIds;
   }
 
+  /**
+   * 次のフレームを呼び出す。
+   */
   next() {
     if(this.index < this.frames.length) {
       this.index++;
@@ -50,10 +56,22 @@ export class Scene {
     }
   }
 
+
+  /**
+   * フレームインデックスを再設定する。
+   *
+   * @param index
+   */
   reset(index?: number) {
     this.index = index ? index : 0;
   }
 
+  /**
+   * セーブデータを作成する。
+   *
+   * @param variables
+   * @param description
+   */
   createSaveData(variables: any, description?: string): SaveData {
     const result: SaveData = {
       label: this._label,

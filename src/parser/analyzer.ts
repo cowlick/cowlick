@@ -561,6 +561,11 @@ function scenario(original: ast.Scenario, state: State): estree.Program {
   return program([importCowlick, moduleExports(result)]);
 }
 
+/**
+ * スクリプトASTを解析してJavaScript AST形式のシナリオデータに変換する。
+ *
+ * @param original スクリプトAST
+ */
 export function analyze(original: ast.Scenario): Result {
   const state: State = {
     replaces: [],

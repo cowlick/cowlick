@@ -5,11 +5,23 @@ import {SaveData} from "./SaveData";
 import {GameError} from "./GameError";
 import {Save, Variable} from "./Script";
 
+/**
+ * ゲームの変数
+ */
 export interface Variables {
+  /**
+   * システム変数
+   */
   system: any;
+  /**
+   * 現在のゲーム変数
+   */
   current: any;
 }
 
+/**
+ * ゲーム情報を管理する。
+ */
 export class GameState {
 
   private data: SaveData[];
@@ -26,6 +38,11 @@ export class GameState {
     return this._variables;
   }
 
+  /**
+   * 指定したインデックスにセーブデータが存在する場合はtrue, そうでなければfalseを返す。
+   *
+   * @param index
+   */
   exists(index: number): boolean {
     return typeof this.data[index] !== "undefined";
   }
@@ -48,6 +65,11 @@ export class GameState {
     }
   }
 
+  /**
+   * 指定したインデックスのセーブデータをロードする。
+   *
+   * @param index
+   */
   load(index: number): SaveData {
     const saveData = this.data[index];
     if(saveData) {
@@ -56,6 +78,11 @@ export class GameState {
     return saveData;
   }
 
+  /**
+   * 変数に格納された値を文字列で取得する。
+   *
+   * @param variable 変数情報
+   */
   getStringValue(variable: Variable): string {
     const target = variable.type === "system" ? this._variables.system : this._variables.current;
     const result = target[variable.name];
@@ -66,6 +93,11 @@ export class GameState {
     }
   }
 
+  /**
+   * セーブデータ関連するAssetIdをすべて取得する。
+   *
+   * @param scenario シナリオデータ
+   */
   collectAssetIds(scenario: Scenario): string[] {
     let ids: string[] =[];
     for(const d of this.data) {

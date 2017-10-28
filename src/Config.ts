@@ -1,30 +1,78 @@
 import {Pane, Script} from "./models/Script";
 import {Layer} from "./Constant";
 
+/**
+ * フォント設定
+ */
 export interface FontConfig {
+  /**
+   * 利用可能なフォントリスト
+   */
   list: g.Font[];
+  /**
+   * 選択中のフォントインデックス
+   */
   selected: number;
+  /**
+   * 文字色
+   */
   color: string;
 }
 
+/**
+ * ゲームウィンドウ設定
+ */
 export interface WindowConfig {
+  /**
+   * メッセージレイヤに使用するPane
+   */
   message: Pane;
+  /**
+   * システムUIに使用するスクリプト
+   */
   // TODO: 制限を強める
   system: Script<any>[];
+  /**
+   * ロード画面に使用するスクリプト
+   */
   load: Script<any>[];
+  /**
+   * セーブ画面に使用するスクリプト
+   */
   save: Script<any>[];
 }
 
+/**
+ * システム設定
+ */
 export interface SystemConfig {
+  /**
+   * 最大セーブ数
+   */
   maxSaveCount: number;
 }
 
+/**
+ * オーディオ設定。
+ */
 export interface AudioConfig {
+  /**
+   * ボイスの音量
+   */
   voice: number;
+  /**
+   * 効果音の音量
+   */
   se: number;
+  /**
+   * BGMの音量
+   */
   bgm: number;
 }
 
+/**
+ * ノベルエンジン全体の設定。
+ */
 export interface Config {
   window: WindowConfig;
   font: FontConfig;

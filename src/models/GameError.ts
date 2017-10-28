@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * ノベルゲーム実行中に発生したエラーを表す。
+ */
 export class GameError extends Error {
   data: any;
 
