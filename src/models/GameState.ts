@@ -4,6 +4,7 @@ import {Scene} from "./Scene";
 import {SaveData} from "./SaveData";
 import {GameError} from "./GameError";
 import {Save, Variable} from "./Script";
+import {VariableType} from "../Constant";
 
 /**
  * ゲームの変数
@@ -79,18 +80,45 @@ export class GameState {
   }
 
   /**
+   * 変数に格納された値を取得する。
+   *
+   * @param variable 変数情報
+   */
+  getValue(variable: Variable): any {
+    let target: any;
+    if(variable.type === VariableType.system) {
+      target = this._variables.system;
+    } else if(variable.type === VariableType.current) {
+      target = this._variables.current;
+    } else {
+      throw new GameError("invalid variable type", variable);
+    }
+    return target[variable.name];
+  }
+
+  /**
    * 変数に格納された値を文字列で取得する。
    *
    * @param variable 変数情報
    */
   getStringValue(variable: Variable): string {
-    const target = variable.type === "system" ? this._variables.system : this._variables.current;
-    const result = target[variable.name];
+    const result = this.getValue(variable);
     if(result) {
       return String(result);
     } else {
       return undefined;
     }
+  }
+
+  /**
+   * 指定した変数に値を設定する。
+   *
+   * @param variable 変数情報
+   * @param value 値
+   */
+  setValue(variable: Variable, value: any) {
+    const target = variable.type === "system" ? this._variables.system : this._variables.current;
+    target[variable.name] = value;
   }
 
   /**

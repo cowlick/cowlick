@@ -31,6 +31,7 @@ export namespace Tag {
   export const ifElse = "ifElse";
   export const exception = "exception";
   export const waitTransition = "waitTransition";
+  export const slider = "slider";
 }
 
 export namespace Layer {
@@ -46,4 +47,9 @@ export const gameId = "$gameId";
 export namespace Region {
   export const system = "system";
   export const saveDataPrefix = "data";
+}
+
+export namespace VariableType {
+  export const system = "system";
+  export const current = "current";
 }

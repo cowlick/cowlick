@@ -4,7 +4,7 @@ import * as esprima from "esprima";
 import * as estraverse from "estraverse";
 import * as script from "../models/Script";
 import * as ast from "../parser/ast";
-import {Tag, Layer} from "../Constant";
+import {Tag, Layer, VariableType} from "../Constant";
 
 export interface KeyValuePair {
   key: string;
@@ -127,8 +127,6 @@ export function ruby(rb: string, rt: string): script.Ruby[] {
   }];
 }
 
-const system = "system";
-const current = "current";
 const varSf = "sf";
 const varF = "f";
 
@@ -144,13 +142,13 @@ export function variable(expression: string): script.Variable {
             switch(e.object.name) {
               case varSf:
                 value = {
-                  type: system,
+                  type: VariableType.system,
                   name: e.property.name
                 };
                 break;
               case varF:
                 value = {
-                  type: current,
+                  type: VariableType.current,
                   name: e.property.name
                 };
                 break;
@@ -240,10 +238,10 @@ function traverseEval(original: estree.Program): estree.Program {
           let newObject: estree.MemberExpression;
           switch(object.name) {
             case varSf:
-              newObject = newMemberExpression(system);
+              newObject = newMemberExpression(VariableType.system);
               break;
             case varF:
-              newObject = newMemberExpression(current);
+              newObject = newMemberExpression(VariableType.current);
               break;
             default:
               throw new Error(`"${object.name}" is a invalid variable name.`);

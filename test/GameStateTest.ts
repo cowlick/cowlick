@@ -143,4 +143,85 @@ describe("GameState", () => {
       GameError
     );
   });
+
+  it("値を設定できる", () => {
+    const vars = {
+      current: {},
+      system: {}
+    };
+    const state = new GameState([], vars, 1);
+
+    let input: any = 1;
+    let target = {
+      type: "system",
+      name: "test"
+    };
+    state.setValue(target, input);
+    assert(state.getValue(target) === input);
+
+    input = "test";
+    target = {
+      type: "current",
+      name: "test"
+    };
+    state.setValue(target, input);
+    assert(state.getValue(target) === input);
+  });
+
+  it("値を文字列で取得できる", () => {
+    const vars = {
+      current: {
+        test: 1
+      },
+      system: {
+        test: "test"
+      }
+    };
+    const state = new GameState([], vars, 1);
+
+    let target = {
+      type: "system",
+      name: "test"
+    };
+    assert(state.getStringValue(target) === "test");
+    
+    target = {
+      type: "current",
+      name: "test"
+    };
+    assert(state.getStringValue(target) === "1");
+  });
+
+  it("変数が定義されていない場合はundefinedを返す", () => {
+    const vars = {
+      current: {},
+      system: {}
+    };
+    const state = new GameState([], vars, 1);
+
+    let input: any = 1;
+    let target = {
+      type: "system",
+      name: "test"
+    };
+    assert(state.getValue(target) === undefined);
+  });
+
+  it("存在しない変数種別を指定した場合はエラー", () => {
+    const vars = {
+      current: {},
+      system: {}
+    };
+    const state = new GameState([], vars, 1);
+    const target = {
+      type: "other",
+      name: "test"
+    };
+    assert.throws(
+      () => {
+        state.getValue(target);
+      },
+      GameError
+    );
+  });
 });

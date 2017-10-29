@@ -404,3 +404,30 @@ export interface WaitTransition {
    */
   skippable?: boolean;
 }
+
+export interface Slider {
+  /**
+   * レイヤー情報
+   */
+  layer: LayerConfig;
+  /**
+   * 向き
+   */
+  direction: Direction;
+  /**
+   * 長さ
+   */
+  length: number;
+  /**
+   * 最大値
+   */
+  max: number;
+  /**
+   * 初期値
+   */
+  default: number;
+  /**
+   * 変更対象の変数
+   */
+  target: Variable;
+}

@@ -7,6 +7,7 @@ import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
 import {LabelButton, LabelButtonParameters} from "../components/LabelButton";
 import {createImage} from "../components/Image";
+import {Slider} from "../components/Slider";
 import {Message} from "../components/Message";
 import {ScriptFunction} from "./ScriptManager";
 import {Tag, Layer} from "../Constant";
@@ -343,6 +344,19 @@ function waitTransition(controller: SceneController, data: script.WaitTransition
   skip(controller);
 }
 
+function slider(controller: SceneController, info: script.Slider) {
+  const s = new Slider({
+    scene: controller.current,
+    width: 0,
+    height: 0,
+    x: info.layer.x,
+    y: info.layer.y,
+    data: info,
+    state: controller.current.gameState
+  });
+  controller.current.appendLayer(s, info.layer);
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.image, image],
   [Tag.pane, pane],
@@ -373,5 +387,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [Tag.timeout, timeout],
   [Tag.ifElse, ifElse],
   [Tag.exception, exception],
-  [Tag.waitTransition, waitTransition]
+  [Tag.waitTransition, waitTransition],
+  [Tag.slider, slider]
 ]);
