@@ -2,6 +2,7 @@ script:
   - npm install
   - npm run build
   - npm test
+  - npm run sample:install
   - npm run sample:build
 language: node_js
 node_js:
