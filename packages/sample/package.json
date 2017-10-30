@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "webpack --progress && npm run scan:assets",
+    "start": "akashic-sandbox game",
+    "scan:assets": "cd ./game && akashic scan asset",
+    "bundle": "cd ./game && akashic export html --output ../dist && cp ../../docs/images/favicon.ico ../dist"
+  },
+  "dependencies": {
+    "@akashic-extension/akashic-label": "0.3.4",
+    "@akashic-extension/akashic-timeline": "0.4.2",
+    "@xnv/akashic-scrollable": "0.0.4",
+    "cowlick-core": "^1.0.0",
+    "cowlick-engine": "^1.0.0"
+  },
+  "devDependencies": {
+    "@akashic/akashic-cli": "1.2.1",
+    "@akashic/akashic-engine": "2.0.0",
+    "@akashic/akashic-sandbox": "0.13.4",
+    "@types/node": "8.0.33",
+    "copy-webpack-plugin": "4.1.1",
+    "ts-loader": "2.3.7",
+    "typescript": "2.5.3",
+    "uglify-save-license": "0.4.1",
+    "uglifyjs-webpack-plugin": "1.0.0-beta.2",
+    "webpack": "3.6.0"
+  }
+}

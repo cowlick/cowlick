@@ -13,7 +13,8 @@
         "sourceType": "module"
     },
     "rules": {
-        "indent": [
+        "indent": "off",
+        "indent-legacy": [
             "error",
             2,
             {

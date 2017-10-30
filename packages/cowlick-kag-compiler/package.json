@@ -1,0 +1,47 @@
+{
+  "name": "cowlick-kag-compiler",
+  "version": "1.0.0",
+  "description": "cowlick kag compiler",
+  "main": "lib/cli.js",
+  "bin": {
+    "cowlick-kag": "./bin/cowlick-kag"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "resources"
+  ],
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc -p . && npm run pegjs",
+    "test": "mocha --compilers ts:espower-typescript/guess test/*.ts",
+    "pegjs": "pegjs --output ./resources/kag.js ./resources/kag.pegjs"
+  },
+  "author": "pocketberserker",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "pocketberserker/cowlick.git"
+  },
+  "dependencies": {
+    "commandpost": "1.2.1",
+    "cowlick-analyzer": "^1.0.0",
+    "cowlick-core": "^1.0.0",
+    "escodegen": "1.9.0",
+    "esprima": "4.0.0",
+    "estraverse": "4.2.0"
+  },
+  "devDependencies": {
+    "@akashic/akashic-engine": "2.0.0",
+    "@types/escodegen": "0.0.6",
+    "@types/esprima": "4.0.1",
+    "@types/estraverse": "0.0.6",
+    "@types/mocha": "2.2.43",
+    "@types/node": "8.0.28",
+    "espower-typescript": "8.1.1",
+    "mocha": "3.5.3",
+    "pegjs": "0.10.0",
+    "power-assert": "1.4.4",
+    "typescript": "2.5.3"
+  }
+}

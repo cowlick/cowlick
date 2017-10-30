@@ -64,8 +64,8 @@ typings/
 # End of https://www.gitignore.io/api/node
 
 lib/
-sample/game/script/
-sample/game/image/cowlick.png
+packages/sample/game/script/
+packages/sample/game/image/cowlick.png
 dist/
-resources/kag.js
+kag.js
 

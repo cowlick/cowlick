@@ -1,0 +1,33 @@
+{
+  "name": "cowlick-analyzer",
+  "version": "1.0.0",
+  "description": "script analyzer for cowlick",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc -p ."
+  },
+  "author": "pocketberserker",
+  "license": "MIT",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "pocketberserker/cowlick.git"
+  },
+  "dependencies": {
+    "commandpost": "1.2.1",
+    "cowlick-core": "^1.0.0",
+    "escodegen": "1.9.0",
+    "estraverse": "4.2.0"
+  },
+  "devDependencies": {
+    "@akashic/akashic-engine": "2.0.0",
+    "@types/escodegen": "0.0.6",
+    "@types/estraverse": "0.0.6",
+    "@types/node": "8.0.28",
+    "typescript": "2.5.3"
+  }
+}
