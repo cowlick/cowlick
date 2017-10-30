@@ -4,7 +4,7 @@
     "build": "webpack --progress && npm run scan:assets",
     "start": "akashic-sandbox game",
     "scan:assets": "cd ./game && akashic scan asset",
-    "bundle": "cd ./game && akashic export html --output ../dist && cp ../../docs/images/favicon.ico ../dist"
+    "bundle": "cd ./game && akashic export html --output ../dist && cp ../../../docs/images/favicon.ico ../dist"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
