@@ -10,10 +10,6 @@ export interface FontConfig {
    */
   list: g.Font[];
   /**
-   * 選択中のフォントインデックス
-   */
-  selected: number;
-  /**
    * 文字色
    */
   color: string;
@@ -104,7 +100,6 @@ export const defaultConfig: Config = {
         size: 18
       })
     ],
-    selected: 0,
     color: "black"
   },
   system: {

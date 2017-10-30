@@ -49,7 +49,8 @@ export class SceneController {
         scene: this.scenario.scene,
         config: this.config,
         scriptManager: this.scriptManager,
-        assetIds: this.collectAssetIds()
+        assetIds: this.collectAssetIds(),
+        gameState: this.current.gameState
       });
       this.saveLoadScene.prefetch();
     }, this);
@@ -103,7 +104,8 @@ export class SceneController {
         scene: this.scenario.scene,
         config: this.config,
         scriptManager: this.scriptManager,
-        assetIds: this.collectAssetIds()
+        assetIds: this.collectAssetIds(),
+        gameState: this.current.gameState
       });
       this.saveLoadScene.prefetch();
     }, this);

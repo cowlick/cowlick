@@ -49,6 +49,10 @@ export namespace Region {
   export const saveDataPrefix = "data";
 }
 
+export namespace BuiltinVariable {
+  export const selectedFont = "selectedFont";
+}
+
 export namespace VariableType {
   export const system = "system";
   export const current = "current";

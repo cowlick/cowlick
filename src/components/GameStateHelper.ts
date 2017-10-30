@@ -62,6 +62,9 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
 
 export function loadGameState(scene: g.Scene, keys: g.StorageKey[], max: number): GameState {
   const result = loadFromStorage(scene, keys, max);
+  if(typeof result.variables.system.selectedFont === "undefined") {
+    result.variables.system.selectedFont = 0;
+  }
   return new GameState(result.data, result.variables, max);
 }
 

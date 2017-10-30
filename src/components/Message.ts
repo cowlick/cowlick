@@ -1,6 +1,7 @@
 "use strict";
 import * as al from "@akashic-extension/akashic-label";
 import {Config} from "../Config";
+import {BuiltinVariable, VariableType} from "../Constant";
 import {Ruby, Text} from "../models/Script";
 import {GameState} from "../models/GameState";
 import {GameError} from "../models/GameError";
@@ -125,7 +126,11 @@ export class Message extends al.Label {
   }
 
   private static toLabelParameters(params: MessageParameters): al.LabelParameterObject {
-    const font = params.config.font.list[params.config.font.selected]
+    const selected = params.gameState.getValue({
+      type: VariableType.system,
+      name: BuiltinVariable.selectedFont
+    });
+    const font = params.config.font.list[selected];
     return {
       scene: params.scene,
       font,

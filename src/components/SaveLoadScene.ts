@@ -3,6 +3,7 @@ import {Button} from "./Button";
 import {LabelButton} from "./LabelButton";
 import {collectAssetIds} from "../models/Script";
 import {Scene} from "../models/Scene";
+import {GameState} from "../models/GameState";
 import {ScriptManager} from "../scripts/ScriptManager";
 import {Config} from "../Config";
 
@@ -12,28 +13,30 @@ export interface SaveLoadSceneParameters {
   config: Config;
   scriptManager: ScriptManager;
   assetIds: string[];
+  gameState: GameState;
 }
 
 export class SaveLoadScene extends g.Scene {
-    
+
   private config: Config;
   private button: Button;
-  private scriptManager: ScriptManager; 
-    
+  private scriptManager: ScriptManager;
+  private gameState: GameState;
+
   constructor(params: SaveLoadSceneParameters) {
     super({
       game: params.game,
       assetIds: SaveLoadScene.collectAssetIds(params)
     });
-    
+
     this.config = params.config;
     this.scriptManager = params.scriptManager;
 
     this.loaded.add(this.onLoaded, this);
   }
-    
+
   private onLoaded() {
-    
+
     // TODO: configで差し替えられるようにする
     this.button = new LabelButton({
       scene: this,
@@ -41,7 +44,8 @@ export class SaveLoadScene extends g.Scene {
       height: 24,
       text: "close",
       fontSize: 18,
-      config: this.config
+      config: this.config,
+      gameState: this.gameState
     });
     this.button.move(this.game.width - 110, 10);
 

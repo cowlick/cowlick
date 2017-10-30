@@ -1,12 +1,15 @@
 "use strict";
 import {ButtonParameters, Button} from "./Button";
 import {Scene} from "./Scene";
+import {GameState} from "../models/GameState";
 import {Config} from "../Config";
+import {BuiltinVariable, VariableType} from "../Constant";
 
 export interface LabelButtonParameters extends ButtonParameters {
   text: string;
   fontSize?: number;
   config: Config;
+  gameState: GameState;
 }
 
 export class LabelButton extends Button {
@@ -14,7 +17,11 @@ export class LabelButton extends Button {
   constructor(params: LabelButtonParameters) {
     super(params);
 
-    const font = params.config.font.list[params.config.font.selected];
+    const selected = params.gameState.getValue({
+      type: VariableType.system,
+      name: BuiltinVariable.selectedFont
+    });
+    const font = params.config.font.list[selected];
     const label = new g.Label({
       scene: this.scene,
       text: params.text,

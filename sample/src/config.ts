@@ -168,7 +168,6 @@ const config: novel.Config = {
         size: 18
       })
     ],
-    selected: 0,
     color: "white"
   },
   system: novel.defaultConfig.system,

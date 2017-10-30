@@ -79,7 +79,8 @@ function choice(controller: SceneController, choice: script.Choice) {
       padding: choice.padding,
       backgroundEffector: choice.backgroundEffector,
       text: item.text,
-      config: Engine.config
+      config: Engine.config,
+      gameState: controller.current.gameState
     });
     button.click.add(() => {
       Engine.scriptManager.call(controller, item);
@@ -108,7 +109,8 @@ function link(controller: SceneController, link: script.Link) {
     padding: link.padding,
     backgroundEffector: link.backgroundEffector,
     text: link.text,
-    config: Engine.config
+    config: Engine.config,
+    gameState: controller.current.gameState
   };
   if(link.fontSize) {
     params.fontSize = link.fontSize;
