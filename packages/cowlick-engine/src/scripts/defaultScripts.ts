@@ -358,7 +358,7 @@ function slider(controller: SceneController, info: core.Slider) {
 }
 
 export function autoMode(controller: SceneController, data: any) {
-  if(this.gameState.getValue({ type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode })) {
+  if(controller.current.gameState.getValue({ type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode })) {
     controller.current.setAutoTrigger();
   }
 }

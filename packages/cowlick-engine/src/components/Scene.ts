@@ -178,7 +178,8 @@ export class Scene extends g.Scene {
   setAutoTrigger() {
     this.autoIdentifier = this.setTimeout(
       () => this.requestNextFrame(),
-      this.gameState.variables.builtin[core.BuiltinVariable.autoMilliSeconds]
+      this.gameState.variables.builtin[core.BuiltinVariable.autoMilliSeconds],
+      this
     );
   }
 
