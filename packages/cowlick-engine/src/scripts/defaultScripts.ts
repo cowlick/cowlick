@@ -359,13 +359,7 @@ function slider(controller: SceneController, info: core.Slider) {
 
 export function autoMode(controller: SceneController, data: any) {
   if(this.gameState.getValue({ type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode })) {
-    this.setTimeout(
-      () => this.requestNextFrame(),
-      this.gameState.getValue({
-        type: core.VariableType.builtin,
-        name: core.BuiltinVariable.autoMilliSeconds
-      })
-    );
+    controller.current.setAutoTrigger();
   }
 }
 

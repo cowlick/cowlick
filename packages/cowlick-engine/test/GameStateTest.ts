@@ -16,6 +16,7 @@ describe("GameState", () => {
 
   it("セーブデータの存在を確認できる", () => {
     const vars = {
+      builtin: {},
       current: {},
       system: {}
     };
@@ -25,6 +26,7 @@ describe("GameState", () => {
 
   it("セーブデータが存在しないことを確認できる", () => {
     const vars = {
+      builtin: {},
       current: {},
       system: {}
     };
@@ -34,6 +36,7 @@ describe("GameState", () => {
 
   it("保存できる", () => {
     const vars = {
+      builtin: {},
       current: {
         test: 0
       },
@@ -59,6 +62,7 @@ describe("GameState", () => {
 
   it("description付きで保存できる", () => {
     const vars = {
+      builtin: {},
       current: {
         test: 0
       },
@@ -85,6 +89,7 @@ describe("GameState", () => {
 
   it("forceオプションがついている場合は上書きする", () => {
     const vars = {
+      builtin: {},
       current: {
         test: 0
       },
@@ -112,6 +117,7 @@ describe("GameState", () => {
 
   it("forceオプションがないなら保存に失敗する", () => {
     const vars = {
+      builtin: {},
       current: {
         test: 0
       },
@@ -136,6 +142,7 @@ describe("GameState", () => {
 
   it("値を設定できる", () => {
     const vars = {
+      builtin: {},
       current: {},
       system: {}
     };
@@ -145,6 +152,14 @@ describe("GameState", () => {
     let target = {
       type: "system",
       name: "test"
+    };
+    state.setValue(target, input);
+    assert(state.getValue(target) === input);
+
+    input = false;
+    target = {
+      type: "builtin",
+      name: "autoMode"
     };
     state.setValue(target, input);
     assert(state.getValue(target) === input);
@@ -160,6 +175,9 @@ describe("GameState", () => {
 
   it("値を文字列で取得できる", () => {
     const vars = {
+      builtin: {
+        autoMode: true
+      },
       current: {
         test: 1
       },
@@ -174,6 +192,12 @@ describe("GameState", () => {
       name: "test"
     };
     assert(state.getStringValue(target) === "test");
+   
+    target = {
+      type: "builtin",
+      name: "autoMode"
+    };
+    assert(state.getStringValue(target) === "true");
     
     target = {
       type: "current",
@@ -184,6 +208,7 @@ describe("GameState", () => {
 
   it("変数が定義されていない場合はundefinedを返す", () => {
     const vars = {
+      builtin: {},
       current: {},
       system: {}
     };
@@ -199,6 +224,7 @@ describe("GameState", () => {
 
   it("存在しない変数種別を指定した場合はエラー", () => {
     const vars = {
+      builtin: {},
       current: {},
       system: {}
     };

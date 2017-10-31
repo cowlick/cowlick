@@ -66,15 +66,7 @@ export class GameState {
    * @param variable 変数情報
    */
   getValue(variable: core.Variable): any {
-    let target: any;
-    if(variable.type === core.VariableType.system) {
-      target = this._variables.system;
-    } else if(variable.type === core.VariableType.current) {
-      target = this._variables.current;
-    } else {
-      throw new core.GameError("invalid variable type", variable);
-    }
-    return target[variable.name];
+    return this.getVariables(variable)[variable.name];
   }
 
   /**
@@ -98,8 +90,7 @@ export class GameState {
    * @param value 値
    */
   setValue(variable: core.Variable, value: any) {
-    const target = variable.type === "system" ? this._variables.system : this._variables.current;
-    target[variable.name] = value;
+    this.getVariables(variable)[variable.name] = value;
   }
 
   /**
@@ -113,5 +104,17 @@ export class GameState {
       ids = ids.concat(scenario.findScene(d).assetIds);
     }
     return ids;
+  }
+
+  private getVariables(variable: core.Variable) {
+    if(variable.type === core.VariableType.system) {
+      return this._variables.system;
+    } else if(variable.type === core.VariableType.builtin) {
+      return this._variables.builtin;
+    } else if(variable.type === core.VariableType.current) {
+      return this._variables.current;
+    } else {
+      throw new core.GameError("invalid variable type", variable);
+    }
   }
 }

@@ -35,6 +35,7 @@ export class Scene extends g.Scene {
   private player: g.Player;
   private _gameState: GameState;
   private _enabledWindowClick: boolean;
+  private autoIdentifier: g.TimerIdentifier;
 
   constructor(params: SceneParameters) {
     super({
@@ -173,6 +174,13 @@ export class Scene extends g.Scene {
     return this.storage.load(index);
   }
 
+  setAutoTrigger() {
+    this.autoIdentifier = this.setTimeout(
+      () => this.requestNextFrame(),
+      this.gameState.variables.builtin[core.BuiltinVariable.autoMilliSeconds]
+    );
+  }
+
   private onLoaded() {
 
     const frame = this.scenario.frame;
@@ -196,6 +204,10 @@ export class Scene extends g.Scene {
   }
 
   private disableTrigger() {
+    if(this.autoIdentifier) {
+      this.clearTimeout(this.autoIdentifier);
+      this.autoIdentifier = null;
+    }
     this.layerGroup.evaluate(core.Layer.message, (layer) => {
       layer.touchable = false;
       layer.pointUp.removeAll();
