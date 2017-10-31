@@ -46,6 +46,10 @@ export interface SystemConfig {
    * 最大セーブ数
    */
   maxSaveCount: number;
+  /**
+   * オートモード時のメッセージ送り速度(ms)
+   */
+  autoMessageSpeed: number;
 }
 
 /**
@@ -103,7 +107,8 @@ export const defaultConfig: Config = {
     color: "black"
   },
   system: {
-    maxSaveCount: 100
+    maxSaveCount: 100,
+    autoMessageSpeed: 1500
   },
   audio: {
     voice: 0.5,

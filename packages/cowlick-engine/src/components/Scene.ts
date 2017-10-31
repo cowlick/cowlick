@@ -86,6 +86,7 @@ export class Scene extends g.Scene {
     this._message.onFinished.addOnce(
       (text) => {
         this.scenario.pushLog({ text, frame: this.scenario.frame });
+        this.scriptManager.call(this.controller, { tag: core.Tag.autoMode, data: {} });
       },
       this
     );
@@ -177,7 +178,7 @@ export class Scene extends g.Scene {
     const frame = this.scenario.frame;
 
     if(! this._gameState) {
-      this._gameState = loadGameState(this, this.storageKeys, this.config.system.maxSaveCount);
+      this._gameState = loadGameState(this, this.storageKeys, this.config);
     }
     this.storage = new Storage(this.game.storage, this.player, this._gameState);
 
@@ -273,6 +274,15 @@ export class Scene extends g.Scene {
 
   private onWindowClick() {
     if(this._enabledWindowClick) {
+
+      this.gameState.setValue(
+        {
+          type: core.VariableType.builtin,
+          name: core.BuiltinVariable.autoMode
+        },
+        false
+      );
+
       if(this._message.finished) {
         this.requestNextFrame();
       } else {

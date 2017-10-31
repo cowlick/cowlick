@@ -1,5 +1,5 @@
 "use strict";
-import {SaveData, Variables} from "cowlick-core";
+import {SaveData, Variables, Config} from "cowlick-core";
 import {GameState} from "../models/GameState";
 import {gameId, Region} from "../Constant";
 
@@ -61,10 +61,17 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   };
 }
 
-export function loadGameState(scene: g.Scene, keys: g.StorageKey[], max: number): GameState {
+export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Config): GameState {
+  const max = config.system.maxSaveCount;
   const result = loadFromStorage(scene, keys, max);
   if(typeof result.variables.builtin.selectedFont === "undefined") {
     result.variables.builtin.selectedFont = 0;
+  }
+  if(typeof result.variables.builtin.autoMode === "undefined") {
+    result.variables.builtin.autoMode = false;
+  }
+  if(typeof result.variables.builtin.autoMilliSeconds === "undefined") {
+    result.variables.builtin.autoMilliSeconds = config.system.autoMessageSpeed;
   }
   return new GameState(result.data, result.variables, max);
 }

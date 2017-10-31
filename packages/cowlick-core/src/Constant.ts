@@ -32,6 +32,7 @@ export namespace Tag {
   export const exception = "exception";
   export const waitTransition = "waitTransition";
   export const slider = "slider";
+  export const autoMode = "autoMode";
 }
 
 export namespace Layer {
@@ -44,6 +45,8 @@ export namespace Layer {
 
 export namespace BuiltinVariable {
   export const selectedFont = "selectedFont";
+  export const autoMode = "autoMode";
+  export const autoMilliSeconds = "autoMilliSeconds";
 }
 
 export namespace VariableType {

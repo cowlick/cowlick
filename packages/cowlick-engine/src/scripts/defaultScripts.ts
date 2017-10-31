@@ -357,6 +357,18 @@ function slider(controller: SceneController, info: core.Slider) {
   controller.current.appendLayer(s, info.layer);
 }
 
+export function autoMode(controller: SceneController, data: any) {
+  if(this.gameState.getValue({ type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode })) {
+    this.setTimeout(
+      () => this.requestNextFrame(),
+      this.gameState.getValue({
+        type: core.VariableType.builtin,
+        name: core.BuiltinVariable.autoMilliSeconds
+      })
+    );
+  }
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],
   [core.Tag.pane, pane],
@@ -388,5 +400,6 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [core.Tag.ifElse, ifElse],
   [core.Tag.exception, exception],
   [core.Tag.waitTransition, waitTransition],
-  [core.Tag.slider, slider]
+  [core.Tag.slider, slider],
+  [core.Tag.autoMode, autoMode]
 ]);
