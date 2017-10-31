@@ -8,9 +8,11 @@ export class Frame {
 
   private _scripts: Script<any>[];
   private cacheAssetIds: string[];
+  alreadyRead: boolean;
 
-  constructor(scripts: Script<any>[]) {
+  constructor(scripts: Script<any>[], alreadyRead?: boolean) {
     this._scripts = scripts;
+    this.alreadyRead = !!alreadyRead;
   }
 
   get scripts(): Script<any>[] {

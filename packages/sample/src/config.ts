@@ -168,7 +168,8 @@ const config: novel.Config = {
         size: 18
       })
     ],
-    color: "white"
+    color: "white",
+    alreadyReadColor: "#4444FF"
   },
   system: novel.defaultConfig.system,
   audio: novel.defaultConfig.audio

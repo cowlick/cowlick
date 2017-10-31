@@ -20,6 +20,7 @@ export class Message extends al.Label {
   private original: core.Text;
   private current: (string | core.Ruby)[];
   private gameState: GameState;
+  private config: core.Config;
 
   constructor(params: MessageParameters) {
     super(Message.toLabelParameters(params));
@@ -32,6 +33,7 @@ export class Message extends al.Label {
     this.current = [];
     this.gameState = params.gameState;
     this.textAlign = g.TextAlign.Left;
+    this.config = params.config;
     this.onFinished = new g.Trigger<string>();
     this.update.add(this.onUpdated, this);
   }
@@ -40,7 +42,12 @@ export class Message extends al.Label {
     return this.index >= this.original.values.length;
   }
 
-  updateText(text: core.Text) {
+  updateText(text: core.Text, alreadyRead?: boolean) {
+    if(this.config.system.alreadyRead && alreadyRead) {
+      this.textColor = this.config.font.alreadyReadColor;
+    } else {
+      this.textColor = this.config.font.color;
+    }
     if(text.clear) {
       this.text = "";
       this.original = text;

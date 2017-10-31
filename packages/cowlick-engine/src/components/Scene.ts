@@ -83,10 +83,11 @@ export class Scene extends g.Scene {
   }
 
   updateText(text: core.Text) {
-    this._message.updateText(text);
+    this._message.updateText(text, this.scenario.frame.alreadyRead);
     this._message.onFinished.addOnce(
       (text) => {
         this.scenario.pushLog({ text, frame: this.scenario.frame });
+        this.scenario.frame.alreadyRead = true;
         this.scriptManager.call(this.controller, { tag: core.Tag.autoMode, data: {} });
       },
       this

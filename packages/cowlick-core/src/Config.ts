@@ -13,6 +13,10 @@ export interface FontConfig {
    * 文字色
    */
   color: string;
+  /**
+   * 既読文字色
+   */
+  alreadyReadColor: string;
 }
 
 /**
@@ -50,6 +54,10 @@ export interface SystemConfig {
    * オートモード時のメッセージ送り速度(ms)
    */
   autoMessageSpeed: number;
+  /**
+   * 既読を有効にするかどうか
+   */
+  alreadyRead: boolean;
 }
 
 /**
@@ -104,11 +112,13 @@ export const defaultConfig: Config = {
         size: 18
       })
     ],
-    color: "black"
+    color: "black",
+    alreadyReadColor: "#4444FF"
   },
   system: {
     maxSaveCount: 100,
-    autoMessageSpeed: 1500
+    autoMessageSpeed: 1500,
+    alreadyRead: false
   },
   audio: {
     voice: 0.5,
