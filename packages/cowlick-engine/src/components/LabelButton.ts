@@ -17,7 +17,7 @@ export class LabelButton extends Button {
     super(params);
 
     const selected = params.gameState.getValue({
-      type: VariableType.system,
+      type: VariableType.builtin,
       name: BuiltinVariable.selectedFont
     });
     const font = params.config.font.list[selected];

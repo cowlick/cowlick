@@ -12,6 +12,7 @@ const prefixLength = Region.saveDataPrefix.length;
 
 function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   const variables: Variables = {
+    builtin: {},
     system: {},
     current: {}
   };
@@ -62,8 +63,8 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
 
 export function loadGameState(scene: g.Scene, keys: g.StorageKey[], max: number): GameState {
   const result = loadFromStorage(scene, keys, max);
-  if(typeof result.variables.system.selectedFont === "undefined") {
-    result.variables.system.selectedFont = 0;
+  if(typeof result.variables.builtin.selectedFont === "undefined") {
+    result.variables.builtin.selectedFont = 0;
   }
   return new GameState(result.data, result.variables, max);
 }
@@ -71,6 +72,7 @@ export function loadGameState(scene: g.Scene, keys: g.StorageKey[], max: number)
 export function createStorageKeys(player: g.Player, max: number): g.StorageKey[] {
   const ks = [
     {region: g.StorageRegion.Values, regionKey: Region.system, userId: player.id, gameId},
+    {region: g.StorageRegion.Values, regionKey: Region.builtin, userId: player.id, gameId}
   ];
   for(let i = 0; i < max - 1; i++) {
     ks.push({region: g.StorageRegion.Values, regionKey: Region.saveDataPrefix + i, userId: player.id, gameId});

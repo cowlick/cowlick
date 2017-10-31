@@ -30,6 +30,10 @@ export class Storage {
     }
   }
 
+  saveBuiltinVariables() {
+    this.write(this.state.variables.builtin, Region.builtin);
+  }
+
   saveSystemVariables() {
     this.write(this.state.variables.system, Region.system);
   }

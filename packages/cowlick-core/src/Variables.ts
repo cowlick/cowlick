@@ -3,7 +3,11 @@
  */
 export interface Variables {
   /**
-   * システム変数
+   * エンジン組み込み変数
+   */
+  builtin: any;
+  /**
+   * ゲームシステム変数
    */
   system: any;
   /**

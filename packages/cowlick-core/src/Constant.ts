@@ -47,6 +47,7 @@ export namespace BuiltinVariable {
 }
 
 export namespace VariableType {
+  export const builtin = "builtin";
   export const system = "system";
   export const current = "current";
 }

@@ -124,7 +124,7 @@ export class Message extends al.Label {
 
   private static toLabelParameters(params: MessageParameters): al.LabelParameterObject {
     const selected = params.gameState.getValue({
-      type: core.VariableType.system,
+      type: core.VariableType.builtin,
       name: core.BuiltinVariable.selectedFont
     });
     const font = params.config.font.list[selected];
