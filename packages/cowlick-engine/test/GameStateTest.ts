@@ -1,8 +1,6 @@
 "use strict";
 import * as assert from "assert";
-import "./helpers/setup";
-import * as core from "cowlick-core";
-import {GameState} from "../src/models/GameState";
+import {core, GameState} from "./helpers/setup";
 
 describe("GameState", () => {
 
@@ -192,13 +190,13 @@ describe("GameState", () => {
       name: "test"
     };
     assert(state.getStringValue(target) === "test");
-   
+
     target = {
       type: "builtin",
       name: "autoMode"
     };
     assert(state.getStringValue(target) === "true");
-    
+
     target = {
       type: "current",
       name: "test"

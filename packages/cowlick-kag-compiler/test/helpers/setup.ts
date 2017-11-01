@@ -1,19 +1,17 @@
 "use strict";
-global.g = require("@akashic/akashic-engine");
-import * as mock from "./mock";
+import { Context } from "@xnv/headless-akashic";
+import "@xnv/headless-akashic/polyfill";
 
-const assets = {
-  foo: {
-    type: "image",
-    path: "/path1.png",
-    virtualPath: "path1.png",
-    width: 1,
-    height: 1
-  }
-};
+export let Scenario;
+export let analyze;
 
-(g.game as any) = new mock.Game({
-  width: 320,
-  height: 320,
-  assets
+beforeEach((done) => {
+  const ctx = new Context();
+  ctx.start().then((game: g.Game) => {
+    g.game = game;
+    const analyzer = require("cowlick-analyzer");
+    Scenario = analyzer.Scene;
+    analyze = analyzer.analyze;
+    done();
+  });
 });

@@ -2,7 +2,6 @@
 import * as assert from "assert";
 import * as fs from "fs";
 import * as glob from "glob";
-import "./helpers/setup";
 import * as kag from "../resources/kag";
 
 function appendSyntaxErrorinfo(e: any) {

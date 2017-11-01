@@ -1,8 +1,6 @@
 "use strict";
 import * as assert from "assert";
-import "./helpers/setup";
-import {Storage} from "../src/models/Storage";
-import {GameState} from "../src/models/GameState";
+import {Storage, GameState} from "./helpers/setup";
 
 describe("Storage", () => {
 

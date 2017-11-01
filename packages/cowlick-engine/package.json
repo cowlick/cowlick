@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",
+    "@xnv/headless-akashic": "0.0.1",
     "@types/mocha": "2.2.43",
     "@types/node": "8.0.28",
     "espower-typescript": "8.1.1",

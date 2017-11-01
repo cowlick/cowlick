@@ -3,8 +3,7 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as glob from "glob";
 import * as esprima from "esprima";
-import "./helpers/setup";
-import {Scenario, analyze} from "cowlick-analyzer";
+import {Scenario, analyze} from "./helpers/setup";
 
 describe("Analyzer", () => {
 

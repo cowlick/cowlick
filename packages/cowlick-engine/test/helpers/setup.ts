@@ -1,19 +1,24 @@
 "use strict";
-global.g = require("@akashic/akashic-engine");
-import * as mock from "./mock";
+import { Context } from "@xnv/headless-akashic";
+import "@xnv/headless-akashic/polyfill";
 
-const assets = {
-  foo: {
-    type: "image",
-    path: "/path1.png",
-    virtualPath: "path1.png",
-    width: 1,
-    height: 1
-  }
-};
+export let core;
+export let GameState;
+export let SceneController;
+export let ScriptManager;
+export let ScriptFunction;
+export let Storage;
 
-(g.game as any) = new mock.Game({
-  width: 320,
-  height: 320,
-  assets
+beforeEach((done) => {
+  const ctx = new Context();
+  ctx.start().then((game: g.Game) => {
+    g.game = game;
+    core = require("cowlick-core");
+    GameState = require("../../src/models/GameState").GameState;
+    SceneController = require("../../src/components/SceneController").SceneController;
+    ScriptManager = require("../../src/scripts/ScriptManager").ScriptManager;
+    ScriptFunction = require("../../src/scripts/ScriptManager").ScriptFunction;
+    Storage = require("../../src/models/Storage").Storage;
+    done();
+  });
 });

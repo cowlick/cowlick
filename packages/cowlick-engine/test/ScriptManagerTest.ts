@@ -1,8 +1,6 @@
 "use strict";
 import * as assert from "assert";
-import "./helpers/setup";
-import {SceneController} from "../src/components/SceneController";
-import {ScriptManager, ScriptFunction} from "../src/scripts/ScriptManager";
+import {SceneController, ScriptManager, ScriptFunction} from "./helpers/setup";
 
 function fail(controller: SceneController, data: any) {
   assert.fail("失敗するスクリプトを実行しました");

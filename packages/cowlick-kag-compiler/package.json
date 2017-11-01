@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",
+    "@xnv/headless-akashic": "0.0.1",
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.1",
     "@types/estraverse": "0.0.6",
