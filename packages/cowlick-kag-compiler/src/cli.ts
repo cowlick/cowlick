@@ -8,17 +8,6 @@ import {parse} from "./parser";
 
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
 
-interface RootOpts {
-  base: string[];
-}
-
-const root = commandpost
-  .create<RootOpts, {}>("cowlick")
-  .version(packageJson.version, "-v, --version")
-  .action(() => {
-    process.stdout.write(root.helpText() + "\n");
-  });
-
 interface CompileOpts {
   output: string[];
 }
@@ -27,8 +16,9 @@ interface CompileArgs {
   inputDir: string;
 }
 
-root
-  .subCommand<CompileOpts, CompileArgs>("kag [inputDir]")
+const root = commandpost
+  .create<CompileOpts, CompileArgs>("cowlick-kag-compiler [inputDir]")
+  .version(packageJson.version, "-v, --version")
   .description("compile KAG scenario")
   .option("-o, --output <output>", "output dir")
   .action((opts, args) => {

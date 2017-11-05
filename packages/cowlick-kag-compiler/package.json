@@ -4,7 +4,7 @@
   "description": "cowlick kag compiler",
   "main": "lib/cli.js",
   "bin": {
-    "cowlick-kag": "./bin/cowlick-kag"
+    "cowlick-kag-compiler": "./bin/run"
   },
   "files": [
     "bin",
