@@ -47,7 +47,7 @@ export class SaveLoadScene extends g.Scene {
     });
     this.button.move(this.game.width - 110, 10);
 
-    this.button.click.add(
+    this.button.onClick.add(
       () => {
         this.game.popScene(false);
       },

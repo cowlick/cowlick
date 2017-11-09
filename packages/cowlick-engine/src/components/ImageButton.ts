@@ -1,22 +1,44 @@
 "use strict";
-import {Button as ButtonConfig, Config} from "cowlick-core";
+import {Image, Config} from "cowlick-core";
 import {Button} from "./Button";
 import {Scene} from "./Scene";
-import {createImage} from "./Image";
+import {createFrameSprite, createImage} from "./Image";
 
 export class ImageButton extends Button {
 
-  constructor(scene: g.Scene, image: g.Sprite) {
+  private image: g.FrameSprite;
+
+  constructor(scene: g.Scene, image: g.FrameSprite) {
     super({
       scene,
       width: image.width,
       height: image.height
     });
 
+    this.image = image;
     this.append(image);
   }
 
-  static create(scene: g.Scene, data: ButtonConfig): Button {
-    return new ImageButton(scene, createImage(scene, data));
+  push() {
+    this.image.frameNumber = 1;
+    super.push();
+  }
+
+  unpush() {
+    this.image.frameNumber = 0;
+    super.unpush();
+  }
+
+  static create(scene: g.Scene, image: Image): Button {
+    const asset = scene.assets[image.assetId] as g.ImageAsset;
+    if(image.frame) {
+      if(typeof image.frame.width === "undefined") {
+        image.frame.width = asset.width / 3;
+      }
+      if(typeof image.frame.height === "undefined") {
+        image.frame.height = asset.height;
+      }
+    }
+    return new ImageButton(scene, createFrameSprite(scene, asset, image));
   }
 }

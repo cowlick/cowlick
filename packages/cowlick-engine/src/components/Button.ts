@@ -14,7 +14,7 @@ export interface ButtonParameters {
 
 export class Button extends g.Pane {
 
-  click: g.Trigger<Button>;
+  onClick: g.Trigger<Button>;
   private pushed: boolean;
 
   constructor(params: ButtonParameters) {
@@ -30,8 +30,18 @@ export class Button extends g.Pane {
     this.pointDown.add(this.onPointDown, this);
     this.pointMove.add(this.onPointMove, this);
     this.pointUp.add(this.onPointUp, this);
-    this.click = new g.Trigger<Button>();
+    this.onClick = new g.Trigger<Button>();
     this.pushed = false;
+  }
+
+  push(): void {
+    this.pushed = true;
+    this.modified();
+  }
+  
+  unpush(): void {
+    this.pushed = false;
+    this.modified();
   }
 
   move(x: number, y: number) {
@@ -46,20 +56,6 @@ export class Button extends g.Pane {
     if (! this.pushed) {
       this.push();
     }
-  }
-
-  private push() {
-    this.y += 2;
-    this.height -= 2;
-    this.pushed = true;
-    this.modified();
-  }
-
-  private unpush() {
-    this.y -= 2;
-    this.height += 2;
-    this.pushed = false;
-    this.modified();
   }
 
   private isHover(e: g.PointMoveEvent) {
@@ -85,7 +81,7 @@ export class Button extends g.Pane {
 
   private onPointUp(e: g.PointUpEvent) {
     if (this.pushed) {
-      this.click.fire(this);
+      this.onClick.fire(this);
       this.unpush();
     }
   }

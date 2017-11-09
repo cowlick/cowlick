@@ -42,14 +42,14 @@ function jump(controller: SceneController, target: core.Jump) {
 }
 
 function button(controller: SceneController, data: core.Button) {
-  const button = ImageButton.create(controller.current, data);
+  const button = ImageButton.create(controller.current, data.image);
   button.move(data.x, data.y);
-  button.click.add(() => {
+  button.onClick.add(() => {
     for(const s of data.scripts) {
       Engine.scriptManager.call(controller, s);
     }
   });
-  controller.current.appendLayer(button, data.layer);
+  controller.current.appendLayer(button, data.image.layer);
 }
 
 function choice(controller: SceneController, choice: core.Choice) {
@@ -80,7 +80,7 @@ function choice(controller: SceneController, choice: core.Choice) {
       config: Engine.config,
       gameState: controller.current.gameState
     });
-    button.click.add(() => {
+    button.onClick.add(() => {
       Engine.scriptManager.call(controller, item);
     });
     const direction = choice.direction ? choice.direction : core.Direction.Vertical;
@@ -115,7 +115,7 @@ function link(controller: SceneController, link: core.Link) {
   }
   const button = new LabelButton(params);
   for(const script of link.scripts) {
-    button.click.add(() => {
+    button.onClick.add(() => {
       Engine.scriptManager.call(controller, script);
     });
   }

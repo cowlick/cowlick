@@ -1,24 +1,30 @@
 "use strict";
 import {Image} from "cowlick-core";
 
+export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, image: Image) {
+  const sprite = new g.FrameSprite({
+    scene,
+    src,
+    width: image.frame.width,
+    height: image.frame.height
+  });
+  sprite.frames = image.frame.frames;
+  if(typeof image.frame.interval !== "undefined") {
+    sprite.interval = image.frame.interval;
+  }
+  sprite.start();
+  return sprite;
+}
+
 export function createImage(scene: g.Scene, image: Image) {
-  const asset = scene.assets[image.assetId] as g.ImageAsset;
+  const src = scene.assets[image.assetId] as g.ImageAsset;
   let sprite: g.Sprite;
   if(image.frame) {
-    let s = new g.FrameSprite({
-      scene,
-      src: asset,
-      width: image.frame.width,
-      height: image.frame.height
-    });
-    s.frames = image.frame.frames;
-    s.interval = 1000;
-    s.start();
-    sprite = s;
+    sprite = createFrameSprite(scene, src, image);
   } else {
     sprite = new g.Sprite({
       scene,
-      src: asset
+      src
     });
   }
   if(image.layer.x !== undefined) {

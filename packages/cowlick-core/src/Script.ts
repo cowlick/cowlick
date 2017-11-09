@@ -41,6 +41,7 @@ export interface Image {
     height: number;
     scale: number;
     frames: number[];
+    interval?: number;
   };
 }
 
@@ -79,13 +80,9 @@ export interface Pane {
  */
 export interface Button {
   /**
-   * レイヤー情報
+   * 画像情報
    */
-  layer: LayerConfig;
-  /**
-   * アセットID
-   */
-  assetId: string;
+  image: Image;
   /**
    * X座標
    */

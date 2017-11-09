@@ -32,4 +32,16 @@ export class LabelButton extends Button {
     label.invalidate();
     this.append(label);
   }
+
+  push() {
+    this.y += 2;
+    this.height -= 2;
+    super.push();
+  }
+
+  unpush() {
+    this.y -= 2;
+    this.height += 2;
+    super.push();
+  }
 }
