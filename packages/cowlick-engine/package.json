@@ -1,6 +1,6 @@
 {
   "name": "cowlick-engine",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Novel engine for Akashic",
   "main": "lib/index.js",
   "files": [
@@ -16,13 +16,13 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "pocketberserker/cowlick.git"
+    "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
     "@akashic-extension/akashic-timeline": "0.4.2",
     "@xnv/akashic-scrollable": "0.0.4",
-    "cowlick-core": "^1.0.0"
+    "cowlick-core": "^0.1.0"
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",

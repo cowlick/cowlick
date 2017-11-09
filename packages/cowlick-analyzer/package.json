@@ -1,6 +1,6 @@
 {
   "name": "cowlick-analyzer",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "script analyzer for cowlick",
   "main": "lib/index.js",
   "files": [
@@ -15,11 +15,11 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "pocketberserker/cowlick.git"
+    "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "dependencies": {
     "commandpost": "1.2.1",
-    "cowlick-core": "^1.0.0",
+    "cowlick-core": "^0.1.0",
     "escodegen": "1.9.0",
     "estraverse": "4.2.0"
   },

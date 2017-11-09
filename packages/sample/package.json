@@ -1,4 +1,6 @@
 {
+  "name": "cowlick-sample",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "webpack --progress && npm run scan:assets",
@@ -10,8 +12,8 @@
     "@akashic-extension/akashic-label": "0.3.4",
     "@akashic-extension/akashic-timeline": "0.4.2",
     "@xnv/akashic-scrollable": "0.0.4",
-    "cowlick-core": "^1.0.0",
-    "cowlick-engine": "^1.0.0"
+    "cowlick-core": "^0.1.0",
+    "cowlick-engine": "^0.1.0"
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.2.1",

@@ -1,6 +1,8 @@
 {
   "private": true,
-  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "name": "cowlick",
   "description": "Novel engine for Akashic",
   "scripts": {
@@ -19,12 +21,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "pocketberserker/cowlick.git"
+    "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "devDependencies": {
     "gh-pages": "1.0.0",
     "husky": "0.14.3",
-    "lerna": "2.4.0",
+    "lerna": "2.5.1",
     "lint-staged": "4.3.0",
     "prettier": "1.7.4"
   },

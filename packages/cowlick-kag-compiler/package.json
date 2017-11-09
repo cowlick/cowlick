@@ -1,6 +1,6 @@
 {
   "name": "cowlick-kag-compiler",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "cowlick kag compiler",
   "main": "lib/cli.js",
   "bin": {
@@ -21,12 +21,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "pocketberserker/cowlick.git"
+    "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "dependencies": {
     "commandpost": "1.2.1",
-    "cowlick-analyzer": "^1.0.0",
-    "cowlick-core": "^1.0.0",
+    "cowlick-analyzer": "^0.1.0",
+    "cowlick-core": "^0.1.0",
     "escodegen": "1.9.0",
     "esprima": "4.0.0",
     "estraverse": "4.2.0"
