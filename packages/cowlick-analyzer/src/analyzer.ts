@@ -198,8 +198,12 @@ function layerProperty(config: core.LayerConfig): estree.Property {
   return property("layer", object(layerConfig(config)));
 }
 
+function imageProperties(original: core.Image): estree.Property[] {
+  return [assetId(original.assetId), layerProperty(original.layer)];
+}
+
 function image(original: core.Image): estree.ObjectExpression {
-  return scriptAst(core.Tag.image, [assetId(original.assetId), layerProperty(original.layer)]);
+  return scriptAst(core.Tag.image, imageProperties(original));
 }
 
 function audio(original: core.Script<core.Audio>): estree.ObjectExpression {
@@ -451,6 +455,24 @@ function waitTransition(original: core.WaitTransition, options: VisitorOptions):
   );
 }
 
+function button(original: core.Button, options: VisitorOptions): estree.ObjectExpression {
+  return scriptAst(
+    core.Tag.button,
+    [
+      property("image", object(imageProperties(original.image))),
+      property("x", literal(original.x)),
+      property("y", literal(original.y)),
+      property(
+        "scripts",
+        {
+          type: ArrayExpression,
+          elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+        }
+      )
+    ]
+  );
+}
+
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -488,6 +510,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return ifElse(original.data, options);
     case core.Tag.waitTransition:
       return waitTransition(original.data, options);
+    case core.Tag.button:
+      return button(original.data, options);
     default:
       return userDefined(original);
   }

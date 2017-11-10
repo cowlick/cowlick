@@ -1,0 +1,66 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "button",
+        "data": {
+          "image": {
+            "assetId": "test",
+            "layer": {
+              "name": "choice"
+            }
+          },
+          "x": 0,
+          "y": 0,
+          "scripts": [
+            {
+              "tag": "eval",
+              "data": {
+                "type": "Program",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "object": {
+                          "type": "MemberExpression",
+                          "object": {
+                            "type": "Identifier",
+                            "name": "variables"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "current"
+                          },
+                          "computed": false
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "test"
+                        },
+                        "computed": false
+                      },
+                      "right": {
+                        "type": "Literal",
+                        "value": "test",
+                        "raw": "'test'"
+                      }
+                    }
+                  }
+                ],
+                "sourceType": "script"
+              }
+            },
+            {
+              "tag": "jump",
+              "data": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

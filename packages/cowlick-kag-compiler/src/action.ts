@@ -4,6 +4,7 @@ import * as esprima from "esprima";
 import * as estraverse from "estraverse";
 import * as core from "cowlick-core";
 import * as ast from "cowlick-analyzer";
+import { Script } from "cowlick-core";
 
 export interface KeyValuePair {
   key: string;
@@ -375,4 +376,11 @@ export function waitTransition(scripts: core.Script<any>[], skippable?: boolean)
     result.data.skippable = skippable;
   }
   return [result];
+}
+
+export function button(data: core.Button): core.Script<core.Button> {
+  return {
+    tag: core.Tag.button,
+    data
+  };
 }

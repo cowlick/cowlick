@@ -73,15 +73,16 @@ TagContent
   / ClearSysVar
   / ClearVar
   / Timeout
+  / Button
   / UserDefined
 
 Image
-  = "image" _ "storage=" assetId:AttributeValue _ "layer=" layer:AttributeValue options:LayerOptions {
+  = "image" _ assetId:StorageAttribute _ "layer=" layer:AttributeValue options:LayerOptions {
     return [b.image(assetId, layer, options)];
   }
 
 PlayBgm
-  = "playbgm" _ "storage=" assetId:AttributeValue {
+  = "playbgm" _ assetId:StorageAttribute {
     return [b.playAudio(assetId, "bgm")];
   }
 
@@ -89,7 +90,7 @@ StopBgm
   = "stopbgm" { return [b.stopAudio("bgm")]; }
 
 PlaySe
-  = "playse" _ "storage=" assetId:AttributeValue {
+  = "playse" _ assetId:StorageAttribute {
     return [b.playAudio(assetId, "se")];
   }
 
@@ -100,9 +101,6 @@ Eval
   = "eval" _ expression:ExpressionAttribute {
     return [b.evaluate(expression)];
   }
-
-ExpressionAttribute
-  = "exp=" expression:AttributeValue { return expression; }
 
 S
   = "s" { return [b.trigger(false)]; }
@@ -130,13 +128,13 @@ LayerOption
   / "opacity=" opacity:Digits { return { key: "opacity", value: opacity }; }
 
 Jump
-  = "jump" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? {
+  = "jump" _ scene:StorageAttribute? _ frame:TargetAttribute? {
     var data = {};
     if(scene) {
-      data.scene = scene[1];
+      data.scene = scene;
     }
     if(frame) {
-      data.frame = frame[1];
+      data.frame = frame;
     }
     return [b.jump(data)];
   }
@@ -152,13 +150,13 @@ ClearVar
   }
 
 Timeout
-   = "timeout" _ time:("time=" AttributeValue) _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? options:TimeoutOptions {
+   = "timeout" _ time:("time=" AttributeValue) _ scene:StorageAttribute? _ frame:TargetAttribute? options:TimeoutOptions {
     var j = {};
     if(scene) {
-      j.scene = scene[1];
+      j.scene = scene;
     }
     if(frame) {
-      j.frame = frame[1];
+      j.frame = frame;
     }
     options.push(b.jump(j));
     var data = {
@@ -174,6 +172,34 @@ TimeoutOptions
 TimeoutOption
   = expression:ExpressionAttribute { return b.evaluate(expression); }
   / "se=" assetId:AttributeValue { return b.playAudio(assetId, "se"); }
+
+Button
+  = "button" _ assetId:GraphicAttribute _ x:XAttribute _ y:YAttribute _ scene:StorageAttribute? _ frame:TargetAttribute? _ expression:ExpressionAttribute? {
+    var scripts = [];
+    if(expression) {
+      scripts.push(b.evaluate(expression));
+    }
+    var j = {};
+    if(scene) {
+      j.scene = scene;
+    }
+    if(frame) {
+      j.frame = frame;
+    }
+    scripts.push(b.jump(j));
+    var data = {
+      image: {
+        assetId: assetId,
+        layer: {
+          name: "choice"
+        }
+      },
+      x: x,
+      y: y,
+      scripts: scripts
+    };
+    return [b.button(data)];
+  }
 
 UserDefined
   = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
@@ -194,13 +220,13 @@ Links
   }
 
 Link
-  = "@link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
+  = "@link" _ scene:StorageAttribute? _ frame:TargetAttribute? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
     var data = {};
     if(scene) {
-      data.scene = scene[1];
+      data.scene = scene;
     }
     if(frame) {
-      data.frame = frame[1];
+      data.frame = frame;
     }
     if(condition) {
       return b.choiceItem(text, data, condition[1]);
@@ -208,13 +234,13 @@ Link
       return b.choiceItem(text, data);
     }
   }
-  / "[link" _ scene:("storage=" AttributeValue)? _ frame:("target=*" AttributeValue)? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
+  / "[link" _ scene:StorageAttribute? _ frame:TargetAttribute? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
     var data = {};
     if(scene) {
-      data.scene = scene[1];
+      data.scene = scene;
     }
     if(frame) {
-      data.frame = frame[1];
+      data.frame = frame;
     }
     return b.choiceItem(text, data, condition);
   }
@@ -347,15 +373,33 @@ Ruby
   }
 
 Emb
-  = "@emb" _ "exp=" exp:AttributeValue &(Newline / EOF) {
+  = "@emb" _ exp:ExpressionAttribute &(Newline / EOF) {
     return b.variable(exp);
   }
-  / "[emb" _ "exp=" exp:AttributeValue _ "]" {
+  / "[emb" _ exp:ExpressionAttribute _ "]" {
     return b.variable(exp);
   }
 
 EndTextBlock
   = (L Newline? / Newline / EOF)?
+
+ExpressionAttribute
+  = "exp=" expression:AttributeValue { return expression; }
+
+StorageAttribute
+  = "storage=" storage:AttributeValue { return storage; }
+
+TargetAttribute
+  = "target=*" target:AttributeValue { return target; }
+
+GraphicAttribute
+  = "graphic=" graphic:AttributeValue { return graphic; }
+
+XAttribute
+  = "x=" x:AttributeValue { return x; }
+
+YAttribute
+  = "y=" y:AttributeValue { return y; }
 
 AttributeName
   = $( ( !Newline !EOF !Space !"=" . )+ )
