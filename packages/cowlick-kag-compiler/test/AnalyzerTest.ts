@@ -8,7 +8,7 @@ import {Scenario, analyze} from "./helpers/setup";
 describe("Analyzer", () => {
 
   describe("スクリプト ASTをJavaScript ASTに変換できる", () => {
-    const path = "test/fixture/kag/valid/";
+    const path = "test/fixture/valid/";
 
     let files = glob.sync(`${path}**/content.js`);
 
