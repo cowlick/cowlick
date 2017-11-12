@@ -208,8 +208,8 @@ FreeImage
   }
 
 UserDefined
-  = name:TagName attrs:(_ AttributeName "=" AttributeValue)* {
-    return [b.tag(name, attrs.map(function(attr) { return { key: attr[1], value: attr[3] }; }))];
+  = name:TagName attrs:(_ UserDefinedAttribute)* {
+    return [b.tag(name, attrs.map(function(attr) { return attr[1]; }))];
   }
 
 TagName
@@ -409,6 +409,17 @@ YAttribute
 
 LayerAttribute
   = "layer=" layer:AttributeValue { return layer; }
+
+UserDefinedAttribute
+  = key:AttributeName "=" value:AttributeValue {
+    return {
+      key: key,
+      value: value
+    };
+  }
+
+TextAttribute
+  = "text=" value:AttributeValue { return value; }
 
 AttributeName
   = $( ( !Newline !EOF !Space !"=" . )+ )
