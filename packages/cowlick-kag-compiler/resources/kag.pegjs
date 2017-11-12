@@ -115,7 +115,7 @@ HideMessage
   }
 
 LayOpt
-  = "layopt" _ "layer=" name:AttributeValue options:LayerOptions {
+  = "layopt" _ name:LayerAttribute options:LayerOptions {
     return [b.layerConfig(name, options)];
   }
 
