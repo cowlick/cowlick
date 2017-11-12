@@ -21,6 +21,7 @@ export class SceneController {
   private config: core.Config;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
+  private storageKeys: g.StorageKey[];
 
   private _current: GameScene;
   private saveLoadScene: SaveLoadScene;
@@ -31,6 +32,7 @@ export class SceneController {
     this.scriptManager = params.scriptManager;
     this.config = params.config;
     this.player = params.player;
+    this.storageKeys = params.storageKeys;
     this._current = new GameScene({
       game: this.game,
       scenario: this.scenario,
@@ -38,7 +40,7 @@ export class SceneController {
       config: this.config,
       controller: this,
       player: this.player,
-      storageKeys: params.storageKeys
+      storageKeys: this.storageKeys
     });
     this._current.loaded.addOnce(() => {
       this.saveLoadScene = new SaveLoadScene({
@@ -102,6 +104,7 @@ export class SceneController {
       config: this.config,
       controller: this,
       player: this.player,
+      storageKeys: this.storageKeys,
       state: this._current.gameState
     });
     this._current.loaded.addOnce(() => {

@@ -42,7 +42,7 @@ export class GameScene extends Scene {
     super({
       game: params.game,
       assetIds: GameScene.collectAssetIds(params),
-      storageKeys: params.state ? undefined : params.storageKeys
+      storageKeys: params.storageKeys
     });
 
     this.layerGroup = new LayerGroup(this);
@@ -192,6 +192,9 @@ export class GameScene extends Scene {
       this._gameState = loadGameState(this, this.storageKeys, this.config);
     }
     this.storage = new Storage(this.game.storage, this.player, this._gameState);
+    // ゲーム中にそこそこの頻度で実行されるタイミング、という点からここで保存している
+    this.storage.saveBuiltinVariables();
+    this.storage.saveSystemVariables();
 
     if(frame) {
       this.removeLayers(frame.scripts);
