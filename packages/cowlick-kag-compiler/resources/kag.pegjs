@@ -402,10 +402,10 @@ GraphicAttribute
   = "graphic=" graphic:AttributeValue { return graphic; }
 
 XAttribute
-  = "x=" x:AttributeValue { return x; }
+  = "x=" x:Digits { return x; }
 
 YAttribute
-  = "y=" y:AttributeValue { return y; }
+  = "y=" y:Digits { return y; }
 
 CanSkipAttribute
   = "canskip=" skippable:AttributeValue { return skippable; }
