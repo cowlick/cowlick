@@ -473,6 +473,10 @@ function button(original: core.Button, options: VisitorOptions): estree.ObjectEx
   );
 }
 
+function removeLayer(original: core.RemoveLayer): estree.ObjectExpression {
+  return scriptAst(core.Tag.removeLayer, [property("name", literal(original.name))]);
+}
+
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for(const key of Object.keys(original.data)) {
@@ -512,6 +516,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return waitTransition(original.data, options);
     case core.Tag.button:
       return button(original.data, options);
+    case core.Tag.removeLayer:
+      return removeLayer(original.data);
     default:
       return userDefined(original);
   }

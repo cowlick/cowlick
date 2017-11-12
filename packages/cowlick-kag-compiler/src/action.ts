@@ -384,3 +384,12 @@ export function button(data: core.Button): core.Script<core.Button> {
     data
   };
 }
+
+export function removeLayer(name: string): core.Script<core.RemoveLayer> {
+  return {
+    tag: core.Tag.removeLayer,
+    data: {
+      name
+    }
+  };
+}

@@ -74,10 +74,11 @@ TagContent
   / ClearVar
   / Timeout
   / Button
+  / FreeImage
   / UserDefined
 
 Image
-  = "image" _ assetId:StorageAttribute _ "layer=" layer:AttributeValue options:LayerOptions {
+  = "image" _ assetId:StorageAttribute _ layer:LayerAttribute options:LayerOptions {
     return [b.image(assetId, layer, options)];
   }
 
@@ -199,6 +200,11 @@ Button
       scripts: scripts
     };
     return [b.button(data)];
+  }
+
+FreeImage
+  = "freeimage" _ name:LayerAttribute {
+    return [b.removeLayer(name)];
   }
 
 UserDefined
@@ -400,6 +406,9 @@ XAttribute
 
 YAttribute
   = "y=" y:AttributeValue { return y; }
+
+LayerAttribute
+  = "layer=" layer:AttributeValue { return layer; }
 
 AttributeName
   = $( ( !Newline !EOF !Space !"=" . )+ )
