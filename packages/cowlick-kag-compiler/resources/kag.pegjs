@@ -320,16 +320,16 @@ EndIf
   = "[endif]" / "@endif"
 
 WT
-  = "[" WTName _ skippable:("canskip=" AttributeValue)? _ "]" {
+  = "[" WTName _ skippable:CanSkipAttribute? _ "]" {
     if(skippable) {
-      return b.tryParseLiteral(skippable[1]);
+      return b.tryParseLiteral(skippable);
     } else {
       return undefined;
     }
   }
-  / "@" WTName _ skippable:("canskip=" AttributeValue)? &(Newline / EOF) {
+  / "@" WTName _ skippable:CanSkipAttribute? &(Newline / EOF) {
     if(skippable) {
-      return b.tryParseLiteral(skippable[1]);
+      return b.tryParseLiteral(skippable);
     } else {
       return undefined;
     }
@@ -371,10 +371,10 @@ Character
   = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf !WT . )
 
 Ruby
-  = "@ruby" _ "text=" rt:AttributeValue Newline rb:Character {
+  = "@ruby" _ rt:TextAttribute Newline rb:Character {
     return b.ruby(rb, rt);
   }
-  / "[ruby" _ "text=" rt:AttributeValue "]" rb:Character {
+  / "[ruby" _ rt:TextAttribute "]" rb:Character {
     return b.ruby(rb, rt);
   }
 
@@ -406,6 +406,9 @@ XAttribute
 
 YAttribute
   = "y=" y:AttributeValue { return y; }
+
+CanSkipAttribute
+  = "canskip=" skippable:AttributeValue { return skippable; }
 
 LayerAttribute
   = "layer=" layer:AttributeValue { return layer; }
