@@ -1,25 +1,24 @@
 "use strict";
-import {Scene, Config, collectAssetIds} from "cowlick-core";
+import * as core from "cowlick-core";
 import {Button} from "./Button";
 import {LabelButton} from "./LabelButton";
+import {Scene} from "./Scene";
 import {GameState} from "../models/GameState";
 import {ScriptManager} from "../scripts/ScriptManager";
 
 export interface SaveLoadSceneParameters {
   game: g.Game;
-  scene: Scene;
-  config: Config;
-  scriptManager: ScriptManager;
+  scene: core.Scene;
+  config: core.Config;
   assetIds: string[];
   gameState: GameState;
 }
 
-export class SaveLoadScene extends g.Scene {
+export class SaveLoadScene extends Scene {
 
-  private config: Config;
+  private config: core.Config;
   private button: Button;
-  private scriptManager: ScriptManager;
-  private gameState: GameState;
+  gameState: GameState;
 
   constructor(params: SaveLoadSceneParameters) {
     super({
@@ -28,7 +27,6 @@ export class SaveLoadScene extends g.Scene {
     });
 
     this.config = params.config;
-    this.scriptManager = params.scriptManager;
 
     this.loaded.add(this.onLoaded, this);
   }
@@ -49,7 +47,7 @@ export class SaveLoadScene extends g.Scene {
 
     this.button.onClick.add(
       () => {
-        this.game.popScene(false);
+        this.game.popScene(true);
       },
       this
     );
@@ -57,7 +55,7 @@ export class SaveLoadScene extends g.Scene {
 
   private static collectAssetIds(params: SaveLoadSceneParameters) {
     const assetIds = params.scene.assetIds
-      .concat(collectAssetIds(params.config.window.system), params.assetIds);
+      .concat(core.collectAssetIds(params.config.window.system), params.assetIds);
     if(params.config.window.message.backgroundImage) {
       assetIds.push(params.config.window.message.backgroundImage);
     }

@@ -1,7 +1,9 @@
 "use strict";
 import * as tl from "@akashic-extension/akashic-timeline";
 import {Scrollable} from "@xnv/akashic-scrollable";
+import * as pg from "@pocketberserker/akashic-pagination";
 import * as core from "cowlick-core";
+import {Scene} from "../components/Scene";
 import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
 import {LabelButton, LabelButtonParameters} from "../components/LabelButton";
@@ -97,10 +99,10 @@ function choice(controller: SceneController, choice: core.Choice) {
   }
 }
 
-function link(controller: SceneController, link: core.Link) {
-  const game = controller.game;
+function createLink(scene: Scene, link: core.Link) {
+  const game = scene.game;
   const params: LabelButtonParameters = {
-    scene: controller.current,
+    scene,
     width: link.width,
     height: link.height,
     backgroundImage: link.backgroundImage,
@@ -108,19 +110,24 @@ function link(controller: SceneController, link: core.Link) {
     backgroundEffector: link.backgroundEffector,
     text: link.text,
     config: Engine.config,
-    gameState: controller.current.gameState
+    gameState: scene.gameState
   };
   if(link.fontSize) {
     params.fontSize = link.fontSize;
   }
   const button = new LabelButton(params);
+  button.move(link.layer.x, link.layer.y);
+  return button;
+}
+
+function link(controller: SceneController, link: core.Link) {
+  const l = createLink(controller.current, link);
   for(const script of link.scripts) {
-    button.onClick.add(() => {
+    l.onClick.add(() => {
       Engine.scriptManager.call(controller, script);
     });
   }
-  button.move(link.x, link.y);
-  controller.current.appendLayer(button, link.layer);
+  controller.current.appendLayer(l, link.layer);
 }
 
 function text(controller: SceneController, text: core.Text) {
@@ -176,16 +183,11 @@ function trigger(controller: SceneController, trigger: core.Trigger) {
 }
 
 function save(controller: SceneController, data: core.Save) {
-  controller.current.save(controller.current.source, data);
+  controller.save(data);
 }
 
 function load(controller: SceneController, data: core.Load) {
-  const s = controller.current.load(data.index);
-  if(s) {
-    jump(controller, s);
-  } else {
-    throw new core.GameError("save data not found", data);
-  }
+  controller.load(data);
 }
 
 function evaluate(controller: SceneController, info: core.Eval) {
@@ -265,9 +267,11 @@ function backlog(controller: SceneController, data: core.Backlog) {
 
   const width = 80;
   const l: core.Link = {
-    layer,
-    x: controller.game.width - width - 10,
-    y: 20,
+    layer: {
+      name: layer.name,
+      x: controller.game.width - width - 10,
+      y: 20,
+    },
     width,
     height: 24,
     text: "close",
@@ -363,6 +367,81 @@ export function autoMode(controller: SceneController, data: any) {
   }
 }
 
+function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene, create: (i: number) => core.Script<any>) {
+  const scene = controller.openSaveLoadScene();
+  let position: pg.Position;
+  switch(info.button) {
+    case core.Position.Top:
+      position = pg.Position.Top;
+      break;
+    case core.Position.Bottom:
+      position = pg.Position.Bottom;
+      break;
+  }
+  const pagination = new pg.Pagination({
+    scene,
+    x: 20,
+    y: 50,
+    width: scene.game.width - 50,
+    height: scene.game.height - 70,
+    limit: {
+      vertical: info.vertical,
+      horizontal: info.horizontal
+    },
+    position,
+    paddingRight: info.padding,
+    first: true,
+    last: true
+  });
+  scene.append(pagination);
+  for(let i = 0; i < Engine.config.system.maxSaveCount; i++) {
+    const l: core.Link = {
+      layer: info.base.layer,
+      width: info.base.width,
+      height: info.base.height,
+      backgroundImage: info.base.backgroundImage,
+      padding: info.base.padding,
+      backgroundEffector: info.base.backgroundEffector,
+      text: String(i),
+      scripts: [ create(i) ]
+    };
+    const button = createLink(scene, l);
+    for(const script of l.scripts) {
+      button.onClick.add(() => {
+        Engine.scriptManager.call(controller, script);
+      });
+    }
+    pagination.content.append(button);
+  }
+}
+
+function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {
+  openSaveLoadScene(
+    controller,
+    info,
+    (index) => ({
+      tag: core.Tag.save,
+      data: {
+        index,
+        force: true
+      }
+    })
+  );
+}
+
+function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
+  openSaveLoadScene(
+    controller,
+    info,
+    (index) => ({
+      tag: core.Tag.load,
+      data: {
+        index
+      }
+    })
+  );
+}
+
 export const defaultSctipts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],
   [core.Tag.pane, pane],
@@ -395,5 +474,7 @@ export const defaultSctipts = new Map<string, ScriptFunction>([
   [core.Tag.exception, exception],
   [core.Tag.waitTransition, waitTransition],
   [core.Tag.slider, slider],
-  [core.Tag.autoMode, autoMode]
+  [core.Tag.autoMode, autoMode],
+  [core.Tag.openSaveScene, openSaveScene],
+  [core.Tag.openLoadScene, openLoadScene]
 ]);

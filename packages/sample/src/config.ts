@@ -1,63 +1,20 @@
 "use strict";
 import * as novel from "cowlick-core";
 
-const maxSaveCount = novel.defaultConfig.system.maxSaveCount;
-const saveButtons: novel.Script<novel.Link>[] = [];
-const loadButtons: novel.Script<novel.Link>[] = [];
-for(let i = 0; i < maxSaveCount; i++) {
-  saveButtons.push({
-    tag: novel.Tag.link,
-    data: {
-      layer: {
-        name: novel.Layer.system
-      },
-      width: g.game.width - 20,
-      height: g.game.height / 11,
-      x: 10 ,
-      y: 10 + g.game.height / 11 * i,
-      backgroundImage: "pane",
-      padding: 4,
-      backgroundEffector: {
-        borderWidth: 4
-      },
-      text: String(i),
-      scripts: [
-        {
-          tag: novel.Tag.save,
-          data: {
-            index: i
-          }
-        }
-      ]
-    }
-  });
-  loadButtons.push({
-    tag: novel.Tag.link,
-    data: {
-      layer: {
-        name: novel.Layer.system
-      },
-      width: g.game.width - 20,
-      height: g.game.height / 11,
-      x: 10 ,
-      y: 10 + g.game.height / 11 * i,
-      backgroundImage: "pane",
-      padding: 4,
-      backgroundEffector: {
-        borderWidth: 4
-      },
-      text: String(i),
-      scripts: [
-        {
-          tag: novel.Tag.load,
-          data: {
-            index: i
-          }
-        }
-      ]
-    }
-  });
-}
+const saveLoadPane: novel.Pane = {
+  layer: {
+    name: novel.Layer.system,
+    x: 10,
+    y: 10
+  },
+  width: g.game.width - 20,
+  height: g.game.height / 11,
+  backgroundImage: "pane",
+  padding: 4,
+  backgroundEffector: {
+    borderWidth: 4
+  }
+};
 
 const config: novel.Config = {
   window: {
@@ -87,11 +44,17 @@ const config: novel.Config = {
           height: 24,
           x: 310,
           y: 450,
-          text: "メニュー1",
+          text: "セーブ",
           scripts: [
             {
-              tag: "noop",
-              data: {}
+              tag: novel.Tag.openSaveScene,
+              data: {
+                vertical: 10,
+                horizontal: 1,
+                button: novel.Position.Top,
+                padding: 10,
+                base: saveLoadPane
+              }
             }
           ]
         }
@@ -106,11 +69,17 @@ const config: novel.Config = {
           height: 24,
           x: 420,
           y: 450,
-          text: "メニュー2",
+          text: "ロード",
           scripts: [
             {
-              tag: "noop",
-              data: {}
+              tag: novel.Tag.openLoadScene,
+              data: {
+                vertical: 10,
+                horizontal: 1,
+                button: novel.Position.Top,
+                padding: 10,
+                base: saveLoadPane
+              }
             }
           ]
         }
@@ -156,9 +125,7 @@ const config: novel.Config = {
           ]
         }
       }
-    ],
-    load: loadButtons,
-    save: saveButtons
+    ]
   },
   font: {
     list: [

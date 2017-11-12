@@ -32,14 +32,6 @@ export interface WindowConfig {
    */
   // TODO: 制限を強める
   system: Script<any>[];
-  /**
-   * ロード画面に使用するスクリプト
-   */
-  load: Script<any>[];
-  /**
-   * セーブ画面に使用するスクリプト
-   */
-  save: Script<any>[];
 }
 
 /**
@@ -100,9 +92,7 @@ export const defaultConfig: Config = {
       height: g.game.height - 20,
       touchable: true
     },
-    system: [],
-    load: [],
-    save: []
+    system: []
   },
   font: {
     list: [

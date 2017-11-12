@@ -242,19 +242,7 @@ export interface Choice {
 /**
  * リンク
  */
-export interface Link {
-  /**
-   * レイヤー情報
-   */
-  layer: LayerConfig;
-  /**
-   * X座標
-   */
-  x: number;
-  /**
-   * Y座標
-   */
-  y: number;
+export interface Link extends Pane {
   /**
    * 幅
    */
@@ -263,11 +251,6 @@ export interface Link {
    * 高さ
    */
   height: number;
-  backgroundImage?: string;
-  padding?: number;
-  backgroundEffector?: {
-    borderWidth: number;
-  };
   /**
    * 表示する文字列
    */
@@ -427,4 +410,20 @@ export interface Slider {
    * 変更対象の変数
    */
   target: Variable;
+}
+
+export const enum Position {
+  Top,
+  Bottom
+}
+
+/**
+ * セーブ、ロードシーン情報
+ */
+export interface SaveLoadScene {
+  vertical: number;
+  horizontal: number;
+  button: Position;
+  padding: number;
+  base: Pane;
 }

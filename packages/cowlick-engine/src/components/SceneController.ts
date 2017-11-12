@@ -1,6 +1,7 @@
 "use strict";
 import * as core from "cowlick-core";
 import {Scene} from "./Scene";
+import {GameScene} from "./GameScene";
 import {SaveLoadScene} from "./SaveLoadScene";
 import {ScriptManager} from "../scripts/ScriptManager";
 
@@ -21,7 +22,7 @@ export class SceneController {
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
 
-  private _current: Scene;
+  private _current: GameScene;
   private saveLoadScene: SaveLoadScene;
 
   constructor(params: SceneControllerParameters) {
@@ -30,7 +31,7 @@ export class SceneController {
     this.scriptManager = params.scriptManager;
     this.config = params.config;
     this.player = params.player;
-    this._current = new Scene({
+    this._current = new GameScene({
       game: this.game,
       scenario: this.scenario,
       scriptManager: this.scriptManager,
@@ -44,7 +45,6 @@ export class SceneController {
         game: this.game,
         scene: this.scenario.scene,
         config: this.config,
-        scriptManager: this.scriptManager,
         assetIds: this.collectAssetIds(),
         gameState: this.current.gameState
       });
@@ -52,7 +52,7 @@ export class SceneController {
     }, this);
   }
 
-  get current(): Scene {
+  get current(): GameScene {
     return this._current;
   }
 
@@ -74,18 +74,28 @@ export class SceneController {
     }
   }
 
-  openSaveScene() {
-    this.game.pushScene(this.saveLoadScene);
+  save(data: core.Save) {
+    this.current.save(this.current.source, data);
   }
 
-  openLoadScene() {
+  load(data: core.Load) {
+    const s = this.current.load(data.index);
+    if(s) {
+      this.jump(s);
+    } else {
+      throw new core.GameError("save data not found", data);
+    }
+  }
+
+  openSaveLoadScene(): Scene {
     this.game.pushScene(this.saveLoadScene);
+    return this.saveLoadScene;
   }
 
   private loadScene() {
     this.scenario.clear();
     const previous = this.saveLoadScene;
-    this._current = new Scene({
+    this._current = new GameScene({
       game: this.game,
       scenario: this.scenario,
       scriptManager: this.scriptManager,
@@ -99,7 +109,6 @@ export class SceneController {
         game: this.game,
         scene: this.scenario.scene,
         config: this.config,
-        scriptManager: this.scriptManager,
         assetIds: this.collectAssetIds(),
         gameState: this.current.gameState
       });
