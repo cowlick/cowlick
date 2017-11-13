@@ -52,6 +52,7 @@ export class SaveLoadScene extends Scene {
       },
       this
     );
+    this.append(this.button);
   }
 
   private static collectAssetIds(params: SaveLoadSceneParameters) {
