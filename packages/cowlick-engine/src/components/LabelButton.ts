@@ -42,6 +42,6 @@ export class LabelButton extends Button {
   unpush() {
     this.y -= 2;
     this.height += 2;
-    super.push();
+    super.unpush();
   }
 }
