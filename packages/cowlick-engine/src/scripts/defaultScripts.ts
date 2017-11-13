@@ -381,9 +381,9 @@ function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene
   const pagination = new pg.Pagination({
     scene,
     x: 20,
-    y: 50,
-    width: scene.game.width - 50,
-    height: scene.game.height - 70,
+    y: 20,
+    width: scene.game.width - 40,
+    height: scene.game.height - 30,
     limit: {
       vertical: info.vertical,
       horizontal: info.horizontal

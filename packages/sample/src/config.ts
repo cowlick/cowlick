@@ -7,8 +7,8 @@ const saveLoadPane: novel.Pane = {
     x: 10,
     y: 10
   },
-  width: g.game.width - 20,
-  height: g.game.height / 11,
+  width: g.game.width - 60,
+  height: 30,
   backgroundImage: "pane",
   padding: 4,
   backgroundEffector: {
@@ -38,12 +38,12 @@ const config: novel.Config = {
         tag: novel.Tag.link,
         data: {
           layer: {
-            name: novel.Layer.system
+            name: novel.Layer.system,
+            x: 310,
+            y: 450
           },
           width: 100,
           height: 24,
-          x: 310,
-          y: 450,
           text: "セーブ",
           scripts: [
             {
@@ -63,12 +63,12 @@ const config: novel.Config = {
         tag: novel.Tag.link,
         data: {
           layer: {
-            name: novel.Layer.system
+            name: novel.Layer.system,
+            x: 420,
+            y: 450
           },
           width: 100,
           height: 24,
-          x: 420,
-          y: 450,
           text: "ロード",
           scripts: [
             {
@@ -88,12 +88,12 @@ const config: novel.Config = {
         tag: novel.Tag.link,
         data: {
           layer: {
-            name: novel.Layer.system
+            name: novel.Layer.system,
+            x: 530,
+            y: 450
           },
           width: 100,
           height: 24,
-          x: 530,
-          y: 450,
           text: "ログ",
           scripts: [
             {
