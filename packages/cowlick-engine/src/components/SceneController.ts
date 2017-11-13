@@ -122,7 +122,6 @@ export class SceneController {
   }
 
   private collectAssetIds(): string[] {
-    return this._current.gameState.collectAssetIds(this.scenario)
-      .concat(this.scenario.scene.assetIds);
+    return this._current.gameState.collectAssetIds(this.scenario);
   }
 }
