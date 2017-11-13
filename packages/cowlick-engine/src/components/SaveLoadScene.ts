@@ -27,6 +27,7 @@ export class SaveLoadScene extends Scene {
     });
 
     this.config = params.config;
+    this.gameState = params.gameState;
 
     this.loaded.add(this.onLoaded, this);
   }
