@@ -2,7 +2,7 @@
 import * as core from "cowlick-core";
 import {SceneController} from "./components/SceneController";
 import {ScriptManager, ScriptFunction} from "./scripts/ScriptManager";
-import {defaultSctipts} from "./scripts/defaultScripts";
+import {defaultScripts} from "./scripts/defaultScripts";
 import {createStorageKeys} from "./components/GameStateHelper";
 
 /**
@@ -11,7 +11,7 @@ import {createStorageKeys} from "./components/GameStateHelper";
 export class Engine {
 
   private game: g.Game;
-  private static _scriptManager = new ScriptManager(defaultSctipts);
+  private static _scriptManager = new ScriptManager(defaultScripts);
   private static _config = core.defaultConfig;
   // 仮置き
   static player: g.Player = { id: "0" };

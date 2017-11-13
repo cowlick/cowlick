@@ -442,7 +442,7 @@ function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
   );
 }
 
-export const defaultSctipts = new Map<string, ScriptFunction>([
+export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],
   [core.Tag.pane, pane],
   [core.Tag.jump, jump],
