@@ -32,6 +32,14 @@ export class SaveLoadScene extends Scene {
     this.loaded.add(this.onLoaded, this);
   }
 
+  close() {
+    if(this.game.scene() === this) {
+      this.game.popScene(true);
+    } else {
+      throw new core.GameError("Current scene is not a save or load scene.");
+    }
+  }
+
   private onLoaded() {
 
     // TODO: configで差し替えられるようにする
@@ -46,12 +54,7 @@ export class SaveLoadScene extends Scene {
     });
     this.button.move(this.game.width - 110, 10);
 
-    this.button.onClick.add(
-      () => {
-        this.game.popScene(true);
-      },
-      this
-    );
+    this.button.onClick.add(this.close, this);
     this.append(this.button);
   }
 

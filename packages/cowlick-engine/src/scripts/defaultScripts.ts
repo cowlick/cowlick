@@ -367,7 +367,11 @@ export function autoMode(controller: SceneController, data: any) {
   }
 }
 
-function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene, create: (i: number) => core.Script<any>) {
+function closeLoadScene(controller: SceneController, data: any) {
+  controller.closeSaveLoadScene();
+}
+
+function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene, create: (i: number) => core.Script<any>[]) {
   const scene = controller.openSaveLoadScene();
   let position: pg.Position;
   switch(info.button) {
@@ -403,7 +407,7 @@ function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene
       padding: info.base.padding,
       backgroundEffector: info.base.backgroundEffector,
       text: String(i),
-      scripts: [ create(i) ]
+      scripts: create(i)
     };
     const button = createLink(scene, l);
     for(const script of l.scripts) {
@@ -419,26 +423,36 @@ function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {
   openSaveLoadScene(
     controller,
     info,
-    (index) => ({
-      tag: core.Tag.save,
-      data: {
-        index,
-        force: true
+    (index) => ([
+      {
+        tag: core.Tag.save,
+        data: {
+          index,
+          force: true
+        }
       }
-    })
+    ])
   );
 }
+
+const closeLoadSceneTag = "closeLoadScene";
 
 function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
   openSaveLoadScene(
     controller,
     info,
-    (index) => ({
-      tag: core.Tag.load,
-      data: {
-        index
+    (index) => ([
+      {
+        tag: closeLoadSceneTag,
+        data: {}
+      },
+      {
+        tag: core.Tag.load,
+        data: {
+          index
+        }
       }
-    })
+    ])
   );
 }
 
@@ -475,6 +489,7 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.waitTransition, waitTransition],
   [core.Tag.slider, slider],
   [core.Tag.autoMode, autoMode],
+  [closeLoadSceneTag, closeLoadScene], // 内部用
   [core.Tag.openSaveScene, openSaveScene],
   [core.Tag.openLoadScene, openLoadScene]
 ]);

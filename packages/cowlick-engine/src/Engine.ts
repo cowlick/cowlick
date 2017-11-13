@@ -56,7 +56,7 @@ export class Engine {
       player: Engine.player,
       storageKeys
     });
-    controller.pushScene();
+    controller.start();
   }
 
   /**

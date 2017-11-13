@@ -62,8 +62,11 @@ export class SceneController {
     return this.scenario.backlog;
   }
 
-  pushScene() {
-    this.game.pushScene(this._current);
+  start() {
+    const scene = this.game.scene();
+    if(scene !== this._current && scene !== this.saveLoadScene) {
+      this.game.pushScene(this._current);
+    }
   }
 
   jump(target: core.Jump) {
@@ -94,9 +97,14 @@ export class SceneController {
     return this.saveLoadScene;
   }
 
+  closeSaveLoadScene() {
+    this.saveLoadScene.close();
+  }
+
   private loadScene() {
     this.scenario.clear();
-    const previous = this.saveLoadScene;
+    const previousLoadScene = this.saveLoadScene;
+    const prevuousGameScene = this._current;
     this._current = new GameScene({
       game: this.game,
       scenario: this.scenario,
@@ -117,8 +125,22 @@ export class SceneController {
       });
       this.saveLoadScene.prefetch();
     }, this);
-    previous.destroy();
-    this.game.replaceScene(this._current);
+    previousLoadScene.stateChanged.add(
+      (state) => {
+        if(state === g.SceneState.Destroyed) {
+          this.game.replaceScene(this._current);
+        }
+      },
+      this
+    );
+    switch(previousLoadScene.state) {
+      case g.SceneState.Standby:
+        previousLoadScene.destroy();
+        break;
+      case g.SceneState.Active:
+        prevuousGameScene.setTimeout(() => previousLoadScene.destroy(), this.game.fps, this);
+        break;
+    }
   }
 
   private collectAssetIds(): string[] {
