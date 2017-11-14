@@ -21,7 +21,7 @@
   "dependencies": {
     "@akashic-extension/akashic-label": "0.3.4",
     "@akashic-extension/akashic-timeline": "0.4.2",
-    "@pocketberserker/akashic-pagination": "0.0.3",
+    "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4",
     "cowlick-core": "^0.1.0"
   },
