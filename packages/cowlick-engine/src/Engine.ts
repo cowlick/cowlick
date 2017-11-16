@@ -42,7 +42,7 @@ export class Engine {
    *
    * @param scenario シナリオデータ。省略した場合は"scenario.js"からシナリオをロードする。
    */
-  start(scenario?: core.Scenario): void {
+  start(scenario?: core.Scenario): SceneController {
 
     const s = scenario ? scenario : core.Scenario.load(this.game);
 
@@ -57,6 +57,7 @@ export class Engine {
       storageKeys
     });
     controller.start();
+    return controller;
   }
 
   /**

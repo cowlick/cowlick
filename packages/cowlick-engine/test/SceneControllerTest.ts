@@ -3,10 +3,8 @@ import * as assert from "assert";
 import * as engine from "./helpers/setup";
 
 describe("SceneController", () => {
-  it("ロードシーンからゲームシーンに遷移できる", () => {
-    const config = engine.core.defaultConfig;
-    const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
-    const scriptManager = new engine.ScriptManager(defaultScripts);
+
+  function createController(config: engine.core.Config, scriptManager: engine.ScriptManager) {
     const scenario = new engine.core.Scenario([
       new engine.core.Scene({
         label: "0",
@@ -62,7 +60,6 @@ describe("SceneController", () => {
       system: {}
     };
     controller.current._gameState = new engine.GameState(data, vars, config.system.maxSaveCount);
-    controller.start();
     controller.saveLoadScene = new engine.SaveLoadScene({
       game: g.game,
       scene: scenario.scene,
@@ -70,6 +67,14 @@ describe("SceneController", () => {
       assetIds: [],
       gameState: controller.current.gameState
     });
+    return controller;
+  }
+
+  it("ロードシーンからゲームシーンに遷移できる", () => {
+    const config = engine.core.defaultConfig;
+    const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
+    const scriptManager = new engine.ScriptManager(defaultScripts);
+    const controller = createController(config, scriptManager);
     controller.saveLoadScene.stateChanged.add(
       (state) => {
         if(state === g.SceneState.Active) {
@@ -82,6 +87,7 @@ describe("SceneController", () => {
       },
       this
     );
+    controller.start();
     scriptManager.call(controller, {
       tag: engine.core.Tag.openLoadScene,
       data: {
@@ -100,5 +106,21 @@ describe("SceneController", () => {
         }
       }
     });
+  });
+
+  it("破棄できる", () => {
+    const config = engine.core.defaultConfig;
+    const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
+    const scriptManager = new engine.ScriptManager(defaultScripts);
+    const controller = createController(config, scriptManager);
+    controller.current.stateChanged.add(
+      (state) => {
+        if(state === g.SceneState.Active) {
+          controller.destroy();
+        }
+      },
+      this
+    );
+    controller.start();
   });
 });

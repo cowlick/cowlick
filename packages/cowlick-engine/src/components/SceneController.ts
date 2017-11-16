@@ -14,7 +14,7 @@ export interface SceneControllerParameters {
   storageKeys: g.StorageKey[];
 }
 
-export class SceneController {
+export class SceneController implements g.Destroyable {
 
   game: g.Game;
   private player: g.Player;
@@ -101,6 +101,42 @@ export class SceneController {
     this.saveLoadScene.close();
   }
 
+  destroy() {
+    const scene = this.game.scene();
+    const current = this._current;
+    if(scene === this.saveLoadScene) {
+      // popSceneのリクエスト直後だとcurrentのpopが行われない可能性があるので、破棄後に再度確認する
+      this.saveLoadScene.stateChanged.add(
+        (status) => {
+          if(status === g.SceneState.Destroyed) {
+            if(this.game.scene() === current) {
+              this.game.popScene();
+            }
+          }
+        },
+        this
+      );
+      this.game.popScene();
+    } else if(! this.saveLoadScene.destroyed()) {
+      this.destroy();
+    }
+    this.saveLoadScene = undefined;
+    if(scene === current) {
+      this.game.popScene();
+    }
+    this._current = undefined;
+    this.player = undefined;
+    this.scenario = undefined;
+    this.config = undefined;
+    this.scriptManager = undefined;
+    this.storageKeys = undefined;
+    this.game = undefined;
+  }
+
+  destroyed() {
+    return ! this._current;
+  }
+
   private loadScene() {
     this.scenario.clear();
     const previousLoadScene = this.saveLoadScene;
@@ -138,6 +174,7 @@ export class SceneController {
         previousLoadScene.destroy();
         break;
       case g.SceneState.Active:
+        // popが終わっていない可能性があるので、1フレーム待ってから破棄する
         previousGameScene.setTimeout(() => previousLoadScene.destroy(), this.game.fps, this);
         break;
     }
