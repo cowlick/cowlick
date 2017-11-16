@@ -104,7 +104,7 @@ export class SceneController {
   private loadScene() {
     this.scenario.clear();
     const previousLoadScene = this.saveLoadScene;
-    const prevuousGameScene = this._current;
+    const previousGameScene = this._current;
     this._current = new GameScene({
       game: this.game,
       scenario: this.scenario,
@@ -138,7 +138,7 @@ export class SceneController {
         previousLoadScene.destroy();
         break;
       case g.SceneState.Active:
-        prevuousGameScene.setTimeout(() => previousLoadScene.destroy(), this.game.fps, this);
+        previousGameScene.setTimeout(() => previousLoadScene.destroy(), this.game.fps, this);
         break;
     }
   }
