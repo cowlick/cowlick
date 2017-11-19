@@ -27,7 +27,7 @@
     "@akashic/akashic-engine": "2.0.0",
     "@types/escodegen": "0.0.6",
     "@types/estraverse": "0.0.6",
-    "@types/node": "8.0.28",
-    "typescript": "2.5.3"
+    "@types/node": "8.0.53",
+    "typescript": "2.6.1"
   }
 }

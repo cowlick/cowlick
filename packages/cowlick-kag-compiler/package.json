@@ -37,12 +37,12 @@
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.1",
     "@types/estraverse": "0.0.6",
-    "@types/mocha": "2.2.43",
-    "@types/node": "8.0.28",
-    "espower-typescript": "8.1.1",
+    "@types/mocha": "2.2.44",
+    "@types/node": "8.0.53",
+    "espower-typescript": "8.1.2",
     "mocha": "3.5.3",
     "pegjs": "0.10.0",
     "power-assert": "1.4.4",
-    "typescript": "2.5.3"
+    "typescript": "2.6.1"
   }
 }

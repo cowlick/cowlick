@@ -19,8 +19,8 @@
     "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "dependencies": {
-    "@akashic-extension/akashic-label": "0.3.4",
-    "@akashic-extension/akashic-timeline": "0.4.2",
+    "@akashic-extension/akashic-label": "0.3.5",
+    "@akashic-extension/akashic-timeline": "0.4.3",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4",
     "cowlick-core": "^0.1.0"
@@ -28,11 +28,11 @@
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",
     "@xnv/headless-akashic": "0.0.1",
-    "@types/mocha": "2.2.43",
-    "@types/node": "8.0.28",
-    "espower-typescript": "8.1.1",
+    "@types/mocha": "2.2.44",
+    "@types/node": "8.0.53",
+    "espower-typescript": "8.1.2",
     "mocha": "3.5.3",
     "power-assert": "1.4.4",
-    "typescript": "2.5.3"
+    "typescript": "2.6.1"
   }
 }

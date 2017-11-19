@@ -271,6 +271,7 @@ function programToExportFunction(original: estree.Program, requireReturn: boolea
     }
     index++;
   }
+  // FIXME: esprimaでのexpressionプロパティが付与される動作に合わせるため、anyに型変換する
   return moduleExports({
     type: "FunctionExpression",
     id: null,
@@ -287,7 +288,7 @@ function programToExportFunction(original: estree.Program, requireReturn: boolea
       type: "BlockStatement",
       body
     }
-  });
+  } as any);
 }
 
 function exportFunction(original: estree.Program, requireReturn: boolean) {

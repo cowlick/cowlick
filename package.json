@@ -24,11 +24,11 @@
     "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "devDependencies": {
-    "gh-pages": "1.0.0",
+    "gh-pages": "1.1.0",
     "husky": "0.14.3",
     "lerna": "2.5.1",
-    "lint-staged": "4.3.0",
-    "prettier": "1.7.4"
+    "lint-staged": "5.0.0",
+    "prettier": "1.8.2"
   },
   "prettier": {
     "printWidth": 120
