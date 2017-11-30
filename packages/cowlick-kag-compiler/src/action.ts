@@ -1,6 +1,6 @@
 "use strict";
+import * as acorn from "acorn";
 import * as estree from "estree";
-import * as esprima from "esprima";
 import * as estraverse from "estraverse";
 import * as core from "cowlick-core";
 import * as ast from "cowlick-analyzer";
@@ -134,7 +134,7 @@ const varF = "f";
 
 export function variable(expression: string): core.Variable {
   let value: core.Variable;
-  estraverse.traverse(esprima.parseScript(expression), {
+  estraverse.traverse(acorn.parse(expression), {
     enter: function(node, parent) {
       if(node.type === "Program" && node.body.length === 1) {
         const statement = node.body[0];
@@ -231,8 +231,8 @@ function newMemberExpression(name: string): estree.MemberExpression {
   };
 }
 
-function traverseEval(original: estree.Program): estree.Program {
-  estraverse.traverse(original, {
+function traverseEval(original: string): estree.Node {
+  return estraverse.replace(acorn.parse(original), {
     leave: (node, parent) => {
       if(node.type === "MemberExpression") {
         const object = node.object;
@@ -251,15 +251,22 @@ function traverseEval(original: estree.Program): estree.Program {
           node.object = newObject;
         }
       }
+      // FIME: acornでstartとendを削除する方法を探す
+      const n = node as any;
+      if(typeof n.start === "number") {
+        delete n["start"];
+      }
+      if(typeof n.end === "number") {
+        delete n["end"];
+      }
     }
   });
-  return original;
 }
 
-export function evaluate(expression: string): core.Script<estree.Program> {
+export function evaluate(expression: string): core.Script<estree.Node> {
   return {
     tag: core.Tag.evaluate,
-    data: traverseEval(esprima.parseScript(expression))
+    data: traverseEval(expression)
   };
 }
 
@@ -267,7 +274,7 @@ export function condition(expression: string, scripts: core.Script<any>[]): core
   return {
     tag: core.Tag.condition,
     data: {
-      expression: traverseEval(esprima.parseScript(expression)),
+      expression: traverseEval(expression),
       scripts
     }
   };
@@ -312,7 +319,7 @@ export function choiceItem(text: string, data: ast.Jump, condition?: string): as
     text
   };
   if(condition) {
-    result.condition = traverseEval(esprima.parseScript(condition));
+    result.condition = traverseEval(condition);
   }
   return result;
 }

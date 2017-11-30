@@ -291,7 +291,7 @@ function programToExportFunction(original: estree.Program, requireReturn: boolea
   } as any);
 }
 
-function exportFunction(original: estree.Program, requireReturn: boolean) {
+function exportFunction(original: estree.Node, requireReturn: boolean) {
   return estraverse.replace(original, {
     leave: (node, path) => {
       switch(node.type) {
@@ -330,7 +330,7 @@ function conditionBody(is: InlineScript, scripts: core.Script<any>[], options: V
   ];
 }
 
-function createInlineScript(expression: estree.Program, options: VisitorOptions) {
+function createInlineScript(expression: estree.Node, options: VisitorOptions) {
   const is = new InlineScript({
     scene: options.scene,
     frame: options.frame,

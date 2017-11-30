@@ -24,22 +24,24 @@
     "url": "https://github.com/pocketberserker/cowlick.git"
   },
   "dependencies": {
+    "acorn": "5.2.1",
     "commandpost": "1.2.1",
     "cowlick-analyzer": "^0.1.0",
     "cowlick-core": "^0.1.0",
     "escodegen": "1.9.0",
-    "esprima": "4.0.0",
     "estraverse": "4.2.0"
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",
-    "@xnv/headless-akashic": "0.0.1",
+    "@types/acorn": "4.0.3",
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.1",
     "@types/estraverse": "0.0.6",
     "@types/mocha": "2.2.44",
     "@types/node": "8.0.53",
+    "@xnv/headless-akashic": "0.0.1",
     "espower-typescript": "8.1.2",
+    "esprima": "4.0.0",
     "mocha": "3.5.3",
     "pegjs": "0.10.0",
     "power-assert": "1.4.4",
