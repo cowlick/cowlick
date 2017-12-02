@@ -5,7 +5,6 @@ import {Script, collectAssetIds} from "./Script";
  * シーンの1フレームを表す。
  */
 export class Frame {
-
   private _scripts: Script<any>[];
   private cacheAssetIds: string[];
   alreadyRead: boolean;
@@ -20,7 +19,7 @@ export class Frame {
   }
 
   get assetIds(): string[] {
-    if(! this.cacheAssetIds) {
+    if (!this.cacheAssetIds) {
       this.cacheAssetIds = collectAssetIds(this._scripts);
     }
     return this.cacheAssetIds;

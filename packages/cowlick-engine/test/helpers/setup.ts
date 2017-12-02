@@ -1,5 +1,5 @@
 "use strict";
-import { Context } from "@xnv/headless-akashic";
+import {Context} from "@xnv/headless-akashic";
 import "@xnv/headless-akashic/polyfill";
 
 export let core;
@@ -10,7 +10,7 @@ export let ScriptManager;
 export let ScriptFunction;
 export let Storage;
 
-beforeEach((done) => {
+beforeEach(done => {
   const ctx = new Context();
   ctx.start().then((game: g.Game) => {
     g.game = game;

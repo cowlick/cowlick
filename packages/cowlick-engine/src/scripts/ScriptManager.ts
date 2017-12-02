@@ -8,7 +8,6 @@ import {SceneController} from "../components/SceneController";
 export type ScriptFunction = (scene: SceneController, data: any) => void;
 
 export class ScriptManager {
-
   private scripts: Map<string, ScriptFunction>;
 
   constructor(scripts: Map<string, ScriptFunction>) {
@@ -21,15 +20,15 @@ export class ScriptManager {
 
   call(controller: SceneController, script: Script<any>) {
     let f = this.scripts.get(script.tag);
-    if(f) {
+    if (f) {
       try {
         f(controller, script.data);
-      } catch(e) {
-        this.call(controller, { tag: Tag.exception, data: e });
+      } catch (e) {
+        this.call(controller, {tag: Tag.exception, data: e});
       }
     } else {
       const data = new GameError("script tag was not registered", script);
-      this.call(controller, { tag: Tag.exception, data });
+      this.call(controller, {tag: Tag.exception, data});
     }
   }
 }

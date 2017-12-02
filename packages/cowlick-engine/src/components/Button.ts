@@ -9,11 +9,10 @@ export interface ButtonParameters {
   padding?: number;
   backgroundEffector?: {
     borderWidth: number;
-  }
+  };
 }
 
 export class Button extends g.Pane {
-
   onClick: g.Trigger<Button>;
   private pushed: boolean;
 
@@ -22,9 +21,13 @@ export class Button extends g.Pane {
       scene: params.scene,
       width: params.width,
       height: params.height,
-      backgroundImage: params.backgroundImage ? params.scene.assets[params.backgroundImage] as g.ImageAsset : undefined,
+      backgroundImage: params.backgroundImage
+        ? (params.scene.assets[params.backgroundImage] as g.ImageAsset)
+        : undefined,
       padding: params.padding,
-      backgroundEffector: params.backgroundEffector ? new g.NinePatchSurfaceEffector(params.scene.game, params.backgroundEffector.borderWidth) : undefined
+      backgroundEffector: params.backgroundEffector
+        ? new g.NinePatchSurfaceEffector(params.scene.game, params.backgroundEffector.borderWidth)
+        : undefined
     });
     this.touchable = true;
     this.pointDown.add(this.onPointDown, this);
@@ -38,14 +41,13 @@ export class Button extends g.Pane {
     this.pushed = true;
     this.modified();
   }
-  
+
   unpush(): void {
     this.pushed = false;
     this.modified();
   }
 
   move(x: number, y: number) {
-
     this.x = x;
     this.y = y;
 
@@ -53,7 +55,7 @@ export class Button extends g.Pane {
   }
 
   private onPointDown(e: g.PointDownEvent) {
-    if (! this.pushed) {
+    if (!this.pushed) {
       this.push();
     }
   }
@@ -63,18 +65,16 @@ export class Button extends g.Pane {
       x: e.point.x + e.startDelta.x,
       y: e.point.y + e.startDelta.y
     };
-    if (p.x < 0 || p.y < 0)
-      return false;
-    if (p.x >= this.width || p.y >= this.height)
-      return false;
+    if (p.x < 0 || p.y < 0) return false;
+    if (p.x >= this.width || p.y >= this.height) return false;
     return true;
   }
 
   private onPointMove(e: g.PointMoveEvent) {
     let hover = this.isHover(e);
-    if (this.pushed && ! hover) {
+    if (this.pushed && !hover) {
       this.unpush();
-    } else if (! this.pushed && hover) {
+    } else if (!this.pushed && hover) {
       this.push();
     }
   }

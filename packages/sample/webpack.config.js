@@ -8,18 +8,18 @@ var outDir = path.join(__dirname, "game", "script");
 
 var config = {
   entry: {
-    "main": path.join(srcDir, "main.ts"),
-    "eval": path.join(srcDir, "eval.ts"),
-    "scenario": path.join(srcDir, "scenario.ts"),
-    "config": path.join(srcDir, "config.ts"),
+    main: path.join(srcDir, "main.ts"),
+    eval: path.join(srcDir, "eval.ts"),
+    scenario: path.join(srcDir, "scenario.ts"),
+    config: path.join(srcDir, "config.ts")
   },
-  output : {
+  output: {
     path: outDir,
     filename: "[name].js",
     library: "[name]",
     libraryTarget: "commonjs2"
   },
-  module : {
+  module: {
     rules: [
       {
         test: /\.ts$/,
@@ -43,7 +43,7 @@ var config = {
         compress: {
           warnings: false
         },
-        output  : {
+        output: {
           comments: require("uglify-save-license")
         }
       }

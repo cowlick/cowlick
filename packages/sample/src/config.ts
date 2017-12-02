@@ -107,7 +107,7 @@ const config: novel.Config = {
                         name: novel.Layer.backlog,
                         opacity: 100,
                         x: 10,
-                        y: 10,
+                        y: 10
                       },
                       width: g.game.width - 20,
                       height: g.game.height - 20,

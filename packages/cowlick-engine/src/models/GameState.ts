@@ -5,7 +5,6 @@ import * as core from "cowlick-core";
  * ゲーム情報を管理する。
  */
 export class GameState {
-
   private data: core.SaveData[];
   private _variables: core.Variables;
   private max: number;
@@ -30,15 +29,15 @@ export class GameState {
   }
 
   save(scene: core.Scene, config: core.Save): core.SaveData {
-    if(config.index > this.max || config.index < 0) {
+    if (config.index > this.max || config.index < 0) {
       throw new core.GameError("storage out of range", config);
     }
     const saveData = scene.createSaveData(this._variables.current, config.description);
-    if(config.force) {
+    if (config.force) {
       this.data[config.index] = saveData;
       return saveData;
     } else {
-      if(this.exists(config.index)) {
+      if (this.exists(config.index)) {
         throw new core.GameError("save data already exists", config);
       } else {
         this.data[config.index] = saveData;
@@ -54,7 +53,7 @@ export class GameState {
    */
   load(index: number): core.SaveData {
     const saveData = this.data[index];
-    if(saveData) {
+    if (saveData) {
       this._variables.current = saveData.variables;
     }
     return saveData;
@@ -76,7 +75,7 @@ export class GameState {
    */
   getStringValue(variable: core.Variable): string {
     const result = this.getValue(variable);
-    if(result) {
+    if (result) {
       return String(result);
     } else {
       return undefined;
@@ -99,19 +98,19 @@ export class GameState {
    * @param scenario シナリオデータ
    */
   collectAssetIds(scenario: core.Scenario): string[] {
-    let ids: string[] =[];
-    for(const d of this.data) {
+    let ids: string[] = [];
+    for (const d of this.data) {
       ids = ids.concat(scenario.findScene(d).assetIds);
     }
     return ids;
   }
 
   private getVariables(variable: core.Variable) {
-    if(variable.type === core.VariableType.system) {
+    if (variable.type === core.VariableType.system) {
       return this._variables.system;
-    } else if(variable.type === core.VariableType.builtin) {
+    } else if (variable.type === core.VariableType.builtin) {
       return this._variables.builtin;
-    } else if(variable.type === core.VariableType.current) {
+    } else if (variable.type === core.VariableType.current) {
       return this._variables.current;
     } else {
       throw new core.GameError("invalid variable type", variable);

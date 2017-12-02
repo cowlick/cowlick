@@ -123,7 +123,7 @@ export interface Text {
   /**
    * テキストを構成するデータ
    */
-  values: (string | Ruby[] | Variable) [];
+  values: (string | Ruby[] | Variable)[];
 }
 
 /**
@@ -137,7 +137,7 @@ export interface Jump {
   /**
    * フレームインデックス
    */
-  frame?: number
+  frame?: number;
 }
 
 /**
@@ -161,11 +161,11 @@ export interface Script<T> {
  */
 export function collectAssetIds(scripts: Script<any>[]): string[] {
   let ids: string[] = [];
-  for(const s of scripts) {
-    if(typeof(s.data) === "object") {
-      if(s.data.assetId) {
+  for (const s of scripts) {
+    if (typeof s.data === "object") {
+      if (s.data.assetId) {
         ids.push(<string>s.data.assetId);
-      } else if(s.data.backgroundImage) {
+      } else if (s.data.backgroundImage) {
         ids.push(<string>s.data.backgroundImage);
       }
     }

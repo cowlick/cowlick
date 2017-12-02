@@ -25,14 +25,14 @@ function parseScene(target: string): ParseResult {
 export function parse(baseDir: string): ast.Scenario {
   let targets = ["first.ks"];
   const scenario: ast.Scene[] = [];
-  while(targets.length !== 0) {
+  while (targets.length !== 0) {
     const filePath = path.resolve(baseDir, targets.pop());
     const result = parseScene(filePath);
     scenario.push(result.scene);
-    
+
     // ファイル登場順に1度だけ解析対象として追加する
-    for(const d of result.dependencies) {
-      if(targets.findIndex(t => t === d) === -1) {
+    for (const d of result.dependencies) {
+      if (targets.findIndex(t => t === d) === -1) {
         targets.push(d);
       }
     }

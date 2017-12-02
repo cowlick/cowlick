@@ -15,7 +15,6 @@ export interface SaveLoadSceneParameters {
 }
 
 export class SaveLoadScene extends Scene {
-
   private config: core.Config;
   private button: Button;
   gameState: GameState;
@@ -33,7 +32,7 @@ export class SaveLoadScene extends Scene {
   }
 
   close() {
-    if(this.game.scene() === this) {
+    if (this.game.scene() === this) {
       this.game.popScene(true);
     } else {
       throw new core.GameError("Current scene is not a save or load scene.");
@@ -41,7 +40,6 @@ export class SaveLoadScene extends Scene {
   }
 
   private onLoaded() {
-
     // TODO: configで差し替えられるようにする
     this.button = new LabelButton({
       scene: this,
@@ -59,9 +57,8 @@ export class SaveLoadScene extends Scene {
   }
 
   private static collectAssetIds(params: SaveLoadSceneParameters) {
-    const assetIds = params.scene.assetIds
-      .concat(core.collectAssetIds(params.config.window.system), params.assetIds);
-    if(params.config.window.message.backgroundImage) {
+    const assetIds = params.scene.assetIds.concat(core.collectAssetIds(params.config.window.system), params.assetIds);
+    if (params.config.window.message.backgroundImage) {
       assetIds.push(params.config.window.message.backgroundImage);
     }
     return assetIds;

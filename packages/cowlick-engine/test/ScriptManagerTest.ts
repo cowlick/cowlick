@@ -7,13 +7,10 @@ function fail(controller: SceneController, data: any) {
 }
 
 describe("ScriptManager", () => {
-
   it("登録済みのスクリプトを上書きできる", () => {
     const tag = "test";
-    const manager = new ScriptManager(new Map<string, ScriptFunction>([
-      [tag, fail]
-    ]));
+    const manager = new ScriptManager(new Map<string, ScriptFunction>([[tag, fail]]));
     manager.register(tag, (controller: SceneController, data: any) => {});
-    manager.call(null, { tag, data: null });
+    manager.call(null, {tag, data: null});
   });
 });

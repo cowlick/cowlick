@@ -3,7 +3,6 @@ import * as assert from "assert";
 import * as engine from "./helpers/setup";
 
 describe("SceneController", () => {
-
   function createController(config: engine.core.Config, scriptManager: engine.ScriptManager) {
     const scenario = new engine.core.Scenario([
       new engine.core.Scene({
@@ -32,13 +31,13 @@ describe("SceneController", () => {
               }
             }
           ])
-      ]
+        ]
       })
     ]);
     const controller = new engine.SceneController({
       game: g.game,
       scenario,
-      player: { id: "0" },
+      player: {id: "0"},
       config,
       scriptManager,
       storageKeys: []
@@ -75,18 +74,15 @@ describe("SceneController", () => {
     const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
     const scriptManager = new engine.ScriptManager(defaultScripts);
     const controller = createController(config, scriptManager);
-    controller.saveLoadScene.stateChanged.add(
-      (state) => {
-        if(state === g.SceneState.Active) {
-          scriptManager.call(controller, { tag: "closeLoadScene" });
-          controller.jump({
-            label: "1",
-            frame: 0
-          });
-        }
-      },
-      this
-    );
+    controller.saveLoadScene.stateChanged.add(state => {
+      if (state === g.SceneState.Active) {
+        scriptManager.call(controller, {tag: "closeLoadScene"});
+        controller.jump({
+          label: "1",
+          frame: 0
+        });
+      }
+    }, this);
     controller.start();
     scriptManager.call(controller, {
       tag: engine.core.Tag.openLoadScene,
@@ -113,14 +109,11 @@ describe("SceneController", () => {
     const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
     const scriptManager = new engine.ScriptManager(defaultScripts);
     const controller = createController(config, scriptManager);
-    controller.current.stateChanged.add(
-      (state) => {
-        if(state === g.SceneState.Active) {
-          controller.destroy();
-        }
-      },
-      this
-    );
+    controller.current.stateChanged.add(state => {
+      if (state === g.SceneState.Active) {
+        controller.destroy();
+      }
+    }, this);
     controller.start();
   });
 });

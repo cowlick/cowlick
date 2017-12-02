@@ -18,9 +18,7 @@ export const scene0 = new novel.Scene({
         tag: novel.Tag.text,
         data: {
           clear: true,
-          values: [
-            "Hello\nAkashic Novel!"
-          ]
+          values: ["Hello\nAkashic Novel!"]
         }
       }
     ]),
@@ -41,22 +39,22 @@ export const scene0 = new novel.Scene({
           values: [
             [
               {
-                value: "{ \"rb\": \"ル　　　　　\", \"rt\": \"テ　　\" }"
+                value: '{ "rb": "ル　　　　　", "rt": "テ　　" }'
               },
               {
-                value: "{ \"rb\": \"ルビ　　　　\", \"rt\": \"テ　　\" }"
+                value: '{ "rb": "ルビ　　　　", "rt": "テ　　" }'
               },
               {
-                value: "{ \"rb\": \"ルビの　　　\", \"rt\": \"テス　\" }"
+                value: '{ "rb": "ルビの　　　", "rt": "テス　" }'
               },
               {
-                value: "{ \"rb\": \"ルビのテ　　\", \"rt\": \"テス　\" }"
+                value: '{ "rb": "ルビのテ　　", "rt": "テス　" }'
               },
               {
-                value: "{ \"rb\": \"ルビのテス　\", \"rt\": \"テスト\" }"
+                value: '{ "rb": "ルビのテス　", "rt": "テスト" }'
               },
               {
-                value: "{ \"rb\": \"ルビのテスト\", \"rt\": \"テスト\" }"
+                value: '{ "rb": "ルビのテスト", "rt": "テスト" }'
               }
             ]
           ]
@@ -74,9 +72,7 @@ export const scene0 = new novel.Scene({
         tag: novel.Tag.text,
         data: {
           clear: true,
-          values: [
-            "画像が指定なされていない場合は前フレームを引き継ぐ"
-          ]
+          values: ["画像が指定なされていない場合は前フレームを引き継ぐ"]
         }
       }
     ]),

@@ -22,7 +22,6 @@ export interface GameSceneParameters {
 }
 
 export class GameScene extends Scene {
-
   private _message: Message;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
@@ -53,7 +52,7 @@ export class GameScene extends Scene {
     this.videos = [];
     this.player = params.player;
     this.storageKeys = params.storageKeys;
-    if(params.state) {
+    if (params.state) {
       this._gameState = params.state;
     }
 
@@ -85,14 +84,11 @@ export class GameScene extends Scene {
 
   updateText(text: core.Text) {
     this._message.updateText(text, this.scenario.frame.alreadyRead);
-    this._message.onFinished.addOnce(
-      (text) => {
-        this.scenario.pushLog({ text, frame: this.scenario.frame });
-        this.scenario.frame.alreadyRead = true;
-        this.scriptManager.call(this.controller, { tag: core.Tag.autoMode, data: {} });
-      },
-      this
-    );
+    this._message.onFinished.addOnce(text => {
+      this.scenario.pushLog({text, frame: this.scenario.frame});
+      this.scenario.frame.alreadyRead = true;
+      this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
+    }, this);
     this.disableWindowClick();
     this.enableWindowClick();
   }
@@ -107,16 +103,16 @@ export class GameScene extends Scene {
   }
 
   enableWindowClick() {
-    this.layerGroup.evaluate(core.Layer.message, (layer) => {
+    this.layerGroup.evaluate(core.Layer.message, layer => {
       layer.touchable = true;
-      if(this._message.finished) {
+      if (this._message.finished) {
         layer.pointUp.addOnce(this.requestNextFrame, this);
-        for(const c of layer.children) {
+        for (const c of layer.children) {
           c.pointUp.addOnce(this.requestNextFrame, this);
         }
       } else {
         layer.pointUp.addOnce(this.onWindowClick, this);
-        for(const c of layer.children) {
+        for (const c of layer.children) {
           c.pointUp.addOnce(this.onWindowClick, this);
         }
       }
@@ -136,7 +132,7 @@ export class GameScene extends Scene {
   }
 
   playAudio(audio: core.Audio) {
-    const a = (this.assets[audio.assetId] as g.AudioAsset);
+    const a = this.assets[audio.assetId] as g.AudioAsset;
     const player = a.play();
     this.audioGroup.add(audio.group, player);
   }
@@ -151,14 +147,14 @@ export class GameScene extends Scene {
 
   playVideo(video: core.Video) {
     // TODO: 最後まで流し終わったことを検知できるようになったら作り直す
-    const v = (this.assets[video.assetId] as g.VideoAsset);
+    const v = this.assets[video.assetId] as g.VideoAsset;
     v.play();
     this.videos.push(v);
   }
 
   stopVideo(video: core.Video) {
     const i = this.videos.findIndex(asset => asset.id === video.assetId);
-    if(i > 0) {
+    if (i > 0) {
       const v = this.videos[i];
       v.stop();
       v.destroy();
@@ -185,10 +181,9 @@ export class GameScene extends Scene {
   }
 
   private onLoaded() {
-
     const frame = this.scenario.frame;
 
-    if(! this._gameState) {
+    if (!this._gameState) {
       this._gameState = loadGameState(this, this.storageKeys, this.config);
     }
     this.storage = new Storage(this.game.storage, this.player, this._gameState);
@@ -196,7 +191,7 @@ export class GameScene extends Scene {
     this.storage.saveBuiltinVariables();
     this.storage.saveSystemVariables();
 
-    if(frame) {
+    if (frame) {
       this.removeLayers(frame.scripts);
       this.createMessageLayer();
       this.createSystemLayer();
@@ -210,21 +205,21 @@ export class GameScene extends Scene {
   }
 
   private disableTrigger() {
-    if(this.autoIdentifier) {
+    if (this.autoIdentifier) {
       this.clearTimeout(this.autoIdentifier);
       this.autoIdentifier = null;
     }
-    this.layerGroup.evaluate(core.Layer.message, (layer) => {
+    this.layerGroup.evaluate(core.Layer.message, layer => {
       layer.touchable = false;
       layer.pointUp.removeAll();
-      for(const c of layer.children) {
+      for (const c of layer.children) {
         c.pointUp.removeAll();
       }
     });
   }
 
   private loadFrame(frame: core.Frame) {
-    if(frame) {
+    if (frame) {
       this.removeLayers(frame.scripts);
       this.applyScripts(frame.scripts);
     }
@@ -233,8 +228,8 @@ export class GameScene extends Scene {
   }
 
   private topMessageLayer() {
-    this.layerGroup.evaluate(core.Layer.message, (layer) => {
-      if(layer.touchable) {
+    this.layerGroup.evaluate(core.Layer.message, layer => {
+      if (layer.touchable) {
         this.layerGroup.top(core.Layer.message);
       }
     });
@@ -253,12 +248,12 @@ export class GameScene extends Scene {
       y: this.config.window.message.layer.y + 20,
       gameState: this.gameState
     });
-    this.layerGroup.append(this._message, { name: core.Layer.message });
+    this.layerGroup.append(this._message, {name: core.Layer.message});
     this.enableWindowClick();
   }
 
   private createSystemLayer() {
-    for(const s of this.config.window.system) {
+    for (const s of this.config.window.system) {
       this.scriptManager.call(this.controller, s);
     }
   }
@@ -266,7 +261,7 @@ export class GameScene extends Scene {
   private removeLayers(scripts: core.Script<any>[]) {
     const names = new Set<string>();
     scripts.forEach(s => {
-      if(s.data.layer) {
+      if (s.data.layer) {
         names.add(s.data.layer);
       }
     });
@@ -282,17 +277,15 @@ export class GameScene extends Scene {
   }
 
   private static collectAssetIds(params: GameSceneParameters) {
-    const assetIds = params.scenario.scene.assetIds
-      .concat(core.collectAssetIds(params.config.window.system));
-    if(params.config.window.message.backgroundImage) {
+    const assetIds = params.scenario.scene.assetIds.concat(core.collectAssetIds(params.config.window.system));
+    if (params.config.window.message.backgroundImage) {
       assetIds.push(params.config.window.message.backgroundImage);
     }
     return assetIds;
   }
 
   private onWindowClick() {
-    if(this._enabledWindowClick) {
-
+    if (this._enabledWindowClick) {
       this.gameState.setValue(
         {
           type: core.VariableType.builtin,
@@ -301,7 +294,7 @@ export class GameScene extends Scene {
         false
       );
 
-      if(this._message.finished) {
+      if (this._message.finished) {
         this.requestNextFrame();
       } else {
         this._message.showAll();

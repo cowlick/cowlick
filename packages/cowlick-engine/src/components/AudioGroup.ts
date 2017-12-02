@@ -2,7 +2,6 @@
 import {Audio, AudioConfig, GameError} from "cowlick-core";
 
 export class AudioGroup {
-
   private game: g.Game;
   private group: Map<string, g.AudioPlayer[]>;
   private config: AudioConfig;
@@ -16,11 +15,11 @@ export class AudioGroup {
   add(name: string, audio: g.AudioPlayer) {
     // TODO: 型変換を消す
     const volume = (this.config as any)[name];
-    if(volume) {
+    if (volume) {
       audio.changeVolume(volume);
     }
     let ps = this.group.get(name);
-    if(! ps) {
+    if (!ps) {
       ps = [];
       this.group.set(name, ps);
     }
@@ -29,8 +28,8 @@ export class AudioGroup {
 
   changeVolume(name: string, volume: number) {
     let ps = this.group.get(name);
-    if(ps) {
-      for(const player of ps) {
+    if (ps) {
+      for (const player of ps) {
         player.changeVolume(volume);
       }
     }
@@ -38,17 +37,17 @@ export class AudioGroup {
 
   remove(audio: Audio) {
     let ps = this.group.get(audio.group);
-    if(ps) {
-      if(audio.assetId) {
+    if (ps) {
+      if (audio.assetId) {
         const i = ps.findIndex(p => p.currentAudio.id === audio.assetId);
-        if(i > 0) {
+        if (i > 0) {
           ps[i].stop();
           ps.splice(i, 1);
         } else {
           throw new GameError("audio not found", audio);
         }
-      } else if(this.group.delete(audio.group)) {
-        for(const player of ps) {
+      } else if (this.group.delete(audio.group)) {
+        for (const player of ps) {
           player.stop();
         }
       } else {

@@ -16,53 +16,46 @@ function appendSyntaxErrorinfo(e: any) {
 }
 
 describe("KAGParser", () => {
-
   describe("正しい構文が処理できる", () => {
     const path = "test/fixture/valid/";
     let files = glob.sync(`${path}**/*.ks`);
 
-    files
-      .forEach((filePath: string) => {
-        const baseName = filePath
-          .substr(0, filePath.length - "/content.ks".length)
-          .substr(path.length);
-        const astFilePath = `${path}${baseName}/content.ast`;
-        it(`${filePath}`, () => {
-          const text = fs.readFileSync(filePath, "utf8");
-          try {
-            const actual = kag.parse(text);
-            const expectedAST = fs.readFileSync(astFilePath, "utf8");
-            assert.deepEqual(actual.frames, JSON.parse(expectedAST));
-          } catch(e) {
-            appendSyntaxErrorinfo(e);
-            throw e;
-          }
-        });
+    files.forEach((filePath: string) => {
+      const baseName = filePath.substr(0, filePath.length - "/content.ks".length).substr(path.length);
+      const astFilePath = `${path}${baseName}/content.ast`;
+      it(`${filePath}`, () => {
+        const text = fs.readFileSync(filePath, "utf8");
+        try {
+          const actual = kag.parse(text);
+          const expectedAST = fs.readFileSync(astFilePath, "utf8");
+          assert.deepEqual(actual.frames, JSON.parse(expectedAST));
+        } catch (e) {
+          appendSyntaxErrorinfo(e);
+          throw e;
+        }
       });
+    });
   });
 
   describe("正しくない構文のファイルが処理できる", () => {
     let path = "test/fixture/invalid/";
     let files = glob.sync(`${path}**/*.ks`);
-    files
-      .forEach((filePath: string) => {
-        let baseName = filePath
-          .substr(0, filePath.length - "/content.ks".length)
-          .substr(path.length);
+    files.forEach((filePath: string) => {
+      let baseName = filePath.substr(0, filePath.length - "/content.ks".length).substr(path.length);
 
-        it(`${filePath}`, () => {
-          let data = fs.readFileSync(filePath, "utf8");
-          try {
-            kag.parse(data);
-            throw new Error("正しく処理できてしまった");
-          } catch (e) {
-            if (e instanceof kag.SyntaxError) {
-              // ok
-            } else {
-              throw e;
-            }
+      it(`${filePath}`, () => {
+        let data = fs.readFileSync(filePath, "utf8");
+        try {
+          kag.parse(data);
+          throw new Error("正しく処理できてしまった");
+        } catch (e) {
+          if (e instanceof kag.SyntaxError) {
+            // ok
+          } else {
+            throw e;
           }
-        });
+        }
+      });
     });
-});
+  });
 });

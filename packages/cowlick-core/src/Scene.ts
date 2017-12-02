@@ -11,7 +11,6 @@ export interface SceneParameters {
  * シーンデータ。
  */
 export class Scene {
-
   private index: number = 0;
   private _label: string;
   private frames: Frame[];
@@ -27,7 +26,7 @@ export class Scene {
   }
 
   get frame() {
-    if(this.index < this.frames.length) {
+    if (this.index < this.frames.length) {
       return this.frames[this.index];
     } else {
       return undefined;
@@ -35,9 +34,9 @@ export class Scene {
   }
 
   get assetIds(): string[] {
-    if(! this.cacheAssetIds) {
+    if (!this.cacheAssetIds) {
       this.cacheAssetIds = [];
-      for(const f of this.frames) {
+      for (const f of this.frames) {
         this.cacheAssetIds = this.cacheAssetIds.concat(f.assetIds);
       }
     }
@@ -48,14 +47,13 @@ export class Scene {
    * 次のフレームを呼び出す。
    */
   next() {
-    if(this.index < this.frames.length) {
+    if (this.index < this.frames.length) {
       this.index++;
       return this.frames[this.index];
     } else {
       return undefined;
     }
   }
-
 
   /**
    * フレームインデックスを再設定する。
@@ -78,7 +76,7 @@ export class Scene {
       frame: this.index,
       variables
     };
-    if(description) {
+    if (description) {
       result.description = description;
     }
     return result;

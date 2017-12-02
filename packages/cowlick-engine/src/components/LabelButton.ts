@@ -12,7 +12,6 @@ export interface LabelButtonParameters extends ButtonParameters {
 }
 
 export class LabelButton extends Button {
-
   constructor(params: LabelButtonParameters) {
     super(params);
 

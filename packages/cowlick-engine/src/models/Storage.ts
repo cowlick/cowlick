@@ -4,7 +4,6 @@ import {GameState} from "./GameState";
 import {Region, gameId} from "../Constant";
 
 export class Storage {
-
   private state: GameState;
   private storage: g.Storage;
   private player: g.Player;
@@ -25,7 +24,7 @@ export class Storage {
     this.write(result.variables, prefix + "variables");
     this.write(result.label, prefix + "label");
     this.write(result.frame, prefix + "frame");
-    if(result.description) {
+    if (result.description) {
       this.write(result.description, prefix + "description");
     }
   }

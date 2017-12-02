@@ -9,7 +9,6 @@ export interface SliderParameters extends g.PaneParameterObject {
 }
 
 export class Slider extends g.Pane {
-
   private bar: scrollable.Scrollbar;
   private length: number;
   private target: core.Variable;
@@ -27,9 +26,21 @@ export class Slider extends g.Pane {
     this.maxValue = params.data.max;
     this.defaultValue = params.data.default;
 
-    let bgImage = scrollable.createDefaultScrollbarImage(params.scene.game, 7, "rgba(255, 255, 255, 0.2)", 4, "rgba(218, 218, 218, 0.5)");
-    let image = scrollable.createDefaultScrollbarImage(params.scene.game, 7, "rgba(255, 255, 255, 0.5)", 4, "rgba(164, 164, 164, 0.7)");
-    switch(params.data.direction) {
+    let bgImage = scrollable.createDefaultScrollbarImage(
+      params.scene.game,
+      7,
+      "rgba(255, 255, 255, 0.2)",
+      4,
+      "rgba(218, 218, 218, 0.5)"
+    );
+    let image = scrollable.createDefaultScrollbarImage(
+      params.scene.game,
+      7,
+      "rgba(255, 255, 255, 0.5)",
+      4,
+      "rgba(164, 164, 164, 0.7)"
+    );
+    switch (params.data.direction) {
       case core.Direction.Vertical:
         this.bar = new scrollable.NinePatchVerticalScrollbar({
           scene: params.scene,
@@ -49,20 +60,17 @@ export class Slider extends g.Pane {
     this.height = this.bar.height;
 
     const value = this.gameState.getValue(this.target);
-    if(typeof value === "number") {
+    if (typeof value === "number") {
       this.setPosRate(value / this.maxValue);
-    } else if(typeof value === "undefined") {
+    } else if (typeof value === "undefined") {
       this.setPosRate(this.defaultValue / this.maxValue);
     } else {
       throw new core.GameError("target variable is not number type", params.data);
     }
-    this.bar.onChangeBarPositionRate.add(
-      (rate) => {
-        this.gameState.setValue(this.target, this.maxValue * rate);
-      },
-      this
-    );
-    
+    this.bar.onChangeBarPositionRate.add(rate => {
+      this.gameState.setValue(this.target, this.maxValue * rate);
+    }, this);
+
     this.append(this.bar);
   }
 

@@ -141,7 +141,7 @@ function property(name: string, value: estree.Expression): estree.Property {
 
 function literal(value: any): estree.Literal {
   let raw: string;
-  if(typeof value === "string") {
+  if (typeof value === "string") {
     raw = JSON.stringify(value);
   } else {
     raw = String(value);
@@ -154,10 +154,7 @@ function literal(value: any): estree.Literal {
 }
 
 function scriptAst(tag: string, data: estree.Property[]): estree.ObjectExpression {
-  return object([
-    property("tag", literal(tag)),
-    property("data", object(data))
-  ]);
+  return object([property("tag", literal(tag)), property("data", object(data))]);
 }
 
 function name(value: string): estree.Property {
@@ -166,28 +163,23 @@ function name(value: string): estree.Property {
 
 function text(original: core.Text): estree.ObjectExpression {
   const data: estree.Property[] = [];
-  if(original.clear) {
+  if (original.clear) {
     data.push(property("clear", literal(original.clear)));
   }
   const values: estree.Expression[] = [];
-  for(const value of original.values) {
-    if(typeof value === "string") {
+  for (const value of original.values) {
+    if (typeof value === "string") {
       values.push(literal(value));
-    } else if(Array.isArray(value)) {
+    } else if (Array.isArray(value)) {
       values.push({
         type: ArrayExpression,
         elements: value.map(v => object([property("value", literal(v.value))]))
       });
     } else {
-      values.push(
-        object([
-          property("type", literal(value.type)),
-          name(value.name)
-        ])
-      );
+      values.push(object([property("type", literal(value.type)), name(value.name)]));
     }
   }
-  data.push(property("values", { type: ArrayExpression, elements: values }));
+  data.push(property("values", {type: ArrayExpression, elements: values}));
   return scriptAst(core.Tag.text, data);
 }
 
@@ -197,16 +189,16 @@ function assetId(id: string): estree.Property {
 
 function layerConfig(config: core.LayerConfig): estree.Property[] {
   const ps: estree.Property[] = [name(config.name)];
-  if(typeof config.x !== "undefined") {
+  if (typeof config.x !== "undefined") {
     ps.push(property("x", literal(config.x)));
   }
-  if(typeof config.y !== "undefined") {
+  if (typeof config.y !== "undefined") {
     ps.push(property("y", literal(config.y)));
   }
-  if(typeof config.opacity !== "undefined") {
+  if (typeof config.opacity !== "undefined") {
     ps.push(property("opacity", literal(config.opacity)));
   }
-  if(typeof config.visible !== "undefined") {
+  if (typeof config.visible !== "undefined") {
     ps.push(property("visible", literal(config.visible)));
   }
   return ps;
@@ -240,23 +232,20 @@ function nestOptions(options: VisitorOptions, i: number): VisitorOptions {
 function click(original: core.Script<any>[], options: VisitorOptions): estree.ObjectExpression {
   return object([
     property("tag", literal(core.Tag.click)),
-    property(
-      "data",
-      {
-        type: ArrayExpression,
-        elements: original.map((s, i) => visit(s, nestOptions(options, i)))
-      }
-    )
+    property("data", {
+      type: ArrayExpression,
+      elements: original.map((s, i) => visit(s, nestOptions(options, i)))
+    })
   ]);
 }
 
 function programToExportFunction(original: estree.Program, requireReturn: boolean) {
   const body: estree.Statement[] = [];
   let index = 0;
-  for(const b of original.body) {
-    switch(b.type) {
+  for (const b of original.body) {
+    switch (b.type) {
       case ExpressionStatement:
-        if(requireReturn && index + 1 === original.body.length) {
+        if (requireReturn && index + 1 === original.body.length) {
           body.push({
             type: ReturnStatement,
             argument: b.expression
@@ -312,7 +301,7 @@ function programToExportFunction(original: estree.Program, requireReturn: boolea
 function exportFunction(original: estree.Node, requireReturn: boolean) {
   return estraverse.replace(original, {
     leave: (node, path) => {
-      switch(node.type) {
+      switch (node.type) {
         case Program:
           node.body = [programToExportFunction(node, requireReturn)];
           node.sourceType = "module";
@@ -338,13 +327,10 @@ function evaluate(original: estree.Program, options: VisitorOptions): estree.Obj
 function conditionBody(is: InlineScript, scripts: core.Script<any>[], options: VisitorOptions): estree.Property[] {
   return [
     property("path", literal(is.assetId)),
-    property(
-      "scripts",
-      {
-        type: ArrayExpression,
-        elements: scripts.map((s, i) => visit(s, nestOptions(options, i)))
-      }
-    )
+    property("scripts", {
+      type: ArrayExpression,
+      elements: scripts.map((s, i) => visit(s, nestOptions(options, i)))
+    })
   ];
 }
 
@@ -361,20 +347,14 @@ function createInlineScript(expression: estree.Node, options: VisitorOptions) {
 
 function condition(original: ast.Condition, options: VisitorOptions): estree.ObjectExpression {
   const is = createInlineScript(original.expression, options);
-  return scriptAst(
-    core.Tag.condition,
-    conditionBody(is, original.scripts, options)
-  );
+  return scriptAst(core.Tag.condition, conditionBody(is, original.scripts, options));
 }
 
 function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpression {
   const label = original.scene ? filename(original.scene) : options.scene;
   const data = object([property("label", literal(label))]);
-  const result = object([
-    property("tag", literal(core.Tag.jump)),
-    property("data", data)
-  ]);
-  if(original.frame) {
+  const result = object([property("tag", literal(core.Tag.jump)), property("data", data)]);
+  if (original.frame) {
     options.state.replaces.push(f => f(data, label, original.frame));
   }
   return result;
@@ -383,7 +363,7 @@ function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpress
 function choiceItem(value: ast.ChoiceItem, options: VisitorOptions): estree.ObjectExpression {
   const result = jump(value.data, options);
   result.properties.push(property("text", literal(value.text)));
-  if(value.condition) {
+  if (value.condition) {
     const s = new InlineScript({
       scene: options.scene,
       frame: options.frame,
@@ -397,99 +377,66 @@ function choiceItem(value: ast.ChoiceItem, options: VisitorOptions): estree.Obje
 }
 
 function choice(original: ast.Choice, options: VisitorOptions): estree.ObjectExpression {
-  return scriptAst(
-    core.Tag.choice,
-    [
-      layerProperty(original.layer),
-      property(
-        "values",
-        {
-          type: ArrayExpression,
-          elements: original.values.map((v, i) => choiceItem(v, nestOptions(options, i)))
-        }
-      )
-    ]
-  );
+  return scriptAst(core.Tag.choice, [
+    layerProperty(original.layer),
+    property("values", {
+      type: ArrayExpression,
+      elements: original.values.map((v, i) => choiceItem(v, nestOptions(options, i)))
+    })
+  ]);
 }
 
 function timeout(original: core.Timeout, options: VisitorOptions): estree.ObjectExpression {
-  return scriptAst(
-    core.Tag.timeout,
-    [
-      property("milliseconds", literal(original.milliseconds)),
-      property(
-        "scripts",
-        {
-          type: ArrayExpression,
-          elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
-        }
-      )
-    ]
-  );
+  return scriptAst(core.Tag.timeout, [
+    property("milliseconds", literal(original.milliseconds)),
+    property("scripts", {
+      type: ArrayExpression,
+      elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+    })
+  ]);
 }
 
-function ifElse(original:ast.IfElse, options: VisitorOptions): estree.ObjectExpression {
+function ifElse(original: ast.IfElse, options: VisitorOptions): estree.ObjectExpression {
   const l = original.conditions.length;
-  return scriptAst(
-    core.Tag.ifElse,
-    [
-      property(
-        "conditions",
-        {
-          type: ArrayExpression,
-          elements: original.conditions.map((c, i) => {
-            const nested = nestOptions(options, i);
-            const is = createInlineScript(c.expression, nested);
-            return object(conditionBody(is, c.scripts, nested));
-          })
-        }
-      ),
-      property(
-        "elseBody",
-        {
-          type: ArrayExpression,
-          elements: original.elseBody.map((s, i) => visit(s, nestOptions(options, l + i)))
-        }
-      )
-    ]
-  );
+  return scriptAst(core.Tag.ifElse, [
+    property("conditions", {
+      type: ArrayExpression,
+      elements: original.conditions.map((c, i) => {
+        const nested = nestOptions(options, i);
+        const is = createInlineScript(c.expression, nested);
+        return object(conditionBody(is, c.scripts, nested));
+      })
+    }),
+    property("elseBody", {
+      type: ArrayExpression,
+      elements: original.elseBody.map((s, i) => visit(s, nestOptions(options, l + i)))
+    })
+  ]);
 }
 
 function waitTransition(original: core.WaitTransition, options: VisitorOptions): estree.ObjectExpression {
   const ps = [
-    property(
-      "scripts",
-      {
-        type: ArrayExpression,
-        elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
-      }
-    )
+    property("scripts", {
+      type: ArrayExpression,
+      elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+    })
   ];
-  if(typeof original.skippable !== "undefined") {
+  if (typeof original.skippable !== "undefined") {
     ps.push(property("skippable", literal(original.skippable)));
   }
-  return scriptAst(
-    core.Tag.waitTransition,
-    ps
-  );
+  return scriptAst(core.Tag.waitTransition, ps);
 }
 
 function button(original: core.Button, options: VisitorOptions): estree.ObjectExpression {
-  return scriptAst(
-    core.Tag.button,
-    [
-      property("image", object(imageProperties(original.image))),
-      property("x", literal(original.x)),
-      property("y", literal(original.y)),
-      property(
-        "scripts",
-        {
-          type: ArrayExpression,
-          elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
-        }
-      )
-    ]
-  );
+  return scriptAst(core.Tag.button, [
+    property("image", object(imageProperties(original.image))),
+    property("x", literal(original.x)),
+    property("y", literal(original.y)),
+    property("scripts", {
+      type: ArrayExpression,
+      elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+    })
+  ]);
 }
 
 function removeLayer(original: core.RemoveLayer): estree.ObjectExpression {
@@ -498,7 +445,7 @@ function removeLayer(original: core.RemoveLayer): estree.ObjectExpression {
 
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
-  for(const key of Object.keys(original.data)) {
+  for (const key of Object.keys(original.data)) {
     // TODO: リテラル以外のデータを解析できるようにする
     const value = literal(original.data[key]);
     ps.push(property(key, value));
@@ -507,7 +454,7 @@ function userDefined(original: core.Script<any>): estree.ObjectExpression {
 }
 
 function visit(original: core.Script<any>, options: VisitorOptions): estree.ObjectExpression {
-  switch(original.tag) {
+  switch (original.tag) {
     case core.Tag.text:
       return text(original.data);
     case core.Tag.image:
@@ -549,11 +496,11 @@ function frame(original: ast.Frame, scene: string, index: number, state: State):
     arguments: [
       {
         type: ArrayExpression,
-        elements: original.scripts.map((s, i) => visit(s, { scene, frame: index, indexes: [i], state }))
+        elements: original.scripts.map((s, i) => visit(s, {scene, frame: index, indexes: [i], state}))
       }
     ]
   };
-  if(original.label) {
+  if (original.label) {
     state.indexes.push({
       scene,
       frame: original.label,
@@ -570,13 +517,10 @@ function scene(original: ast.Scene, state: State): estree.NewExpression {
     arguments: [
       object([
         property("label", literal(original.label)),
-        property(
-          "frames",
-          {
-            type: ArrayExpression,
-            elements: original.frames.map((f, i) => frame(f, original.label, i, state))
-          }
-        )
+        property("frames", {
+          type: ArrayExpression,
+          elements: original.frames.map((f, i) => frame(f, original.label, i, state))
+        })
       ])
     ]
   };
@@ -595,9 +539,7 @@ const importCowlick: estree.VariableDeclaration = {
           type: Identifier,
           name: "require"
         },
-        arguments: [
-          literal("cowlick-core")
-        ]
+        arguments: [literal("cowlick-core")]
       }
     }
   ]
@@ -629,10 +571,10 @@ export function analyze(original: ast.Scenario): Result {
     indexes: []
   };
   const result = scenario(original, state);
-  for(const replace of state.replaces) {
+  for (const replace of state.replaces) {
     replace((expression, scene, frame) => {
       const i = state.indexes.find(i => i.scene === scene && i.frame === frame);
-      if(i) {
+      if (i) {
         expression.properties.push(property("frame", literal(i.index)));
       } else {
         throw new Error(`label(scene = ${scene}, frame = ${frame}) not found.`);

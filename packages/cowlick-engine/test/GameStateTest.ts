@@ -3,7 +3,6 @@ import * as assert from "assert";
 import {core, GameState} from "./helpers/setup";
 
 describe("GameState", () => {
-
   const data: core.SaveData[] = [
     {
       label: "before",
@@ -29,7 +28,7 @@ describe("GameState", () => {
       system: {}
     };
     const state = new GameState([], vars, 1);
-    assert(! state.exists(0));
+    assert(!state.exists(0));
   });
 
   it("保存できる", () => {
@@ -43,9 +42,7 @@ describe("GameState", () => {
     const state = new GameState([], vars, 1);
     const scene = new core.Scene({
       label: "test",
-      frames: [
-        new core.Frame([])
-      ]
+      frames: [new core.Frame([])]
     });
     const expected: core.SaveData = {
       label: "test",
@@ -54,7 +51,7 @@ describe("GameState", () => {
         test: 0
       }
     };
-    const actual = state.save(scene, { index: 0 });
+    const actual = state.save(scene, {index: 0});
     assert.deepEqual(actual, expected);
   });
 
@@ -69,9 +66,7 @@ describe("GameState", () => {
     const state = new GameState([], vars, 1);
     const scene = new core.Scene({
       label: "test",
-      frames: [
-        new core.Frame([])
-      ]
+      frames: [new core.Frame([])]
     });
     const expected: core.SaveData = {
       label: "test",
@@ -81,7 +76,7 @@ describe("GameState", () => {
       },
       description: "test"
     };
-    const actual = state.save(scene, { index: 0, description: "test" });
+    const actual = state.save(scene, {index: 0, description: "test"});
     assert.deepEqual(actual, expected);
   });
 
@@ -96,10 +91,7 @@ describe("GameState", () => {
     const state = new GameState(data, vars, 1);
     const scene = new core.Scene({
       label: "test",
-      frames: [
-        new core.Frame([]),
-        new core.Frame([])
-      ]
+      frames: [new core.Frame([]), new core.Frame([])]
     });
     scene.next();
     const expected: core.SaveData = {
@@ -109,7 +101,7 @@ describe("GameState", () => {
         test: 0
       }
     };
-    const actual = state.save(scene, { index: 0, force: true });
+    const actual = state.save(scene, {index: 0, force: true});
     assert.deepEqual(actual, expected);
   });
 
@@ -124,18 +116,12 @@ describe("GameState", () => {
     const state = new GameState(data, vars, 1);
     const scene = new core.Scene({
       label: "test",
-      frames: [
-        new core.Frame([]),
-        new core.Frame([])
-      ]
+      frames: [new core.Frame([]), new core.Frame([])]
     });
-    assert.throws(
-      () => {
-        scene.next();
-        state.save(scene, { index: 0 });
-      },
-      core.GameError
-    );
+    assert.throws(() => {
+      scene.next();
+      state.save(scene, {index: 0});
+    }, core.GameError);
   });
 
   it("値を設定できる", () => {
@@ -231,11 +217,8 @@ describe("GameState", () => {
       type: "other",
       name: "test"
     };
-    assert.throws(
-      () => {
-        state.getValue(target);
-      },
-      core.GameError
-    );
+    assert.throws(() => {
+      state.getValue(target);
+    }, core.GameError);
   });
 });

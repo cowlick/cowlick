@@ -17,15 +17,15 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
     current: {}
   };
   const data: KeyValue[] = [];
-  for(const key of keys) {
-    for(const value of scene.storageValues.get(key)) {
+  for (const key of keys) {
+    for (const value of scene.storageValues.get(key)) {
       const v = typeof value.data === "number" ? value.data : JSON.parse(value.data);
-      if(key.regionKey === Region.system) {
+      if (key.regionKey === Region.system) {
         variables.system = v;
       } else {
-        let s = data.find((kv) => kv.key === value.storageKey);
+        let s = data.find(kv => kv.key === value.storageKey);
         const keys = key.regionKey.split(".");
-        if(! s) {
+        if (!s) {
           const i = parseInt(keys[0].substring(prefixLength), 10);
           s = {
             key: value.storageKey,
@@ -38,7 +38,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
           data[i] = s;
         }
         const label = keys[keys.length - 1];
-        switch(label) {
+        switch (label) {
           case "frame":
             s.value.frame = v;
             break;
@@ -56,7 +56,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
     }
   }
   return {
-    data: data.map((kv) => kv.value),
+    data: data.map(kv => kv.value),
     variables
   };
 }
@@ -64,13 +64,13 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
 export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Config): GameState {
   const max = config.system.maxSaveCount;
   const result = loadFromStorage(scene, keys, max);
-  if(typeof result.variables.builtin.selectedFont === "undefined") {
+  if (typeof result.variables.builtin.selectedFont === "undefined") {
     result.variables.builtin.selectedFont = 0;
   }
-  if(typeof result.variables.builtin.autoMode === "undefined") {
+  if (typeof result.variables.builtin.autoMode === "undefined") {
     result.variables.builtin.autoMode = false;
   }
-  if(typeof result.variables.builtin.autoMilliSeconds === "undefined") {
+  if (typeof result.variables.builtin.autoMilliSeconds === "undefined") {
     result.variables.builtin.autoMilliSeconds = config.system.autoMessageSpeed;
   }
   return new GameState(result.data, result.variables, max);
@@ -81,7 +81,7 @@ export function createStorageKeys(player: g.Player, max: number): g.StorageKey[]
     {region: g.StorageRegion.Values, regionKey: Region.system, userId: player.id, gameId},
     {region: g.StorageRegion.Values, regionKey: Region.builtin, userId: player.id, gameId}
   ];
-  for(let i = 0; i < max - 1; i++) {
+  for (let i = 0; i < max - 1; i++) {
     ks.push({region: g.StorageRegion.Values, regionKey: Region.saveDataPrefix + i, userId: player.id, gameId});
   }
   return ks;

@@ -13,7 +13,6 @@ export interface MessageParameters {
 }
 
 export class Message extends al.Label {
-
   onFinished: g.Trigger<string>;
   private index: number;
   private counter: number;
@@ -43,12 +42,12 @@ export class Message extends al.Label {
   }
 
   updateText(text: core.Text, alreadyRead?: boolean) {
-    if(this.config.system.alreadyRead && alreadyRead) {
+    if (this.config.system.alreadyRead && alreadyRead) {
       this.textColor = this.config.font.alreadyReadColor;
     } else {
       this.textColor = this.config.font.color;
     }
-    if(text.clear) {
+    if (text.clear) {
       this.text = "";
       this.original = text;
       this.index = 0;
@@ -63,17 +62,17 @@ export class Message extends al.Label {
   }
 
   showAll() {
-    if(! this.finished) {
+    if (!this.finished) {
       this.update.remove(this.onUpdated, this);
       this.text = "";
-      for(const t of this.original.values) {
-        if(typeof t === "string") {
+      for (const t of this.original.values) {
+        if (typeof t === "string") {
           this.text += t;
-        } else if(Array.isArray(t)) {
+        } else if (Array.isArray(t)) {
           this.text += t[t.length - 1].value;
         } else {
           const result = this.gameState.getStringValue(t);
-          if(result) {
+          if (result) {
             this.text += result;
           } else {
             throw new core.GameError("変数の取得に失敗しました", t);
@@ -87,19 +86,19 @@ export class Message extends al.Label {
   }
 
   private onUpdated() {
-    if(! this.finished && this.counter >= this.current.length) {
+    if (!this.finished && this.counter >= this.current.length) {
       this.counter = 0;
       this.index++;
-      if(! this.finished) {
+      if (!this.finished) {
         this.setCurrent();
       }
     }
-    if(! this.finished) {
+    if (!this.finished) {
       const t = this.current[this.counter];
-      if(typeof t === "string") {
+      if (typeof t === "string") {
         this.text += t;
       } else {
-        if(this.counter !== 0) {
+        if (this.counter !== 0) {
           this.text = this.text.substring(0, this.text.length - t.value.length);
         }
         this.text += t.value;
@@ -107,7 +106,7 @@ export class Message extends al.Label {
       this.invalidate();
       this.counter++;
     }
-    if(this.finished) {
+    if (this.finished) {
       this.update.remove(this.onUpdated, this);
       this.onFinished.fire(this.text);
     }
@@ -115,13 +114,13 @@ export class Message extends al.Label {
 
   private setCurrent() {
     const ts = this.original.values[this.index];
-    if(typeof ts === "string") {
+    if (typeof ts === "string") {
       this.current = ts.split(/.*?/);
-    } else if(Array.isArray(ts)) {
+    } else if (Array.isArray(ts)) {
       this.current = ts;
     } else {
       const result = this.gameState.getStringValue(ts);
-      if(result) {
+      if (result) {
         this.current = result.split(/.*?/);
       } else {
         throw new core.GameError("変数の取得に失敗しました", ts);

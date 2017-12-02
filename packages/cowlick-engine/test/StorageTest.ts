@@ -3,7 +3,6 @@ import * as assert from "assert";
 import {Storage, GameState} from "./helpers/setup";
 
 describe("Storage", () => {
-
   it("セーブデータをロードできる", () => {
     const vars = {
       current: {},
@@ -19,7 +18,7 @@ describe("Storage", () => {
       }
     ];
     const state = new GameState(data, vars, 1);
-    const storage = new Storage(new g.Storage(g.game), { id: "0" }, state);
+    const storage = new Storage(new g.Storage(g.game), {id: "0"}, state);
     assert(storage.load(0) === data[0]);
     assert(state.variables.current === data[0].variables);
   });
@@ -40,7 +39,7 @@ describe("Storage", () => {
       }
     ];
     const state = new GameState(data, vars, 1);
-    const storage = new Storage(new g.Storage(g.game), { id: "0" }, state);
+    const storage = new Storage(new g.Storage(g.game), {id: "0"}, state);
     assert(storage.load(0) === data[0]);
     assert(state.variables.current === data[0].variables);
   });

@@ -26,25 +26,26 @@ const root = commandpost
     const outputPath = path.resolve(process.cwd(), output);
     const basePath = path.resolve(process.cwd(), args.inputDir);
     const result = analyze(parse(basePath));
-    if (! fs.existsSync(outputPath)) {
+    if (!fs.existsSync(outputPath)) {
       fs.mkdirSync(outputPath);
     }
     fs.writeFileSync(path.join(outputPath, "scenario.js"), escodegen.generate(result.scenario));
-    for(const s of result.scripts) {
+    for (const s of result.scripts) {
       s.write(outputPath);
     }
   });
 
-commandpost
-  .exec(root, process.argv)
-  .then(() => {
+commandpost.exec(root, process.argv).then(
+  () => {
     process.stdout.write("");
     process.exit(0);
-  }, err => {
+  },
+  err => {
     console.error("uncaught error", err);
     if (err.stack) {
       console.error(err.stack);
     }
     process.stdout.write("");
     process.exit(1);
-  });
+  }
+);

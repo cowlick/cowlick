@@ -4,7 +4,7 @@ import * as estree from "estree";
 import * as estraverse from "estraverse";
 import * as core from "cowlick-core";
 import * as ast from "cowlick-analyzer";
-import { Script } from "cowlick-core";
+import {Script} from "cowlick-core";
 
 export interface KeyValuePair {
   key: string;
@@ -14,9 +14,8 @@ export interface KeyValuePair {
 export let dependencies: string[];
 
 export function contents(c: core.Script<any>[], cs: core.Script<any>[][]): core.Script<any>[] {
-
   var result = c;
-  for(const c of cs) {
+  for (const c of cs) {
     result = result.concat(c);
   }
   return result;
@@ -26,7 +25,7 @@ export function frame(scripts: core.Script<any>[], label?: string): ast.Frame {
   const result: ast.Frame = {
     scripts
   };
-  if(label) {
+  if (label) {
     result.label = label;
   }
   return result;
@@ -42,7 +41,7 @@ export function image(assetId: string, layer: string, options: KeyValuePair[]): 
       assetId: assetId
     }
   };
-  options.forEach(function (option) {
+  options.forEach(function(option) {
     result.data.layer[option.key] = option.value;
   });
   return result;
@@ -55,24 +54,28 @@ export function text(values: (string | core.Ruby[])[], cm: any): core.Script<cor
       values: values
     }
   };
-  if(cm) {
+  if (cm) {
     result.data.clear = true;
   }
   return result;
 }
 
-function flatten(result: (string | core.Ruby[] | core.Variable)[], text: string, values: (string | core.Ruby[] | core.Variable)[]) {
-  for(const v of values) {
-    if(Array.isArray(v)) {
-      if(text) {
+function flatten(
+  result: (string | core.Ruby[] | core.Variable)[],
+  text: string,
+  values: (string | core.Ruby[] | core.Variable)[]
+) {
+  for (const v of values) {
+    if (Array.isArray(v)) {
+      if (text) {
         result.push(text);
         text = "";
       }
       result.push(v);
-    } else if(typeof v === "string") {
+    } else if (typeof v === "string") {
       text += v;
     } else {
-      if(text) {
+      if (text) {
         result.push(text);
         text = "";
       }
@@ -82,31 +85,36 @@ function flatten(result: (string | core.Ruby[] | core.Variable)[], text: string,
   return text;
 }
 
-export function textBlock(t: (string | core.Ruby[] | core.Variable)[], ts: (string | core.Ruby[] | core.Variable)[][])
-  : (string | core.Ruby[] | core.Variable)[] {
+export function textBlock(
+  t: (string | core.Ruby[] | core.Variable)[],
+  ts: (string | core.Ruby[] | core.Variable)[][]
+): (string | core.Ruby[] | core.Variable)[] {
   const result: (string | core.Ruby[] | core.Variable)[] = [];
   let text = flatten(result, "", t);
-  for(const t of ts) {
+  for (const t of ts) {
     text = flatten(result, text, t);
   }
-  if(text) {
+  if (text) {
     result.push(text);
   }
   return result;
 }
 
-export function textLine(values: (string | core.Ruby[] | core.Variable)[], top: any, end: any)
-  : (string | core.Ruby[] | core.Variable)[] {
-  if(top) {
-    if(typeof values[0] === "string") {
+export function textLine(
+  values: (string | core.Ruby[] | core.Variable)[],
+  top: any,
+  end: any
+): (string | core.Ruby[] | core.Variable)[] {
+  if (top) {
+    if (typeof values[0] === "string") {
       values[0] = "\n" + values[0];
     } else {
       values = (["\n"] as (string | core.Ruby[] | core.Variable)[]).concat(values);
     }
   }
-  if(end) {
+  if (end) {
     var last = values[values.length - 1];
-    if(typeof last === "string") {
+    if (typeof last === "string") {
       values[values.length - 1] = last + "\n";
     } else {
       values.push("\n");
@@ -114,19 +122,21 @@ export function textLine(values: (string | core.Ruby[] | core.Variable)[], top: 
   }
   const result: (string | core.Ruby[] | core.Variable)[] = [];
   let text = flatten(result, "", values);
-  if(text) {
+  if (text) {
     result.push(text);
   }
   return result;
 }
 
 export function ruby(rb: string, rt: string): core.Ruby[] {
-  return [{
-    value: JSON.stringify({
-      rb: rb,
-      rt: rt
-    })
-  }];
+  return [
+    {
+      value: JSON.stringify({
+        rb: rb,
+        rt: rt
+      })
+    }
+  ];
 }
 
 const varSf = "sf";
@@ -136,12 +146,12 @@ export function variable(expression: string): core.Variable {
   let value: core.Variable;
   estraverse.traverse(acorn.parse(expression), {
     enter: function(node, parent) {
-      if(node.type === "Program" && node.body.length === 1) {
+      if (node.type === "Program" && node.body.length === 1) {
         const statement = node.body[0];
-        if(statement.type === "ExpressionStatement") {
+        if (statement.type === "ExpressionStatement") {
           const e = statement.expression;
-          if(e.type === "MemberExpression" && e.object.type === "Identifier" && e.property.type === "Identifier") {
-            switch(e.object.name) {
+          if (e.type === "MemberExpression" && e.object.type === "Identifier" && e.property.type === "Identifier") {
+            switch (e.object.name) {
               case varSf:
                 value = {
                   type: core.VariableType.system,
@@ -161,7 +171,7 @@ export function variable(expression: string): core.Variable {
       }
     }
   });
-  if(value) {
+  if (value) {
     return value;
   } else {
     throw new Error(`illegal expression(call variable): ${expression}`);
@@ -190,13 +200,13 @@ export function stopAudio(group: string): core.Script<core.Audio> {
 
 export function tryParseLiteral(value: string) {
   let parsed: any = parseInt(value, 10);
-  if(isNaN(parsed)) {
+  if (isNaN(parsed)) {
     parsed = parseFloat(value);
   }
-  if(isNaN(parsed)) {
-    if(value === "true") {
+  if (isNaN(parsed)) {
+    if (value === "true") {
       parsed = true;
-    } else if(value === "false") {
+    } else if (value === "false") {
       parsed = false;
     } else {
       parsed = value;
@@ -210,7 +220,7 @@ export function tag(name: string, attrs: KeyValuePair[]): core.Script<any> {
     tag: name,
     data: {}
   };
-  for(const attr of attrs) {
+  for (const attr of attrs) {
     result.data[attr.key] = tryParseLiteral(attr.value);
   }
   return result;
@@ -234,11 +244,11 @@ function newMemberExpression(name: string): estree.MemberExpression {
 function traverseEval(original: string): estree.Node {
   return estraverse.replace(acorn.parse(original), {
     leave: (node, parent) => {
-      if(node.type === "MemberExpression") {
+      if (node.type === "MemberExpression") {
         const object = node.object;
-        if(object.type === "Identifier") {
+        if (object.type === "Identifier") {
           let newObject: estree.MemberExpression;
-          switch(object.name) {
+          switch (object.name) {
             case varSf:
               newObject = newMemberExpression(core.VariableType.system);
               break;
@@ -253,10 +263,10 @@ function traverseEval(original: string): estree.Node {
       }
       // FIME: acornでstartとendを削除する方法を探す
       const n = node as any;
-      if(typeof n.start === "number") {
+      if (typeof n.start === "number") {
         delete n["start"];
       }
-      if(typeof n.end === "number") {
+      if (typeof n.end === "number") {
         delete n["end"];
       }
     }
@@ -318,7 +328,7 @@ export function choiceItem(text: string, data: ast.Jump, condition?: string): as
     data,
     text
   };
-  if(condition) {
+  if (condition) {
     result.condition = traverseEval(condition);
   }
   return result;
@@ -331,7 +341,7 @@ export function layerConfig(name: string, options: KeyValuePair[]): core.Script<
       name
     }
   };
-  for(const option of options) {
+  for (const option of options) {
     result.data[option.key] = option.value;
   }
   return result;
@@ -379,7 +389,7 @@ export function waitTransition(scripts: core.Script<any>[], skippable?: boolean)
       scripts
     }
   };
-  if(typeof skippable !== "undefined") {
+  if (typeof skippable !== "undefined") {
     result.data.skippable = skippable;
   }
   return [result];

@@ -31,9 +31,11 @@ function pane(controller: SceneController, pane: core.Pane) {
     height: pane.height,
     x: pane.layer.x,
     y: pane.layer.y,
-    backgroundImage: pane.backgroundImage ? scene.assets[pane.backgroundImage] as g.ImageAsset : undefined,
+    backgroundImage: pane.backgroundImage ? (scene.assets[pane.backgroundImage] as g.ImageAsset) : undefined,
     padding: pane.padding,
-    backgroundEffector: pane.backgroundEffector ? new g.NinePatchSurfaceEffector(scene.game, pane.backgroundEffector.borderWidth) : undefined
+    backgroundEffector: pane.backgroundEffector
+      ? new g.NinePatchSurfaceEffector(scene.game, pane.backgroundEffector.borderWidth)
+      : undefined
   });
   p.touchable = !!pane.touchable;
   scene.appendLayer(p, pane.layer);
@@ -47,7 +49,7 @@ function button(controller: SceneController, data: core.Button) {
   const button = ImageButton.create(controller.current, data.image);
   button.move(data.x, data.y);
   button.onClick.add(() => {
-    for(const s of data.scripts) {
+    for (const s of data.scripts) {
       Engine.scriptManager.call(controller, s);
     }
   });
@@ -64,10 +66,10 @@ function choice(controller: SceneController, choice: core.Choice) {
   const baseX = choice.x ? choice.x : width / 6;
   const baseY = choice.y ? choice.y : (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
   let index = 0;
-  for(const item of choice.values) {
-    if(item.path) {
+  for (const item of choice.values) {
+    if (item.path) {
       const f = g._require(game, item.path);
-      if(! f(controller.current.gameState.variables)) {
+      if (!f(controller.current.gameState.variables)) {
         continue;
       }
     }
@@ -86,7 +88,7 @@ function choice(controller: SceneController, choice: core.Choice) {
       Engine.scriptManager.call(controller, item);
     });
     const direction = choice.direction ? choice.direction : core.Direction.Vertical;
-    switch(direction) {
+    switch (direction) {
       case core.Direction.Vertical:
         button.move(baseX, baseY + (height + space) * index);
         break;
@@ -112,7 +114,7 @@ function createLink(scene: Scene, link: core.Link) {
     config: Engine.config,
     gameState: scene.gameState
   };
-  if(link.fontSize) {
+  if (link.fontSize) {
     params.fontSize = link.fontSize;
   }
   const button = new LabelButton(params);
@@ -122,7 +124,7 @@ function createLink(scene: Scene, link: core.Link) {
 
 function link(controller: SceneController, link: core.Link) {
   const l = createLink(controller.current, link);
-  for(const script of link.scripts) {
+  for (const script of link.scripts) {
     l.onClick.add(() => {
       Engine.scriptManager.call(controller, script);
     });
@@ -161,7 +163,7 @@ function stopVideo(controller: SceneController, video: core.Video) {
 function click(controller: SceneController, scripts: core.Script<any>[]) {
   const scene = controller.current;
   scene.pointUpCapture.addOnce(() => {
-    for(const s of scripts) {
+    for (const s of scripts) {
       Engine.scriptManager.call(controller, s);
     }
   }, scene);
@@ -172,7 +174,7 @@ function skip(controller: SceneController, data?: any) {
 }
 
 function trigger(controller: SceneController, trigger: core.Trigger) {
-  switch(trigger) {
+  switch (trigger) {
     case core.Trigger.Off:
       controller.current.disableWindowClick();
       break;
@@ -197,8 +199,8 @@ function evaluate(controller: SceneController, info: core.Eval) {
 
 function condition(controller: SceneController, cond: core.Condition) {
   const f = g._require(controller.game, cond.path);
-  if(f(controller.current.gameState.variables)) {
-    for(const s of cond.scripts) {
+  if (f(controller.current.gameState.variables)) {
+    for (const s of cond.scripts) {
       Engine.scriptManager.call(controller, s);
     }
     return true;
@@ -207,15 +209,15 @@ function condition(controller: SceneController, cond: core.Condition) {
 }
 
 function backlog(controller: SceneController, data: core.Backlog) {
-  const layer = { name: core.Layer.backlog };
+  const layer = {name: core.Layer.backlog};
 
-  for(const s of data.scripts) {
+  for (const s of data.scripts) {
     Engine.scriptManager.call(controller, s);
   }
 
   const scene = controller.current;
   const enabled = scene.enabledWindowClick;
-  if(enabled) {
+  if (enabled) {
     trigger(controller, core.Trigger.Off);
   }
 
@@ -239,14 +241,14 @@ function backlog(controller: SceneController, data: core.Backlog) {
     gameState: scene.gameState
   });
   let values: (string | core.Ruby[] | core.Variable)[] = [];
-  for(const log of controller.backlog) {
-    if(values.length !== 0) {
+  for (const log of controller.backlog) {
+    if (values.length !== 0) {
       values.push("\n", log.text);
     } else {
       values.push(log.text);
     }
   }
-  message.updateText({ values });
+  message.updateText({values});
   message.showAll();
   scrollable.content.append(message);
 
@@ -258,7 +260,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
       }
     }
   ];
-  if(enabled) {
+  if (enabled) {
     scripts.push({
       tag: core.Tag.trigger,
       data: core.Trigger.On
@@ -270,7 +272,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
     layer: {
       name: layer.name,
       x: controller.game.width - width - 10,
-      y: 20,
+      y: 20
     },
     width,
     height: 24,
@@ -293,45 +295,40 @@ function clearCurrentVariables(controller: SceneController, data: any) {
 }
 
 function fadeIn(controller: SceneController, info: core.Fade) {
-  controller.current.transition(info.layer, (layer) => {
+  controller.current.transition(info.layer, layer => {
     let timeline = new tl.Timeline(controller.current);
-    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed})
-      .fadeIn(info.duration);
+    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed}).fadeIn(info.duration);
   });
 }
 
 function fadeOut(controller: SceneController, info: core.Fade) {
-  controller.current.transition(info.layer, (layer) => {
+  controller.current.transition(info.layer, layer => {
     let timeline = new tl.Timeline(controller.current);
-    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed})
-      .fadeOut(info.duration);
+    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed}).fadeOut(info.duration);
   });
 }
 
 function timeout(controller: SceneController, info: core.Timeout) {
-  controller.current.setTimeout(
-    () => {
-      for(const s of info.scripts) {
-        Engine.scriptManager.call(controller, s);
-      }
-    },
-    info.milliseconds
-  );
+  controller.current.setTimeout(() => {
+    for (const s of info.scripts) {
+      Engine.scriptManager.call(controller, s);
+    }
+  }, info.milliseconds);
 }
 
 function ifElse(controller: SceneController, data: core.IfElse) {
-  for(const c of data.conditions) {
-    if(condition(controller, c)) {
+  for (const c of data.conditions) {
+    if (condition(controller, c)) {
       return;
     }
   }
-  for(const s of data.elseBody) {
+  for (const s of data.elseBody) {
     Engine.scriptManager.call(controller, s);
   }
 }
 
 function exception(controller: SceneController, e: Error) {
-  if(e instanceof core.GameError) {
+  if (e instanceof core.GameError) {
     controller.game.logger.warn(e.message, e.data);
   } else {
     controller.game.logger.warn(e.message);
@@ -339,10 +336,10 @@ function exception(controller: SceneController, e: Error) {
 }
 
 function waitTransition(controller: SceneController, data: core.WaitTransition) {
-  if(typeof data.skippable !== "undefined" && ! data.skippable) {
+  if (typeof data.skippable !== "undefined" && !data.skippable) {
     trigger(controller, core.Trigger.Off);
   }
-  for(const s of data.scripts) {
+  for (const s of data.scripts) {
     Engine.scriptManager.call(controller, s);
   }
   skip(controller);
@@ -362,7 +359,7 @@ function slider(controller: SceneController, info: core.Slider) {
 }
 
 export function autoMode(controller: SceneController, data: any) {
-  if(controller.current.gameState.getValue({ type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode })) {
+  if (controller.current.gameState.getValue({type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode})) {
     controller.current.setAutoTrigger();
   }
 }
@@ -371,10 +368,14 @@ function closeLoadScene(controller: SceneController, data: any) {
   controller.closeSaveLoadScene();
 }
 
-function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene, create: (i: number) => core.Script<any>[]) {
+function openSaveLoadScene(
+  controller: SceneController,
+  info: core.SaveLoadScene,
+  create: (i: number) => core.Script<any>[]
+) {
   const scene = controller.openSaveLoadScene();
   let position: pg.Position;
-  switch(info.button) {
+  switch (info.button) {
     case core.Position.Top:
       position = pg.Position.Top;
       break;
@@ -398,7 +399,7 @@ function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene
     last: true
   });
   scene.append(pagination);
-  for(let i = 0; i < Engine.config.system.maxSaveCount; i++) {
+  for (let i = 0; i < Engine.config.system.maxSaveCount; i++) {
     const l: core.Link = {
       layer: info.base.layer,
       width: info.base.width,
@@ -410,7 +411,7 @@ function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene
       scripts: create(i)
     };
     const button = createLink(scene, l);
-    for(const script of l.scripts) {
+    for (const script of l.scripts) {
       button.onClick.add(() => {
         Engine.scriptManager.call(controller, script);
       });
@@ -420,40 +421,32 @@ function openSaveLoadScene(controller: SceneController, info: core.SaveLoadScene
 }
 
 function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {
-  openSaveLoadScene(
-    controller,
-    info,
-    (index) => ([
-      {
-        tag: core.Tag.save,
-        data: {
-          index,
-          force: true
-        }
+  openSaveLoadScene(controller, info, index => [
+    {
+      tag: core.Tag.save,
+      data: {
+        index,
+        force: true
       }
-    ])
-  );
+    }
+  ]);
 }
 
 const closeLoadSceneTag = "closeLoadScene";
 
 function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
-  openSaveLoadScene(
-    controller,
-    info,
-    (index) => ([
-      {
-        tag: closeLoadSceneTag,
-        data: {}
-      },
-      {
-        tag: core.Tag.load,
-        data: {
-          index
-        }
+  openSaveLoadScene(controller, info, index => [
+    {
+      tag: closeLoadSceneTag,
+      data: {}
+    },
+    {
+      tag: core.Tag.load,
+      data: {
+        index
       }
-    ])
-  );
+    }
+  ]);
 }
 
 export const defaultScripts = new Map<string, ScriptFunction>([

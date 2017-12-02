@@ -15,7 +15,6 @@ export interface SceneControllerParameters {
 }
 
 export class SceneController implements g.Destroyable {
-
   game: g.Game;
   private player: g.Player;
   private config: core.Config;
@@ -64,7 +63,7 @@ export class SceneController implements g.Destroyable {
 
   start() {
     const scene = this.game.scene();
-    if(scene !== this._current && scene !== this.saveLoadScene) {
+    if (scene !== this._current && scene !== this.saveLoadScene) {
       this.game.pushScene(this._current);
     }
   }
@@ -72,7 +71,7 @@ export class SceneController implements g.Destroyable {
   jump(target: core.Jump) {
     const previous = this.scenario.scene.label;
     this.scenario.update(target);
-    if(previous === this.scenario.scene.label) {
+    if (previous === this.scenario.scene.label) {
       this.scenario.load();
     } else {
       this.loadScene();
@@ -85,7 +84,7 @@ export class SceneController implements g.Destroyable {
 
   load(data: core.Load) {
     const s = this.current.load(data.index);
-    if(s) {
+    if (s) {
       this.jump(s);
     } else {
       throw new core.GameError("save data not found", data);
@@ -104,24 +103,21 @@ export class SceneController implements g.Destroyable {
   destroy() {
     const scene = this.game.scene();
     const current = this._current;
-    if(scene === this.saveLoadScene) {
+    if (scene === this.saveLoadScene) {
       // popSceneのリクエスト直後だとcurrentのpopが行われない可能性があるので、破棄後に再度確認する
-      this.saveLoadScene.stateChanged.add(
-        (status) => {
-          if(status === g.SceneState.Destroyed) {
-            if(this.game.scene() === current) {
-              this.game.popScene();
-            }
+      this.saveLoadScene.stateChanged.add(status => {
+        if (status === g.SceneState.Destroyed) {
+          if (this.game.scene() === current) {
+            this.game.popScene();
           }
-        },
-        this
-      );
+        }
+      }, this);
       this.game.popScene();
-    } else if(! this.saveLoadScene.destroyed()) {
+    } else if (!this.saveLoadScene.destroyed()) {
       this.destroy();
     }
     this.saveLoadScene = undefined;
-    if(scene === current) {
+    if (scene === current) {
       this.game.popScene();
     }
     this._current = undefined;
@@ -134,7 +130,7 @@ export class SceneController implements g.Destroyable {
   }
 
   destroyed() {
-    return ! this._current;
+    return !this._current;
   }
 
   private loadScene() {
@@ -161,15 +157,12 @@ export class SceneController implements g.Destroyable {
       });
       this.saveLoadScene.prefetch();
     }, this);
-    previousLoadScene.stateChanged.add(
-      (state) => {
-        if(state === g.SceneState.Destroyed) {
-          this.game.replaceScene(this._current);
-        }
-      },
-      this
-    );
-    switch(previousLoadScene.state) {
+    previousLoadScene.stateChanged.add(state => {
+      if (state === g.SceneState.Destroyed) {
+        this.game.replaceScene(this._current);
+      }
+    }, this);
+    switch (previousLoadScene.state) {
       case g.SceneState.Standby:
         previousLoadScene.destroy();
         break;

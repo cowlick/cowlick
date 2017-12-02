@@ -10,7 +10,6 @@ import {GameError} from "./GameError";
  * シナリオデータ。
  */
 export class Scenario {
-
   private index = 0;
   private scenes: Scene[];
   onLoaded: g.Trigger<Frame>;
@@ -24,7 +23,7 @@ export class Scenario {
 
   /**
    * scenario.jsからシナリオデータをロードする。
-   * 
+   *
    * @param game
    */
   static load(game: g.Game): Scenario {
@@ -36,10 +35,10 @@ export class Scenario {
   }
 
   get scene() {
-    if(this.index < this.scenes.length) {
+    if (this.index < this.scenes.length) {
       return this.scenes[this.index];
     } else {
-      throw new GameError("scene not found", { index: this.index });
+      throw new GameError("scene not found", {index: this.index});
     }
   }
 
@@ -49,12 +48,12 @@ export class Scenario {
 
   /**
    * シーンを更新する。
-   * 
+   *
    * @param target 遷移情報
    */
   update(target: Jump) {
     const i = this.scenes.findIndex(s => s.label === target.label);
-    if(i > -1) {
+    if (i > -1) {
       this.index = i;
       this.scenes[this.index].reset(target.frame);
     } else {
@@ -64,12 +63,12 @@ export class Scenario {
 
   /**
    * フレームをロードする。
-   * 
+   *
    * @param frame
    */
   load(frame?: Frame) {
     const f = frame ? frame : this.frame;
-    if(f) {
+    if (f) {
       this.onLoaded.fire(f);
     } else {
       throw new GameError("target frame not found");
@@ -85,7 +84,7 @@ export class Scenario {
 
   /**
    * セーブデータに対応するシーンを検索する。
-   * 
+   *
    * @param data
    */
   findScene(data: SaveData): Scene {

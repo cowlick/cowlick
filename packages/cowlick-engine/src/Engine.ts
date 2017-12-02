@@ -9,18 +9,17 @@ import {createStorageKeys} from "./components/GameStateHelper";
  * ノベルエンジン本体。
  */
 export class Engine {
-
   private game: g.Game;
   private static _scriptManager = new ScriptManager(defaultScripts);
   private static _config = core.defaultConfig;
   // 仮置き
-  static player: g.Player = { id: "0" };
+  static player: g.Player = {id: "0"};
 
   constructor(game: g.Game) {
     this.game = game;
 
     const c = g._require(game, "config");
-    if(c) {
+    if (c) {
       Engine._config = c;
     }
   }
@@ -43,7 +42,6 @@ export class Engine {
    * @param scenario シナリオデータ。省略した場合は"scenario.js"からシナリオをロードする。
    */
   start(scenario?: core.Scenario): SceneController {
-
     const s = scenario ? scenario : core.Scenario.load(this.game);
 
     const storageKeys = createStorageKeys(Engine.player, Engine._config.system.maxSaveCount);

@@ -9,7 +9,7 @@ export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, image: Imag
     height: image.frame.height
   });
   sprite.frames = image.frame.frames;
-  if(typeof image.frame.interval !== "undefined") {
+  if (typeof image.frame.interval !== "undefined") {
     sprite.interval = image.frame.interval;
   }
   sprite.start();
@@ -19,7 +19,7 @@ export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, image: Imag
 export function createImage(scene: g.Scene, image: Image) {
   const src = scene.assets[image.assetId] as g.ImageAsset;
   let sprite: g.Sprite;
-  if(image.frame) {
+  if (image.frame) {
     sprite = createFrameSprite(scene, src, image);
   } else {
     sprite = new g.Sprite({
@@ -27,10 +27,10 @@ export function createImage(scene: g.Scene, image: Image) {
       src
     });
   }
-  if(image.layer.x !== undefined) {
+  if (image.layer.x !== undefined) {
     sprite.x = image.layer.x;
   }
-  if(image.layer.y !== undefined) {
+  if (image.layer.y !== undefined) {
     sprite.y = image.layer.y;
   }
   sprite.invalidate();
