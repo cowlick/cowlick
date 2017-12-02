@@ -50,22 +50,40 @@ const ObjectExpression = "ObjectExpression";
 const NewExpression = "NewExpression";
 const ArrayExpression = "ArrayExpression";
 const ReturnStatement = "ReturnStatement";
-const ImportDeclaration = "ImportDeclaration";
-const ImportSpecifier = "ImportSpecifier";
 const Property = "Property";
 const Literal = "Literal";
 
-const Scenario: estree.Identifier = {
+const corePackage: estree.Identifier = {
   type: Identifier,
-  name: "Scenario"
+  name: "core"
 };
-const Scene: estree.Identifier = {
-  type: Identifier,
-  name: "Scene"
+
+const Scenario: estree.MemberExpression = {
+  type: MemberExpression,
+  object: corePackage,
+  property: {
+    type: Identifier,
+    name: "Scenario"
+  },
+  computed: false
 };
-const Frame: estree.Identifier = {
-  type: Identifier,
-  name: "Frame"
+const Scene: estree.MemberExpression = {
+  type: MemberExpression,
+  object: corePackage,
+  property: {
+    type: Identifier,
+    name: "Scene"
+  },
+  computed: false
+};
+const Frame: estree.MemberExpression = {
+  type: MemberExpression,
+  object: corePackage,
+  property: {
+    type: Identifier,
+    name: "Frame"
+  },
+  computed: false
 };
 
 function program(body: (estree.Statement | estree.ModuleDeclaration)[]): estree.Program {
@@ -564,26 +582,25 @@ function scene(original: ast.Scene, state: State): estree.NewExpression {
   };
 }
 
-const importCowlick: estree.ImportDeclaration = {
-  type: ImportDeclaration,
-  specifiers: [
+const importCowlick: estree.VariableDeclaration = {
+  type: "VariableDeclaration",
+  kind: "var",
+  declarations: [
     {
-      type: ImportSpecifier,
-      imported: Scenario,
-      local: Scenario
-    },
-    {
-      type: ImportSpecifier,
-      imported: Scene,
-      local: Scene
-    },
-    {
-      type: ImportSpecifier,
-      imported: Frame,
-      local: Frame
+      type: "VariableDeclarator",
+      id: corePackage,
+      init: {
+        type: "CallExpression",
+        callee: {
+          type: Identifier,
+          name: "require"
+        },
+        arguments: [
+          literal("cowlick-core")
+        ]
+      }
     }
-  ],
-  source: literal("cowlick-core")
+  ]
 };
 
 function scenario(original: ast.Scenario, state: State): estree.Program {

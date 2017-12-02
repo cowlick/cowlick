@@ -1,10 +1,10 @@
-import {Scenario, Scene, Frame} from "cowlick-core";
+var core = require("cowlick-core");
 
-module.exports = new Scenario([
-  new Scene({
+module.exports = new core.Scenario([
+  new core.Scene({
     label: "content",
     frames: [
-      new Frame([
+      new core.Frame([
         {
           tag: "text",
           data: {
@@ -14,7 +14,7 @@ module.exports = new Scenario([
           }
         }
       ]),
-      new Frame([
+      new core.Frame([
         {
           tag: "text",
           data: {
