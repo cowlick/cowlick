@@ -9,8 +9,8 @@ module.exports = new core.Scenario([
           tag: "layerConfig",
           data: {
             name: "test",
-            x: 0,
-            y: 0,
+            x: 2,
+            y: 1,
             opacity: 0,
             visible: true
           }

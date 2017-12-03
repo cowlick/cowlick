@@ -123,8 +123,8 @@ LayerOptions
   = os:(_ LayerOption)* { return os.map(function(o) { return o[1]; }); }
 
 LayerOption
-  = "top=" x:Digits { return { key: "x", value: x }; }
-  / "left=" y:Digits { return { key: "y", value: y }; }
+  = "top=" y:Digits { return { key: "y", value: y }; }
+  / "left=" x:Digits { return { key: "x", value: x }; }
   / "visible=" visible:Boolean { return { key: "visible", value: visible }; }
   / "opacity=" opacity:Digits { return { key: "opacity", value: opacity }; }
 
