@@ -452,6 +452,7 @@ AttributeValue
 
 StringLiteral
   = '"' l:$( ( !'"' . )+ ) '"' { return l; }
+  / "'" l:$( ( !"'" . )+ ) "'" { return l; }
 
 Digits
   = $(Digit+)
