@@ -5,7 +5,7 @@ import {SceneController} from "../components/SceneController";
 /**
  * スクリプトの実態を表す関数
  */
-export type ScriptFunction = (scene: SceneController, data: any) => void;
+export type ScriptFunction = (controller: SceneController, data: any) => void;
 
 export class ScriptManager {
   private scripts: Map<string, ScriptFunction>;
