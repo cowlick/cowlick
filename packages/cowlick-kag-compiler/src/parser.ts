@@ -32,7 +32,7 @@ export function parse(baseDir: string): ast.Scenario {
 
     // ファイル登場順に1度だけ解析対象として追加する
     for (const d of result.dependencies) {
-      if (targets.findIndex(t => t === d) === -1) {
+      if (targets.findIndex(t => t === d) === -1 && scenario.findIndex(s => s.label === ast.filename(d)) === -1) {
         targets.push(d);
       }
     }
