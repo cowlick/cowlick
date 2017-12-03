@@ -15,16 +15,18 @@ Frames
   }
 
 Frame
-  = label:Label? ts:Tags Newline skippable:WT Newline? {
+  = Comments label:Label? ts:Tags Newline Comments skippable:WT Newline? {
     return b.frame(b.waitTransition(ts, skippable), label);
   }
-  / label:Label? ts:Tags text:(Newline Text)? {
+  / Comments label:Label? ts:Tags text:(Newline Text)? {
     if(text) {
       ts.push(text[1]);
     }
     return b.frame(ts, label);
   }
-  / label:Label? text:Text { return b.frame([text], label); }
+  / Comments label:Label? text:Text {
+    return b.frame([text], label);
+  }
 
 Label
   = "*" label:LabelValue Newline { return label; }
