@@ -15,7 +15,7 @@ Frames
   }
 
 Frame
-  = label:Label? ts:Tags Newline skippable:WT {
+  = label:Label? ts:Tags Newline skippable:WT Newline? {
     return b.frame(b.waitTransition(ts, skippable), label);
   }
   / label:Label? ts:Tags text:(Newline Text)? {
@@ -338,7 +338,7 @@ WT
 WTName = "wt"
 
 Text
-  = Comments cm:CM? Newline? values:TextBlock EndTextBlock {
+  = Comments cm:CM? Newline? values:TextBlock Newline? EndTextBlock {
     return b.text(values, cm);
   }
 
