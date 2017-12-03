@@ -1,0 +1,30 @@
+[
+  {
+    "label": "test",
+    "scripts": [
+      {
+        "tag": "click",
+        "data": [
+          {
+            "tag": "jump",
+            "data": {
+              "scene": "content"
+            }
+          }
+        ]
+      },
+      {
+        "tag": "click",
+        "data": [
+          {
+            "tag": "jump",
+            "data": {
+              "scene": "content",
+              "frame": "test"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

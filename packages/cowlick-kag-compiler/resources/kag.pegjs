@@ -77,6 +77,7 @@ TagContent
   / Timeout
   / Button
   / FreeImage
+  / Click
   / UserDefined
 
 Image
@@ -153,7 +154,7 @@ ClearVar
   }
 
 Timeout
-   = "timeout" _ time:("time=" AttributeValue) _ scene:StorageAttribute? _ frame:TargetAttribute? options:TimeoutOptions {
+   = "timeout" _ time:("time=" AttributeValue) _ scene:StorageAttribute? _ frame:TargetAttribute? options:JumpOptions {
     var j = {};
     if(scene) {
       j.scene = scene;
@@ -169,12 +170,12 @@ Timeout
     return [b.timeout(data)];
   }
 
-TimeoutOptions
-  = os:(_ TimeoutOption)* { return os.map(function(o) { return o[1]; }); }
+JumpOptions
+  = os:(_ JumpOption)* { return os.map(function(o) { return o[1]; }); }
 
-TimeoutOption
+JumpOption
   = expression:ExpressionAttribute { return b.evaluate(expression); }
-  / "se=" assetId:AttributeValue { return b.playAudio(assetId, "se"); }
+  / assetId:SEAttribute { return b.playAudio(assetId, "se"); }
 
 Button
   = "button" _ assetId:GraphicAttribute _ x:XAttribute _ y:YAttribute _ scene:StorageAttribute? _ frame:TargetAttribute? _ expression:ExpressionAttribute? {
@@ -207,6 +208,19 @@ Button
 FreeImage
   = "freeimage" _ name:LayerAttribute {
     return [b.removeLayer(name)];
+  }
+
+Click
+  = "click" _ scene:StorageAttribute? _ frame:TargetAttribute? options:JumpOptions {
+    var j = {};
+    if(scene) {
+      j.scene = scene;
+    }
+    if(frame) {
+      j.frame = frame;
+    }
+    options.push(b.jump(j));
+    return [b.click(options)];
   }
 
 UserDefined
@@ -414,6 +428,9 @@ CanSkipAttribute
 
 LayerAttribute
   = "layer=" layer:AttributeValue { return layer; }
+
+SEAttribute
+  = "se=" assetId:AttributeValue { return assetId; }
 
 UserDefinedAttribute
   = key:AttributeName "=" value:AttributeValue {

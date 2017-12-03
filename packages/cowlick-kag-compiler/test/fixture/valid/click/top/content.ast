@@ -1,0 +1,15 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "click",
+        "data": [
+          {
+            "tag": "jump",
+            "data": {}
+          }
+        ]
+      }
+    ]
+  }
+]

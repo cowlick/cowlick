@@ -1,0 +1,18 @@
+[
+  {
+    "label": "test",
+    "scripts": [
+      {
+        "tag": "click",
+        "data": [
+          {
+            "tag": "jump",
+            "data": {
+              "frame": "test"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

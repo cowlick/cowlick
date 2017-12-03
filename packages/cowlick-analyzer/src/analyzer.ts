@@ -504,6 +504,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return [removeLayer(original.data)];
     case core.Tag.trigger:
       return [trigger(original.data)];
+    case core.Tag.click:
+      return [click(original.data, options)];
     default:
       return [userDefined(original)];
   }

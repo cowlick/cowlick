@@ -1,0 +1,2 @@
+*test
+[click target=*test]
