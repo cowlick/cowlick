@@ -443,6 +443,10 @@ function removeLayer(original: core.RemoveLayer): estree.ObjectExpression {
   return scriptAst(core.Tag.removeLayer, [property("name", literal(original.name))]);
 }
 
+function trigger(original: core.Trigger): estree.ObjectExpression {
+  return object([property("tag", literal(core.Tag.trigger)), property("data", literal(original))]);
+}
+
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for (const key of Object.keys(original.data)) {
@@ -484,6 +488,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return button(original.data, options);
     case core.Tag.removeLayer:
       return removeLayer(original.data);
+    case core.Tag.trigger:
+      return trigger(original.data);
     default:
       return userDefined(original);
   }
