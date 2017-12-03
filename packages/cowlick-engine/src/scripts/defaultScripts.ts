@@ -335,16 +335,6 @@ function exception(controller: SceneController, e: Error) {
   }
 }
 
-function waitTransition(controller: SceneController, data: core.WaitTransition) {
-  if (typeof data.skippable !== "undefined" && !data.skippable) {
-    trigger(controller, core.Trigger.Off);
-  }
-  for (const s of data.scripts) {
-    Engine.scriptManager.call(controller, s);
-  }
-  skip(controller);
-}
-
 function slider(controller: SceneController, info: core.Slider) {
   const s = new Slider({
     scene: controller.current,
@@ -479,7 +469,6 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.timeout, timeout],
   [core.Tag.ifElse, ifElse],
   [core.Tag.exception, exception],
-  [core.Tag.waitTransition, waitTransition],
   [core.Tag.slider, slider],
   [core.Tag.autoMode, autoMode],
   [closeLoadSceneTag, closeLoadScene], // 内部用

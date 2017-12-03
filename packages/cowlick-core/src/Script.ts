@@ -371,20 +371,6 @@ export interface IfElse {
   elseBody: Script<any>[];
 }
 
-/**
- * トランジション待機
- */
-export interface WaitTransition {
-  /**
-   * 実行するトランジションスクリプト
-   */
-  scripts: Script<any>[];
-  /**
-   * スキップ可能かどうか
-   */
-  skippable?: boolean;
-}
-
 export interface Slider {
   /**
    * レイヤー情報

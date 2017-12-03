@@ -37,3 +37,8 @@ export interface IfElse {
   conditions: Condition[];
   elseBody: Script<any>[];
 }
+
+export interface WaitTransition {
+  scripts: Script<any>[];
+  skippable?: boolean;
+}

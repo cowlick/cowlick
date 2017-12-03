@@ -383,7 +383,7 @@ export function ifExpression(data: ast.IfElse): core.Script<ast.IfElse> {
 }
 
 export function waitTransition(scripts: core.Script<any>[], skippable?: boolean): core.Script<any>[] {
-  const result: core.Script<core.WaitTransition> = {
+  const result: core.Script<ast.WaitTransition> = {
     tag: core.Tag.waitTransition,
     data: {
       scripts

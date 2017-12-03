@@ -6,17 +6,10 @@ module.exports = new core.Scenario([
     frames: [
       new core.Frame([
         {
-          tag: "waitTransition",
+          tag: "fadeIn",
           data: {
-            scripts: [
-              {
-                tag: "fadeIn",
-                data: {
-                  layer: "test",
-                  duration: 10
-                }
-              }
-            ]
+            layer: "test",
+            duration: 10
           }
         }
       ]),
@@ -24,9 +17,7 @@ module.exports = new core.Scenario([
         {
           tag: "text",
           data: {
-            values: [
-              "テスト"
-            ]
+            values: ["テスト"]
           }
         }
       ])

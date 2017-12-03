@@ -5,6 +5,7 @@ import * as core from "cowlick-core";
 import {filename} from "./util";
 import * as ast from "./ast";
 import {InlineScript} from "./InlineScript";
+import {Script} from "cowlick-core";
 
 /**
  * 解析結果
@@ -234,7 +235,7 @@ function click(original: core.Script<any>[], options: VisitorOptions): estree.Ob
     property("tag", literal(core.Tag.click)),
     property("data", {
       type: ArrayExpression,
-      elements: original.map((s, i) => visit(s, nestOptions(options, i)))
+      elements: visitScripts(original, options, 0)
     })
   ]);
 }
@@ -329,7 +330,7 @@ function conditionBody(is: InlineScript, scripts: core.Script<any>[], options: V
     property("path", literal(is.assetId)),
     property("scripts", {
       type: ArrayExpression,
-      elements: scripts.map((s, i) => visit(s, nestOptions(options, i)))
+      elements: visitScripts(scripts, options, 0)
     })
   ];
 }
@@ -391,7 +392,7 @@ function timeout(original: core.Timeout, options: VisitorOptions): estree.Object
     property("milliseconds", literal(original.milliseconds)),
     property("scripts", {
       type: ArrayExpression,
-      elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+      elements: visitScripts(original.scripts, options, 0)
     })
   ]);
 }
@@ -409,22 +410,27 @@ function ifElse(original: ast.IfElse, options: VisitorOptions): estree.ObjectExp
     }),
     property("elseBody", {
       type: ArrayExpression,
-      elements: original.elseBody.map((s, i) => visit(s, nestOptions(options, l + i)))
+      elements: visitScripts(original.elseBody, options, l)
     })
   ]);
 }
 
-function waitTransition(original: core.WaitTransition, options: VisitorOptions): estree.ObjectExpression {
-  const ps = [
-    property("scripts", {
-      type: ArrayExpression,
-      elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
-    })
-  ];
-  if (typeof original.skippable !== "undefined") {
-    ps.push(property("skippable", literal(original.skippable)));
+function waitTransition(original: ast.WaitTransition, options: VisitorOptions): estree.ObjectExpression[] {
+  let scripts = visitScripts(original.scripts, options, 0);
+  if (!!original.skippable) {
+    scripts.push(
+      click(
+        [
+          {
+            tag: core.Tag.skip,
+            data: {}
+          }
+        ],
+        options
+      )
+    );
   }
-  return scriptAst(core.Tag.waitTransition, ps);
+  return scripts;
 }
 
 function button(original: core.Button, options: VisitorOptions): estree.ObjectExpression {
@@ -434,7 +440,7 @@ function button(original: core.Button, options: VisitorOptions): estree.ObjectEx
     property("y", literal(original.y)),
     property("scripts", {
       type: ArrayExpression,
-      elements: original.scripts.map((s, i) => visit(s, nestOptions(options, i)))
+      elements: visitScripts(original.scripts, options, 0)
     })
   ]);
 }
@@ -457,52 +463,64 @@ function userDefined(original: core.Script<any>): estree.ObjectExpression {
   return scriptAst(original.tag, ps);
 }
 
-function visit(original: core.Script<any>, options: VisitorOptions): estree.ObjectExpression {
+function visitScripts(scripts: core.Script<any>[], options: VisitorOptions, l: number) {
+  let result: estree.ObjectExpression[] = [];
+  for (const [i, s] of scripts.entries()) {
+    result = result.concat(visit(s, nestOptions(options, l + i)));
+  }
+  return result;
+}
+
+function visit(original: core.Script<any>, options: VisitorOptions): estree.ObjectExpression[] {
   switch (original.tag) {
     case core.Tag.text:
-      return text(original.data);
+      return [text(original.data)];
     case core.Tag.image:
-      return image(original.data);
+      return [image(original.data)];
     case core.Tag.layerConfig:
-      return scriptAst(core.Tag.layerConfig, layerConfig(original.data));
+      return [scriptAst(core.Tag.layerConfig, layerConfig(original.data))];
     case core.Tag.playAudio:
     case core.Tag.stopAudio:
-      return audio(original);
+      return [audio(original)];
     case core.Tag.click:
-      return click(original.data, options);
+      return [click(original.data, options)];
     case core.Tag.evaluate:
-      return evaluate(original.data, options);
+      return [evaluate(original.data, options)];
     case core.Tag.condition:
-      return condition(original.data, options);
+      return [condition(original.data, options)];
     case core.Tag.jump:
-      return jump(original.data, options);
+      return [jump(original.data, options)];
     case core.Tag.choice:
-      return choice(original.data, options);
+      return [choice(original.data, options)];
     case core.Tag.timeout:
-      return timeout(original.data, options);
+      return [timeout(original.data, options)];
     case core.Tag.ifElse:
-      return ifElse(original.data, options);
+      return [ifElse(original.data, options)];
     case core.Tag.waitTransition:
       return waitTransition(original.data, options);
     case core.Tag.button:
-      return button(original.data, options);
+      return [button(original.data, options)];
     case core.Tag.removeLayer:
-      return removeLayer(original.data);
+      return [removeLayer(original.data)];
     case core.Tag.trigger:
-      return trigger(original.data);
+      return [trigger(original.data)];
     default:
-      return userDefined(original);
+      return [userDefined(original)];
   }
 }
 
 function frame(original: ast.Frame, scene: string, index: number, state: State): estree.NewExpression {
+  let elements: estree.ObjectExpression[] = [];
+  for (const [i, s] of original.scripts.entries()) {
+    elements = elements.concat(visit(s, {scene, frame: index, indexes: [i], state}));
+  }
   const result: estree.NewExpression = {
     type: NewExpression,
     callee: Frame,
     arguments: [
       {
         type: ArrayExpression,
-        elements: original.scripts.map((s, i) => visit(s, {scene, frame: index, indexes: [i], state}))
+        elements
       }
     ]
   };
