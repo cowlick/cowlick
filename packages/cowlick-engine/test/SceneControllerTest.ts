@@ -1,14 +1,15 @@
 "use strict";
 import * as assert from "assert";
+import * as core from "cowlick-core";
 import * as engine from "./helpers/setup";
 
 describe("SceneController", () => {
-  function createController(config: engine.core.Config, scriptManager: engine.ScriptManager) {
-    const scenario = new engine.core.Scenario([
-      new engine.core.Scene({
+  function createController(config: engine.config.Config, scriptManager: engine.ScriptManager) {
+    const scenario = new core.Scenario([
+      new core.Scene({
         label: "0",
         frames: [
-          new engine.core.Frame([
+          new core.Frame([
             {
               tag: "jump",
               data: {
@@ -19,10 +20,10 @@ describe("SceneController", () => {
           ])
         ]
       }),
-      new engine.core.Scene({
+      new core.Scene({
         label: "1",
         frames: [
-          new engine.core.Frame([
+          new core.Frame([
             {
               tag: "jump",
               data: {
@@ -70,7 +71,7 @@ describe("SceneController", () => {
   }
 
   it("ロードシーンからゲームシーンに遷移できる", () => {
-    const config = engine.core.defaultConfig;
+    const config = engine.config.defaultConfig;
     const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
     const scriptManager = new engine.ScriptManager(defaultScripts);
     const controller = createController(config, scriptManager);
@@ -85,7 +86,7 @@ describe("SceneController", () => {
     }, this);
     controller.start();
     scriptManager.call(controller, {
-      tag: engine.core.Tag.openLoadScene,
+      tag: core.Tag.openLoadScene,
       data: {
         vertical: 10,
         horizontal: 1,
@@ -93,7 +94,7 @@ describe("SceneController", () => {
         padding: 10,
         base: {
           layer: {
-            name: engine.core.Layer.system,
+            name: core.Layer.system,
             x: 10,
             y: 10
           },
@@ -105,7 +106,7 @@ describe("SceneController", () => {
   });
 
   it("破棄できる", () => {
-    const config = engine.core.defaultConfig;
+    const config = engine.config.defaultConfig;
     const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
     const scriptManager = new engine.ScriptManager(defaultScripts);
     const controller = createController(config, scriptManager);

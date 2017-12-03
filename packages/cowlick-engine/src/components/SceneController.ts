@@ -1,5 +1,6 @@
 "use strict";
 import * as core from "cowlick-core";
+import {Config} from "cowlick-config";
 import {Scene} from "./Scene";
 import {GameScene} from "./GameScene";
 import {SaveLoadScene} from "./SaveLoadScene";
@@ -9,7 +10,7 @@ export interface SceneControllerParameters {
   game: g.Game;
   scenario: core.Scenario;
   scriptManager: ScriptManager;
-  config: core.Config;
+  config: Config;
   player: g.Player;
   storageKeys: g.StorageKey[];
 }
@@ -17,7 +18,7 @@ export interface SceneControllerParameters {
 export class SceneController implements g.Destroyable {
   game: g.Game;
   private player: g.Player;
-  private config: core.Config;
+  private config: Config;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
   private storageKeys: g.StorageKey[];

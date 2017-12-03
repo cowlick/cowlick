@@ -1,11 +1,12 @@
 "use strict";
 import * as al from "@akashic-extension/akashic-label";
 import * as core from "cowlick-core";
+import {Config} from "cowlick-config";
 import {GameState} from "../models/GameState";
 
 export interface MessageParameters {
   scene: g.Scene;
-  config: core.Config;
+  config: Config;
   width: number;
   x: number;
   y: number;
@@ -19,7 +20,7 @@ export class Message extends al.Label {
   private original: core.Text;
   private current: (string | core.Ruby)[];
   private gameState: GameState;
-  private config: core.Config;
+  private config: Config;
 
   constructor(params: MessageParameters) {
     super(Message.toLabelParameters(params));

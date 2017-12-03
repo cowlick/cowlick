@@ -3,7 +3,7 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as glob from "glob";
 import * as esprima from "esprima";
-import {Scenario, analyze} from "./helpers/setup";
+import {Scenario, analyze} from "cowlick-analyzer";
 
 describe("Analyzer", () => {
   describe("スクリプト ASTをJavaScript ASTに変換できる", () => {

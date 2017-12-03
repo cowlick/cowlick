@@ -1,5 +1,6 @@
 "use strict";
 import * as core from "cowlick-core";
+import {Config} from "cowlick-config";
 import {Button} from "./Button";
 import {LabelButton} from "./LabelButton";
 import {Scene} from "./Scene";
@@ -9,13 +10,13 @@ import {ScriptManager} from "../scripts/ScriptManager";
 export interface SaveLoadSceneParameters {
   game: g.Game;
   scene: core.Scene;
-  config: core.Config;
+  config: Config;
   assetIds: string[];
   gameState: GameState;
 }
 
 export class SaveLoadScene extends Scene {
-  private config: core.Config;
+  private config: Config;
   private button: Button;
   gameState: GameState;
 

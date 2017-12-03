@@ -2,7 +2,7 @@
 import {Context} from "@xnv/headless-akashic";
 import "@xnv/headless-akashic/polyfill";
 
-export let core;
+export let config;
 export let GameState;
 export let SaveLoadScene;
 export let SceneController;
@@ -14,7 +14,7 @@ beforeEach(done => {
   const ctx = new Context();
   ctx.start().then((game: g.Game) => {
     g.game = game;
-    core = require("cowlick-core");
+    config = require("cowlick-config");
     GameState = require("../../src/models/GameState").GameState;
     SaveLoadScene = require("../../src/components/SaveLoadScene").SaveLoadScene;
     SceneController = require("../../src/components/SceneController").SceneController;

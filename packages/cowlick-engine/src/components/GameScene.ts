@@ -1,6 +1,7 @@
 "use strict";
 import {Storage} from "../models/Storage";
 import * as core from "cowlick-core";
+import {Config} from "cowlick-config";
 import {GameState} from "../models/GameState";
 import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
@@ -14,7 +15,7 @@ export interface GameSceneParameters {
   game: g.Game;
   scenario: core.Scenario;
   scriptManager: ScriptManager;
-  config: core.Config;
+  config: Config;
   controller: SceneController;
   player: g.Player;
   storageKeys?: g.StorageKey[];
@@ -26,7 +27,7 @@ export class GameScene extends Scene {
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
-  private config: core.Config;
+  private config: Config;
   private controller: SceneController;
   private audioGroup: AudioGroup;
   private videos: g.VideoAsset[];

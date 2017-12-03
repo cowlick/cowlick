@@ -1,5 +1,6 @@
 "use strict";
 import * as novel from "cowlick-core";
+import {Config, defaultConfig} from "cowlick-config";
 
 const saveLoadPane: novel.Pane = {
   layer: {
@@ -16,7 +17,7 @@ const saveLoadPane: novel.Pane = {
   }
 };
 
-const config: novel.Config = {
+const config: Config = {
   window: {
     message: {
       layer: {
@@ -138,8 +139,8 @@ const config: novel.Config = {
     color: "white",
     alreadyReadColor: "#4444FF"
   },
-  system: novel.defaultConfig.system,
-  audio: novel.defaultConfig.audio
+  system: defaultConfig.system,
+  audio: defaultConfig.audio
 };
 
 module.exports = config;

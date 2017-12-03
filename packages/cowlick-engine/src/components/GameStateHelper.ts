@@ -1,5 +1,6 @@
 "use strict";
-import {SaveData, Variables, Config} from "cowlick-core";
+import {SaveData, Variables} from "cowlick-core";
+import {Config} from "cowlick-config";
 import {GameState} from "../models/GameState";
 import {gameId, Region} from "../Constant";
 

@@ -1,5 +1,6 @@
 "use strict";
-import {Image, Config} from "cowlick-core";
+import {Image} from "cowlick-core";
+import {Config} from "cowlick-config";
 import {Button} from "./Button";
 import {Scene} from "./Scene";
 import {createFrameSprite, createImage} from "./Image";

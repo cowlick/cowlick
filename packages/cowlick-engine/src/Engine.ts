@@ -1,5 +1,6 @@
 "use strict";
 import * as core from "cowlick-core";
+import {Config, defaultConfig} from "cowlick-config";
 import {SceneController} from "./components/SceneController";
 import {ScriptManager, ScriptFunction} from "./scripts/ScriptManager";
 import {defaultScripts} from "./scripts/defaultScripts";
@@ -11,7 +12,7 @@ import {createStorageKeys} from "./components/GameStateHelper";
 export class Engine {
   private game: g.Game;
   private static _scriptManager = new ScriptManager(defaultScripts);
-  private static _config = core.defaultConfig;
+  private static _config = defaultConfig;
   // 仮置き
   static player: g.Player = {id: "0"};
 
@@ -24,7 +25,7 @@ export class Engine {
     }
   }
 
-  set config(value: core.Config) {
+  set config(value: Config) {
     Engine._config = value;
   }
 
@@ -32,7 +33,7 @@ export class Engine {
     return Engine._scriptManager;
   }
 
-  static get config(): core.Config {
+  static get config(): Config {
     return Engine._config;
   }
 

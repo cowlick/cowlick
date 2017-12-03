@@ -1,5 +1,6 @@
 "use strict";
-import {Audio, AudioConfig, GameError} from "cowlick-core";
+import {Audio, GameError} from "cowlick-core";
+import {AudioConfig} from "cowlick-config";
 
 export class AudioGroup {
   private game: g.Game;

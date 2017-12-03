@@ -1,6 +1,7 @@
 "use strict";
 import * as assert from "assert";
-import {core, GameState} from "./helpers/setup";
+import * as core from "cowlick-core";
+import {GameState} from "./helpers/setup";
 
 describe("GameState", () => {
   const data: core.SaveData[] = [

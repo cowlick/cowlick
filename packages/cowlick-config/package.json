@@ -1,0 +1,28 @@
+{
+  "name": "cowlick-config",
+  "version": "0.1.0",
+  "description": "configuration for cowlick",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc -p ."
+  },
+  "author": "pocketberserker",
+  "license": "MIT",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pocketberserker/cowlick.git"
+  },
+  "dependencies": {
+    "cowlick-core": "^0.1.0"
+  },
+  "devDependencies": {
+    "@akashic/akashic-engine": "2.0.0",
+    "@types/node": "8.0.53",
+    "typescript": "2.6.1"
+  }
+}

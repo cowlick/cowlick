@@ -37,6 +37,7 @@
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.1",
     "@types/estraverse": "0.0.6",
+    "@types/glob": "5.0.33",
     "@types/mocha": "2.2.44",
     "@types/node": "8.0.53",
     "@xnv/headless-akashic": "0.0.1",

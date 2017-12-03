@@ -1,5 +1,4 @@
-import {Pane, Script} from "./Script";
-import {Layer} from "./Constant";
+import {Pane, Script, Layer} from "cowlick-core";
 
 /**
  * フォント設定
