@@ -9,3 +9,5 @@ import * as path from "path";
 export function filename(target: string): string {
   return path.basename(target, path.extname(target));
 }
+
+export const waitTransition = "waitTransition";

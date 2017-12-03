@@ -30,7 +30,6 @@ export namespace Tag {
   export const timeout = "timeout";
   export const ifElse = "ifElse";
   export const exception = "exception";
-  export const waitTransition = "waitTransition";
   export const slider = "slider";
   export const autoMode = "autoMode";
 }
