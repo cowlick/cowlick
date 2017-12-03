@@ -1,16 +1,23 @@
-export function parse(input: string): any;
+import {Frame} from "cowlick-analyzer";
+
+export interface Result {
+  frames: Frame[];
+  dependencies: string[];
+}
+
+export function parse(input: string): Result;
 
 export interface Location {
-  start:{
-      offset: number,
-      line: number,
-      column: number
-  }
+  start: {
+    offset: number;
+    line: number;
+    column: number;
+  };
   end: {
-      offset: number,
-      line: number,
-      column: number
-  }
+    offset: number;
+    line: number;
+    column: number;
+  };
 }
 
 export class SyntaxError {
