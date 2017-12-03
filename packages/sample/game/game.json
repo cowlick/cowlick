@@ -21,11 +21,6 @@
 			"height": 32,
 			"path": "image/pane.png"
 		},
-		"eval": {
-			"type": "script",
-			"path": "script/eval.js",
-			"global": true
-		},
 		"scenario": {
 			"type": "script",
 			"path": "script/scenario.js",
@@ -41,6 +36,11 @@
 			"width": 128,
 			"height": 128,
 			"path": "image/cowlick.png"
+		},
+		"scene0_2_0": {
+			"type": "script",
+			"path": "script/scene0_2_0.js",
+			"global": true
 		}
 	},
 	"environment": {

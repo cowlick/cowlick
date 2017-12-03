@@ -8,7 +8,6 @@ interface Logo extends core.Fade {
 }
 
 function main() {
-  novel.engine.script("noop", (controller, data) => {});
   novel.engine.script("logo", (controller, data: Logo) => {
     const scene = controller.current;
     scene.transition(data.layer, layer => {
@@ -20,6 +19,16 @@ function main() {
         .fadeOut(data.duration)
         .call(() => scene.requestNextFrame());
     });
+  });
+
+  const choiceScript = novel.defaultScripts.get(core.Tag.choice);
+  novel.engine.script(core.Tag.choice, (controller, value: core.Choice) => {
+    value.backgroundImage = "pane";
+    value.padding = 4;
+    value.backgroundEffector = {
+      borderWidth: 4
+    };
+    choiceScript(controller, value);
   });
 
   novel.engine.start();

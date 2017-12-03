@@ -9,8 +9,8 @@ var outDir = path.join(__dirname, "game", "script");
 var config = {
   entry: {
     main: path.join(srcDir, "main.ts"),
-    eval: path.join(srcDir, "eval.ts"),
-    scenario: path.join(srcDir, "scenario.ts"),
+    scene0_2_0: path.join(srcDir, "scene0_2_0.js"),
+    scenario: path.join(srcDir, "scenario.js"),
     config: path.join(srcDir, "config.ts")
   },
   output: {

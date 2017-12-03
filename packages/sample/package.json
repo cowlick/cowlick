@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "webpack --progress && npm run scan:assets",
+    "build": "cowlick-kag-compiler ./scenario -o ./src && webpack --progress && npm run scan:assets",
     "start": "akashic-sandbox game",
     "scan:assets": "cd ./game && akashic scan asset",
     "bundle": "cd ./game && akashic export html --output ../dist && cp ../../../docs/images/favicon.ico ../dist"
@@ -23,6 +23,7 @@
     "@akashic/akashic-sandbox": "0.13.4",
     "@types/node": "8.0.53",
     "copy-webpack-plugin": "4.2.1",
+    "cowlick-kag-compiler": "^0.1.0",
     "ts-loader": "3.1.1",
     "typescript": "2.6.1",
     "uglify-save-license": "0.4.1",
