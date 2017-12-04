@@ -1,3 +1,3 @@
 module.exports = function(variables) {
-  variables.current.test = 'test';
+  variables.current.test = "test";
 };

@@ -15,9 +15,7 @@ module.exports = new core.Scenario([
                   {
                     tag: "text",
                     data: {
-                      values: [
-                        "first"
-                      ]
+                      values: ["first"]
                     }
                   }
                 ]

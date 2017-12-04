@@ -10,7 +10,7 @@
     "publish": "lerna publish",
     "test": "lerna run test",
     "build": "lerna run build",
-    "prettier": "prettier --write '**/*.{js,ts}'",
+    "prettier": "prettier --write '**/*.ts'",
     "sample:bundle": "cd packages/sample && npm run bundle",
     "sample:publish": "gh-pages -d ./packages/sample/dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
     "start": "cd packages/sample && npm start",

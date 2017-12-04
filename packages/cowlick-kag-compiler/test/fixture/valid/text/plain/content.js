@@ -8,9 +8,7 @@ module.exports = new core.Scenario([
         {
           tag: "text",
           data: {
-            values: [
-              "テスト\n1"
-            ]
+            values: ["テスト\n1"]
           }
         }
       ])

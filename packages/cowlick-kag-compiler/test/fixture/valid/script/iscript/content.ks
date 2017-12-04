@@ -1,3 +1,3 @@
 [iscript]
-f.test='test';
+f.test="test";
 [endscript]

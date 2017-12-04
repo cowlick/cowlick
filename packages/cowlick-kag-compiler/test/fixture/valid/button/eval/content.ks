@@ -1,1 +1,1 @@
-[button graphic="test" x=0 y=0 exp="f.test='test'"]
+[button graphic="test" x=0 y=0 exp='f.test="test"']

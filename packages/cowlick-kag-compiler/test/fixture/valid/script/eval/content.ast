@@ -34,7 +34,7 @@
                 "right": {
                   "type": "Literal",
                   "value": "test",
-                  "raw": "'test'"
+                  "raw": "\"test\""
                 }
               }
             }
