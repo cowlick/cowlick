@@ -68,8 +68,8 @@ TagContent
   / PlaySe
   / StopSe
   / Eval
-  / S
   / HideMessage
+  / ShowHistory
   / LayOpt
   / Jump
   / ClearSysVar
@@ -79,6 +79,7 @@ TagContent
   / FreeImage
   / Click
   / UserDefined
+  / S
 
 Image
   = "image" _ assetId:StorageAttribute _ layer:LayerAttribute options:LayerOptions {
@@ -115,6 +116,11 @@ HideMessage
       b.layerConfig("message", [{ key: "visible", value: false }]),
       b.click([b.layerConfig("message", [{ key: "visible", value: true }])])
     ];
+  }
+
+ShowHistory
+  = "showhistory" {
+    return [b.backlog()];
   }
 
 LayOpt

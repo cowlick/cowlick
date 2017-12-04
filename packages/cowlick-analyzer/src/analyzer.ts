@@ -453,6 +453,15 @@ function trigger(original: core.Trigger): estree.ObjectExpression {
   return object([property("tag", literal(core.Tag.trigger)), property("data", literal(original))]);
 }
 
+function backlog(original: core.Backlog, options: VisitorOptions): estree.ObjectExpression {
+  return scriptAst(core.Tag.backlog, [
+    property("scripts", {
+      type: ArrayExpression,
+      elements: visitScripts(original.scripts, options, 0)
+    })
+  ]);
+}
+
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for (const key of Object.keys(original.data)) {
@@ -506,6 +515,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return [trigger(original.data)];
     case core.Tag.click:
       return [click(original.data, options)];
+    case core.Tag.backlog:
+      return [backlog(original.data, options)];
     default:
       return [userDefined(original)];
   }

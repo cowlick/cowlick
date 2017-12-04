@@ -410,3 +410,12 @@ export function removeLayer(name: string): core.Script<core.RemoveLayer> {
     }
   };
 }
+
+export function backlog(): core.Script<core.Backlog> {
+  return {
+    tag: core.Tag.backlog,
+    data: {
+      scripts: []
+    }
+  };
+}
