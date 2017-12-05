@@ -78,8 +78,8 @@ TagContent
   / Button
   / FreeImage
   / Click
-  / UserDefined
   / S
+  / UserDefined
 
 Image
   = "image" _ assetId:StorageAttribute _ layer:LayerAttribute options:LayerOptions {
