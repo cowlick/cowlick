@@ -42,9 +42,13 @@ export interface SystemConfig {
    */
   maxSaveCount: number;
   /**
+   * 1文字を表示する速度(ms)
+   */
+  messageSpeed: number;
+  /**
    * オートモード時のメッセージ送り速度(ms)
    */
-  autoMessageSpeed: number;
+  autoMessageDuration: number;
   /**
    * 既読を有効にするかどうか
    */
@@ -106,7 +110,8 @@ export const defaultConfig: Config = {
   },
   system: {
     maxSaveCount: 100,
-    autoMessageSpeed: 1500,
+    messageSpeed: 1000 / g.game.fps,
+    autoMessageDuration: 1500,
     alreadyRead: false
   },
   audio: {

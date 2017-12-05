@@ -71,8 +71,11 @@ export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Conf
   if (typeof result.variables.builtin.autoMode === "undefined") {
     result.variables.builtin.autoMode = false;
   }
-  if (typeof result.variables.builtin.autoMilliSeconds === "undefined") {
-    result.variables.builtin.autoMilliSeconds = config.system.autoMessageSpeed;
+  if (typeof result.variables.builtin.autoMessageDuration === "undefined") {
+    result.variables.builtin.autoMessageDuration = config.system.autoMessageDuration;
+  }
+  if (typeof result.variables.builtin.messageSpeed === "undefined") {
+    result.variables.builtin.messageSpeed = config.system.messageSpeed;
   }
   return new GameState(result.data, result.variables, max);
 }

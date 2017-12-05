@@ -21,6 +21,7 @@ export class Message extends al.Label {
   private current: (string | core.Ruby)[];
   private gameState: GameState;
   private config: Config;
+  private identifier: g.TimerIdentifier;
 
   constructor(params: MessageParameters) {
     super(Message.toLabelParameters(params));
@@ -35,7 +36,7 @@ export class Message extends al.Label {
     this.textAlign = g.TextAlign.Left;
     this.config = params.config;
     this.onFinished = new g.Trigger<string>();
-    this.update.add(this.onUpdated, this);
+    this.applySpeed();
   }
 
   get finished() {
@@ -59,12 +60,23 @@ export class Message extends al.Label {
         values: this.original.values.concat(text.values)
       };
     }
-    this.update.add(this.onUpdated, this);
+    this.applySpeed();
+  }
+
+  applySpeed(speed?: number) {
+    if (this.identifier) {
+      this.removeTimer();
+    }
+    this.identifier = this.scene.setInterval(
+      this.next,
+      this.gameState.variables.builtin[core.BuiltinVariable.messageSpeed],
+      this
+    );
   }
 
   showAll() {
     if (!this.finished) {
-      this.update.remove(this.onUpdated, this);
+      this.removeTimer();
       this.text = "";
       for (const t of this.original.values) {
         if (typeof t === "string") {
@@ -86,7 +98,7 @@ export class Message extends al.Label {
     }
   }
 
-  private onUpdated() {
+  private next() {
     if (!this.finished && this.counter >= this.current.length) {
       this.counter = 0;
       this.index++;
@@ -108,8 +120,15 @@ export class Message extends al.Label {
       this.counter++;
     }
     if (this.finished) {
-      this.update.remove(this.onUpdated, this);
+      this.removeTimer();
       this.onFinished.fire(this.text);
+    }
+  }
+
+  private removeTimer() {
+    if (this.identifier) {
+      this.scene.clearInterval(this.identifier);
+      this.identifier = null;
     }
   }
 

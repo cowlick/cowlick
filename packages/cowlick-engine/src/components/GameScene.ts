@@ -176,7 +176,7 @@ export class GameScene extends Scene {
   setAutoTrigger() {
     this.autoIdentifier = this.setTimeout(
       () => this.requestNextFrame(),
-      this.gameState.variables.builtin[core.BuiltinVariable.autoMilliSeconds],
+      this.gameState.variables.builtin[core.BuiltinVariable.autoMessageDuration],
       this
     );
   }

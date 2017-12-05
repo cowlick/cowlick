@@ -45,7 +45,8 @@ export namespace Layer {
 export namespace BuiltinVariable {
   export const selectedFont = "selectedFont";
   export const autoMode = "autoMode";
-  export const autoMilliSeconds = "autoMilliSeconds";
+  export const autoMessageDuration = "autoMessageDuration";
+  export const messageSpeed = "messageSpeed";
 }
 
 export namespace VariableType {

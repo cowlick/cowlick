@@ -54,7 +54,7 @@ describe("SceneController", () => {
       builtin: {
         selectedFont: 0,
         audoMode: false,
-        autoMilliSeconds: config.system.autoMessageSpeed
+        autoMessageDuration: config.system.autoMessageDuration
       },
       current: {},
       system: {}
