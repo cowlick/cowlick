@@ -14,6 +14,7 @@
   "files": [
     "../node_modules/@akashic/akashic-engine/lib/main.d.ts",
     "./action.ts",
-    "./cli.ts"
+    "./cli.ts",
+    "./index.ts"
   ]
 }

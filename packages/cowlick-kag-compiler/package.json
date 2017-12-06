@@ -2,7 +2,7 @@
   "name": "cowlick-kag-compiler",
   "version": "0.1.0",
   "description": "cowlick kag compiler",
-  "main": "lib/cli.js",
+  "main": "lib/index.js",
   "bin": {
     "cowlick-kag-compiler": "./bin/run"
   },
