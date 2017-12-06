@@ -5,6 +5,8 @@ import * as commandpost from "commandpost";
 import * as escodegen from "escodegen";
 import {analyze} from "cowlick-analyzer";
 import {parse} from "./parser";
+import {SyntaxError} from "../resources/kag";
+import {runProgress} from "./runner";
 
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
 
@@ -25,7 +27,8 @@ const root = commandpost
     const output: string = opts.output[0] || "script";
     const outputPath = path.resolve(process.cwd(), output);
     const basePath = path.resolve(process.cwd(), args.inputDir);
-    const result = analyze(parse(basePath));
+    const ast = parse(basePath, runProgress);
+    const result = runProgress("Analyzing scenario", () => analyze(ast));
     if (!fs.existsSync(outputPath)) {
       fs.mkdirSync(outputPath);
     }
@@ -41,11 +44,12 @@ commandpost.exec(root, process.argv).then(
     process.exit(0);
   },
   err => {
-    console.error("uncaught error", err);
-    if (err.stack) {
-      console.error(err.stack);
+    if (err instanceof SyntaxError) {
+      console.error(err.message);
+      console.error(err.location);
+    } else {
+      console.error("uncaught error", err);
     }
-    process.stdout.write("");
     process.exit(1);
   }
 );
