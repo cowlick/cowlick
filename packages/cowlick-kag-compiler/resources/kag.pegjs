@@ -108,7 +108,7 @@ Eval
   }
 
 S
-  = "s" { return [b.trigger(false)]; }
+  = "s" &"]" { return [b.trigger(false)]; }
 
 HideMessage
   = "hidemessage" {

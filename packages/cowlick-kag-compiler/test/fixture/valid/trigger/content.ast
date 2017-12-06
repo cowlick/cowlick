@@ -1,0 +1,10 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "trigger",
+        "data": 1
+      }
+    ]
+  }
+]
