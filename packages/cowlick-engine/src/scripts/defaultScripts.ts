@@ -439,6 +439,10 @@ function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
   ]);
 }
 
+function messageSpeed(controller: SceneController, data: core.MessageSpeed) {
+  controller.current.applyMessageSpeed(data.speed);
+}
+
 export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],
   [core.Tag.pane, pane],
@@ -473,5 +477,6 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.autoMode, autoMode],
   [closeLoadSceneTag, closeLoadScene], // 内部用
   [core.Tag.openSaveScene, openSaveScene],
-  [core.Tag.openLoadScene, openLoadScene]
+  [core.Tag.openLoadScene, openLoadScene],
+  [core.Tag.messageSpeed, messageSpeed]
 ]);

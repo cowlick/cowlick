@@ -181,6 +181,10 @@ export class GameScene extends Scene {
     );
   }
 
+  applyMessageSpeed(speed: number) {
+    this._message.applySpeed(speed);
+  }
+
   private onLoaded() {
     const frame = this.scenario.frame;
 

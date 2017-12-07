@@ -413,3 +413,10 @@ export interface SaveLoadScene {
   padding: number;
   base: Pane;
 }
+
+/**
+ * メッセージ速度
+ */
+export interface MessageSpeed {
+  speed: number;
+}

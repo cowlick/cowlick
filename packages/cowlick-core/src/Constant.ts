@@ -32,6 +32,7 @@ export namespace Tag {
   export const exception = "exception";
   export const slider = "slider";
   export const autoMode = "autoMode";
+  export const messageSpeed = "messageSpeed";
 }
 
 export namespace Layer {

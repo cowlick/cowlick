@@ -1,0 +1,12 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "messageSpeed",
+        "data": {
+          "speed": 10
+        }
+      }
+    ]
+  }
+]

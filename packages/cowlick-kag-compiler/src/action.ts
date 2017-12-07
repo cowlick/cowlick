@@ -419,3 +419,12 @@ export function backlog(): core.Script<core.Backlog> {
     }
   };
 }
+
+export function messageSpeed(speed: string): core.Script<core.MessageSpeed> {
+  return {
+    tag: core.Tag.messageSpeed,
+    data: {
+      speed: tryParseLiteral(speed)
+    }
+  };
+}

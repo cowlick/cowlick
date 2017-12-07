@@ -462,6 +462,10 @@ function backlog(original: core.Backlog, options: VisitorOptions): estree.Object
   ]);
 }
 
+function messageSpeed(original: core.MessageSpeed): estree.ObjectExpression {
+  return scriptAst(core.Tag.messageSpeed, [property("speed", literal(original.speed))]);
+}
+
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for (const key of Object.keys(original.data)) {
@@ -517,6 +521,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return [click(original.data, options)];
     case core.Tag.backlog:
       return [backlog(original.data, options)];
+    case core.Tag.messageSpeed:
+      return [messageSpeed(original.data)];
     default:
       return [userDefined(original)];
   }

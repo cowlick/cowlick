@@ -79,6 +79,7 @@ TagContent
   / FreeImage
   / Click
   / S
+  / Delay
   / UserDefined
 
 Image
@@ -227,6 +228,11 @@ Click
     }
     options.push(b.jump(j));
     return [b.click(options)];
+  }
+
+Delay
+  = "delay" _ speed:SpeedAttribute {
+    return [b.messageSpeed(speed)];
   }
 
 UserDefined
@@ -424,10 +430,10 @@ GraphicAttribute
   = "graphic=" graphic:AttributeValue { return graphic; }
 
 XAttribute
-  = "x=" x:Digits { return x; }
+  = "x=" x:AttributeNumberValue { return x; }
 
 YAttribute
-  = "y=" y:Digits { return y; }
+  = "y=" y:AttributeNumberValue { return y; }
 
 CanSkipAttribute
   = "canskip=" skippable:AttributeValue { return skippable; }
@@ -437,6 +443,9 @@ LayerAttribute
 
 SEAttribute
   = "se=" assetId:AttributeValue { return assetId; }
+
+SpeedAttribute
+  = "speed=" speed:AttributeNumberValue { return speed; }
 
 UserDefinedAttribute
   = key:AttributeName "=" value:AttributeValue {
@@ -455,6 +464,13 @@ AttributeName
 AttributeValue
   = StringLiteral
   / $( ( !Newline !EOF !Space !"]" . )+ )
+
+AttributeNumberValue
+  = StringDigits / Digits
+
+StringDigits
+  = '"' v:Digits '"' { return v; }
+  / "'" v:Digits "'" { return v; }
 
 StringLiteral
   = '"' l:$( ( !'"' . )+ ) '"' { return l; }
