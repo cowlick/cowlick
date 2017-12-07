@@ -440,6 +440,10 @@ function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
 }
 
 function messageSpeed(controller: SceneController, data: core.MessageSpeed) {
+  controller.current.gameState.setValue(
+    {type: core.VariableType.builtin, name: core.BuiltinVariable.messageSpeed},
+    data.speed
+  );
   controller.current.applyMessageSpeed(data.speed);
 }
 
