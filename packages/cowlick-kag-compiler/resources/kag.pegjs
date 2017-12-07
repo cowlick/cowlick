@@ -7,7 +7,7 @@ Start
   = Frames
 
 Frames
-  = fs:Frame+ EOF {
+  = fs:Frame+ Newline* EOF {
     return {
       dependencies: b.dependencies,
       frames: fs
