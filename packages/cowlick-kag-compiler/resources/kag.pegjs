@@ -134,10 +134,10 @@ LayerOptions
   = os:(_ LayerOption)* { return os.map(function(o) { return o[1]; }); }
 
 LayerOption
-  = "top=" y:Digits { return { key: "y", value: y }; }
-  / "left=" x:Digits { return { key: "x", value: x }; }
+  = "top=" y:AttributeNumberValue { return { key: "y", value: y }; }
+  / "left=" x:AttributeNumberValue { return { key: "x", value: x }; }
   / "visible=" visible:Boolean { return { key: "visible", value: visible }; }
-  / "opacity=" opacity:Digits { return { key: "opacity", value: opacity }; }
+  / "opacity=" opacity:AttributeNumberValue { return { key: "opacity", value: opacity }; }
 
 Jump
   = "jump" _ scene:StorageAttribute? _ frame:TargetAttribute? {
@@ -505,7 +505,11 @@ Digit
 
 Boolean
   = "true" { return true; }
+  / "'true'" { return true; }
+  / '"true"' { return true; }
   / "false" { return false; }
+  / "'false'" { return false; }
+  / '"false"' { return false; }
 
 Newline
   = "\r\n"
