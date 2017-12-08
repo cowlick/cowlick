@@ -9,12 +9,6 @@
     "bundle": "cd ./game && akashic export html --output ../dist && cp ../../../docs/images/favicon.ico ../dist"
   },
   "dependencies": {
-    "@akashic-extension/akashic-label": "0.3.5",
-    "@akashic-extension/akashic-timeline": "0.4.3",
-    "@pocketberserker/akashic-pagination": "0.0.4",
-    "@xnv/akashic-scrollable": "0.0.4",
-    "cowlick-config": "^0.1.0",
-    "cowlick-core": "^0.1.0",
     "cowlick-engine": "^0.1.0"
   },
   "devDependencies": {

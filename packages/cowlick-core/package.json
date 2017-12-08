@@ -20,6 +20,6 @@
   "devDependencies": {
     "@akashic/akashic-engine": "2.0.0",
     "@types/node": "8.0.53",
-    "typescript": "2.6.1"
+    "typescript": "2.6.2"
   }
 }
