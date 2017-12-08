@@ -444,7 +444,7 @@ function messageSpeed(controller: SceneController, data: core.MessageSpeed) {
     {type: core.VariableType.builtin, name: core.BuiltinVariable.messageSpeed},
     data.speed
   );
-  controller.current.applyMessageSpeed(data.speed);
+  controller.current.applyMessageSpeed();
 }
 
 function fontSetting(controller: SceneController, data: core.Font) {

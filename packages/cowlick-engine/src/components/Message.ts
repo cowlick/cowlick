@@ -63,7 +63,7 @@ export class Message extends al.Label {
     this.applySpeed();
   }
 
-  applySpeed(speed?: number) {
+  applySpeed() {
     if (this.identifier) {
       this.removeTimer();
     }

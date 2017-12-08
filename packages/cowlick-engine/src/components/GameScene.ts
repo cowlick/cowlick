@@ -181,8 +181,8 @@ export class GameScene extends Scene {
     );
   }
 
-  applyMessageSpeed(speed: number) {
-    this._message.applySpeed(speed);
+  applyMessageSpeed() {
+    this._message.applySpeed();
   }
 
   applyFontSetting() {
