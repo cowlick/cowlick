@@ -41,9 +41,7 @@ export function image(assetId: string, layer: string, options: KeyValuePair[]): 
       assetId: assetId
     }
   };
-  options.forEach(function(option) {
-    result.data.layer[option.key] = option.value;
-  });
+  concatKeyValues(result.data.layer, options);
   return result;
 }
 
@@ -426,5 +424,18 @@ export function messageSpeed(speed: string): core.Script<core.MessageSpeed> {
     data: {
       speed: tryParseLiteral(speed)
     }
+  };
+}
+
+export function concatKeyValues(data: any, options: KeyValuePair[]) {
+  for (const option of options) {
+    data[option.key] = option.key === "color" ? option.value : tryParseLiteral(option.value);
+  }
+}
+
+export function font(data: core.Font): core.Script<core.Font> {
+  return {
+    tag: core.Tag.font,
+    data
   };
 }

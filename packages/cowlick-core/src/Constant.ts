@@ -33,6 +33,7 @@ export namespace Tag {
   export const slider = "slider";
   export const autoMode = "autoMode";
   export const messageSpeed = "messageSpeed";
+  export const font = "font";
 }
 
 export namespace Layer {
@@ -48,6 +49,8 @@ export namespace BuiltinVariable {
   export const autoMode = "autoMode";
   export const autoMessageDuration = "autoMessageDuration";
   export const messageSpeed = "messageSpeed";
+  export const fontSize = "fontSize";
+  export const fontColor = "fontColor";
 }
 
 export namespace VariableType {

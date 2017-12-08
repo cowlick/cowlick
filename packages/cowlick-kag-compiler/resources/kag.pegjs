@@ -80,6 +80,7 @@ TagContent
   / Click
   / S
   / Delay
+  / Font
   / UserDefined
 
 Image
@@ -234,6 +235,20 @@ Delay
   = "delay" _ speed:SpeedAttribute {
     return [b.messageSpeed(speed)];
   }
+
+Font
+  = "font" options:FontOptions {
+    var data = {};
+    b.concatKeyValues(data, options);
+    return [b.font(data)];
+  }
+
+FontOptions
+  = os:(_ FontOption)* { return os.map(function(o) { return o[1]; }); }
+
+FontOption
+  = value:SizeAttribute { return { key: "size", value: value }; }
+  / value:ColorAttribute { return { key: "color", value: value }; }
 
 UserDefined
   = name:TagName attrs:(_ UserDefinedAttribute)* {
@@ -446,6 +461,12 @@ SEAttribute
 
 SpeedAttribute
   = "speed=" speed:AttributeNumberValue { return speed; }
+
+SizeAttribute
+  = "size=" value:AttributeValue { return value; }
+
+ColorAttribute
+  = "color=" value:AttributeValue { return value; }
 
 UserDefinedAttribute
   = key:AttributeName "=" value:AttributeValue {

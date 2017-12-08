@@ -466,6 +466,21 @@ function messageSpeed(original: core.MessageSpeed): estree.ObjectExpression {
   return scriptAst(core.Tag.messageSpeed, [property("speed", literal(original.speed))]);
 }
 
+function fontProperties(setting: core.Font): estree.Property[] {
+  const ps: estree.Property[] = [];
+  if (typeof setting.size !== "undefined") {
+    ps.push(property("size", literal(setting.size)));
+  }
+  if (typeof setting.color !== "undefined") {
+    ps.push(property("color", literal(setting.color)));
+  }
+  return ps;
+}
+
+function font(original: core.Font): estree.ObjectExpression {
+  return scriptAst(core.Tag.font, fontProperties(original));
+}
+
 function userDefined(original: core.Script<any>): estree.ObjectExpression {
   const ps: estree.Property[] = [];
   for (const key of Object.keys(original.data)) {
@@ -523,6 +538,8 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
       return [backlog(original.data, options)];
     case core.Tag.messageSpeed:
       return [messageSpeed(original.data)];
+    case core.Tag.font:
+      return [font(original.data)];
     default:
       return [userDefined(original)];
   }

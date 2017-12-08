@@ -420,3 +420,11 @@ export interface SaveLoadScene {
 export interface MessageSpeed {
   speed: number;
 }
+
+/**
+ * フォント設定
+ */
+export interface Font {
+  size: "default" | number;
+  color: string;
+}

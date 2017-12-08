@@ -16,6 +16,10 @@ export interface FontConfig {
    * 既読文字色
    */
   alreadyReadColor: string;
+  /**
+   * 文字サイズ
+   */
+  size: number;
 }
 
 /**
@@ -83,6 +87,8 @@ export interface Config {
   audio: AudioConfig;
 }
 
+const size = 18;
+
 export const defaultConfig: Config = {
   window: {
     message: {
@@ -102,11 +108,12 @@ export const defaultConfig: Config = {
       new g.DynamicFont({
         game: g.game,
         fontFamily: g.FontFamily.SansSerif,
-        size: 18
+        size
       })
     ],
     color: "black",
-    alreadyReadColor: "#4444FF"
+    alreadyReadColor: "#4444FF",
+    size
   },
   system: {
     maxSaveCount: 100,

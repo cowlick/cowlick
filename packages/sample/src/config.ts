@@ -17,6 +17,8 @@ const saveLoadPane: novel.Pane = {
   }
 };
 
+const size = 18;
+
 const config: Config = {
   window: {
     message: {
@@ -133,11 +135,12 @@ const config: Config = {
       new g.DynamicFont({
         game: g.game,
         fontFamily: g.FontFamily.SansSerif,
-        size: 18
+        size
       })
     ],
     color: "white",
-    alreadyReadColor: "#4444FF"
+    alreadyReadColor: "#4444FF",
+    size
   },
   system: defaultConfig.system,
   audio: defaultConfig.audio

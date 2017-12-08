@@ -74,6 +74,12 @@ export class Message extends al.Label {
     );
   }
 
+  applyFontSetting() {
+    this.fontSize = this.gameState.variables.builtin[core.BuiltinVariable.fontSize];
+    this.textColor = this.gameState.variables.builtin[core.BuiltinVariable.fontColor];
+    this.invalidate();
+  }
+
   showAll() {
     if (!this.finished) {
       this.removeTimer();
@@ -154,12 +160,20 @@ export class Message extends al.Label {
       name: core.BuiltinVariable.selectedFont
     });
     const font = params.config.font.list[selected];
+    const fontSize = params.gameState.getValue({
+      type: core.VariableType.builtin,
+      name: core.BuiltinVariable.fontSize
+    });
+    const textColor = params.gameState.getValue({
+      type: core.VariableType.builtin,
+      name: core.BuiltinVariable.fontColor
+    });
     return {
       scene: params.scene,
       font,
       text: "",
-      fontSize: font.size,
-      textColor: params.config.font.color,
+      fontSize,
+      textColor,
       width: params.width,
       x: params.x,
       y: params.y

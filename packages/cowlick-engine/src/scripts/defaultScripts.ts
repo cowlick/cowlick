@@ -447,6 +447,28 @@ function messageSpeed(controller: SceneController, data: core.MessageSpeed) {
   controller.current.applyMessageSpeed(data.speed);
 }
 
+function fontSetting(controller: SceneController, data: core.Font) {
+  if (data.size) {
+    controller.current.gameState.setValue(
+      {
+        type: core.VariableType.builtin,
+        name: core.BuiltinVariable.fontSize
+      },
+      data.size === "default" ? Engine.config.font.size : data.size
+    );
+  }
+  if (data.color) {
+    controller.current.gameState.setValue(
+      {
+        type: core.VariableType.builtin,
+        name: core.BuiltinVariable.fontColor
+      },
+      data.color === "default" ? Engine.config.font.color : data.color
+    );
+  }
+  controller.current.applyFontSetting();
+}
+
 export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],
   [core.Tag.pane, pane],
@@ -482,5 +504,6 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [closeLoadSceneTag, closeLoadScene], // 内部用
   [core.Tag.openSaveScene, openSaveScene],
   [core.Tag.openLoadScene, openLoadScene],
-  [core.Tag.messageSpeed, messageSpeed]
+  [core.Tag.messageSpeed, messageSpeed],
+  [core.Tag.font, fontSetting]
 ]);

@@ -185,6 +185,10 @@ export class GameScene extends Scene {
     this._message.applySpeed(speed);
   }
 
+  applyFontSetting() {
+    this._message.applyFontSetting();
+  }
+
   private onLoaded() {
     const frame = this.scenario.frame;
 

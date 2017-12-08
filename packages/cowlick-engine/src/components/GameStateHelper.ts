@@ -77,6 +77,12 @@ export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Conf
   if (typeof result.variables.builtin.messageSpeed === "undefined") {
     result.variables.builtin.messageSpeed = config.system.messageSpeed;
   }
+  if (typeof result.variables.builtin.fontSize === "undefined") {
+    result.variables.builtin.fontSize = config.font.size;
+  }
+  if (typeof result.variables.builtin.fontColor === "undefined") {
+    result.variables.builtin.fontColor = config.font.color;
+  }
   return new GameState(result.data, result.variables, max);
 }
 
