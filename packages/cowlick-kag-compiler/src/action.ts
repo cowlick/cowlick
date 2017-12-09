@@ -224,9 +224,11 @@ export function tag(name: string, attrs: KeyValuePair[]): core.Script<any> {
   return result;
 }
 
+const MemberExpression = "MemberExpression";
+
 function newMemberExpression(name: string): estree.MemberExpression {
   return {
-    type: "MemberExpression",
+    type: MemberExpression,
     object: {
       type: "Identifier",
       name: "variables"
@@ -239,25 +241,33 @@ function newMemberExpression(name: string): estree.MemberExpression {
   };
 }
 
-function traverseEval(original: string): estree.Node {
+function replaceVariable(node: estree.MemberExpression) {
+  const object = node.object;
+  if (object.type === "Identifier") {
+    let newObject: estree.MemberExpression;
+    switch (object.name) {
+      case varSf:
+        newObject = newMemberExpression(core.VariableType.system);
+        break;
+      case varF:
+        newObject = newMemberExpression(core.VariableType.current);
+        break;
+      default:
+        throw new Error(`"${object.name}" is a invalid variable name.`);
+    }
+    node.object = newObject;
+  }
+}
+
+function traverseEval(original: string, not?: boolean): estree.Node {
   return estraverse.replace(acorn.parse(original), {
     leave: (node, parent) => {
-      if (node.type === "MemberExpression") {
-        const object = node.object;
-        if (object.type === "Identifier") {
-          let newObject: estree.MemberExpression;
-          switch (object.name) {
-            case varSf:
-              newObject = newMemberExpression(core.VariableType.system);
-              break;
-            case varF:
-              newObject = newMemberExpression(core.VariableType.current);
-              break;
-            default:
-              throw new Error(`"${object.name}" is a invalid variable name.`);
-          }
-          node.object = newObject;
-        }
+      switch (node.type) {
+        case MemberExpression:
+          replaceVariable(node);
+          break;
+        default:
+          break;
       }
       // FIME: acornでstartとendを削除する方法を探す
       const n = node as any;
@@ -438,4 +448,8 @@ export function font(data: core.Font): core.Script<core.Font> {
     tag: core.Tag.font,
     data
   };
+}
+
+export function ignore(expression: string, scripts: core.Script<any>[]): ast.Condition {
+  return condition(`!(${expression})`, scripts).data;
 }

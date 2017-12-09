@@ -15,17 +15,22 @@ Frames
   }
 
 Frame
-  = Comments label:Label? ts:Tags Newline Comments skippable:WT Newline? {
-    return b.frame(b.waitTransition(ts, skippable), label);
+  = Comments label:Label? body:FrameBody {
+    return b.frame(body, label);
   }
-  / Comments label:Label? ts:Tags text:(Newline Text)? {
+
+FrameBody
+  = ts:Tags Newline Comments skippable:WT Newline? {
+    return b.waitTransition(ts, skippable);
+  }
+  / ts:Tags text:(Newline Text)? {
     if(text) {
       ts.push(text[1]);
     }
-    return b.frame(ts, label);
+    return ts;
   }
-  / Comments label:Label? text:Text {
-    return b.frame([text], label);
+  / text:Text {
+    return [text];
   }
 
 Label
@@ -43,6 +48,7 @@ Tag
   = Links
   / IScript
   / IfExpression
+  / IgnoreExpression
   / SingleTag
 
 SingleTag
@@ -315,52 +321,61 @@ EndScript
 
 IfExpression
   = i:If is:Elsif* e:Else? EndIf {
-    var result = {
-      conditions: [i].concat(is)
-    };
-    if(e) {
-      result.elseBody = e;
-    } else {
-      result.elseBody = [];
-    }
-    return [b.ifExpression(result)];
+    return [
+      b.ifExpression({
+        conditions: [i].concat(is),
+        elseBody: e ? e : []
+      })
+    ];
   }
 
 If
-  = "[if" _ expression:ExpressionAttribute _ "]" Newline? body:IfBody {
+  = "[if" _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
     return b.condition(expression, body).data;
   }
-  / "@if" _ expression:ExpressionAttribute Newline body:IfBody {
+  / "@if" _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.condition(expression, body).data;
   }
-
-IfBody
-  = ts:Tags text:(Newline Text)? {
-    if(text) {
-      ts.push(text[1]);
-    }
-    return ts;
-  }
-  / text:Text { return [text]; }
 
 Elsif
-  = "[elsif" _ expression:ExpressionAttribute _ "]" Newline? body:IfBody {
+  = "[elsif" _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
     return b.condition(expression, body).data;
   }
-  / "@elsif" _ expression:ExpressionAttribute Newline body:IfBody {
+  / "@elsif" _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.condition(expression, body).data;
   }
 
 Else
-  = "[else]" Newline? body:IfBody {
+  = "[else]" Newline? body:FrameBody {
     return body;
   }
-  / "@else" Newline body:IfBody {
+  / "@else" Newline body:FrameBody {
     return body;
   }
 
 EndIf
   = "[endif]" / "@endif"
+
+IgnoreExpression
+  = i:Ignore Newline? EndIgnore {
+    return [
+      b.ifExpression({
+        conditions: [i],
+        elseBody: []
+      })
+    ];
+  }
+
+Ignore
+  = "[ignore" _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+    return b.ignore(expression, body);
+  }
+  / "@ignore" _ expression:ExpressionAttribute Newline body:FrameBody {
+    return b.ignore(expression, body);
+  }
+
+EndIgnore
+  = "[endignore]" / "@endignore"
 
 WT
   = "[" WTName _ skippable:CanSkipAttribute? _ "]" {
@@ -411,7 +426,7 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf !WT . )
+  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf !WT !Ignore !EndIgnore . )
 
 Ruby
   = "@ruby" _ rt:TextAttribute Newline rb:Character {
