@@ -1,5 +1,6 @@
 # cowlick
 
+[![npm version](https://badge.fury.io/js/cowlick.svg)](https://badge.fury.io/js/cowlick)
 [![Build Status](https://travis-ci.org/pocketberserker/cowlick.svg?branch=master)](https://travis-ci.org/pocketberserker/cowlick)
 
 <p align="center">
