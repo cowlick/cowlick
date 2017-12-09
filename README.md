@@ -1,10 +1,10 @@
 # cowlick
 
 [![npm version](https://badge.fury.io/js/cowlick-engine.svg)](https://badge.fury.io/js/cowlick-engine)
-[![Build Status](https://travis-ci.org/pocketberserker/cowlick.svg?branch=master)](https://travis-ci.org/pocketberserker/cowlick)
+[![Build Status](https://travis-ci.org/cowlick/cowlick.svg?branch=master)](https://travis-ci.org/cowlick/cowlick)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/pocketberserker/cowlick/master/docs/images/cowlick.png"/>
+<img src="https://raw.githubusercontent.com/cowlick/cowlick/master/docs/images/cowlick.png"/>
 </p>
 
 `cowlick`は[Akashic](https://akashic-games.github.io/)専用のノベルゲームエンジンです。

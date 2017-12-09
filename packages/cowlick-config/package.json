@@ -15,7 +15,7 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pocketberserker/cowlick.git"
+    "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
     "cowlick-core": "^0.1.0"

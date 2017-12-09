@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pocketberserker/cowlick.git"
+    "url": "https://github.com/cowlick/cowlick.git"
   },
   "devDependencies": {
     "gh-pages": "1.1.0",

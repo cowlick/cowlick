@@ -16,7 +16,7 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pocketberserker/cowlick.git"
+    "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.0",
