@@ -20,10 +20,27 @@
               "tag": "jump",
               "data": {
                 "scene": "content",
-                "frame": "test"
+                "frame": "test2"
               },
               "text": "test2"
             }
+          ]
+        }
+      },
+      {
+        "tag": "trigger",
+        "data": 1
+      }
+    ]
+  },
+  {
+    "label": "test2",
+    "scripts": [
+      {
+        "tag": "text",
+        "data": {
+          "values": [
+            "テスト2"
           ]
         }
       }

@@ -24,11 +24,23 @@ module.exports = new core.Scenario([
                 tag: "jump",
                 data: {
                   label: "content",
-                  frame: 0
+                  frame: 1
                 },
                 text: "test2"
               }
             ]
+          }
+        },
+        {
+          tag: "trigger",
+          data: 1
+        }
+      ]),
+      new core.Frame([
+        {
+          tag: "text",
+          data: {
+            values: ["テスト2"]
           }
         }
       ])

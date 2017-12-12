@@ -23,6 +23,10 @@ FrameBody
   = ts:Tags Newline Comments skippable:WT Newline? {
     return b.waitTransition(ts, skippable);
   }
+  / ts:Tags Newline Comments trigger:S Newline? {
+    ts.push(trigger);
+    return ts;
+  }
   / ts:Tags text:(Newline Text)? {
     if(text) {
       ts.push(text[1]);
@@ -38,6 +42,14 @@ Label
 
 LabelValue
   = $( ( !Newline !EOF !Space !"|" . )+ )
+
+S
+  = "[s]" {
+    return b.trigger(false);
+  }
+  / "@s" {
+    return b.trigger(false);
+  }
 
 Tags
   = Comments c:Tag cs:(Newline Comments Tag)* {
@@ -84,7 +96,6 @@ TagContent
   / Button
   / FreeImage
   / Click
-  / S
   / Delay
   / Font
   / UserDefined
@@ -114,9 +125,6 @@ Eval
   = "eval" _ expression:ExpressionAttribute {
     return [b.evaluate(expression)];
   }
-
-S
-  = "s" &"]" { return [b.trigger(false)]; }
 
 HideMessage
   = "hidemessage" {
@@ -426,7 +434,26 @@ PlainText
   = $(Character+)
 
 Character
-  = $( !Newline !EOF !CM !L !R !Tag !EndLink !Ruby !Emb !If !Elsif !Else !EndIf !WT !Ignore !EndIgnore . )
+  = $(
+      !Newline
+      !EOF
+      !CM
+      !L
+      !R
+      !Tag
+      !EndLink
+      !Ruby
+      !Emb
+      !If
+      !Elsif
+      !Else
+      !EndIf
+      !WT
+      !Ignore
+      !EndIgnore
+      !S
+      .
+    )
 
 Ruby
   = "@ruby" _ rt:TextAttribute Newline rb:Character {
