@@ -54,12 +54,12 @@ export class Message extends al.Label {
       this.original = text;
       this.index = 0;
       this.counter = 0;
-      this.setCurrent();
     } else {
       this.original = {
         values: this.original.values.concat(text.values)
       };
     }
+    this.setCurrent();
     this.applySpeed();
   }
 
