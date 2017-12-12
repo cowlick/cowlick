@@ -1,6 +1,6 @@
 {
   "name": "cowlick-kag-compiler",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "cowlick kag compiler",
   "main": "lib/index.js",
   "bin": {
