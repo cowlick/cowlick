@@ -2,6 +2,12 @@
   {
     "scripts": [
       {
+        "tag": "removeLayer",
+        "data": {
+          "name": "choice"
+        }
+      },
+      {
         "tag": "text",
         "data": {
           "clear": true,

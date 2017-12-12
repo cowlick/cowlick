@@ -6,6 +6,12 @@ module.exports = new core.Scenario([
     frames: [
       new core.Frame([
         {
+          tag: "removeLayer",
+          data: {
+            name: "choice"
+          }
+        },
+        {
           tag: "text",
           data: {
             clear: true,

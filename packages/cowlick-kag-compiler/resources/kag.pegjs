@@ -28,13 +28,10 @@ FrameBody
     return ts;
   }
   / ts:Tags text:(Newline Text)? {
-    if(text) {
-      ts.push(text[1]);
-    }
-    return ts;
+    return text ? ts.concat(text[1]) : ts;
   }
   / text:Text {
-    return [text];
+    return text;
   }
 
 Label
@@ -405,7 +402,12 @@ WTName = "wt"
 
 Text
   = Comments cm:CM? Newline? values:TextBlock Newline? EndTextBlock {
-    return b.text(values, cm);
+    var s = [];
+    if(cm) {
+      s.push(b.removeLayer("choice"));
+    }
+    s.push(b.text(values, cm));
+    return s;
   }
 
 L
