@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as commandpost from "commandpost";
 import * as escodegen from "escodegen";
-import {analyze} from "cowlick-analyzer";
+import * as analyzer from "cowlick-analyzer";
 import {parse} from "./parser";
 import {SyntaxError} from "../resources/kag";
 import {runProgress} from "./runner";
@@ -23,18 +23,19 @@ const root = commandpost
   .version(packageJson.version, "-v, --version")
   .description("compile KAG scenario")
   .option("-o, --output <output>", "output dir")
-  .action((opts, args) => {
+  .action(async (opts, args) => {
     const output: string = opts.output[0] || "script";
     const outputPath = path.resolve(process.cwd(), output);
     const basePath = path.resolve(process.cwd(), args.inputDir);
-    const ast = parse(basePath, runProgress);
-    const result = runProgress("Analyzing scenario", () => analyze(ast));
-    if (!fs.existsSync(outputPath)) {
-      fs.mkdirSync(outputPath);
+    const ast = await parse(basePath, runProgress);
+    const result = runProgress("Analyzing scenario", () => analyzer.analyze(ast));
+    const exists = await analyzer.exists(outputPath);
+    if (exists === false) {
+      await analyzer.mkdir(outputPath);
     }
-    fs.writeFileSync(path.join(outputPath, "scenario.js"), escodegen.generate(result.scenario));
+    await analyzer.writeFile(path.join(outputPath, "scenario.js"), escodegen.generate(result.scenario));
     for (const s of result.scripts) {
-      s.write(outputPath);
+      await s.write(outputPath);
     }
   });
 

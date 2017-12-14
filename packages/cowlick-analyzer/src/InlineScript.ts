@@ -1,8 +1,8 @@
 "use strict";
 import {Node} from "estree";
 import * as escodegen from "escodegen";
-import * as fs from "fs";
 import * as path from "path";
+import {writeFile} from "./file";
 
 export interface InlineScriptParameters {
   scene: string;
@@ -36,7 +36,7 @@ export class InlineScript {
     return escodegen.generate(this.source);
   }
 
-  write(basePath: string) {
-    fs.writeFileSync(path.join(basePath, this.name), this.generate());
+  async write(basePath: string) {
+    return await writeFile(path.join(basePath, this.name), this.generate());
   }
 }
