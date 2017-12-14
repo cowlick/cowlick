@@ -1,12 +1,12 @@
 "use strict";
 import * as ora from "ora";
 
-export type Run<T> = (text: string, run: () => T) => T;
+export type Run<T> = (text: string, run: () => Promise<T>) => Promise<T>;
 
-export function runProgress<T>(text: string, run: () => T): T {
+export async function runProgress<T>(text: string, run: () => Promise<T>): Promise<T> {
   const spinner = ora(text).start();
   try {
-    const result = run();
+    const result = await run();
     spinner.color = "green";
     spinner.succeed();
     return result;

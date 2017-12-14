@@ -12,7 +12,7 @@ interface ParseResult {
 
 async function parseScene(target: string, run: Run<kag.Result>): Promise<ParseResult> {
   const input = await analyzer.readFile(target, "utf8");
-  const result = run(`Parsing ${target}`, () => kag.parse(input));
+  const result = await run(`Parsing ${target}`, async () => kag.parse(input));
   const scene: analyzer.Scene = {
     label: analyzer.filename(target),
     frames: result.frames
