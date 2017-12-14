@@ -1,0 +1,12 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "realTimeDisplay",
+        "data": {
+          "enabled": false
+        }
+      }
+    ]
+  }
+]

@@ -445,8 +445,8 @@ function button(original: core.Button, options: VisitorOptions): estree.ObjectEx
   ]);
 }
 
-function removeLayer(original: core.RemoveLayer): estree.ObjectExpression {
-  return scriptAst(core.Tag.removeLayer, [property("name", literal(original.name))]);
+function flatObjectToAST(tag: string, original: any): estree.ObjectExpression {
+  return scriptAst(tag, Object.entries(original).map(([k, v]) => property(k, literal(v))));
 }
 
 function trigger(original: core.Trigger): estree.ObjectExpression {
@@ -460,10 +460,6 @@ function backlog(original: core.Backlog, options: VisitorOptions): estree.Object
       elements: visitScripts(original.scripts, options, 0)
     })
   ]);
-}
-
-function messageSpeed(original: core.MessageSpeed): estree.ObjectExpression {
-  return scriptAst(core.Tag.messageSpeed, [property("speed", literal(original.speed))]);
 }
 
 function fontProperties(setting: core.Font): estree.Property[] {
@@ -529,7 +525,7 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
     case core.Tag.button:
       return [button(original.data, options)];
     case core.Tag.removeLayer:
-      return [removeLayer(original.data)];
+      return [flatObjectToAST(core.Tag.removeLayer, original.data)];
     case core.Tag.trigger:
       return [trigger(original.data)];
     case core.Tag.click:
@@ -537,9 +533,11 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
     case core.Tag.backlog:
       return [backlog(original.data, options)];
     case core.Tag.messageSpeed:
-      return [messageSpeed(original.data)];
+      return [flatObjectToAST(core.Tag.messageSpeed, original.data)];
     case core.Tag.font:
       return [font(original.data)];
+    case core.Tag.realTimeDisplay:
+      return [flatObjectToAST(core.Tag.realTimeDisplay, original.data)];
     default:
       return [userDefined(original)];
   }

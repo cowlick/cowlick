@@ -453,3 +453,12 @@ export function font(data: core.Font): core.Script<core.Font> {
 export function ignore(expression: string, scripts: core.Script<any>[]): ast.Condition {
   return condition(`!(${expression})`, scripts).data;
 }
+
+export function realTimeDisplay(enabled: boolean): core.Script<core.RealTimeDisplay> {
+  return {
+    tag: core.Tag.realTimeDisplay,
+    data: {
+      enabled
+    }
+  };
+}

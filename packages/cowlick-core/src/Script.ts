@@ -428,3 +428,10 @@ export interface Font {
   size: "default" | number;
   color: string;
 }
+
+/**
+ * メッセージ即時表示設定
+ */
+export interface RealTimeDisplay {
+  enabled: boolean;
+}

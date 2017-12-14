@@ -34,6 +34,7 @@ export namespace Tag {
   export const autoMode = "autoMode";
   export const messageSpeed = "messageSpeed";
   export const font = "font";
+  export const realTimeDisplay = "realTimeDisplay";
 }
 
 export namespace Layer {
@@ -51,6 +52,7 @@ export namespace BuiltinVariable {
   export const messageSpeed = "messageSpeed";
   export const fontSize = "fontSize";
   export const fontColor = "fontColor";
+  export const realTimeDisplay = "realTimeDisplay";
 }
 
 export namespace VariableType {

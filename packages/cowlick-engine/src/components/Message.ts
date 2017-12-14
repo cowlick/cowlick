@@ -60,7 +60,11 @@ export class Message extends al.Label {
       };
     }
     this.setCurrent();
-    this.applySpeed();
+    if (this.gameState.variables.builtin[core.BuiltinVariable.realTimeDisplay]) {
+      this.showAll();
+    } else {
+      this.applySpeed();
+    }
   }
 
   applySpeed() {

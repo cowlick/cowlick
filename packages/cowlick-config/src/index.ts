@@ -57,6 +57,10 @@ export interface SystemConfig {
    * 既読を有効にするかどうか
    */
   alreadyRead: boolean;
+  /**
+   * メッセージ即時表示
+   */
+  realTimeDisplay: boolean;
 }
 
 /**
@@ -119,7 +123,8 @@ export const defaultConfig: Config = {
     maxSaveCount: 100,
     messageSpeed: 1000 / g.game.fps,
     autoMessageDuration: 1500,
-    alreadyRead: false
+    alreadyRead: false,
+    realTimeDisplay: false
   },
   audio: {
     voice: 0.5,

@@ -95,6 +95,8 @@ TagContent
   / Click
   / Delay
   / Font
+  / NoWait
+  / EndNoWait
   / UserDefined
 
 Image
@@ -260,6 +262,12 @@ FontOptions
 FontOption
   = value:SizeAttribute { return { key: "size", value: value }; }
   / value:ColorAttribute { return { key: "color", value: value }; }
+
+NoWait
+  = "nowait" { return [b.realTimeDisplay(true)]; }
+
+EndNoWait
+  = "endnowait" { return [b.realTimeDisplay(false)]; }
 
 UserDefined
   = name:TagName attrs:(_ UserDefinedAttribute)* {
