@@ -1,6 +1,5 @@
 [
   {
-    "label": "test",
     "scripts": [
       {
         "tag": "jump",
@@ -13,6 +12,19 @@
         "data": {
           "scene": "content",
           "frame": "test"
+        }
+      }
+    ]
+  },
+  {
+    "label": "test",
+    "scripts": [
+      {
+        "tag": "text",
+        "data": {
+          "values": [
+            "テスト"
+          ]
         }
       }
     ]

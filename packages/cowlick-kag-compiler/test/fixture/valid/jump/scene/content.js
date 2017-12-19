@@ -15,7 +15,15 @@ module.exports = new core.Scenario([
           tag: "jump",
           data: {
             label: "content",
-            frame: 0
+            frame: 1
+          }
+        }
+      ]),
+      new core.Frame([
+        {
+          tag: "text",
+          data: {
+            values: ["テスト"]
           }
         }
       ])

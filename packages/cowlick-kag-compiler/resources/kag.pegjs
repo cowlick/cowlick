@@ -27,6 +27,9 @@ FrameBody
     ts.push(trigger);
     return ts;
   }
+  / ts:Tags Newline &Label {
+    return ts;
+  }
   / ts:Tags text:(Newline Text)? {
     return text ? ts.concat(text[1]) : ts;
   }
