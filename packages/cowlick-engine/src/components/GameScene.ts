@@ -10,6 +10,7 @@ import {AudioGroup} from "./AudioGroup";
 import {Scene} from "./Scene";
 import {SceneController} from "./SceneController";
 import {loadGameState} from "./GameStateHelper";
+import {AutoMode} from "./AutoMode";
 
 export interface GameSceneParameters {
   game: g.Game;
@@ -36,7 +37,7 @@ export class GameScene extends Scene {
   private player: g.Player;
   private _gameState: GameState;
   private _enabledWindowClick: boolean;
-  private autoIdentifier: g.TimerIdentifier;
+  private autoMode: AutoMode;
 
   constructor(params: GameSceneParameters) {
     super({
@@ -135,6 +136,11 @@ export class GameScene extends Scene {
   playAudio(audio: core.Audio) {
     const a = this.assets[audio.assetId] as g.AudioAsset;
     const player = a.play();
+    if (audio.group === core.AudioGroup.voice) {
+      player.stopped.addOnce(() => {
+        this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
+      }, this);
+    }
     this.audioGroup.add(audio.group, player);
   }
 
@@ -174,11 +180,7 @@ export class GameScene extends Scene {
   }
 
   setAutoTrigger() {
-    this.autoIdentifier = this.setTimeout(
-      () => this.requestNextFrame(),
-      this.gameState.variables.builtin[core.BuiltinVariable.autoMessageDuration],
-      this
-    );
+    this.autoMode.setTrigger();
   }
 
   applyMessageSpeed() {
@@ -191,6 +193,8 @@ export class GameScene extends Scene {
 
   private onLoaded() {
     const frame = this.scenario.frame;
+
+    this.autoMode = new AutoMode(this);
 
     if (!this._gameState) {
       this._gameState = loadGameState(this, this.storageKeys, this.config);
@@ -214,10 +218,7 @@ export class GameScene extends Scene {
   }
 
   private disableTrigger() {
-    if (this.autoIdentifier) {
-      this.clearTimeout(this.autoIdentifier);
-      this.autoIdentifier = null;
-    }
+    this.autoMode.clear();
     this.layerGroup.evaluate(core.Layer.message, layer => {
       layer.touchable = false;
       layer.pointUp.removeAll();

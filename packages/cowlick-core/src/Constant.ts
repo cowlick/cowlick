@@ -60,3 +60,9 @@ export namespace VariableType {
   export const system = "system";
   export const current = "current";
 }
+
+export namespace AudioGroup {
+  export const voice = "voice";
+  export const se = "se";
+  export const bgm = "bgm";
+}
