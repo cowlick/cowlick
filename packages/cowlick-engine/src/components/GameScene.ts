@@ -270,20 +270,20 @@ export class GameScene extends Scene {
 
   private removeLayers(scripts: core.Script<any>[]) {
     const names = new Set<string>();
-    scripts.forEach(s => {
+    for (const s of scripts) {
       if (s.data.layer) {
         names.add(s.data.layer);
       }
-    });
+    }
     names.forEach(name => {
       this.layerGroup.remove(name);
     });
   }
 
   private applyScripts(scripts: core.Script<any>[]) {
-    scripts.forEach(s => {
+    for (const s of scripts) {
       this.scriptManager.call(this.controller, s);
-    });
+    }
   }
 
   private static collectAssetIds(params: GameSceneParameters) {
