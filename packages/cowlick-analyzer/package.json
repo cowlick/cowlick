@@ -1,6 +1,6 @@
 {
   "name": "cowlick-analyzer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "script analyzer for cowlick",
   "main": "lib/index.js",
   "files": [
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "commandpost": "1.2.1",
-    "cowlick-core": "^0.1.0",
+    "cowlick-core": "^0.2.0",
     "escodegen": "1.9.0",
     "estraverse": "4.2.0"
   },

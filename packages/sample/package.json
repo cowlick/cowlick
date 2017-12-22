@@ -1,6 +1,6 @@
 {
   "name": "cowlick-sample",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "build": "cowlick-kag-compiler ./scenario -o ./src && webpack --progress && npm run scan:assets",
@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@akashic-extension/akashic-timeline": "2.0.0",
-    "cowlick-config": "^0.1.0",
-    "cowlick-core": "^0.1.0",
-    "cowlick-engine": "^0.1.1"
+    "cowlick-config": "^0.2.0",
+    "cowlick-core": "^0.2.0",
+    "cowlick-engine": "^0.2.0"
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.2.1",
@@ -20,7 +20,7 @@
     "@akashic/akashic-sandbox": "0.13.11",
     "@types/node": "8.0.53",
     "copy-webpack-plugin": "4.2.1",
-    "cowlick-kag-compiler": "^0.1.1",
+    "cowlick-kag-compiler": "^0.2.0",
     "ts-loader": "3.1.1",
     "typescript": "2.6.1",
     "uglify-save-license": "0.4.1",
