@@ -28,7 +28,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
         const keys = key.regionKey.split(".");
         if (!s) {
           const i = parseInt(keys[0].substring(prefixLength), 10);
-          data[i] = {
+          s = {
             key: value.storageKey,
             value: {
               label: "",
@@ -36,6 +36,7 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
               variables: {}
             }
           };
+          data[i] = s;
         }
         const label = keys[keys.length - 1];
         switch (label) {
