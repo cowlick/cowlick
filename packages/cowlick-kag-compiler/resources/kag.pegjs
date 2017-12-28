@@ -43,13 +43,33 @@ Label
 LabelValue
   = $( ( !Newline !EOF !Space !"|" . )+ )
 
+WT
+  = "[" WTTagName _ skippable:CanSkipAttribute? _ "]" {
+    if(skippable) {
+      return b.tryParseLiteral(skippable);
+    } else {
+      return undefined;
+    }
+  }
+  / "@" WTTagName _ skippable:CanSkipAttribute? &(Newline / EOF) {
+    if(skippable) {
+      return b.tryParseLiteral(skippable);
+    } else {
+      return undefined;
+    }
+  }
+
+WTTagName = "wt"
+
 S
-  = "[s]" {
+  = "[" STagName "]" {
     return b.trigger(false);
   }
-  / "@s" {
+  / "@" STagName {
     return b.trigger(false);
   }
+
+STagName = "s"
 
 Tags
   = Comments c:Tag cs:(Newline Comments Tag)* {
@@ -273,12 +293,32 @@ EndNoWait
   = "endnowait" { return [b.realTimeDisplay(false)]; }
 
 UserDefined
-  = name:TagName attrs:(_ UserDefinedAttribute)* {
+  = name:UserDefinedTagName attrs:(_ UserDefinedAttribute)* {
     return [b.tag(name, attrs.map(function(attr) { return attr[1]; }))];
   }
 
-TagName
-  = $( ( !Newline !EOF !Space !"=" !WTName . )+ )
+UserDefinedTagName
+  = $(
+      (
+        !Newline
+        !EOF
+        !Space
+        !"="
+        !WTTagName
+        !STagName
+        !LinkTagName
+        !EndLinkTagName
+        !IScriptTagName
+        !EndScriptTagName
+        !IfTagName
+        !ElsifTagName
+        !ElseTagName
+        !EndIfTagName
+        !IgnoreTagName
+        !EndIgnoreTagName
+        .
+      )+
+    )
 
 Condition
   = "cond=" expression:AttributeValue {
@@ -291,7 +331,7 @@ Links
   }
 
 Link
-  = "@link" _ scene:StorageAttribute? _ frame:TargetAttribute? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
+  = "@" LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
     var data = {};
     if(scene) {
       data.scene = scene;
@@ -305,7 +345,7 @@ Link
       return b.choiceItem(text, data);
     }
   }
-  / "[link" _ scene:StorageAttribute? _ frame:TargetAttribute? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
+  / "[" LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
     var data = {};
     if(scene) {
       data.scene = scene;
@@ -316,24 +356,32 @@ Link
     return b.choiceItem(text, data, condition);
   }
 
+LinkTagName = "link"
+
 EndLink
-  = "@endlink" ( (Newline R) / &(Newline / EOF) )
-  / Newline? "[endlink]" (Newline? R)?
+  = "@" EndLinkTagName ( (Newline R) / &(Newline / EOF) )
+  / Newline? "[" EndLinkTagName "]" (Newline? R)?
+
+EndLinkTagName = "endlink"
 
 IScript
-  = "[iscript]" Newline script:IScriptValue Newline EndScript {
+  = "[" IScriptTagName "]" Newline script:IScriptValue Newline EndScript {
     return [b.evaluate(script)];
   }
-  / "@iscript" Newline script:IScriptValue Newline EndScript {
+  / "@" IScriptTagName Newline script:IScriptValue Newline EndScript {
     return [b.evaluate(script)];
   }
+
+IScriptTagName = "iscript"
 
 IScriptValue
   = $( ( !(Newline EndScript) . )* )
 
 EndScript
-  = "@endscript"
-  / "[endscript]"
+  = "@" EndScriptTagName
+  / "[" EndScriptTagName "]"
+
+EndScriptTagName = "endscript"
 
 IfExpression
   = i:If is:Elsif* e:Else? EndIf {
@@ -346,31 +394,39 @@ IfExpression
   }
 
 If
-  = "[if" _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+  = "[" IfTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
     return b.condition(expression, body).data;
   }
-  / "@if" _ expression:ExpressionAttribute Newline body:FrameBody {
+  / "@" IfTagName _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.condition(expression, body).data;
   }
+
+IfTagName = "if"
 
 Elsif
-  = "[elsif" _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+  = "[" ElsifTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
     return b.condition(expression, body).data;
   }
-  / "@elsif" _ expression:ExpressionAttribute Newline body:FrameBody {
+  / "@" ElsifTagName _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.condition(expression, body).data;
   }
+
+ElsifTagName = "elsif"
 
 Else
-  = "[else]" Newline? body:FrameBody {
+  = "[" ElseTagName "]" Newline? body:FrameBody {
     return body;
   }
-  / "@else" Newline body:FrameBody {
+  / "@" ElseTagName Newline body:FrameBody {
     return body;
   }
 
+ElseTagName = "else"
+
 EndIf
-  = "[endif]" / "@endif"
+  = "[" EndIfTagName "]" / "@" EndIfTagName
+
+EndIfTagName = "endif"
 
 IgnoreExpression
   = i:Ignore Newline? EndIgnore {
@@ -383,33 +439,19 @@ IgnoreExpression
   }
 
 Ignore
-  = "[ignore" _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+  = "[" IgnoreTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
     return b.ignore(expression, body);
   }
-  / "@ignore" _ expression:ExpressionAttribute Newline body:FrameBody {
+  / "@" IgnoreTagName _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.ignore(expression, body);
   }
+
+IgnoreTagName = "ignore"
 
 EndIgnore
-  = "[endignore]" / "@endignore"
+  = "[" EndIgnoreTagName "]" / "@" EndIgnoreTagName
 
-WT
-  = "[" WTName _ skippable:CanSkipAttribute? _ "]" {
-    if(skippable) {
-      return b.tryParseLiteral(skippable);
-    } else {
-      return undefined;
-    }
-  }
-  / "@" WTName _ skippable:CanSkipAttribute? &(Newline / EOF) {
-    if(skippable) {
-      return b.tryParseLiteral(skippable);
-    } else {
-      return undefined;
-    }
-  }
-
-WTName = "wt"
+EndIgnoreTagName = "endignore"
 
 Text
   = Comments cm:CM? Newline? values:TextBlock Newline? EndTextBlock {
