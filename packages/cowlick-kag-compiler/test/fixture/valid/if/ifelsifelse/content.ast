@@ -22,11 +22,12 @@
               },
               "scripts": [
                 {
-                  "tag": "text",
+                  "tag": "image",
                   "data": {
-                    "values": [
-                      "first"
-                    ]
+                    "assetId": "test",
+                    "layer": {
+                      "name": "base"
+                    }
                   }
                 }
               ]
@@ -48,11 +49,12 @@
               },
               "scripts": [
                 {
-                  "tag": "text",
+                  "tag": "image",
                   "data": {
-                    "values": [
-                      "second"
-                    ]
+                    "assetId": "test",
+                    "layer": {
+                      "name": "base"
+                    }
                   }
                 }
               ]
@@ -60,11 +62,12 @@
           ],
           "elseBody": [
             {
-              "tag": "text",
+              "tag": "image",
               "data": {
-                "values": [
-                  "third"
-                ]
+                "assetId": "test",
+                "layer": {
+                  "name": "base"
+                }
               }
             }
           ]

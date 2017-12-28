@@ -1,7 +1,7 @@
 [if exp="true"]
-first
+[image storage=test layer=base]
 [elsif exp="false"]
-second
+[image storage=test layer=base]
 [else]
-third
+[image storage=test layer=base]
 [endif]

@@ -27,7 +27,7 @@ FrameBody
     ts.push(trigger);
     return ts;
   }
-  / ts:Tags Newline &Label {
+  / ts:Tags Newline ( &Label / &EndScript / &Elsif / &Else / &EndIf / &EndIgnore ) {
     return ts;
   }
   / ts:Tags text:(Newline Text)? {

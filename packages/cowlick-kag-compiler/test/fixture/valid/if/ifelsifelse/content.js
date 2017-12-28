@@ -13,9 +13,12 @@ module.exports = new core.Scenario([
                 path: "content_0_0_0",
                 scripts: [
                   {
-                    tag: "text",
+                    tag: "image",
                     data: {
-                      values: ["first"]
+                      assetId: "test",
+                      layer: {
+                        name: "base"
+                      }
                     }
                   }
                 ]
@@ -24,9 +27,12 @@ module.exports = new core.Scenario([
                 path: "content_0_0_1",
                 scripts: [
                   {
-                    tag: "text",
+                    tag: "image",
                     data: {
-                      values: ["second"]
+                      assetId: "test",
+                      layer: {
+                        name: "base"
+                      }
                     }
                   }
                 ]
@@ -34,9 +40,12 @@ module.exports = new core.Scenario([
             ],
             elseBody: [
               {
-                tag: "text",
+                tag: "image",
                 data: {
-                  values: ["third"]
+                  assetId: "test",
+                  layer: {
+                    name: "base"
+                  }
                 }
               }
             ]
