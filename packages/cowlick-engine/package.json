@@ -27,9 +27,9 @@
     "cowlick-core": "^0.2.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.0.2",
-    "@types/mocha": "2.2.44",
-    "@types/node": "8.0.53",
+    "@akashic/akashic-engine": "2.0.3",
+    "@types/mocha": "2.2.45",
+    "@types/node": "8.5.2",
     "@xnv/headless-akashic": "0.0.1",
     "espower-typescript": "8.1.2",
     "mocha": "3.5.3",
