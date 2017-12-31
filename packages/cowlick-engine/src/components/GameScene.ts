@@ -51,7 +51,7 @@ export class GameScene extends Scene {
     this.scriptManager = params.scriptManager;
     this.config = params.config;
     this.controller = params.controller;
-    this.audioGroup = new AudioGroup(this.game, params.config.audio);
+    this.audioGroup = new AudioGroup(this, params.config.audio);
     this.videoGroup = new VideoGroup(this);
     this.player = params.player;
     this.storageKeys = params.storageKeys;
@@ -135,14 +135,12 @@ export class GameScene extends Scene {
   }
 
   playAudio(audio: core.Audio) {
-    const asset = this.assets[audio.assetId] as g.AudioAsset;
-    const player = asset.play();
+    const player = this.audioGroup.add(audio);
     if (audio.group === core.AudioGroup.voice) {
       player.stopped.addOnce(() => {
         this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
       }, this);
     }
-    this.audioGroup.add(audio.group, player);
   }
 
   changeVolume(data: core.ChangeVolume) {

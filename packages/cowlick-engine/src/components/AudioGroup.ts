@@ -3,28 +3,29 @@ import {Audio, GameError} from "cowlick-core";
 import {AudioConfig} from "cowlick-config";
 
 export class AudioGroup {
-  private game: g.Game;
+  private scene: g.Scene;
   private group: Map<string, g.AudioPlayer[]>;
   private config: AudioConfig;
 
-  constructor(game: g.Game, config: AudioConfig) {
-    this.game = game;
+  constructor(scene: g.Scene, config: AudioConfig) {
+    this.scene = scene;
     this.group = new Map<string, g.AudioPlayer[]>();
     this.config = config;
   }
 
-  add(name: string, audio: g.AudioPlayer) {
-    // TODO: 型変換を消す
-    const volume = (this.config as any)[name];
-    if (volume) {
-      audio.changeVolume(volume);
-    }
-    let ps = this.group.get(name);
+  add(audio: Audio) {
+    let ps = this.group.get(audio.group);
     if (!ps) {
       ps = [];
-      this.group.set(name, ps);
+      this.group.set(audio.group, ps);
     }
-    ps.push(audio);
+    const player = this.play(audio);
+    const volume = (this.config as any)[audio.group];
+    if (volume) {
+      player.changeVolume(volume);
+    }
+    ps.push(player);
+    return player;
   }
 
   changeVolume(name: string, volume: number) {
@@ -55,5 +56,10 @@ export class AudioGroup {
         throw new GameError("audio group not found", audio);
       }
     }
+  }
+
+  private play(audio: Audio) {
+    const asset = this.scene.assets[audio.assetId] as g.AudioAsset;
+    return asset.play();
   }
 }
