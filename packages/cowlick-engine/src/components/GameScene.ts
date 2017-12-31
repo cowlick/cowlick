@@ -7,6 +7,7 @@ import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
 import {AudioGroup} from "./AudioGroup";
+import {VideoGroup} from "./VideoGroup";
 import {Scene} from "./Scene";
 import {SceneController} from "./SceneController";
 import {loadGameState} from "./GameStateHelper";
@@ -31,7 +32,7 @@ export class GameScene extends Scene {
   private config: Config;
   private controller: SceneController;
   private audioGroup: AudioGroup;
-  private videos: g.VideoAsset[];
+  private videoGroup: VideoGroup;
   private storage: Storage;
   private storageKeys: g.StorageKey[];
   private player: g.Player;
@@ -51,7 +52,7 @@ export class GameScene extends Scene {
     this.config = params.config;
     this.controller = params.controller;
     this.audioGroup = new AudioGroup(this.game, params.config.audio);
-    this.videos = [];
+    this.videoGroup = new VideoGroup(this);
     this.player = params.player;
     this.storageKeys = params.storageKeys;
     if (params.state) {
@@ -153,22 +154,11 @@ export class GameScene extends Scene {
   }
 
   playVideo(video: core.Video) {
-    // TODO: 最後まで流し終わったことを検知できるようになったら作り直す
-    const asset = this.assets[video.assetId] as g.VideoAsset;
-    asset.play();
-    this.videos.push(asset);
+    this.videoGroup.add(video);
   }
 
   stopVideo(video: core.Video) {
-    const i = this.videos.findIndex(asset => asset.id === video.assetId);
-    if (i > 0) {
-      const v = this.videos[i];
-      v.stop();
-      v.destroy();
-      this.videos.splice(i, 1);
-    } else {
-      throw new core.GameError("video not found", video);
-    }
+    this.videoGroup.remove(video);
   }
 
   save(scene: core.Scene, info: core.Save) {
