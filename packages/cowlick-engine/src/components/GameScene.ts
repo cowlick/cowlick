@@ -134,8 +134,8 @@ export class GameScene extends Scene {
   }
 
   playAudio(audio: core.Audio) {
-    const a = this.assets[audio.assetId] as g.AudioAsset;
-    const player = a.play();
+    const asset = this.assets[audio.assetId] as g.AudioAsset;
+    const player = asset.play();
     if (audio.group === core.AudioGroup.voice) {
       player.stopped.addOnce(() => {
         this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
@@ -154,9 +154,9 @@ export class GameScene extends Scene {
 
   playVideo(video: core.Video) {
     // TODO: 最後まで流し終わったことを検知できるようになったら作り直す
-    const v = this.assets[video.assetId] as g.VideoAsset;
-    v.play();
-    this.videos.push(v);
+    const asset = this.assets[video.assetId] as g.VideoAsset;
+    asset.play();
+    this.videos.push(asset);
   }
 
   stopVideo(video: core.Video) {
