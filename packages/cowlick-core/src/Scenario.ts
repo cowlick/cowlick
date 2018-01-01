@@ -3,7 +3,7 @@ import {Scene} from "./Scene";
 import {Frame} from "./Frame";
 import {Jump} from "./Script";
 import {SaveData} from "./SaveData";
-import {Index, Log} from "./Log";
+import {Log} from "./Log";
 import {GameError} from "./GameError";
 
 /**
@@ -32,6 +32,10 @@ export class Scenario {
 
   get backlog() {
     return this.logs;
+  }
+
+  set backlog(logs: Log[]) {
+    this.logs = logs;
   }
 
   get scene() {
@@ -106,14 +110,34 @@ export class Scenario {
    */
   pushTextLog(text: string) {
     const index = this.scene.index;
-    const log = this.logs.find(l => l.label === index.label && l.frame === index.frame);
+    const log = this.logs.find(l => l.frame === index);
     log.text = text;
   }
 
-  private pushLog(index: Index) {
-    const i = this.logs.find(l => l.label === index.label && l.frame === index.frame);
+  /**
+   * セーブデータを作成する。
+   *
+   * @param variables
+   * @param description
+   */
+  createSaveData(variables: any, description?: string): SaveData {
+    const result: SaveData = {
+      label: this.scene.label,
+      variables,
+      logs: this.logs
+    };
+    if (description) {
+      result.description = description;
+    }
+    return result;
+  }
+
+  private pushLog(frame: number) {
+    const i = this.logs.find(l => l.frame === frame);
     if (!i) {
-      this.logs.push(index);
+      this.logs.push({
+        frame
+      });
     }
   }
 }

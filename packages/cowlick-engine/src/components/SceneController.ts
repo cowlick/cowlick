@@ -80,7 +80,7 @@ export class SceneController implements g.Destroyable {
   }
 
   save(data: core.Save) {
-    this.current.save(this.current.source, data);
+    this.current.save(data);
   }
 
   load(data: core.Load) {

@@ -28,11 +28,11 @@ export class GameState {
     return typeof this.data[index] !== "undefined";
   }
 
-  save(scene: core.Scene, config: core.Save): core.SaveData {
+  save(scenario: core.Scenario, config: core.Save): core.SaveData {
     if (config.index > this.max || config.index < 0) {
       throw new core.GameError("storage out of range", config);
     }
-    const saveData = scene.createSaveData(this._variables.current, config.description);
+    const saveData = scenario.createSaveData(this._variables.current, config.description);
     if (config.force) {
       this.data[config.index] = saveData;
       return saveData;

@@ -159,8 +159,8 @@ export class GameScene extends Scene {
     this.videoGroup.remove(video);
   }
 
-  save(scene: core.Scene, info: core.Save) {
-    this.storage.save(scene, info);
+  save(info: core.Save) {
+    this.storage.save(this.scenario, info);
   }
 
   load(index: number): core.SaveData {

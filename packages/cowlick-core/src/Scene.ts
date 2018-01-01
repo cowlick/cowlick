@@ -1,7 +1,6 @@
 "use strict";
 import {Frame} from "./Frame";
 import {SaveData} from "./SaveData";
-import {Index} from "./Log";
 
 export interface SceneParameters {
   label: string;
@@ -23,11 +22,8 @@ export class Scene {
     this.frames = params.frames;
   }
 
-  get index(): Index {
-    return {
-      label: this.label,
-      frame: this._index
-    };
+  get index() {
+    return this._index;
   }
 
   get label() {
@@ -68,23 +64,5 @@ export class Scene {
    */
   reset(index?: number) {
     this._index = index ? index : 0;
-  }
-
-  /**
-   * セーブデータを作成する。
-   *
-   * @param variables
-   * @param description
-   */
-  createSaveData(variables: any, description?: string): SaveData {
-    const result: SaveData = {
-      label: this._label,
-      frame: this._index,
-      variables
-    };
-    if (description) {
-      result.description = description;
-    }
-    return result;
   }
 }

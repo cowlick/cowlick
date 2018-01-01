@@ -7,7 +7,11 @@ describe("GameState", () => {
   const data: core.SaveData[] = [
     {
       label: "before",
-      frame: 0,
+      logs: [
+        {
+          frame: 0
+        }
+      ],
       variables: {}
     }
   ];
@@ -41,18 +45,25 @@ describe("GameState", () => {
       system: {}
     };
     const state = new GameState([], vars, 1);
-    const scene = new core.Scene({
-      label: "test",
-      frames: [new core.Frame([])]
-    });
+    const scenario = new core.Scenario([
+      new core.Scene({
+        label: "test",
+        frames: [new core.Frame([])]
+      })
+    ]);
+    scenario.backlog = data[0].logs;
     const expected: core.SaveData = {
       label: "test",
-      frame: 0,
+      logs: [
+        {
+          frame: 0
+        }
+      ],
       variables: {
         test: 0
       }
     };
-    const actual = state.save(scene, {index: 0});
+    const actual = state.save(scenario, {index: 0});
     assert.deepEqual(actual, expected);
   });
 
@@ -65,19 +76,26 @@ describe("GameState", () => {
       system: {}
     };
     const state = new GameState([], vars, 1);
-    const scene = new core.Scene({
-      label: "test",
-      frames: [new core.Frame([])]
-    });
+    const scenario = new core.Scenario([
+      new core.Scene({
+        label: "test",
+        frames: [new core.Frame([])]
+      })
+    ]);
+    scenario.backlog = data[0].logs;
     const expected: core.SaveData = {
       label: "test",
-      frame: 0,
+      logs: [
+        {
+          frame: 0
+        }
+      ],
       variables: {
         test: 0
       },
       description: "test"
     };
-    const actual = state.save(scene, {index: 0, description: "test"});
+    const actual = state.save(scenario, {index: 0, description: "test"});
     assert.deepEqual(actual, expected);
   });
 
@@ -90,19 +108,29 @@ describe("GameState", () => {
       system: {}
     };
     const state = new GameState(data, vars, 1);
-    const scene = new core.Scene({
-      label: "test",
-      frames: [new core.Frame([]), new core.Frame([])]
-    });
-    scene.next();
+    const scenario = new core.Scenario([
+      new core.Scene({
+        label: "test",
+        frames: [new core.Frame([]), new core.Frame([])]
+      })
+    ]);
+    scenario.backlog = data[0].logs;
+    scenario.next();
     const expected: core.SaveData = {
       label: "test",
-      frame: 1,
+      logs: [
+        {
+          frame: 0
+        },
+        {
+          frame: 1
+        }
+      ],
       variables: {
         test: 0
       }
     };
-    const actual = state.save(scene, {index: 0, force: true});
+    const actual = state.save(scenario, {index: 0, force: true});
     assert.deepEqual(actual, expected);
   });
 
@@ -115,13 +143,15 @@ describe("GameState", () => {
       system: {}
     };
     const state = new GameState(data, vars, 1);
-    const scene = new core.Scene({
-      label: "test",
-      frames: [new core.Frame([]), new core.Frame([])]
-    });
+    const scenario = new core.Scenario([
+      new core.Scene({
+        label: "test",
+        frames: [new core.Frame([]), new core.Frame([])]
+      })
+    ]);
     assert.throws(() => {
-      scene.next();
-      state.save(scene, {index: 0});
+      scenario.next();
+      state.save(scenario, {index: 0});
     }, core.GameError);
   });
 

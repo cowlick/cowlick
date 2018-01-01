@@ -1,23 +1,13 @@
 "use strict";
 
 /**
- * シーン、フレームを指すindex。
- */
-export interface Index {
-  /**
-   * シーンラベル
-   */
-  label: string;
-  /**
-   *フレーム
-   */
-  frame: number;
-}
-
-/**
  * バックログで利用されるログ。
  */
-export interface Log extends Index {
+export interface Log {
+  /**
+   * フレームインデックス
+   */
+  frame: number;
   /**
    * 表示されたテキスト
    */

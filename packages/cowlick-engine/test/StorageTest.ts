@@ -11,10 +11,14 @@ describe("Storage", () => {
     const data = [
       {
         label: "test",
-        frame: 0,
         variables: {
           test: 0
-        }
+        },
+        logs: [
+          {
+            frame: 0
+          }
+        ]
       }
     ];
     const state = new GameState(data, vars, 1);
@@ -31,10 +35,14 @@ describe("Storage", () => {
     const data = [
       {
         label: "test",
-        frame: 0,
         variables: {
           test: 0
         },
+        logs: [
+          {
+            frame: 0
+          }
+        ],
         description: "test"
       }
     ];

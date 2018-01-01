@@ -32,19 +32,19 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
             key: value.storageKey,
             value: {
               label: "",
-              frame: 0,
-              variables: {}
+              variables: {},
+              logs: []
             }
           };
           data[i] = s;
         }
         const label = keys[keys.length - 1];
         switch (label) {
-          case "frame":
-            s.value.frame = v;
-            break;
           case "label":
             s.value.label = v;
+            break;
+          case "logs":
+            s.value.logs = v;
             break;
           case "description":
             s.value.description = v;

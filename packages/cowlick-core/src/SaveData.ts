@@ -1,6 +1,8 @@
+import {Log} from "./Log";
+
 export interface SaveData {
   label: string;
-  frame: number;
   variables: any;
+  logs: Log[];
   description?: string;
 }
