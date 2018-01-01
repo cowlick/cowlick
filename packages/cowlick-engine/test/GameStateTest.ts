@@ -17,34 +17,46 @@ describe("GameState", () => {
   ];
 
   it("セーブデータの存在を確認できる", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {},
       system: {}
     };
-    const state = new GameState(data, vars, 1);
+    const state = new GameState({
+      data,
+      variables,
+      max: 1
+    });
     assert(state.exists(0));
   });
 
   it("セーブデータが存在しないことを確認できる", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {},
       system: {}
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
     assert(!state.exists(0));
   });
 
   it("保存できる", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {
         test: 0
       },
       system: {}
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -68,14 +80,18 @@ describe("GameState", () => {
   });
 
   it("description付きで保存できる", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {
         test: 0
       },
       system: {}
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -100,14 +116,18 @@ describe("GameState", () => {
   });
 
   it("forceオプションがついている場合は上書きする", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {
         test: 0
       },
       system: {}
     };
-    const state = new GameState(data, vars, 1);
+    const state = new GameState({
+      data,
+      variables,
+      max: 1
+    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -135,14 +155,18 @@ describe("GameState", () => {
   });
 
   it("forceオプションがないなら保存に失敗する", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {
         test: 0
       },
       system: {}
     };
-    const state = new GameState(data, vars, 1);
+    const state = new GameState({
+      data,
+      variables,
+      max: 1
+    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -156,12 +180,16 @@ describe("GameState", () => {
   });
 
   it("値を設定できる", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {},
       system: {}
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
 
     let input: any = 1;
     let target = {
@@ -189,7 +217,7 @@ describe("GameState", () => {
   });
 
   it("値を文字列で取得できる", () => {
-    const vars = {
+    const variables = {
       builtin: {
         autoMode: true
       },
@@ -200,7 +228,11 @@ describe("GameState", () => {
         test: "test"
       }
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
 
     let target = {
       type: "system",
@@ -222,12 +254,16 @@ describe("GameState", () => {
   });
 
   it("変数が定義されていない場合はundefinedを返す", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {},
       system: {}
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
 
     let input: any = 1;
     let target = {
@@ -238,12 +274,16 @@ describe("GameState", () => {
   });
 
   it("存在しない変数種別を指定した場合はエラー", () => {
-    const vars = {
+    const variables = {
       builtin: {},
       current: {},
       system: {}
     };
-    const state = new GameState([], vars, 1);
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1
+    });
     const target = {
       type: "other",
       name: "test"

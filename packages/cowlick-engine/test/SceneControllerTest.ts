@@ -50,7 +50,7 @@ describe("SceneController", () => {
         variables: {}
       }
     ];
-    const vars = {
+    const variables = {
       builtin: {
         selectedFont: 0,
         audoMode: false,
@@ -59,7 +59,11 @@ describe("SceneController", () => {
       current: {},
       system: {}
     };
-    controller.current._gameState = new engine.GameState(data, vars, config.system.maxSaveCount);
+    controller.current._gameState = new engine.GameState({
+      data,
+      variables,
+      max: config.system.maxSaveCount
+    });
     controller.saveLoadScene = new engine.SaveLoadScene({
       game: g.game,
       scene: scenario.scene,

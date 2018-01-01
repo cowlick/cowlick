@@ -1,5 +1,5 @@
 "use strict";
-import {SaveData, Variables} from "cowlick-core";
+import {SaveData, Variables, BuiltinVariable} from "cowlick-core";
 import {Config} from "cowlick-config";
 import {GameState} from "../models/GameState";
 import {gameId, Region} from "../Constant";
@@ -58,35 +58,30 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   }
   return {
     data: data.map(kv => kv.value),
-    variables
+    variables,
+    max
   };
 }
 
 export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Config): GameState {
   const max = config.system.maxSaveCount;
   const result = loadFromStorage(scene, keys, max);
-  if (!("selectedFont" in result.variables.builtin)) {
-    result.variables.builtin.selectedFont = 0;
+  const defaults: [string, any][] = [
+    [BuiltinVariable.selectedFont, 0],
+    [BuiltinVariable.autoMode, false],
+    [BuiltinVariable.autoMessageDuration, config.system.autoMessageDuration],
+    [BuiltinVariable.messageSpeed, config.system.messageSpeed],
+    [BuiltinVariable.realTimeDisplay, config.system.realTimeDisplay],
+    [BuiltinVariable.fontSize, config.font.size],
+    [BuiltinVariable.fontColor, config.font.color],
+    [BuiltinVariable.alreadyRead, {}]
+  ];
+  for (const [key, value] of defaults) {
+    if (!(key in result.variables.builtin)) {
+      result.variables.builtin[key] = value;
+    }
   }
-  if (!("autoMode" in result.variables.builtin)) {
-    result.variables.builtin.autoMode = false;
-  }
-  if (!("autoMessageDuration" in result.variables.builtin)) {
-    result.variables.builtin.autoMessageDuration = config.system.autoMessageDuration;
-  }
-  if (!("messageSpeed" in result.variables.builtin)) {
-    result.variables.builtin.messageSpeed = config.system.messageSpeed;
-  }
-  if (!("realTimeDisplay" in result.variables.builtin)) {
-    result.variables.builtin.realTimeDisplay = config.system.realTimeDisplay;
-  }
-  if (!("fontSize" in result.variables.builtin)) {
-    result.variables.builtin.fontSize = config.font.size;
-  }
-  if (!("fontColor" in result.variables.builtin)) {
-    result.variables.builtin.fontColor = config.font.color;
-  }
-  return new GameState(result.data, result.variables, max);
+  return new GameState(result);
 }
 
 export function createStorageKeys(player: g.Player, max: number): g.StorageKey[] {

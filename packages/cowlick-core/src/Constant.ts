@@ -53,6 +53,7 @@ export namespace BuiltinVariable {
   export const fontSize = "fontSize";
   export const fontColor = "fontColor";
   export const realTimeDisplay = "realTimeDisplay";
+  export const alreadyRead = "alreadyRead";
 }
 
 export namespace VariableType {

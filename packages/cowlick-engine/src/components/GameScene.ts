@@ -86,10 +86,11 @@ export class GameScene extends Scene {
   }
 
   updateText(text: core.Text) {
-    this._message.updateText(text, this.scenario.frame.alreadyRead);
+    const scene = this.scenario.scene;
+    this._message.updateText(text, this._gameState.isAlreadyRead(scene.label, scene.index));
+    this._gameState.markAlreadyRead(scene.label, scene.index);
     this._message.onFinished.addOnce(t => {
       this.scenario.pushTextLog(t);
-      this.scenario.frame.alreadyRead = true;
       this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
     }, this);
     this.disableWindowClick();

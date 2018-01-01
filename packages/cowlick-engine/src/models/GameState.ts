@@ -1,5 +1,12 @@
 "use strict";
 import * as core from "cowlick-core";
+import {AlreadyReadManager} from "./AlreadyReadManager";
+
+export interface GameStateParameters {
+  data: core.SaveData[];
+  variables: core.Variables;
+  max: number;
+}
 
 /**
  * ゲーム情報を管理する。
@@ -8,11 +15,13 @@ export class GameState {
   private data: core.SaveData[];
   private _variables: core.Variables;
   private max: number;
+  private alreadyReadManager: AlreadyReadManager;
 
-  constructor(data: core.SaveData[], variables: core.Variables, max: number) {
-    this.data = data;
-    this._variables = variables;
-    this.max = max;
+  constructor(param: GameStateParameters) {
+    this.data = param.data;
+    this._variables = param.variables;
+    this.max = param.max;
+    this.alreadyReadManager = new AlreadyReadManager(this._variables.builtin.alreadyRead);
   }
 
   get variables(): core.Variables {
@@ -103,6 +112,14 @@ export class GameState {
       ids = ids.concat(scenario.findScene(d).assetIds);
     }
     return ids;
+  }
+
+  isAlreadyRead(label: string, frame: number) {
+    return this.alreadyReadManager.isAlreadyRead(label, frame);
+  }
+
+  markAlreadyRead(label: string, frame: number) {
+    this.alreadyReadManager.mark(label, frame);
   }
 
   private getVariables(variable: core.Variable) {

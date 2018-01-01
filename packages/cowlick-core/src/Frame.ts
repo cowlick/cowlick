@@ -7,11 +7,9 @@ import {Script, collectAssetIds} from "./Script";
 export class Frame {
   private _scripts: Script<any>[];
   private cacheAssetIds: string[];
-  alreadyRead: boolean;
 
-  constructor(scripts: Script<any>[], alreadyRead?: boolean) {
+  constructor(scripts: Script<any>[]) {
     this._scripts = scripts;
-    this.alreadyRead = !!alreadyRead;
   }
 
   get scripts(): Script<any>[] {
