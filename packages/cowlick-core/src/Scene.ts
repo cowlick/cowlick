@@ -1,6 +1,7 @@
 "use strict";
 import {Frame} from "./Frame";
 import {SaveData} from "./SaveData";
+import {Index} from "./Log";
 
 export interface SceneParameters {
   label: string;
@@ -11,14 +12,22 @@ export interface SceneParameters {
  * シーンデータ。
  */
 export class Scene {
-  private index: number = 0;
+  private _index: number;
   private _label: string;
   private frames: Frame[];
   private cacheAssetIds: string[];
 
   constructor(params: SceneParameters) {
+    this._index = 0;
     this._label = params.label;
     this.frames = params.frames;
+  }
+
+  get index(): Index {
+    return {
+      label: this.label,
+      frame: this._index
+    };
   }
 
   get label() {
@@ -26,8 +35,8 @@ export class Scene {
   }
 
   get frame() {
-    if (this.index < this.frames.length) {
-      return this.frames[this.index];
+    if (this._index < this.frames.length) {
+      return this.frames[this._index];
     } else {
       return undefined;
     }
@@ -44,14 +53,11 @@ export class Scene {
   }
 
   /**
-   * 次のフレームを呼び出す。
+   * 次のフレームに遷移する。
    */
   next() {
-    if (this.index < this.frames.length) {
-      this.index++;
-      return this.frames[this.index];
-    } else {
-      return undefined;
+    if (this._index < this.frames.length) {
+      this._index++;
     }
   }
 
@@ -61,7 +67,7 @@ export class Scene {
    * @param index
    */
   reset(index?: number) {
-    this.index = index ? index : 0;
+    this._index = index ? index : 0;
   }
 
   /**
@@ -73,7 +79,7 @@ export class Scene {
   createSaveData(variables: any, description?: string): SaveData {
     const result: SaveData = {
       label: this._label,
-      frame: this.index,
+      frame: this._index,
       variables
     };
     if (description) {

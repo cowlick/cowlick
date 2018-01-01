@@ -3,7 +3,7 @@ import {Scene} from "./Scene";
 import {Frame} from "./Frame";
 import {Jump} from "./Script";
 import {SaveData} from "./SaveData";
-import {Log} from "./Log";
+import {Index, Log} from "./Log";
 import {GameError} from "./GameError";
 
 /**
@@ -13,12 +13,12 @@ export class Scenario {
   private index = 0;
   private scenes: Scene[];
   onLoaded: g.Trigger<Frame>;
-  private log: Log[];
+  private logs: Log[];
 
   constructor(scenes: Scene[]) {
     this.scenes = scenes;
     this.onLoaded = new g.Trigger<Frame>();
-    this.log = [];
+    this.logs = [];
   }
 
   /**
@@ -31,7 +31,7 @@ export class Scenario {
   }
 
   get backlog() {
-    return this.log;
+    return this.logs;
   }
 
   get scene() {
@@ -62,24 +62,24 @@ export class Scenario {
   }
 
   /**
-   * フレームをロードする。
-   *
-   * @param frame
+   * フレーム情報をロードする。
    */
-  load(frame?: Frame) {
-    const f = frame ? frame : this.frame;
-    if (f) {
-      this.onLoaded.fire(f);
+  load() {
+    const frame = this.frame;
+    if (frame) {
+      this.pushLog(this.scene.index);
+      this.onLoaded.fire(frame);
     } else {
-      throw new GameError("target frame not found");
+      throw new GameError("frame not found", this.scene.index);
     }
   }
 
   /**
-   * 次のシーンに遷移する。
+   * 次のフレームを呼び出す。
    */
   next() {
-    this.load(this.scene.next());
+    this.scene.next();
+    this.load();
   }
 
   /**
@@ -95,16 +95,25 @@ export class Scenario {
    * シナリオデータに紐づいていた情報をクリアする。
    */
   clear() {
-    this.log = [];
+    this.logs = [];
     this.onLoaded.removeAll();
   }
 
   /**
-   * ログを登録する。
+   * テキストログを登録する。
    *
-   * @param log
+   * @param text
    */
-  pushLog(log: Log) {
-    this.log.push(log);
+  pushTextLog(text: string) {
+    const index = this.scene.index;
+    const log = this.logs.find(l => l.label === index.label && l.frame === index.frame);
+    log.text = text;
+  }
+
+  private pushLog(index: Index) {
+    const i = this.logs.find(l => l.label === index.label && l.frame === index.frame);
+    if (!i) {
+      this.logs.push(index);
+    }
   }
 }

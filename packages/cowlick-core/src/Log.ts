@@ -1,16 +1,25 @@
 "use strict";
-import {Frame} from "./Frame";
+
+/**
+ * シーン、フレームを指すindex。
+ */
+export interface Index {
+  /**
+   * シーンラベル
+   */
+  label: string;
+  /**
+   *フレーム
+   */
+  frame: number;
+}
 
 /**
  * バックログで利用されるログ。
  */
-export interface Log {
+export interface Log extends Index {
   /**
    * 表示されたテキスト
    */
-  text: string;
-  /**
-   * ログ作成に利用したオリジナルのフレーム
-   */
-  frame: Frame;
+  text?: string;
 }

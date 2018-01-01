@@ -87,8 +87,8 @@ export class GameScene extends Scene {
 
   updateText(text: core.Text) {
     this._message.updateText(text, this.scenario.frame.alreadyRead);
-    this._message.onFinished.addOnce(text => {
-      this.scenario.pushLog({text, frame: this.scenario.frame});
+    this._message.onFinished.addOnce(t => {
+      this.scenario.pushTextLog(t);
       this.scenario.frame.alreadyRead = true;
       this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
     }, this);
@@ -180,8 +180,6 @@ export class GameScene extends Scene {
   }
 
   private onLoaded() {
-    const frame = this.scenario.frame;
-
     this.autoMode = new AutoMode(this);
 
     if (!this._gameState) {
@@ -192,17 +190,10 @@ export class GameScene extends Scene {
     this.storage.saveBuiltinVariables();
     this.storage.saveSystemVariables();
 
-    if (frame) {
-      this.removeLayers(frame.scripts);
-      this.createMessageLayer();
-      this.createSystemLayer();
-      this.applyScripts(frame.scripts);
-    } else {
-      this.createMessageLayer();
-      this.createSystemLayer();
-    }
-    this.topMessageLayer();
-    this.layerGroup.top(core.Layer.system);
+    this.createMessageLayer();
+    this.createSystemLayer();
+
+    this.scenario.load();
   }
 
   private disableTrigger() {

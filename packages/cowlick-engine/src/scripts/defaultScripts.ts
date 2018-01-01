@@ -240,15 +240,19 @@ function backlog(controller: SceneController, data: core.Backlog) {
     y: 0,
     gameState: scene.gameState
   });
-  let values: (string | core.Ruby[] | core.Variable)[] = [];
+  const text: core.Text = {
+    values: []
+  };
   for (const log of controller.backlog) {
-    if (values.length !== 0) {
-      values.push("\n", log.text);
-    } else {
-      values.push(log.text);
+    if (log.text) {
+      if (text.values.length !== 0) {
+        text.values.push("\n", log.text);
+      } else {
+        text.values.push(log.text);
+      }
     }
   }
-  message.updateText({values});
+  message.updateText(text);
   message.showAll();
   scrollable.content.append(message);
 
