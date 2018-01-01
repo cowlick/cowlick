@@ -33,7 +33,7 @@ export async function parse(baseDir: string, run: Run<kag.Result>): Promise<anal
 
     // ファイル登場順に1度だけ解析対象として追加する
     for (const d of result.dependencies) {
-      if (targets.findIndex(t => t === d) === -1 && scenario.findIndex(s => s.label === analyzer.filename(d)) === -1) {
+      if (targets.some(t => t === d) === false && scenario.some(s => s.label === analyzer.filename(d)) === false) {
         targets.push(d);
       }
     }
