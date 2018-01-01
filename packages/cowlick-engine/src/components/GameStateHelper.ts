@@ -65,25 +65,25 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
 export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Config): GameState {
   const max = config.system.maxSaveCount;
   const result = loadFromStorage(scene, keys, max);
-  if (typeof result.variables.builtin.selectedFont === "undefined") {
+  if (!("selectedFont" in result.variables.builtin)) {
     result.variables.builtin.selectedFont = 0;
   }
-  if (typeof result.variables.builtin.autoMode === "undefined") {
+  if (!("autoMode" in result.variables.builtin)) {
     result.variables.builtin.autoMode = false;
   }
-  if (typeof result.variables.builtin.autoMessageDuration === "undefined") {
+  if (!("autoMessageDuration" in result.variables.builtin)) {
     result.variables.builtin.autoMessageDuration = config.system.autoMessageDuration;
   }
-  if (typeof result.variables.builtin.messageSpeed === "undefined") {
+  if (!("messageSpeed" in result.variables.builtin)) {
     result.variables.builtin.messageSpeed = config.system.messageSpeed;
   }
-  if (typeof result.variables.builtin.realTimeDisplay === "undefined") {
+  if (!("realTimeDisplay" in result.variables.builtin)) {
     result.variables.builtin.realTimeDisplay = config.system.realTimeDisplay;
   }
-  if (typeof result.variables.builtin.fontSize === "undefined") {
+  if (!("fontSize" in result.variables.builtin)) {
     result.variables.builtin.fontSize = config.font.size;
   }
-  if (typeof result.variables.builtin.fontColor === "undefined") {
+  if (!("fontColor" in result.variables.builtin)) {
     result.variables.builtin.fontColor = config.font.color;
   }
   return new GameState(result.data, result.variables, max);

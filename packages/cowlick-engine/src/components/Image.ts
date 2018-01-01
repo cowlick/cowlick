@@ -9,7 +9,7 @@ export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, image: Imag
     height: image.frame.height
   });
   sprite.frames = image.frame.frames;
-  if (typeof image.frame.interval !== "undefined") {
+  if ("interval" in image.frame) {
     sprite.interval = image.frame.interval;
   }
   sprite.start();

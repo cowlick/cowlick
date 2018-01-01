@@ -32,10 +32,10 @@ export class ImageButton extends Button {
   static create(scene: g.Scene, image: Image): Button {
     const asset = scene.assets[image.assetId] as g.ImageAsset;
     if (image.frame) {
-      if (typeof image.frame.width === "undefined") {
+      if (!("width" in image.frame)) {
         image.frame.width = asset.width / 3;
       }
-      if (typeof image.frame.height === "undefined") {
+      if (!("height" in image.frame)) {
         image.frame.height = asset.height;
       }
     }

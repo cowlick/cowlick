@@ -191,16 +191,16 @@ function assetId(id: string): estree.Property {
 
 function layerConfig(config: core.LayerConfig): estree.Property[] {
   const ps: estree.Property[] = [name(config.name)];
-  if (typeof config.x !== "undefined") {
+  if ("x" in config) {
     ps.push(property("x", literal(config.x)));
   }
-  if (typeof config.y !== "undefined") {
+  if ("y" in config) {
     ps.push(property("y", literal(config.y)));
   }
-  if (typeof config.opacity !== "undefined") {
+  if ("opacity" in config) {
     ps.push(property("opacity", literal(config.opacity)));
   }
-  if (typeof config.visible !== "undefined") {
+  if ("visible" in config) {
     ps.push(property("visible", literal(config.visible)));
   }
   return ps;
@@ -465,10 +465,10 @@ function backlog(original: core.Backlog, options: VisitorOptions): estree.Object
 
 function fontProperties(setting: core.Font): estree.Property[] {
   const ps: estree.Property[] = [];
-  if (typeof setting.size !== "undefined") {
+  if ("size" in setting) {
     ps.push(property("size", literal(setting.size)));
   }
-  if (typeof setting.color !== "undefined") {
+  if ("color" in setting) {
     ps.push(property("color", literal(setting.color)));
   }
   return ps;
