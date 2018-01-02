@@ -405,11 +405,11 @@ function openSaveLoadScene(
       scripts: create(i)
     };
     const button = createLink(scene, l);
-    for (const script of l.scripts) {
-      button.onClick.add(() => {
+    button.onClick.add(() => {
+      for (const script of l.scripts) {
         Engine.scriptManager.call(controller, script);
-      });
-    }
+      }
+    });
     pagination.content.append(button);
   }
 }
