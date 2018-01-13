@@ -72,7 +72,10 @@ export class LayerGroup {
   }
 
   top(name: string) {
-    this.evaluate(name, layer => this.root.append(layer));
+    const layer = this.group.get(name);
+    if (layer) {
+      this.root.append(layer);
+    }
   }
 
   evaluate(name: string, f: (e: g.E) => void) {
