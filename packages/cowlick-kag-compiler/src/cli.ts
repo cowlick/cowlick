@@ -7,7 +7,6 @@ import * as analyzer from "cowlick-analyzer";
 import {parse} from "./parser";
 import {SyntaxError} from "../resources/kag";
 import {runProgress} from "./runner";
-import {generate} from "./generate";
 
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
 
@@ -35,7 +34,7 @@ const root = commandpost
       await analyzer.mkdir(outputPath);
     }
     const outputFile = path.join(outputPath, "scenario.js");
-    await runProgress(`Generate ${outputFile}`, async () => generate(outputFile, result.scenario));
+    await runProgress(`Generate ${outputFile}`, async () => analyzer.generate(outputFile, result.scenario));
     for (const s of result.scripts) {
       await s.write(outputPath);
     }
