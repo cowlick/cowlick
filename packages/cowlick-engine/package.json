@@ -19,7 +19,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
-    "@akashic-extension/akashic-label": "2.0.1",
+    "@akashic-extension/akashic-label": "2.0.2",
     "@akashic-extension/akashic-timeline": "2.0.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4",
