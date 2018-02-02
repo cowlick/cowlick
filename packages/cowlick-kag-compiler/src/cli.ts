@@ -29,9 +29,10 @@ const root = commandpost
     const basePath = path.resolve(process.cwd(), args.inputDir);
     const ast = await parse(basePath, runProgress);
     const result = await runProgress("Analyzing scenario", async () => analyzer.analyze(ast));
-    const exists = await analyzer.exists(outputPath);
-    if (exists === false) {
+    try {
       await analyzer.mkdir(outputPath);
+    } catch (e) {
+      console.log("output directory already exists: " + outputPath);
     }
     const outputFile = path.join(outputPath, "scenario.js");
     await runProgress(`Generate ${outputFile}`, async () => analyzer.generate(outputFile, result.scenario));

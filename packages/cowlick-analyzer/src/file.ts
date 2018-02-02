@@ -14,5 +14,4 @@ export function filename(target: string): string {
 
 export const writeFile = promisify(fs.writeFile);
 export const readFile = promisify(fs.readFile);
-export const exists = promisify(fs.exists);
 export const mkdir = promisify(fs.mkdir);
