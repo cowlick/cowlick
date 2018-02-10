@@ -1,6 +1,7 @@
 "use strict";
 import * as assert from "assert";
-import {Storage, GameState} from "./helpers/setup";
+import {Storage} from "./helpers/setup";
+import {GameState} from "../src/models/GameState";
 
 describe("Storage", () => {
   it("セーブデータをロードできる", () => {

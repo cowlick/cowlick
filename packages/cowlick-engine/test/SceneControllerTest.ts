@@ -2,6 +2,7 @@
 import * as assert from "assert";
 import * as core from "cowlick-core";
 import * as engine from "./helpers/setup";
+import {GameState} from "../src/models/GameState";
 
 describe("SceneController", () => {
   function createController(config: engine.config.Config, scriptManager: engine.ScriptManager) {
@@ -59,7 +60,7 @@ describe("SceneController", () => {
       current: {},
       system: {}
     };
-    controller.current._gameState = new engine.GameState({
+    controller.current._gameState = new GameState({
       data,
       variables,
       max: config.system.maxSaveCount

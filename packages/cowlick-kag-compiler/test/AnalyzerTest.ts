@@ -23,7 +23,12 @@ describe("Analyzer", () => {
         ];
         const actual = analyze(scriptAst);
         // FIXME: start, endを外してacornでテストできるようにしたい
-        const expectedAST = esprima.parseModule(fs.readFileSync(filePath, "utf8"));
+        const expectedAST = [
+          {
+            label: "content",
+            source: esprima.parseModule(fs.readFileSync(filePath, "utf8"))
+          }
+        ];
         assert.deepEqual(actual.scenario, expectedAST);
 
         for (const script of actual.scripts) {
