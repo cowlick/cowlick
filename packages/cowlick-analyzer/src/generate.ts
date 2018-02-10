@@ -1,9 +1,12 @@
 "use strict";
-import {Program} from "estree";
+import {join} from "path";
 import * as escodegen from "escodegen";
 import {Scenario} from "./ast";
 import {writeFile} from "./file";
+import {GeneratedScene} from "./analyzer";
 
-export async function generate(target: string, scenario: Program) {
-  return await writeFile(target, escodegen.generate(scenario));
+export async function generate(targetDir: string, scenario: GeneratedScene[]) {
+  for (const scene of scenario) {
+    await writeFile(join(targetDir, `${scene.label}.js`), escodegen.generate(scene.source));
+  }
 }

@@ -31,7 +31,7 @@ function main() {
     choiceScript(controller, value);
   });
 
-  novel.engine.start();
+  novel.engine.load("first");
 }
 
 module.exports = main;

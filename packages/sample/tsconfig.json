@@ -7,15 +7,12 @@
     ],
     "noLib": false,
     "sourceMap": false,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "outDir": "./script"
   },
   "files": [
-    "node_modules/@akashic/akashic-engine/lib/main.d.ts"
-  ],
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
+    "node_modules/@akashic/akashic-engine/lib/main.d.ts",
+    "./src/main.ts",
+    "./src/config.ts"
   ]
 }

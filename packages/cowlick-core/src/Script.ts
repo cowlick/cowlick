@@ -163,10 +163,17 @@ export function collectAssetIds(scripts: Script<any>[]): string[] {
   let ids: string[] = [];
   for (const s of scripts) {
     if (typeof s.data === "object") {
-      if (s.data.assetId) {
-        ids.push(<string>s.data.assetId);
-      } else if (s.data.backgroundImage) {
-        ids.push(<string>s.data.backgroundImage);
+      if ("assetId" in s.data) {
+        ids.push(s.data.assetId);
+      }
+      if ("backgroundImage" in s.data) {
+        ids.push(s.data.backgroundImage);
+      }
+      if ("label" in s.data) {
+        ids.push(s.data.label);
+      }
+      if ("scripts" in s.data) {
+        ids.push(...collectAssetIds(s.data.scripts));
       }
     }
   }

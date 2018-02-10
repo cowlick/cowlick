@@ -40,16 +40,14 @@ export class Engine {
   /**
    * シナリオを元にゲームを開始する。
    *
-   * @param scenario シナリオデータ。省略した場合は"scenario.js"からシナリオをロードする。
+   * @param scenario シナリオデータ
    */
-  start(scenario?: core.Scenario): SceneController {
-    const s = scenario ? scenario : core.Scenario.load(this.game);
-
+  start(scenario: core.Scenario): SceneController {
     const storageKeys = createStorageKeys(Engine.player, Engine._config.system.maxSaveCount);
 
     const controller = new SceneController({
       game: this.game,
-      scenario: s,
+      scenario,
       scriptManager: Engine.scriptManager,
       config: Engine.config,
       player: Engine.player,
@@ -57,6 +55,20 @@ export class Engine {
     });
     controller.start();
     return controller;
+  }
+
+  /**
+   * 最初のシーンをロードしてゲームを開始する。
+   *
+   * @param scene シーンファイル名
+   */
+  load(scene: string): SceneController {
+    const s: core.Scene = g._require(this.game, scene);
+    if (s) {
+      return this.start(new core.Scenario([s]));
+    } else {
+      throw new core.GameError("scene not found", {label: scene});
+    }
   }
 
   /**

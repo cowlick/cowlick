@@ -3,13 +3,17 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "build": "cowlick-kag-compiler ./scenario -o ./src && webpack --progress && npm run scan:assets",
-    "start": "akashic-sandbox game",
-    "scan:assets": "cd ./game && akashic scan asset",
-    "bundle": "cd ./game && akashic export html --output ../dist && cp ../../../docs/images/favicon.ico ../dist"
+    "build": "cowlick-kag-compiler ./scenario -o ./script && tsc -p . && npm run scan:assets",
+    "start": "akashic-sandbox .",
+    "scan:assets": "npm run copy:images && akashic scan asset",
+    "copy:images": "cp ../../docs/images/cowlick.png ./image",
+    "bundle": "akashic export html --output ../../dist -M && cp ../../docs/images/favicon.ico ../../dist"
   },
   "dependencies": {
+    "@akashic-extension/akashic-label": "2.0.2",
     "@akashic-extension/akashic-timeline": "2.0.0",
+    "@pocketberserker/akashic-pagination": "0.0.4",
+    "@xnv/akashic-scrollable": "0.0.4",
     "cowlick-config": "^0.3.0",
     "cowlick-core": "^0.3.0",
     "cowlick-engine": "^0.3.0"
@@ -21,10 +25,6 @@
     "@types/node": "8.5.2",
     "copy-webpack-plugin": "4.3.1",
     "cowlick-kag-compiler": "^0.3.0",
-    "ts-loader": "3.2.0",
-    "typescript": "2.6.2",
-    "uglify-save-license": "0.4.1",
-    "uglifyjs-webpack-plugin": "1.1.5",
-    "webpack": "3.10.0"
+    "typescript": "2.6.2"
   }
 }

@@ -9,13 +9,27 @@ import {InlineScript} from "./InlineScript";
 import {Script} from "cowlick-core";
 
 /**
+ * 生成されたシーン
+ */
+export interface GeneratedScene {
+  /**
+   * シーン名
+   */
+  label: string;
+  /**
+   * シーンソース
+   */
+  source: estree.Program;
+}
+
+/**
  * 解析結果
  */
 export interface Result {
   /**
    * シナリオ
    */
-  scenario: estree.Program;
+  scenario: GeneratedScene[];
   /**
    * 埋め込みスクリプト
    */
@@ -569,22 +583,6 @@ function frame(original: ast.Frame, scene: string, index: number, state: State):
   return result;
 }
 
-function scene(original: ast.Scene, state: State): estree.NewExpression {
-  return {
-    type: NewExpression,
-    callee: Scene,
-    arguments: [
-      object([
-        property("label", literal(original.label)),
-        property("frames", {
-          type: ArrayExpression,
-          elements: original.frames.map((f, i) => frame(f, original.label, i, state))
-        })
-      ])
-    ]
-  };
-}
-
 const importCowlick: estree.VariableDeclaration = {
   type: "VariableDeclaration",
   kind: "var",
@@ -604,18 +602,27 @@ const importCowlick: estree.VariableDeclaration = {
   ]
 };
 
-function scenario(original: ast.Scenario, state: State): estree.Program {
-  const result: estree.NewExpression = {
+function scene(original: ast.Scene, state: State): estree.NewExpression {
+  return {
     type: NewExpression,
-    callee: Scenario,
+    callee: Scene,
     arguments: [
-      {
-        type: ArrayExpression,
-        elements: original.map(s => scene(s, state))
-      }
+      object([
+        property("label", literal(original.label)),
+        property("frames", {
+          type: ArrayExpression,
+          elements: original.frames.map((f, i) => frame(f, original.label, i, state))
+        })
+      ])
     ]
   };
-  return program([importCowlick, moduleExports(result)]);
+}
+
+function scenario(original: ast.Scenario, state: State): GeneratedScene[] {
+  return original.map(s => ({
+    label: s.label,
+    source: program([importCowlick, moduleExports(scene(s, state))])
+  }));
 }
 
 /**

@@ -71,7 +71,7 @@ export class SceneController implements g.Destroyable {
 
   jump(target: core.Jump) {
     const previous = this.scenario.scene.label;
-    this.scenario.update(target);
+    this.scenario.update(this.game, target);
     if (previous === this.scenario.scene.label) {
       this.scenario.load();
     } else {

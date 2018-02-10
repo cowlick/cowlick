@@ -34,8 +34,7 @@ const root = commandpost
     } catch (e) {
       console.log("output directory already exists: " + outputPath);
     }
-    const outputFile = path.join(outputPath, "scenario.js");
-    await runProgress(`Generate ${outputFile}`, async () => analyzer.generate(outputFile, result.scenario));
+    await runProgress(`Generate scenario`, async () => analyzer.generate(outputPath, result.scenario));
     for (const s of result.scripts) {
       await s.write(outputPath);
     }

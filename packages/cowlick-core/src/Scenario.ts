@@ -21,15 +21,6 @@ export class Scenario {
     this.logs = [];
   }
 
-  /**
-   * scenario.jsからシナリオデータをロードする。
-   *
-   * @param game
-   */
-  static load(game: g.Game): Scenario {
-    return g._require(game, "scenario");
-  }
-
   get backlog() {
     return this.logs;
   }
@@ -53,13 +44,20 @@ export class Scenario {
   /**
    * シーンを更新する。
    *
+   * @param game
    * @param target 遷移情報
    */
-  update(target: Jump) {
+  update(game: g.Game, target: Jump) {
     const i = this.scenes.findIndex(s => s.label === target.label);
     if (i > -1) {
       this.index = i;
       this.scenes[this.index].reset(target.frame);
+      return;
+    }
+    const s = g._require(game, target.label);
+    if (s) {
+      this.scenes.push(s);
+      this.index = this.scenes.length - 1;
     } else {
       throw new GameError("scene not found", target);
     }

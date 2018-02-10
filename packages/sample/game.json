@@ -1,0 +1,131 @@
+{
+	"width": 640,
+	"height": 480,
+	"fps": 30,
+	"main": "./script/main.js",
+	"assets": {
+		"black": {
+			"type": "image",
+			"width": 640,
+			"height": 480,
+			"path": "image/black.png"
+		},
+		"pane": {
+			"type": "image",
+			"width": 32,
+			"height": 32,
+			"path": "image/pane.png"
+		},
+		"scene0_2_0": {
+			"type": "script",
+			"path": "script/scene0_2_0.js",
+			"global": true
+		},
+		"first": {
+			"type": "script",
+			"path": "script/first.js",
+			"global": true
+		},
+		"scene0": {
+			"type": "script",
+			"path": "script/scene0.js",
+			"global": true
+		},
+		"scene1": {
+			"type": "script",
+			"path": "script/scene1.js",
+			"global": true
+		},
+		"scene2": {
+			"type": "script",
+			"path": "script/scene2.js",
+			"global": true
+		},
+		"title": {
+			"type": "script",
+			"path": "script/title.js",
+			"global": true
+		},
+		"config": {
+			"type": "script",
+			"path": "script/config.js",
+			"global": true
+		},
+		"main": {
+			"type": "script",
+			"path": "script/main.js",
+			"global": true
+		},
+		"cowlick": {
+			"type": "image",
+			"width": 128,
+			"height": 128,
+			"path": "image/cowlick.png"
+		}
+	},
+	"environment": {
+		"sandbox-runtime": "2"
+	},
+	"globalScripts": [
+		"node_modules/@akashic-extension/akashic-label/lib/DefaultRubyParser.js",
+		"node_modules/@akashic-extension/akashic-label/lib/FragmentDrawInfo.js",
+		"node_modules/@akashic-extension/akashic-label/lib/Label.js",
+		"node_modules/@akashic-extension/akashic-label/lib/RubyParser.js",
+		"node_modules/@akashic-extension/akashic-label/lib/index.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/ActionType.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/Easing.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/Timeline.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/Tween.js",
+		"node_modules/@akashic-extension/akashic-timeline/lib/index.js",
+		"node_modules/@pocketberserker/akashic-pagination/lib/LabelButton.js",
+		"node_modules/@pocketberserker/akashic-pagination/lib/Pagination.js",
+		"node_modules/@pocketberserker/akashic-pagination/lib/createDefaultButtonImage.js",
+		"node_modules/@pocketberserker/akashic-pagination/lib/index.js",
+		"node_modules/@xnv/akashic-scrollable/lib/NinePatchHorizontalScrollbar.js",
+		"node_modules/@xnv/akashic-scrollable/lib/NinePatchVerticalScrollbar.js",
+		"node_modules/@xnv/akashic-scrollable/lib/NullScrollbar.js",
+		"node_modules/@xnv/akashic-scrollable/lib/Scrollable.js",
+		"node_modules/@xnv/akashic-scrollable/lib/createDefaultScrollbarImage.js",
+		"node_modules/@xnv/akashic-scrollable/lib/index.js",
+		"node_modules/cowlick-config/lib/index.js",
+		"node_modules/cowlick-core/lib/Constant.js",
+		"node_modules/cowlick-core/lib/Frame.js",
+		"node_modules/cowlick-core/lib/GameError.js",
+		"node_modules/cowlick-core/lib/Scenario.js",
+		"node_modules/cowlick-core/lib/Scene.js",
+		"node_modules/cowlick-core/lib/Script.js",
+		"node_modules/cowlick-core/lib/index.js",
+		"node_modules/cowlick-engine/lib/Constant.js",
+		"node_modules/cowlick-engine/lib/Engine.js",
+		"node_modules/cowlick-engine/lib/components/AudioGroup.js",
+		"node_modules/cowlick-engine/lib/components/AutoMode.js",
+		"node_modules/cowlick-engine/lib/components/Button.js",
+		"node_modules/cowlick-engine/lib/components/GameScene.js",
+		"node_modules/cowlick-engine/lib/components/GameStateHelper.js",
+		"node_modules/cowlick-engine/lib/components/Image.js",
+		"node_modules/cowlick-engine/lib/components/ImageButton.js",
+		"node_modules/cowlick-engine/lib/components/LabelButton.js",
+		"node_modules/cowlick-engine/lib/components/LayerGroup.js",
+		"node_modules/cowlick-engine/lib/components/Message.js",
+		"node_modules/cowlick-engine/lib/components/SaveLoadScene.js",
+		"node_modules/cowlick-engine/lib/components/Scene.js",
+		"node_modules/cowlick-engine/lib/components/SceneController.js",
+		"node_modules/cowlick-engine/lib/components/Slider.js",
+		"node_modules/cowlick-engine/lib/components/VideoGroup.js",
+		"node_modules/cowlick-engine/lib/index.js",
+		"node_modules/cowlick-engine/lib/models/AlreadyReadManager.js",
+		"node_modules/cowlick-engine/lib/models/GameState.js",
+		"node_modules/cowlick-engine/lib/models/Storage.js",
+		"node_modules/cowlick-engine/lib/scripts/ScriptManager.js",
+		"node_modules/cowlick-engine/lib/scripts/defaultScripts.js"
+	],
+	"moduleMainScripts": {
+		"@akashic-extension/akashic-label": "node_modules/@akashic-extension/akashic-label/lib/index.js",
+		"@akashic-extension/akashic-timeline": "node_modules/@akashic-extension/akashic-timeline/lib/index.js",
+		"@pocketberserker/akashic-pagination": "node_modules/@pocketberserker/akashic-pagination/lib/index.js",
+		"@xnv/akashic-scrollable": "node_modules/@xnv/akashic-scrollable/lib/index.js",
+		"cowlick-config": "node_modules/cowlick-config/lib/index.js",
+		"cowlick-core": "node_modules/cowlick-core/lib/index.js",
+		"cowlick-engine": "node_modules/cowlick-engine/lib/index.js"
+	}
+}
