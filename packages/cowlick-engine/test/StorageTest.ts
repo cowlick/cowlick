@@ -3,7 +3,7 @@ import * as assert from "assert";
 import {Storage} from "./helpers/setup";
 import {GameState} from "../src/models/GameState";
 
-describe("Storage", () => {
+describe.skip("Storage", () => {
   it("セーブデータをロードできる", () => {
     const variables = {
       current: {},
