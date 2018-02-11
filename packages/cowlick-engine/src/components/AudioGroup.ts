@@ -40,20 +40,18 @@ export class AudioGroup {
   remove(audio: Audio) {
     let ps = this.group.get(audio.group);
     if (ps) {
-      if (audio.assetId) {
-        const i = ps.findIndex(p => p.currentAudio.id === audio.assetId);
-        if (i > 0) {
-          ps[i].stop();
-          ps.splice(i, 1);
-        } else {
-          throw new GameError("audio not found", audio);
-        }
-      } else if (this.group.delete(audio.group)) {
+      if (this.group.delete(audio.group)) {
         for (const player of ps) {
           player.stop();
         }
+        return;
+      }
+      const i = ps.findIndex(p => p.currentAudio.id === audio.assetId);
+      if (i > -1) {
+        ps[i].stop();
+        ps.splice(i, 1);
       } else {
-        throw new GameError("audio group not found", audio);
+        throw new GameError("audio not found", audio);
       }
     }
   }
