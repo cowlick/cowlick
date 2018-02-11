@@ -9,8 +9,11 @@ export let ScriptManager;
 export let ScriptFunction;
 export let Storage;
 
-beforeEach(() => {
-  const ctx = new Context();
+let ctx: Context;
+
+beforeEach(function() {
+  this.timeout(5000);
+  ctx = new Context();
   return ctx.start().then(game => {
     g.game = game;
     config = require("cowlick-config");
@@ -20,4 +23,8 @@ beforeEach(() => {
     ScriptFunction = require("../../src/scripts/ScriptManager").ScriptFunction;
     Storage = require("../../src/models/Storage").Storage;
   });
+});
+
+afterEach(() => {
+  ctx.end();
 });
