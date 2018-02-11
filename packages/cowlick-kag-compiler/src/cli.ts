@@ -2,7 +2,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as commandpost from "commandpost";
-import * as escodegen from "escodegen";
 import * as analyzer from "cowlick-analyzer";
 import {parse} from "./parser";
 import {SyntaxError} from "../resources/kag";
