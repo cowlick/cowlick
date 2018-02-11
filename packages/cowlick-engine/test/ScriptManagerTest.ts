@@ -6,7 +6,7 @@ function fail(controller: SceneController, data: any) {
   assert.fail("失敗するスクリプトを実行しました");
 }
 
-describe.skip("ScriptManager", () => {
+describe("ScriptManager", () => {
   it("登録済みのスクリプトを上書きできる", () => {
     const tag = "test";
     const manager = new ScriptManager(new Map<string, ScriptFunction>([[tag, fail]]));
