@@ -6,6 +6,7 @@ export interface GameStateParameters {
   data: core.SaveData[];
   variables: core.Variables;
   max: number;
+  scenario: core.Scenario;
 }
 
 /**
@@ -13,19 +14,23 @@ export interface GameStateParameters {
  */
 export class GameState {
   private data: core.SaveData[];
-  private _variables: core.Variables;
+  private currentVariables: core.Variables;
+  private sceneStartVariables: any;
   private max: number;
   private alreadyReadManager: AlreadyReadManager;
+  private scenario: core.Scenario;
 
   constructor(param: GameStateParameters) {
     this.data = param.data;
-    this._variables = param.variables;
+    this.currentVariables = param.variables;
+    this.sceneStartVariables = this.currentVariables.current;
     this.max = param.max;
-    this.alreadyReadManager = new AlreadyReadManager(this._variables.builtin.alreadyRead);
+    this.alreadyReadManager = new AlreadyReadManager(this.currentVariables.builtin.alreadyRead);
+    this.scenario = param.scenario;
   }
 
   get variables(): core.Variables {
-    return this._variables;
+    return this.currentVariables;
   }
 
   /**
@@ -37,11 +42,16 @@ export class GameState {
     return typeof this.data[index] !== "undefined";
   }
 
-  save(scenario: core.Scenario, config: core.Save): core.SaveData {
+  /**
+   * 指定した領域にセーブデータを保存する。
+   *
+   * @param config 保存設定
+   */
+  save(config: core.Save): core.SaveData {
     if (config.index > this.max || config.index < 0) {
       throw new core.GameError("storage out of range", config);
     }
-    const saveData = scenario.createSaveData(this._variables.current, config.description);
+    const saveData = this.scenario.createSaveData(this.sceneStartVariables, config.description);
     if (config.force) {
       this.data[config.index] = saveData;
       return saveData;
@@ -63,7 +73,9 @@ export class GameState {
   load(index: number): core.SaveData {
     const saveData = this.data[index];
     if (saveData) {
-      this._variables.current = saveData.variables;
+      this.currentVariables.current = saveData.variables;
+      this.sceneStartVariables = saveData.variables;
+      this.scenario.backlog = saveData.logs;
     }
     return saveData;
   }
@@ -102,14 +114,17 @@ export class GameState {
   }
 
   /**
-   * セーブデータ関連するAssetIdをすべて取得する。
+   * セーブデータに関連するAssetIdをすべて取得する。
    *
    * @param scenario シナリオデータ
    */
-  collectAssetIds(scenario: core.Scenario): string[] {
+  collectAssetIds(game: g.Game): string[] {
     let ids: string[] = [];
     for (const d of this.data) {
-      ids = ids.concat(scenario.findScene(d).assetIds);
+      // まだセーブされていない番地はundefinedなので飛ばす
+      if (d) {
+        ids.push(...this.scenario.findScene(game, d).assetIds);
+      }
     }
     return ids;
   }
@@ -122,13 +137,17 @@ export class GameState {
     this.alreadyReadManager.mark(label, frame);
   }
 
+  copyGameVariables() {
+    this.sceneStartVariables = this.currentVariables.current;
+  }
+
   private getVariables(variable: core.Variable) {
     if (variable.type === core.VariableType.system) {
-      return this._variables.system;
+      return this.currentVariables.system;
     } else if (variable.type === core.VariableType.builtin) {
-      return this._variables.builtin;
+      return this.currentVariables.builtin;
     } else if (variable.type === core.VariableType.current) {
-      return this._variables.current;
+      return this.currentVariables.current;
     } else {
       throw new core.GameError("invalid variable type", variable);
     }

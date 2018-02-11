@@ -1,18 +1,18 @@
 "use strict";
-import {SaveData, Variables, BuiltinVariable} from "cowlick-core";
+import * as core from "cowlick-core";
 import {Config} from "cowlick-config";
 import {GameState} from "../models/GameState";
 import {gameId, Region} from "../Constant";
 
 interface KeyValue {
   key: g.StorageKey;
-  value: SaveData;
+  value: core.SaveData;
 }
 
 const prefixLength = Region.saveDataPrefix.length;
 
 function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
-  const variables: Variables = {
+  const variables: core.Variables = {
     builtin: {},
     system: {},
     current: {}
@@ -63,25 +63,33 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   };
 }
 
-export function loadGameState(scene: g.Scene, keys: g.StorageKey[], config: Config): GameState {
+export function loadGameState(
+  scene: g.Scene,
+  keys: g.StorageKey[],
+  config: Config,
+  scenario: core.Scenario
+): GameState {
   const max = config.system.maxSaveCount;
   const result = loadFromStorage(scene, keys, max);
   const defaults: [string, any][] = [
-    [BuiltinVariable.selectedFont, 0],
-    [BuiltinVariable.autoMode, false],
-    [BuiltinVariable.autoMessageDuration, config.system.autoMessageDuration],
-    [BuiltinVariable.messageSpeed, config.system.messageSpeed],
-    [BuiltinVariable.realTimeDisplay, config.system.realTimeDisplay],
-    [BuiltinVariable.fontSize, config.font.size],
-    [BuiltinVariable.fontColor, config.font.color],
-    [BuiltinVariable.alreadyRead, {}]
+    [core.BuiltinVariable.selectedFont, 0],
+    [core.BuiltinVariable.autoMode, false],
+    [core.BuiltinVariable.autoMessageDuration, config.system.autoMessageDuration],
+    [core.BuiltinVariable.messageSpeed, config.system.messageSpeed],
+    [core.BuiltinVariable.realTimeDisplay, config.system.realTimeDisplay],
+    [core.BuiltinVariable.fontSize, config.font.size],
+    [core.BuiltinVariable.fontColor, config.font.color],
+    [core.BuiltinVariable.alreadyRead, {}]
   ];
   for (const [key, value] of defaults) {
     if (!(key in result.variables.builtin)) {
       result.variables.builtin[key] = value;
     }
   }
-  return new GameState(result);
+  return new GameState({
+    ...result,
+    scenario
+  });
 }
 
 export function createStorageKeys(player: g.Player, max: number): g.StorageKey[] {

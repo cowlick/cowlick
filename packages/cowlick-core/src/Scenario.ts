@@ -87,10 +87,19 @@ export class Scenario {
   /**
    * セーブデータに対応するシーンを検索する。
    *
+   * @param game
    * @param data
    */
-  findScene(data: SaveData): Scene {
-    return this.scenes.find(s => s.label === data.label);
+  findScene(game: g.Game, data: SaveData): Scene {
+    let scene = this.scenes.find(s => s.label === data.label);
+    if (scene) {
+      return scene;
+    }
+    scene = g._require(game, data.label);
+    if (scene) {
+      this.scenes.push(scene);
+    }
+    return scene;
   }
 
   /**
@@ -122,7 +131,7 @@ export class Scenario {
     const result: SaveData = {
       label: this.scene.label,
       variables,
-      logs: this.logs
+      logs: this.logs.slice() // 以降の変更を反映したくないのでshallow copy
     };
     if (description) {
       result.description = description;

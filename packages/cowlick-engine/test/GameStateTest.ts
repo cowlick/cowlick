@@ -25,7 +25,8 @@ describe("GameState", () => {
     const state = new GameState({
       data,
       variables,
-      max: 1
+      max: 1,
+      scenario: new core.Scenario([])
     });
     assert(state.exists(0));
   });
@@ -39,7 +40,8 @@ describe("GameState", () => {
     const state = new GameState({
       data: [],
       variables,
-      max: 1
+      max: 1,
+      scenario: new core.Scenario([])
     });
     assert(!state.exists(0));
   });
@@ -52,11 +54,6 @@ describe("GameState", () => {
       },
       system: {}
     };
-    const state = new GameState({
-      data: [],
-      variables,
-      max: 1
-    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -64,6 +61,12 @@ describe("GameState", () => {
       })
     ]);
     scenario.backlog = data[0].logs;
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1,
+      scenario
+    });
     const expected: core.SaveData = {
       label: "test",
       logs: [
@@ -75,7 +78,7 @@ describe("GameState", () => {
         test: 0
       }
     };
-    const actual = state.save(scenario, {index: 0});
+    const actual = state.save({index: 0});
     assert.deepEqual(actual, expected);
   });
 
@@ -87,11 +90,6 @@ describe("GameState", () => {
       },
       system: {}
     };
-    const state = new GameState({
-      data: [],
-      variables,
-      max: 1
-    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -99,6 +97,12 @@ describe("GameState", () => {
       })
     ]);
     scenario.backlog = data[0].logs;
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1,
+      scenario
+    });
     const expected: core.SaveData = {
       label: "test",
       logs: [
@@ -111,7 +115,7 @@ describe("GameState", () => {
       },
       description: "test"
     };
-    const actual = state.save(scenario, {index: 0, description: "test"});
+    const actual = state.save({index: 0, description: "test"});
     assert.deepEqual(actual, expected);
   });
 
@@ -123,11 +127,6 @@ describe("GameState", () => {
       },
       system: {}
     };
-    const state = new GameState({
-      data,
-      variables,
-      max: 1
-    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
@@ -135,6 +134,12 @@ describe("GameState", () => {
       })
     ]);
     scenario.backlog = data[0].logs;
+    const state = new GameState({
+      data,
+      variables,
+      max: 1,
+      scenario
+    });
     scenario.next();
     const expected: core.SaveData = {
       label: "test",
@@ -150,7 +155,7 @@ describe("GameState", () => {
         test: 0
       }
     };
-    const actual = state.save(scenario, {index: 0, force: true});
+    const actual = state.save({index: 0, force: true});
     assert.deepEqual(actual, expected);
   });
 
@@ -162,20 +167,21 @@ describe("GameState", () => {
       },
       system: {}
     };
-    const state = new GameState({
-      data,
-      variables,
-      max: 1
-    });
     const scenario = new core.Scenario([
       new core.Scene({
         label: "test",
         frames: [new core.Frame([]), new core.Frame([])]
       })
     ]);
+    const state = new GameState({
+      data,
+      variables,
+      max: 1,
+      scenario
+    });
     assert.throws(() => {
       scenario.next();
-      state.save(scenario, {index: 0});
+      state.save({index: 0});
     }, core.GameError);
   });
 
@@ -188,7 +194,8 @@ describe("GameState", () => {
     const state = new GameState({
       data: [],
       variables,
-      max: 1
+      max: 1,
+      scenario: new core.Scenario([])
     });
 
     let input: any = 1;
@@ -231,7 +238,8 @@ describe("GameState", () => {
     const state = new GameState({
       data: [],
       variables,
-      max: 1
+      max: 1,
+      scenario: new core.Scenario([])
     });
 
     let target = {
@@ -262,7 +270,8 @@ describe("GameState", () => {
     const state = new GameState({
       data: [],
       variables,
-      max: 1
+      max: 1,
+      scenario: new core.Scenario([])
     });
 
     let input: any = 1;
@@ -282,7 +291,8 @@ describe("GameState", () => {
     const state = new GameState({
       data: [],
       variables,
-      max: 1
+      max: 1,
+      scenario: new core.Scenario([])
     });
     const target = {
       type: "other",

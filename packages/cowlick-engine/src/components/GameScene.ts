@@ -161,7 +161,7 @@ export class GameScene extends Scene {
   }
 
   save(info: core.Save) {
-    this.storage.save(this.scenario, info);
+    this.storage.save(info);
   }
 
   load(index: number): core.SaveData {
@@ -184,9 +184,15 @@ export class GameScene extends Scene {
     this.autoMode = new AutoMode(this);
 
     if (!this._gameState) {
-      this._gameState = loadGameState(this, this.storageKeys, this.config);
+      this._gameState = loadGameState(this, this.storageKeys, this.config, this.scenario);
     }
-    this.storage = new Storage(this.game.storage, this.player, this._gameState);
+    this._gameState.copyGameVariables();
+    this.storage = new Storage({
+      storage: this.game.storage,
+      player: this.player,
+      state: this._gameState,
+      scenario: this.scenario
+    });
     // ゲーム中にそこそこの頻度で実行されるタイミング、という点からここで保存している
     this.storage.saveBuiltinVariables();
     this.storage.saveSystemVariables();

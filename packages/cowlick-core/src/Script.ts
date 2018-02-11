@@ -405,7 +405,7 @@ export interface Slider {
   target: Variable;
 }
 
-export const enum Position {
+export enum Position {
   Top,
   Bottom
 }

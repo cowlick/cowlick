@@ -86,7 +86,18 @@ export class SceneController implements g.Destroyable {
   load(data: core.Load) {
     const s = this.current.load(data.index);
     if (s) {
-      this.jump(s);
+      this.scenario.update(this.game, {
+        label: s.label,
+        frame: s.logs[0].frame
+      });
+      this.loadScene(() => {
+        for (const l of s.logs.slice(1)) {
+          this.jump({
+            label: s.label,
+            frame: l.frame
+          });
+        }
+      });
     } else {
       throw new core.GameError("save data not found", data);
     }
@@ -134,7 +145,7 @@ export class SceneController implements g.Destroyable {
     return !this._current;
   }
 
-  private loadScene() {
+  private loadScene(callback?: () => void) {
     this.scenario.clear();
     const previousLoadScene = this.saveLoadScene;
     const previousGameScene = this._current;
@@ -149,6 +160,9 @@ export class SceneController implements g.Destroyable {
       state: this._current.gameState
     });
     this._current.loaded.addOnce(() => {
+      if (callback) {
+        callback();
+      }
       this.saveLoadScene = new SaveLoadScene({
         game: this.game,
         scene: this.scenario.scene,
@@ -175,6 +189,6 @@ export class SceneController implements g.Destroyable {
   }
 
   private collectAssetIds(): string[] {
-    return this._current.gameState.collectAssetIds(this.scenario);
+    return this._current.gameState.collectAssetIds(this.game);
   }
 }
