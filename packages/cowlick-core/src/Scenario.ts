@@ -54,13 +54,8 @@ export class Scenario {
       this.scenes[this.index].reset(target.frame);
       return;
     }
-    const s = g._require(game, target.label);
-    if (s) {
-      this.scenes.push(s);
-      this.index = this.scenes.length - 1;
-    } else {
-      throw new GameError("scene not found", target);
-    }
+    this.scenes.push(g._require(game, target.label));
+    this.index = this.scenes.length - 1;
   }
 
   /**

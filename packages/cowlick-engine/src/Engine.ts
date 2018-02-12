@@ -65,12 +65,7 @@ export class Engine {
    * @param assetId
    */
   load(assetId: string): SceneController {
-    const s: core.Scene = g._require(this.game, assetId);
-    if (s) {
-      return this.start(new core.Scenario([s]));
-    } else {
-      throw new core.GameError("scene not found", {assetId});
-    }
+    return this.start(new core.Scenario([g._require(this.game, assetId)]));
   }
 
   /**
