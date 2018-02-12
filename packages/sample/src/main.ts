@@ -1,37 +1,13 @@
 "use strict";
-import * as tl from "@akashic-extension/akashic-timeline";
-import * as core from "cowlick-core";
-import * as novel from "cowlick-engine";
+import {engine} from "cowlick-engine";
 
-interface Logo extends core.Fade {
-  wait: number;
-}
+module.exports = () => {
+  g._require(g.game, "load")(engine);
+  const controller = engine.load("first");
 
-function main() {
-  novel.engine.script("logo", (controller, data: Logo) => {
-    const scene = controller.current;
-    scene.transition(data.layer, layer => {
-      let timeline = new tl.Timeline(scene);
-      timeline
-        .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
-        .fadeIn(data.duration)
-        .wait(data.wait)
-        .fadeOut(data.duration)
-        .call(() => scene.requestNextFrame());
-    });
+  g.game.snapshotRequest.add(() => {
+    if (g.game.shouldSaveSnapshot()) {
+      g.game.saveSnapshot(controller.snapshot());
+    }
   });
-
-  const choiceScript = novel.defaultScripts.get(core.Tag.choice);
-  novel.engine.script(core.Tag.choice, (controller, value: core.Choice) => {
-    value.backgroundImage = "pane";
-    value.padding = 4;
-    value.backgroundEffector = {
-      borderWidth: 4
-    };
-    choiceScript(controller, value);
-  });
-
-  novel.engine.load("first");
-}
-
-module.exports = main;
+};

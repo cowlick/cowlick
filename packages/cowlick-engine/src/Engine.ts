@@ -94,3 +94,17 @@ export class Engine {
     Engine.scriptManager.register(name, f);
   }
 }
+
+/**
+ * シングルプレー用ノベルエンジンインスタンス
+ */
+export const engine = new Engine(g.game, {id: "0"});
+
+/**
+ * マルチプレー用エンジンを準備する。
+ *
+ * @param player
+ */
+export const initialize = (player: g.Player, game?: g.Game) => {
+  return new Engine(game ? game : g.game, player);
+};

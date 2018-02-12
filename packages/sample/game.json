@@ -61,6 +61,16 @@
 			"type": "script",
 			"path": "script/cowlickConfig.js",
 			"global": true
+		},
+		"load": {
+			"type": "script",
+			"path": "script/load.js",
+			"global": true
+		},
+		"snapshotLoader": {
+			"type": "script",
+			"path": "script/snapshotLoader.js",
+			"global": true
 		}
 	},
 	"environment": {

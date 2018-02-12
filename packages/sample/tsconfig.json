@@ -13,6 +13,8 @@
   "files": [
     "node_modules/@akashic/akashic-engine/lib/main.d.ts",
     "./src/main.ts",
+    "./src/load.ts",
+    "./src/snapshotLoader.ts",
     "./src/cowlickConfig.ts"
   ]
 }
