@@ -46,11 +46,6 @@
 			"path": "script/title.js",
 			"global": true
 		},
-		"config": {
-			"type": "script",
-			"path": "script/config.js",
-			"global": true
-		},
 		"main": {
 			"type": "script",
 			"path": "script/main.js",
@@ -61,6 +56,11 @@
 			"width": 128,
 			"height": 128,
 			"path": "image/cowlick.png"
+		},
+		"cowlickConfig": {
+			"type": "script",
+			"path": "script/cowlickConfig.js",
+			"global": true
 		}
 	},
 	"environment": {

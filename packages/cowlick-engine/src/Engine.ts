@@ -20,9 +20,9 @@ export class Engine {
     this.game = game;
     this.player = player;
 
-    const c = g._require(game, "config");
-    if (c) {
-      Engine._config = c;
+    const assetId = "cowlickConfig";
+    if (game.assets[assetId] !== undefined) {
+      Engine._config = g._require(game, assetId);
     }
   }
 
