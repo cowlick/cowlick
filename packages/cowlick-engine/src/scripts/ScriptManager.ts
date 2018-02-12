@@ -24,7 +24,11 @@ export class ScriptManager {
       try {
         f(controller, script.data);
       } catch (e) {
-        this.call(controller, {tag: Tag.exception, data: e});
+        if (e instanceof GameError) {
+          this.call(controller, {tag: Tag.exception, data: e});
+        } else {
+          throw e;
+        }
       }
     } else {
       const data = new GameError("script tag was not registered", script);

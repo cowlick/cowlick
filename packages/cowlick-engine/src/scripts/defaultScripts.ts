@@ -331,12 +331,8 @@ function ifElse(controller: SceneController, data: core.IfElse) {
   }
 }
 
-function exception(controller: SceneController, e: Error) {
-  if (e instanceof core.GameError) {
-    controller.game.logger.warn(e.message, e.data);
-  } else {
-    controller.game.logger.warn(e.message);
-  }
+function exception(controller: SceneController, e: core.GameError) {
+  controller.game.logger.warn(e.message, e.data);
 }
 
 function slider(controller: SceneController, info: core.Slider) {
