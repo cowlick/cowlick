@@ -5,6 +5,7 @@ import {SceneController} from "./components/SceneController";
 import {ScriptManager, ScriptFunction} from "./scripts/ScriptManager";
 import {defaultScripts} from "./scripts/defaultScripts";
 import {createStorageKeys} from "./components/GameStateHelper";
+import {Snapshot} from "./models/Snapshot";
 
 /**
  * ノベルエンジン本体。
@@ -13,11 +14,11 @@ export class Engine {
   private game: g.Game;
   private static _scriptManager = new ScriptManager(defaultScripts);
   private static _config = defaultConfig;
-  // 仮置き
-  static player: g.Player = {id: "0"};
+  private player: g.Player;
 
-  constructor(game: g.Game) {
+  constructor(game: g.Game, player: g.Player) {
     this.game = game;
+    this.player = player;
 
     const c = g._require(game, "config");
     if (c) {
@@ -38,19 +39,19 @@ export class Engine {
   }
 
   /**
-   * シナリオを元にゲームを開始する。
+   * シナリオに登録された最初のシーンを使用してゲームを開始する。
    *
-   * @param scenario シナリオデータ
+   * @param scenario シナリオ
    */
   start(scenario: core.Scenario): SceneController {
-    const storageKeys = createStorageKeys(Engine.player, Engine._config.system.maxSaveCount);
+    const storageKeys = createStorageKeys(this.player, Engine._config.system.maxSaveCount);
 
     const controller = new SceneController({
       game: this.game,
       scenario,
       scriptManager: Engine.scriptManager,
       config: Engine.config,
-      player: Engine.player,
+      player: this.player,
       storageKeys
     });
     controller.start();
@@ -58,17 +59,33 @@ export class Engine {
   }
 
   /**
-   * 最初のシーンをロードしてゲームを開始する。
+   * 指定したシーンをロードしてゲームを開始する。
+   * 指定するassetはgame.jsonで`"global": true`に設定されている必要がある。
    *
-   * @param scene シーンファイル名
+   * @param assetId
    */
-  load(scene: string): SceneController {
-    const s: core.Scene = g._require(this.game, scene);
+  load(assetId: string): SceneController {
+    const s: core.Scene = g._require(this.game, assetId);
     if (s) {
       return this.start(new core.Scenario([s]));
     } else {
-      throw new core.GameError("scene not found", {label: scene});
+      throw new core.GameError("scene not found", {assetId});
     }
+  }
+
+  /**
+   * ゲームを復元する。
+   *
+   * @params snapshot
+   */
+  restore(snapshot: Snapshot): SceneController {
+    return SceneController.restore({
+      game: this.game,
+      scriptManager: Engine.scriptManager,
+      config: Engine.config,
+      player: this.player,
+      snapshot
+    });
   }
 
   /**

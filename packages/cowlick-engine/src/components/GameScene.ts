@@ -3,6 +3,7 @@ import {Storage} from "../models/Storage";
 import * as core from "cowlick-core";
 import {Config} from "cowlick-config";
 import {GameState} from "../models/GameState";
+import {Snapshot} from "../models/Snapshot";
 import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
@@ -22,6 +23,7 @@ export interface GameSceneParameters {
   player: g.Player;
   storageKeys?: g.StorageKey[];
   state?: GameState;
+  storageValuesSerialization?: g.StorageValueStoreSerialization;
 }
 
 export class GameScene extends Scene {
@@ -44,7 +46,8 @@ export class GameScene extends Scene {
     super({
       game: params.game,
       assetIds: GameScene.collectAssetIds(params),
-      storageKeys: params.storageKeys
+      storageKeys: params.storageKeys,
+      storageValuesSerialization: params.storageValuesSerialization
     });
 
     this.layerGroup = new LayerGroup(this);
@@ -75,6 +78,14 @@ export class GameScene extends Scene {
 
   get enabledWindowClick(): boolean {
     return this._enabledWindowClick;
+  }
+
+  snapshot(): Snapshot {
+    return {
+      ...this.gameState.createSnapshot(),
+      storageKeys: this.storageKeys,
+      storageValuesSerialization: this.serializeStorageValues()
+    };
   }
 
   appendLayer(e: g.E, config: core.LayerConfig) {

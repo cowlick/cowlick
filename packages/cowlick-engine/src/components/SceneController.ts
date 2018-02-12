@@ -5,6 +5,7 @@ import {Scene} from "./Scene";
 import {GameScene} from "./GameScene";
 import {SaveLoadScene} from "./SaveLoadScene";
 import {ScriptManager} from "../scripts/ScriptManager";
+import {Snapshot} from "../models/Snapshot";
 
 export interface SceneControllerParameters {
   game: g.Game;
@@ -13,6 +14,15 @@ export interface SceneControllerParameters {
   config: Config;
   player: g.Player;
   storageKeys: g.StorageKey[];
+  storageValuesSerialization?: g.StorageValueStoreSerialization;
+}
+
+export interface SceneRestoreParameters {
+  game: g.Game;
+  scriptManager: ScriptManager;
+  config: Config;
+  player: g.Player;
+  snapshot: Snapshot;
 }
 
 export class SceneController implements g.Destroyable {
@@ -40,7 +50,8 @@ export class SceneController implements g.Destroyable {
       config: this.config,
       controller: this,
       player: this.player,
-      storageKeys: this.storageKeys
+      storageKeys: this.storageKeys,
+      storageValuesSerialization: params.storageValuesSerialization
     });
     this._current.loaded.addOnce(() => {
       this.saveLoadScene = new SaveLoadScene({
@@ -60,6 +71,10 @@ export class SceneController implements g.Destroyable {
 
   get backlog(): core.Log[] {
     return this.scenario.backlog;
+  }
+
+  snapshot(): Snapshot {
+    return this._current.snapshot();
   }
 
   start() {
@@ -86,18 +101,7 @@ export class SceneController implements g.Destroyable {
   load(data: core.Load) {
     const s = this.current.load(data.index);
     if (s) {
-      this.scenario.update(this.game, {
-        label: s.label,
-        frame: s.logs[0].frame
-      });
-      this.loadScene(() => {
-        for (const l of s.logs.slice(1)) {
-          this.jump({
-            label: s.label,
-            frame: l.frame
-          });
-        }
-      });
+      this.loadFromSaveData(s);
     } else {
       throw new core.GameError("save data not found", data);
     }
@@ -145,6 +149,32 @@ export class SceneController implements g.Destroyable {
     return !this._current;
   }
 
+  static restore(params: SceneRestoreParameters): SceneController {
+    const scenes = SceneController.fakeScenes(params.snapshot.label);
+    const controller = new SceneController({
+      game: params.game,
+      scriptManager: params.scriptManager,
+      config: params.config,
+      player: params.player,
+      scenario: new core.Scenario(scenes),
+      storageKeys: params.snapshot.storageKeys,
+      storageValuesSerialization: params.snapshot.storageValuesSerialization
+    });
+    if (params.game.assets[params.snapshot.label] === undefined) {
+      controller.current.assetLoaded.add(asset => {
+        if (asset.id === params.snapshot.label) {
+          scenes.shift();
+          controller.loadFromSaveData(params.snapshot);
+        }
+      });
+      controller.current.prefetch();
+    } else {
+      scenes.shift();
+      controller.loadFromSaveData(params.snapshot);
+    }
+    return controller;
+  }
+
   private loadScene(callback?: () => void) {
     this.scenario.clear();
     const previousLoadScene = this.saveLoadScene;
@@ -190,5 +220,39 @@ export class SceneController implements g.Destroyable {
 
   private collectAssetIds(): string[] {
     return this._current.gameState.collectAssetIds(this.game);
+  }
+
+  private loadFromSaveData(data: core.SaveData) {
+    this.scenario.update(this.game, {
+      label: data.label,
+      frame: data.logs[0].frame
+    });
+    this.loadScene(() => {
+      for (const l of data.logs.slice(1)) {
+        this.jump({
+          label: data.label,
+          frame: l.frame
+        });
+      }
+    });
+  }
+
+  // globalでないassetを取得するためのダミーシーン
+  private static fakeScenes(label: string): core.Scene[] {
+    return [
+      new core.Scene({
+        label: "",
+        frames: [
+          new core.Frame([
+            {
+              tag: "",
+              data: {
+                label
+              }
+            }
+          ])
+        ]
+      })
+    ];
   }
 }

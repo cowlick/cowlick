@@ -152,4 +152,8 @@ export class GameState {
       throw new core.GameError("invalid variable type", variable);
     }
   }
+
+  createSnapshot(): core.SaveData {
+    return this.scenario.createSaveData(this.sceneStartVariables);
+  }
 }

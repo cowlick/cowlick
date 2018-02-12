@@ -1,20 +1,13 @@
 "use strict";
 import * as assert from "assert";
 import * as core from "cowlick-core";
+import {Snapshot} from "../src/models/Snapshot";
 import {GameState} from "../src/models/GameState";
 
 describe("GameState", () => {
-  const data: core.SaveData[] = [
-    {
-      label: "before",
-      logs: [
-        {
-          frame: 0
-        }
-      ],
-      variables: {}
-    }
-  ];
+  const log: core.Log = {
+    frame: 0
+  };
 
   it("セーブデータの存在を確認できる", () => {
     const variables = {
@@ -23,7 +16,13 @@ describe("GameState", () => {
       system: {}
     };
     const state = new GameState({
-      data,
+      data: [
+        {
+          label: "before",
+          logs: [log],
+          variables: {}
+        }
+      ],
       variables,
       max: 1,
       scenario: new core.Scenario([])
@@ -60,7 +59,7 @@ describe("GameState", () => {
         frames: [new core.Frame([])]
       })
     ]);
-    scenario.backlog = data[0].logs;
+    scenario.backlog = [log];
     const state = new GameState({
       data: [],
       variables,
@@ -96,7 +95,7 @@ describe("GameState", () => {
         frames: [new core.Frame([])]
       })
     ]);
-    scenario.backlog = data[0].logs;
+    scenario.backlog = [log];
     const state = new GameState({
       data: [],
       variables,
@@ -133,9 +132,15 @@ describe("GameState", () => {
         frames: [new core.Frame([]), new core.Frame([])]
       })
     ]);
-    scenario.backlog = data[0].logs;
+    scenario.backlog = [log];
     const state = new GameState({
-      data,
+      data: [
+        {
+          label: "before",
+          logs: [log],
+          variables: {}
+        }
+      ],
       variables,
       max: 1,
       scenario
@@ -174,7 +179,13 @@ describe("GameState", () => {
       })
     ]);
     const state = new GameState({
-      data,
+      data: [
+        {
+          label: "before",
+          logs: [log],
+          variables: {}
+        }
+      ],
       variables,
       max: 1,
       scenario
@@ -301,5 +312,40 @@ describe("GameState", () => {
     assert.throws(() => {
       state.getValue(target);
     }, core.GameError);
+  });
+
+  it("スナップショットを作成できる", () => {
+    const variables: core.Variables = {
+      builtin: {},
+      current: {
+        test: 0
+      },
+      system: {}
+    };
+    const scenario = new core.Scenario([
+      new core.Scene({
+        label: "test",
+        frames: [new core.Frame([])]
+      })
+    ]);
+    scenario.backlog = [log];
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1,
+      scenario
+    });
+    const expected: core.SaveData = {
+      label: "test",
+      logs: [
+        {
+          frame: 0
+        }
+      ],
+      variables: {
+        test: 0
+      }
+    };
+    assert.deepEqual(state.createSnapshot(), expected);
   });
 });
