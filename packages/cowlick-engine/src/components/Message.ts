@@ -180,7 +180,8 @@ export class Message extends al.Label {
       textColor,
       width: params.width,
       x: params.x,
-      y: params.y
+      y: params.y,
+      fixLineGap: true
     };
   }
 }
