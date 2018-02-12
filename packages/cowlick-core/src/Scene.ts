@@ -42,7 +42,7 @@ export class Scene {
     if (!this.cacheAssetIds) {
       this.cacheAssetIds = [];
       for (const f of this.frames) {
-        this.cacheAssetIds = this.cacheAssetIds.concat(f.assetIds);
+        this.cacheAssetIds.push(...f.assetIds);
       }
     }
     return this.cacheAssetIds;

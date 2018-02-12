@@ -16,7 +16,7 @@ export let dependencies: string[];
 export function contents(c: core.Script<any>[], cs: core.Script<any>[][]): core.Script<any>[] {
   var result = c;
   for (const c of cs) {
-    result = result.concat(c);
+    result.push(...c);
   }
   return result;
 }

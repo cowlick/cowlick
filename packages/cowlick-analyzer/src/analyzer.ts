@@ -505,7 +505,7 @@ function userDefined(original: core.Script<any>): estree.ObjectExpression {
 function visitScripts(scripts: core.Script<any>[], options: VisitorOptions, l: number) {
   let result: estree.ObjectExpression[] = [];
   for (const [i, s] of scripts.entries()) {
-    result = result.concat(visit(s, nestOptions(options, l + i)));
+    result.push(...visit(s, nestOptions(options, l + i)));
   }
   return result;
 }
@@ -561,7 +561,7 @@ function visit(original: core.Script<any>, options: VisitorOptions): estree.Obje
 function frame(original: ast.Frame, scene: string, index: number, state: State): estree.NewExpression {
   let elements: estree.ObjectExpression[] = [];
   for (const [i, s] of original.scripts.entries()) {
-    elements = elements.concat(visit(s, {scene, frame: index, indexes: [i], state}));
+    elements.push(...visit(s, {scene, frame: index, indexes: [i], state}));
   }
   const result: estree.NewExpression = {
     type: NewExpression,
