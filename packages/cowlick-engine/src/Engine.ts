@@ -96,12 +96,12 @@ export class Engine {
 }
 
 /**
- * シングルプレー用ノベルエンジンインスタンス
+ * ノベルエンジンインスタンス
  */
 export const engine = new Engine(g.game, {id: "0"});
 
 /**
- * マルチプレー用エンジンを準備する。
+ * エンジンを準備する。
  *
  * @param player
  */
