@@ -7,7 +7,7 @@
     "start": "akashic-sandbox .",
     "scan:assets": "npm run copy:images && akashic scan asset",
     "copy:images": "cp ../../docs/images/cowlick.png ./image",
-    "bundle": "akashic export html --output ../../dist -M && cp ../../docs/images/favicon.ico ../../dist"
+    "bundle": "akashic export html --output ../../dist -M --strip && cp ../../docs/images/favicon.ico ../../dist"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.2",
