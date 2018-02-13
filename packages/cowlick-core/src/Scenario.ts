@@ -126,7 +126,9 @@ export class Scenario {
     const result: SaveData = {
       label: this.scene.label,
       variables,
-      logs: this.logs.slice() // 以降の変更を反映したくないのでshallow copy
+      logs: this.logs.map(x => ({
+        frame: x.frame
+      }))
     };
     if (description) {
       result.description = description;

@@ -68,14 +68,43 @@ describe("GameState", () => {
     });
     const expected: core.SaveData = {
       label: "test",
-      logs: [
-        {
-          frame: 0
-        }
-      ],
+      logs: [log],
       variables: {
         test: 0
       }
+    };
+    const actual = state.save({index: 0});
+    assert.deepEqual(actual, expected);
+  });
+
+  it("テキストログはセーブデータに含めない", () => {
+    const variables = {
+      builtin: {},
+      current: {},
+      system: {}
+    };
+    const scenario = new core.Scenario([
+      new core.Scene({
+        label: "test",
+        frames: [new core.Frame([])]
+      })
+    ]);
+    scenario.backlog = [
+      {
+        frame: 0,
+        text: "log"
+      }
+    ];
+    const state = new GameState({
+      data: [],
+      variables,
+      max: 1,
+      scenario
+    });
+    const expected: core.SaveData = {
+      label: "test",
+      logs: [log],
+      variables: {}
     };
     const actual = state.save({index: 0});
     assert.deepEqual(actual, expected);
@@ -104,11 +133,7 @@ describe("GameState", () => {
     });
     const expected: core.SaveData = {
       label: "test",
-      logs: [
-        {
-          frame: 0
-        }
-      ],
+      logs: [log],
       variables: {
         test: 0
       },
@@ -149,9 +174,7 @@ describe("GameState", () => {
     const expected: core.SaveData = {
       label: "test",
       logs: [
-        {
-          frame: 0
-        },
+        log,
         {
           frame: 1
         }
@@ -337,11 +360,7 @@ describe("GameState", () => {
     });
     const expected: core.SaveData = {
       label: "test",
-      logs: [
-        {
-          frame: 0
-        }
-      ],
+      logs: [log],
       variables: {
         test: 0
       }
