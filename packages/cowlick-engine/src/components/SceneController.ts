@@ -202,19 +202,25 @@ export class SceneController implements g.Destroyable {
       });
       this.saveLoadScene.prefetch();
     }, this);
-    previousLoadScene.stateChanged.add(state => {
-      if (state === g.SceneState.Destroyed) {
-        this.game.replaceScene(this._current);
+    if (previousLoadScene) {
+      previousLoadScene.stateChanged.add(state => {
+        if (state === g.SceneState.Destroyed) {
+          this.game.replaceScene(this._current);
+        }
+      }, this);
+      switch (previousLoadScene.state) {
+        case g.SceneState.Standby:
+          previousLoadScene.destroy();
+          break;
+        case g.SceneState.Active:
+          // popが終わっていない可能性があるので、1フレーム待ってから破棄する
+          previousGameScene.setTimeout(() => previousLoadScene.destroy(), this.game.fps, this);
+          break;
       }
-    }, this);
-    switch (previousLoadScene.state) {
-      case g.SceneState.Standby:
-        previousLoadScene.destroy();
-        break;
-      case g.SceneState.Active:
-        // popが終わっていない可能性があるので、1フレーム待ってから破棄する
-        previousGameScene.setTimeout(() => previousLoadScene.destroy(), this.game.fps, this);
-        break;
+    } else if (this.game.scene() === previousGameScene) {
+      this.game.replaceScene(this._current);
+    } else {
+      this.game.pushScene(this._current);
     }
   }
 
