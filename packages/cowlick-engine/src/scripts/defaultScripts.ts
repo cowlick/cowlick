@@ -102,7 +102,6 @@ function choice(controller: SceneController, choice: core.Choice) {
 }
 
 function createLink(scene: Scene, link: core.Link) {
-  const game = scene.game;
   const params: LabelButtonParameters = {
     scene,
     width: link.width,
@@ -169,7 +168,7 @@ function click(controller: SceneController, scripts: core.Script<any>[]) {
   }, scene);
 }
 
-function skip(controller: SceneController, data?: any) {
+function skip(controller: SceneController, _: any) {
   controller.current.requestNextFrame();
 }
 
@@ -290,11 +289,11 @@ function removeLayer(controller: SceneController, target: core.RemoveLayer) {
   controller.current.removeLayer(target.name);
 }
 
-function clearSystemVariables(controller: SceneController, data: any) {
+function clearSystemVariables(controller: SceneController, _: any) {
   controller.current.gameState.variables.system = {};
 }
 
-function clearCurrentVariables(controller: SceneController, data: any) {
+function clearCurrentVariables(controller: SceneController, _: any) {
   controller.current.gameState.variables.current = {};
 }
 
@@ -348,13 +347,13 @@ function slider(controller: SceneController, info: core.Slider) {
   controller.current.appendLayer(s, info.layer);
 }
 
-export function autoMode(controller: SceneController, data: any) {
+export function autoMode(controller: SceneController, _: any) {
   if (controller.current.gameState.getValue({type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode})) {
     controller.current.setAutoTrigger();
   }
 }
 
-function closeLoadScene(controller: SceneController, data: any) {
+function closeLoadScene(controller: SceneController, _: any) {
   controller.closeSaveLoadScene();
 }
 

@@ -201,8 +201,7 @@ export class GameScene extends Scene {
     this.storage = new Storage({
       storage: this.game.storage,
       player: this.player,
-      state: this._gameState,
-      scenario: this.scenario
+      state: this._gameState
     });
     // ゲーム中にそこそこの頻度で実行されるタイミング、という点からここで保存している
     this.storage.saveBuiltinVariables();

@@ -1,6 +1,5 @@
 "use strict";
 import {Frame} from "./Frame";
-import {SaveData} from "./SaveData";
 
 export interface SceneParameters {
   label: string;

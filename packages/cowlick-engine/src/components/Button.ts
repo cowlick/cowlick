@@ -1,5 +1,4 @@
 "use strict";
-import {Scene} from "cowlick-core";
 
 export interface ButtonParameters {
   scene: g.Scene;
@@ -54,7 +53,7 @@ export class Button extends g.Pane {
     this.modified();
   }
 
-  private onPointDown(e: g.PointDownEvent) {
+  private onPointDown(_: g.PointDownEvent) {
     if (!this.pushed) {
       this.push();
     }
@@ -79,7 +78,7 @@ export class Button extends g.Pane {
     }
   }
 
-  private onPointUp(e: g.PointUpEvent) {
+  private onPointUp(_: g.PointUpEvent) {
     if (this.pushed) {
       this.onClick.fire(this);
       this.unpush();

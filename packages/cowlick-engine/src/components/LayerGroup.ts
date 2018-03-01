@@ -1,5 +1,5 @@
 "use strict";
-import {LayerConfig, Layer, GameError} from "cowlick-core";
+import {LayerConfig, GameError} from "cowlick-core";
 
 export class LayerGroup {
   private scene: g.Scene;

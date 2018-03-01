@@ -1,5 +1,5 @@
 "use strict";
-import {Scenario, Save, SaveData} from "cowlick-core";
+import {Save, SaveData} from "cowlick-core";
 import {GameState} from "./GameState";
 import {Region, gameId} from "../Constant";
 
@@ -7,20 +7,17 @@ export interface StorageParameters {
   storage: g.Storage;
   state: GameState;
   player: g.Player;
-  scenario: Scenario;
 }
 
 export class Storage {
   private state: GameState;
   private storage: g.Storage;
   private player: g.Player;
-  private scenario: Scenario;
 
   constructor(params: StorageParameters) {
     this.storage = params.storage;
     this.player = params.player;
     this.state = params.state;
-    this.scenario = params.scenario;
   }
 
   load(index: number): SaveData {

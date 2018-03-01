@@ -1,7 +1,6 @@
 "use strict";
 import {join} from "path";
 import * as escodegen from "escodegen";
-import {Scenario} from "./ast";
 import {writeFile} from "./file";
 import {GeneratedScene} from "./analyzer";
 

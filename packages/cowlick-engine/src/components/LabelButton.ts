@@ -1,6 +1,5 @@
 "use strict";
 import {ButtonParameters, Button} from "./Button";
-import {Scene} from "./Scene";
 import {GameState} from "../models/GameState";
 import {BuiltinVariable, VariableType} from "cowlick-core";
 import {Config} from "cowlick-config";

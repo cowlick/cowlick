@@ -4,7 +4,6 @@ import * as estree from "estree";
 import * as estraverse from "estraverse";
 import * as core from "cowlick-core";
 import * as ast from "cowlick-analyzer";
-import {Script} from "cowlick-core";
 
 export interface KeyValuePair {
   key: string;
@@ -143,7 +142,7 @@ const varF = "f";
 export function variable(expression: string): core.Variable {
   let value: core.Variable;
   estraverse.traverse(acorn.parse(expression), {
-    enter: function(node, parent) {
+    enter: function(node, _) {
       if (node.type === "Program" && node.body.length === 1) {
         const statement = node.body[0];
         if (statement.type === "ExpressionStatement") {
@@ -259,9 +258,9 @@ function replaceVariable(node: estree.MemberExpression) {
   }
 }
 
-function traverseEval(original: string, not?: boolean): estree.Node {
+function traverseEval(original: string): estree.Node {
   return estraverse.replace(acorn.parse(original), {
-    leave: (node, parent) => {
+    leave: (node, _) => {
       switch (node.type) {
         case MemberExpression:
           replaceVariable(node);

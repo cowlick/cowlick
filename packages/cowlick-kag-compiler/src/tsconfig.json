@@ -8,6 +8,10 @@
     "noLib": false,
     "sourceMap": false,
     "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "declaration": true,
     "outDir": "../lib"
   },

@@ -5,7 +5,6 @@ import {Button} from "./Button";
 import {LabelButton} from "./LabelButton";
 import {Scene} from "./Scene";
 import {GameState} from "../models/GameState";
-import {ScriptManager} from "../scripts/ScriptManager";
 
 export interface SaveLoadSceneParameters {
   game: g.Game;

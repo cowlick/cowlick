@@ -6,7 +6,6 @@ import {filename} from "./file";
 import * as Tag from "./constant";
 import * as ast from "./ast";
 import {InlineScript} from "./InlineScript";
-import {Script} from "cowlick-core";
 
 /**
  * 生成されたシーン
@@ -74,15 +73,6 @@ const corePackage: estree.Identifier = {
   name: "core"
 };
 
-const Scenario: estree.MemberExpression = {
-  type: MemberExpression,
-  object: corePackage,
-  property: {
-    type: Identifier,
-    name: "Scenario"
-  },
-  computed: false
-};
 const Scene: estree.MemberExpression = {
   type: MemberExpression,
   object: corePackage,
@@ -316,7 +306,7 @@ function programToExportFunction(original: estree.Program, requireReturn: boolea
 
 function exportFunction(original: estree.Node, requireReturn: boolean) {
   return estraverse.replace(original, {
-    leave: (node, path) => {
+    leave: (node, _) => {
       switch (node.type) {
         case Program:
           node.body = [programToExportFunction(node, requireReturn)];

@@ -1,9 +1,7 @@
 "use strict";
 import {Image} from "cowlick-core";
-import {Config} from "cowlick-config";
 import {Button} from "./Button";
-import {Scene} from "./Scene";
-import {createFrameSprite, createImage} from "./Image";
+import {createFrameSprite} from "./Image";
 
 export class ImageButton extends Button {
   private image: g.FrameSprite;
