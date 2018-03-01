@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es5",
     "module": "commonjs",
     "lib": [
       "es2017"
@@ -13,12 +13,10 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "declaration": true,
-    "outDir": "../lib"
+    "outDir": "./lib"
   },
   "files": [
-    "../node_modules/@akashic/akashic-engine/lib/main.d.ts",
-    "./action.ts",
-    "./cli.ts",
-    "./index.ts"
+    "./node_modules/@akashic/akashic-engine/lib/main.d.ts",
+    "./src/index.ts"
   ]
 }

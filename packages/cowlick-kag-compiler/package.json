@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc -p ./src && npm run pegjs",
+    "build": "tsc -p ./tsconfig.cli.json && npm run pegjs",
     "test": "mocha --compilers ts:espower-typescript/guess test/*.ts",
     "pegjs": "pegjs --output ./resources/kag.js ./resources/kag.pegjs"
   },

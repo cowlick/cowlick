@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc -p ./src",
+    "build": "tsc -p ./tsconfig.lib.json",
     "test": "mocha --compilers ts:espower-typescript/guess test/*.ts"
   },
   "author": "pocketberserker",
