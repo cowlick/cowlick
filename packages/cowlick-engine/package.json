@@ -27,13 +27,13 @@
     "cowlick-core": "^0.4.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.0.3",
+    "@akashic/akashic-engine": "2.1.1",
     "@types/mocha": "2.2.45",
-    "@types/node": "8.5.2",
+    "@types/node": "9.4.7",
     "@xnv/headless-akashic": "0.0.1",
     "espower-typescript": "8.1.2",
     "mocha": "3.5.3",
     "power-assert": "1.4.4",
-    "typescript": "2.6.2"
+    "typescript": "2.7.2"
   }
 }
