@@ -29,14 +29,6 @@ export class ImageButton extends Button {
 
   static create(scene: g.Scene, image: Image): Button {
     const asset = scene.assets[image.assetId] as g.ImageAsset;
-    if (image.frame) {
-      if (!("width" in image.frame)) {
-        image.frame.width = asset.width / 3;
-      }
-      if (!("height" in image.frame)) {
-        image.frame.height = asset.height;
-      }
-    }
     return new ImageButton(scene, createFrameSprite(scene, asset, image));
   }
 }
