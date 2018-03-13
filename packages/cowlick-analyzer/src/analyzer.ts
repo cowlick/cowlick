@@ -2,7 +2,6 @@
 import * as estree from "estree";
 import * as estraverse from "estraverse";
 import * as core from "cowlick-core";
-import {filename} from "./file";
 import * as Tag from "./constant";
 import * as ast from "./ast";
 import {InlineScript} from "./InlineScript";
@@ -357,7 +356,7 @@ function condition(original: ast.Condition, options: VisitorOptions): estree.Obj
 }
 
 function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpression {
-  const label = original.scene ? filename(original.scene) : options.scene;
+  const label = "scene" in original ? original.scene : options.scene;
   const data = object([property("label", literal(label))]);
   const result = object([property("tag", literal(core.Tag.jump)), property("data", data)]);
   if (original.frame) {
