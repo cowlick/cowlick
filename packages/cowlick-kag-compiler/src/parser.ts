@@ -9,9 +9,14 @@ interface ParseResult {
   dependencies: string[];
 }
 
-async function parseScene(target: string, run: Run<kag.Result>): Promise<ParseResult> {
-  const input = await analyzer.readFile(target, "utf8");
-  const result = await run(`Parsing ${target}`, async () => kag.parse(input));
+async function parseScene(target: string, baseDir: string, run: Run<kag.Result>): Promise<ParseResult> {
+  const relative = path.dirname(target);
+  let filePath = path.join(baseDir, target);
+  if (path.extname(filePath) === "") {
+    filePath = filePath + ".ks";
+  }
+  const input = await analyzer.readFile(filePath, "utf8");
+  const result = await run(`Parsing ${target}`, async () => kag.parse(input, {base: baseDir, relative}));
   const scene: analyzer.Scene = {
     label: analyzer.filename(target),
     frames: result.frames
@@ -26,13 +31,12 @@ export async function parse(baseDir: string, run: Run<kag.Result>): Promise<anal
   let targets = ["first.ks"];
   const scenario: analyzer.Scene[] = [];
   while (targets.length !== 0) {
-    const filePath = path.resolve(baseDir, targets.pop());
-    const result = await parseScene(filePath, run);
+    const result = await parseScene(targets.pop(), baseDir, run);
     scenario.push(result.scene);
 
     // ファイル登場順に1度だけ解析対象として追加する
     for (const d of result.dependencies) {
-      if (targets.some(t => t === d) === false && scenario.some(s => s.label === analyzer.filename(d)) === false) {
+      if ((targets.some(t => t === d) || scenario.some(s => s.label === d)) === false) {
         targets.push(d);
       }
     }

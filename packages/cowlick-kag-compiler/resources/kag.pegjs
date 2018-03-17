@@ -1,6 +1,10 @@
 {
   var b = require("../lib/action");
-  b.dependencies = [];
+  b.setup({
+    base: options.base,
+    relative: options.relative,
+    dependencies: []
+  });
 }
 
 Start
@@ -8,10 +12,7 @@ Start
 
 Frames
   = fs:Frame+ Newline* EOF {
-    return {
-      dependencies: b.dependencies,
-      frames: fs
-    };
+    return b.frames(fs);
   }
 
 Frame

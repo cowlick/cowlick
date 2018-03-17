@@ -22,11 +22,12 @@ describe("KAGParser", () => {
 
     files.forEach((filePath: string) => {
       const baseName = filePath.substr(0, filePath.length - "/content.ks".length).substr(path.length);
-      const astFilePath = `${path}${baseName}/content.ast`;
+      const basePath = `${path}${baseName}`;
+      const astFilePath = `${basePath}/content.ast`;
       it(`${filePath}`, () => {
         const text = fs.readFileSync(filePath, "utf8");
         try {
-          const actual = kag.parse(text);
+          const actual = kag.parse(text, {base: basePath, relative: ""});
           const expectedAST = fs.readFileSync(astFilePath, "utf8");
           assert.deepEqual(actual.frames, JSON.parse(expectedAST));
         } catch (e) {

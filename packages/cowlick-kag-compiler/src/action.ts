@@ -4,13 +4,24 @@ import * as estree from "estree";
 import * as estraverse from "estraverse";
 import * as core from "cowlick-core";
 import * as ast from "cowlick-analyzer";
+import * as path from "path";
 
 export interface KeyValuePair {
   key: string;
   value: any;
 }
 
-export let dependencies: string[];
+export interface Context {
+  base: string;
+  relative: string;
+  dependencies: string[];
+}
+
+let context: Context;
+
+export function setup(ctx: Context) {
+  context = ctx;
+}
 
 export function contents(c: core.Script<any>[], cs: core.Script<any>[][]): core.Script<any>[] {
   var result = c;
@@ -18,6 +29,13 @@ export function contents(c: core.Script<any>[], cs: core.Script<any>[][]): core.
     result.push(...c);
   }
   return result;
+}
+
+export function frames(frames: ast.Frame[]) {
+  return {
+    dependencies: context.dependencies,
+    frames
+  };
 }
 
 export function frame(scripts: core.Script<any>[], label?: string): ast.Frame {
@@ -304,9 +322,16 @@ export function trigger(enabled: boolean): core.Script<core.Trigger> {
   };
 }
 
+function pathToSceneName(scene: string): string {
+  const full = path.relative(context.base, path.join(context.base, context.relative, scene));
+  const dir = path.dirname(full);
+  return path.join(dir, ast.filename(scene));
+}
+
 export function jump(data: ast.Jump): core.Script<ast.Jump> {
   if (data.scene) {
-    dependencies.push(data.scene);
+    data.scene = pathToSceneName(data.scene);
+    context.dependencies.push(data.scene);
   }
   return {
     tag: core.Tag.jump,
@@ -328,11 +353,10 @@ export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): core.Script<ast
 
 export function choiceItem(text: string, data: ast.Jump, condition?: string): ast.ChoiceItem {
   if (data.scene) {
-    dependencies.push(data.scene);
+    context.dependencies.push(data.scene);
   }
   const result: ast.ChoiceItem = {
-    tag: core.Tag.jump,
-    data,
+    ...jump(data),
     text
   };
   if (condition) {
