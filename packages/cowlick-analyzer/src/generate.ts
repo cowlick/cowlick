@@ -1,11 +1,19 @@
 "use strict";
-import {join} from "path";
+import {join, dirname} from "path";
 import * as escodegen from "escodegen";
-import {writeFile} from "./file";
+import {mkdir, writeFile} from "./file";
 import {GeneratedScene} from "./analyzer";
 
 export async function generate(targetDir: string, scenario: GeneratedScene[]) {
   for (const scene of scenario) {
-    await writeFile(join(targetDir, `${scene.label}.js`), escodegen.generate(scene.source));
+    const target = join(targetDir, `${scene.label}.js`);
+    try {
+      await mkdir(dirname(target));
+    } catch (e) {
+      if (e.code !== "EEXIST") {
+        throw e;
+      }
+    }
+    await writeFile(target, escodegen.generate(scene.source));
   }
 }
