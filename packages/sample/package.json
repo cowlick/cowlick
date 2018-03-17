@@ -1,6 +1,6 @@
 {
   "name": "cowlick-sample",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "scripts": {
     "build": "cowlick-kag-compiler ./scenario -o ./script && tsc -p . && npm run scan:assets",
@@ -23,7 +23,7 @@
     "@akashic/akashic-engine": "2.1.1",
     "@akashic/akashic-sandbox": "0.13.17",
     "@types/node": "9.4.7",
-    "cowlick-kag-compiler": "^0.4.1",
+    "cowlick-kag-compiler": "^0.4.2",
     "typescript": "2.7.2"
   }
 }

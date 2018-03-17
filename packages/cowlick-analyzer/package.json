@@ -1,6 +1,6 @@
 {
   "name": "cowlick-analyzer",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "script analyzer for cowlick",
   "main": "lib/index.js",
   "files": [
