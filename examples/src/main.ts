@@ -1,5 +1,5 @@
 "use strict";
-import {engine} from "cowlick-engine";
+import {engine} from "@cowlick/engine";
 
 module.exports = (param: g.GameMainParameterObject) => {
   if (param.snapshot) {

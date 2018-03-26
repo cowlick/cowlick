@@ -1,7 +1,7 @@
 "use strict";
 import * as tl from "@akashic-extension/akashic-timeline";
-import * as core from "cowlick-core";
-import * as novel from "cowlick-engine";
+import * as core from "@cowlick/core";
+import * as novel from "@cowlick/engine";
 
 interface Logo extends core.Fade {
   wait: number;

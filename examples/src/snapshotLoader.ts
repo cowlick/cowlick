@@ -1,5 +1,5 @@
 "use strict";
-import {engine, Snapshot} from "cowlick-engine";
+import {engine, Snapshot} from "@cowlick/engine";
 
 module.exports = (snapshot: Snapshot) => {
   g._require(g.game, "load")(engine);

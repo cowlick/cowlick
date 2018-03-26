@@ -1,0 +1,25 @@
+{
+  "name": "@cowlick/core",
+  "version": "0.4.0",
+  "description": "core models for cowlick",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc -p ."
+  },
+  "author": "pocketberserker",
+  "license": "MIT",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cowlick/cowlick.git"
+  },
+  "devDependencies": {
+    "@akashic/akashic-engine": "2.1.1",
+    "@types/node": "9.4.7",
+    "typescript": "2.7.2"
+  }
+}

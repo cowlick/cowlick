@@ -1,0 +1,29 @@
+var core = require("@cowlick/core");
+
+module.exports = new core.Scene({
+  label: "content",
+  frames: [
+    new core.Frame([
+      {
+        tag: "removeLayer",
+        data: {
+          name: "choice"
+        }
+      },
+      {
+        tag: "text",
+        data: {
+          clear: true,
+          values: [
+            "テスト: ",
+            {
+              type: "system",
+              name: "test"
+            },
+            "\ntest"
+          ]
+        }
+      }
+    ])
+  ]
+});

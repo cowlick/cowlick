@@ -12,18 +12,18 @@
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.2",
     "@akashic-extension/akashic-timeline": "2.0.0",
+    "@cowlick/config": "^0.4.0",
+    "@cowlick/core": "^0.4.0",
+    "@cowlick/engine": "^0.4.1",
     "@pocketberserker/akashic-pagination": "0.0.4",
-    "@xnv/akashic-scrollable": "0.0.4",
-    "cowlick-config": "^0.4.0",
-    "cowlick-core": "^0.4.0",
-    "cowlick-engine": "^0.4.1"
+    "@xnv/akashic-scrollable": "0.0.4"
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.3.0",
     "@akashic/akashic-engine": "2.1.1",
     "@akashic/akashic-sandbox": "0.13.17",
+    "@cowlick/kag-compiler": "^0.4.2",
     "@types/node": "9.4.7",
-    "cowlick-kag-compiler": "^0.4.2",
     "shx": "0.2.2",
     "typescript": "2.7.2"
   }
