@@ -3,16 +3,12 @@
     "scripts": [
       {
         "tag": "jump",
-        "data": {
-          "scene": "content"
-        }
+        "scene": "content"
       },
       {
         "tag": "jump",
-        "data": {
-          "scene": "content",
-          "frame": "test"
-        }
+        "scene": "content",
+        "frame": "test"
       }
     ]
   },
@@ -21,11 +17,9 @@
     "scripts": [
       {
         "tag": "text",
-        "data": {
-          "values": [
-            "テスト"
-          ]
-        }
+        "values": [
+          "テスト"
+        ]
       }
     ]
   }

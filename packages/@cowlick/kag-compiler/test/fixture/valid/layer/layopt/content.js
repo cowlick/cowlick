@@ -5,14 +5,12 @@ module.exports = new core.Scene({
   frames: [
     new core.Frame([
       {
-        tag: "layerConfig",
-        data: {
-          name: "test",
-          x: 2,
-          y: 1,
-          opacity: 0,
-          visible: true
-        }
+        tag: "layer",
+        name: "test",
+        x: 2,
+        y: 1,
+        opacity: 0,
+        visible: true
       }
     ])
   ]

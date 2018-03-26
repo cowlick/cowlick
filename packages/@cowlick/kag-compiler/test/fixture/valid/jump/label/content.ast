@@ -4,9 +4,7 @@
     "scripts": [
       {
         "tag": "jump",
-        "data": {
-          "frame": "test"
-        }
+        "frame": "test"
       }
     ]
   }

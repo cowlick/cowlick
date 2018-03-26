@@ -3,79 +3,71 @@
     "scripts": [
       {
         "tag": "ifElse",
-        "data": {
-          "conditions": [
-            {
-              "expression": {
-                "type": "Program",
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                      "type": "Literal",
-                      "value": true,
-                      "raw": "true"
-                    }
-                  }
-                ],
-                "sourceType": "script"
-              },
-              "scripts": [
+        "conditions": [
+          {
+            "tag": "condition",
+            "expression": {
+              "type": "Program",
+              "body": [
                 {
-                  "tag": "playAudio",
-                  "data": {
-                    "assetId": "test",
-                    "group": "bgm"
-                  }
-                },
-                {
-                  "tag": "text",
-                  "data": {
-                    "values": [
-                      "first"
-                    ]
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "Literal",
+                    "value": true,
+                    "raw": "true"
                   }
                 }
-              ]
+              ],
+              "sourceType": "script"
             },
-            {
-              "expression": {
-                "type": "Program",
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                      "type": "Literal",
-                      "value": false,
-                      "raw": "false"
-                    }
-                  }
-                ],
-                "sourceType": "script"
+            "scripts": [
+              {
+                "tag": "playAudio",
+                "assetId": "test",
+                "group": "bgm"
               },
-              "scripts": [
-                {
-                  "tag": "text",
-                  "data": {
-                    "values": [
-                      "second"
-                    ]
-                  }
-                }
-              ]
-            }
-          ],
-          "elseBody": [
-            {
-              "tag": "text",
-              "data": {
+              {
+                "tag": "text",
                 "values": [
-                  "third"
+                  "first"
                 ]
               }
-            }
-          ]
-        }
+            ]
+          },
+          {
+            "tag": "condition",
+            "expression": {
+              "type": "Program",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "Literal",
+                    "value": false,
+                    "raw": "false"
+                  }
+                }
+              ],
+              "sourceType": "script"
+            },
+            "scripts": [
+              {
+                "tag": "text",
+                "values": [
+                  "second"
+                ]
+              }
+            ]
+          }
+        ],
+        "elseBody": [
+          {
+            "tag": "text",
+            "values": [
+              "third"
+            ]
+          }
+        ]
       }
     ]
   }

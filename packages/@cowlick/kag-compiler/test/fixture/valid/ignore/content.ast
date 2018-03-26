@@ -3,42 +3,39 @@
     "scripts": [
       {
         "tag": "ifElse",
-        "data": {
-          "conditions": [
-            {
-              "expression": {
-                "type": "Program",
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                      "type": "UnaryExpression",
-                      "operator": "!",
-                      "prefix": true,
-                      "argument": {
-                        "type": "Literal",
-                        "value": true,
-                        "raw": "true"
-                      }
+        "conditions": [
+          {
+            "tag": "condition",
+            "expression": {
+              "type": "Program",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "UnaryExpression",
+                    "operator": "!",
+                    "prefix": true,
+                    "argument": {
+                      "type": "Literal",
+                      "value": true,
+                      "raw": "true"
                     }
                   }
-                ],
-                "sourceType": "script"
-              },
-              "scripts": [
-                {
-                  "tag": "text",
-                  "data": {
-                    "values": [
-                      "first"
-                    ]
-                  }
                 }
-              ]
-            }
-          ],
-          "elseBody": []
-        }
+              ],
+              "sourceType": "script"
+            },
+            "scripts": [
+              {
+                "tag": "text",
+                "values": [
+                  "first"
+                ]
+              }
+            ]
+          }
+        ],
+        "elseBody": []
       }
     ]
   }

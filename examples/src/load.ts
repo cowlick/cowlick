@@ -3,7 +3,10 @@ import * as tl from "@akashic-extension/akashic-timeline";
 import * as core from "@cowlick/core";
 import * as novel from "@cowlick/engine";
 
-interface Logo extends core.Fade {
+interface Logo extends core.ScriptNode {
+  tag: "logo";
+  layer: string;
+  duration: number;
   wait: number;
 }
 

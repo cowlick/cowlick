@@ -3,22 +3,17 @@
     "scripts": [
       {
         "tag": "timeout",
-        "data": {
-          "milliseconds": 0,
-          "scripts": [
-            {
-              "tag": "playAudio",
-              "data": {
-                "assetId": "test",
-                "group": "se"
-              }
-            },
-            {
-              "tag": "jump",
-              "data": {}
-            }
-          ]
-        }
+        "milliseconds": 0,
+        "scripts": [
+          {
+            "tag": "playAudio",
+            "assetId": "test",
+            "group": "se"
+          },
+          {
+            "tag": "jump"
+          }
+        ]
       }
     ]
   }

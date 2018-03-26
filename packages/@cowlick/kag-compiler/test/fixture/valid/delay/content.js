@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "messageSpeed",
-        data: {
-          speed: 10
-        }
+        speed: 10
       }
     ])
   ]

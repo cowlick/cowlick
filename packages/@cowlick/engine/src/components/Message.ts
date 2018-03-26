@@ -29,6 +29,7 @@ export class Message extends al.Label {
     this.index = 0;
     this.counter = 0;
     this.original = {
+      tag: core.Tag.text,
       values: []
     };
     this.current = [];
@@ -56,6 +57,7 @@ export class Message extends al.Label {
       this.counter = 0;
     } else {
       this.original = {
+        tag: core.Tag.text,
         values: this.original.values.concat(text.values)
       };
     }

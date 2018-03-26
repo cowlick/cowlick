@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "jump",
-        data: {
-          label: "content"
-        }
+        label: "content"
       }
     ])
   ]

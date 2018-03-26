@@ -178,7 +178,9 @@ LayerOption
 
 Jump
   = "jump" _ scene:StorageAttribute? _ frame:TargetAttribute? {
-    var data = {};
+    var data = {
+      tag: "jump"
+    };
     if(scene) {
       data.scene = scene;
     }
@@ -200,7 +202,9 @@ ClearVar
 
 Timeout
    = "timeout" _ time:("time=" AttributeValue) _ scene:StorageAttribute? _ frame:TargetAttribute? options:JumpOptions {
-    var j = {};
+    var j = {
+      tag: "jump"
+    };
     if(scene) {
       j.scene = scene;
     }
@@ -209,10 +213,11 @@ Timeout
     }
     options.push(b.jump(j));
     var data = {
+      tag: "timeout",
       milliseconds: time[1],
       scripts: options
     };
-    return [b.timeout(data)];
+    return [data];
   }
 
 JumpOptions
@@ -228,7 +233,9 @@ Button
     if(expression) {
       scripts.push(b.evaluate(expression));
     }
-    var j = {};
+    var j = {
+      tag: "jump"
+    };
     if(scene) {
       j.scene = scene;
     }
@@ -237,6 +244,7 @@ Button
     }
     scripts.push(b.jump(j));
     var data = {
+      tag: "button",
       image: {
         assetId: assetId,
         layer: {
@@ -247,7 +255,7 @@ Button
       y: y,
       scripts: scripts
     };
-    return [b.button(data)];
+    return [data];
   }
 
 FreeImage
@@ -257,7 +265,9 @@ FreeImage
 
 Click
   = "click" _ scene:StorageAttribute? _ frame:TargetAttribute? options:JumpOptions {
-    var j = {};
+    var j = {
+      tag: "jump"
+    };
     if(scene) {
       j.scene = scene;
     }
@@ -275,9 +285,11 @@ Delay
 
 Font
   = "font" options:FontOptions {
-    var data = {};
+    var data = {
+      tag: "font"
+    };
     b.concatKeyValues(data, options);
-    return [b.font(data)];
+    return [data];
   }
 
 FontOptions
@@ -333,7 +345,9 @@ Links
 
 Link
   = "@" LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
-    var data = {};
+    var data = {
+      tag: "jump"
+    };
     if(scene) {
       data.scene = scene;
     }
@@ -347,7 +361,9 @@ Link
     }
   }
   / "[" LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
-    var data = {};
+    var data = {
+      tag: "jump"
+    };
     if(scene) {
       data.scene = scene;
     }
@@ -387,29 +403,30 @@ EndScriptTagName = "endscript"
 IfExpression
   = i:If is:Elsif* e:Else? EndIf {
     return [
-      b.ifExpression({
+      {
+        tag: "ifElse",
         conditions: [i].concat(is),
         elseBody: e ? e : []
-      })
+      }
     ];
   }
 
 If
   = "[" IfTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
-    return b.condition(expression, body).data;
+    return b.condition(expression, body);
   }
   / "@" IfTagName _ expression:ExpressionAttribute Newline body:FrameBody {
-    return b.condition(expression, body).data;
+    return b.condition(expression, body);
   }
 
 IfTagName = "if"
 
 Elsif
   = "[" ElsifTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
-    return b.condition(expression, body).data;
+    return b.condition(expression, body);
   }
   / "@" ElsifTagName _ expression:ExpressionAttribute Newline body:FrameBody {
-    return b.condition(expression, body).data;
+    return b.condition(expression, body);
   }
 
 ElsifTagName = "elsif"
@@ -432,10 +449,11 @@ EndIfTagName = "endif"
 IgnoreExpression
   = i:Ignore Newline? EndIgnore {
     return [
-      b.ifExpression({
+      {
+        tag: "ifElse",
         conditions: [i],
         elseBody: []
-      })
+      }
     ];
   }
 

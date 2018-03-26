@@ -1,4 +1,4 @@
-import {Pane, Script, Layer} from "@cowlick/core";
+import * as core from "@cowlick/core";
 
 /**
  * フォント設定
@@ -29,12 +29,12 @@ export interface WindowConfig {
   /**
    * メッセージレイヤに使用するPane
    */
-  message: Pane;
+  message: core.PaneDefinition;
   /**
    * システムUIに使用するスクリプト
    */
   // TODO: 制限を強める
-  system: Script<any>[];
+  system: core.Script[];
 }
 
 /**
@@ -97,7 +97,7 @@ export const defaultConfig: Config = {
   window: {
     message: {
       layer: {
-        name: Layer.message,
+        name: core.LayerKind.message,
         x: 10,
         y: 10
       },

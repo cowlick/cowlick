@@ -5,8 +5,9 @@ module.exports = new core.Scene({
   frames: [
     new core.Frame([
       {
-        tag: "foo",
+        tag: "extension",
         data: {
+          tag: "foo",
           bar: "test",
           buz: "test"
         }

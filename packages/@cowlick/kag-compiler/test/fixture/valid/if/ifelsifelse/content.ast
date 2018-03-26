@@ -3,75 +3,69 @@
     "scripts": [
       {
         "tag": "ifElse",
-        "data": {
-          "conditions": [
-            {
-              "expression": {
-                "type": "Program",
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                      "type": "Literal",
-                      "value": true,
-                      "raw": "true"
-                    }
-                  }
-                ],
-                "sourceType": "script"
-              },
-              "scripts": [
+        "conditions": [
+          {
+            "tag": "condition",
+            "expression": {
+              "type": "Program",
+              "body": [
                 {
-                  "tag": "image",
-                  "data": {
-                    "assetId": "test",
-                    "layer": {
-                      "name": "base"
-                    }
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "Literal",
+                    "value": true,
+                    "raw": "true"
                   }
                 }
-              ]
+              ],
+              "sourceType": "script"
             },
-            {
-              "expression": {
-                "type": "Program",
-                "body": [
-                  {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                      "type": "Literal",
-                      "value": false,
-                      "raw": "false"
-                    }
-                  }
-                ],
-                "sourceType": "script"
-              },
-              "scripts": [
-                {
-                  "tag": "image",
-                  "data": {
-                    "assetId": "test",
-                    "layer": {
-                      "name": "base"
-                    }
-                  }
-                }
-              ]
-            }
-          ],
-          "elseBody": [
-            {
-              "tag": "image",
-              "data": {
+            "scripts": [
+              {
+                "tag": "image",
                 "assetId": "test",
                 "layer": {
                   "name": "base"
                 }
               }
+            ]
+          },
+          {
+            "tag": "condition",
+            "expression": {
+              "type": "Program",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "Literal",
+                    "value": false,
+                    "raw": "false"
+                  }
+                }
+              ],
+              "sourceType": "script"
+            },
+            "scripts": [
+              {
+                "tag": "image",
+                "assetId": "test",
+                "layer": {
+                  "name": "base"
+                }
+              }
+            ]
+          }
+        ],
+        "elseBody": [
+          {
+            "tag": "image",
+            "assetId": "test",
+            "layer": {
+              "name": "base"
             }
-          ]
-        }
+          }
+        ]
       }
     ]
   }

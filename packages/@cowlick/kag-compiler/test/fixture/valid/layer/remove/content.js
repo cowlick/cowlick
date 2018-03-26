@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "removeLayer",
-        data: {
-          name: "test"
-        }
+        name: "test"
       }
     ])
   ]

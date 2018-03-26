@@ -6,17 +6,13 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "playAudio",
-        data: {
-          assetId: "test",
-          group: "se"
-        }
+        assetId: "test",
+        group: "se"
       },
       {
         tag: "stopAudio",
-        data: {
-          assetId: null,
-          group: "se"
-        }
+        assetId: null,
+        group: "se"
       }
     ])
   ]

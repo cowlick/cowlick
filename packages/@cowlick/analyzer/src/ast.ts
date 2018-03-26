@@ -1,5 +1,5 @@
 import * as estree from "estree";
-import {LayerConfig, Script} from "@cowlick/core";
+import * as core from "@cowlick/core";
 
 export type Scenario = Scene[];
 
@@ -9,36 +9,90 @@ export interface Scene {
 }
 
 export interface Frame {
-  scripts: Script<any>[];
+  scripts: Script[];
   label?: string;
 }
 
-export interface Choice {
-  layer: LayerConfig;
+export type Script =
+  core.Layer | core.Image | core.Pane | Button |
+  core.Text | Jump | core.Trigger | Choice | Link |
+  core.Audio | core.ChangeVolume | core.Video | core.Save |
+  core.Load | Eval | Condition | core.RemoveLayer |
+  Backlog | core.Fade | Timeout | IfElse |
+  core.Slider | core.SaveLoadScene | core.MessageSpeed |
+  core.Font | core.RealTimeDisplay | Click | core.Skip |
+  core.ClearSystemVariables | core.ClearCurrentVariables |
+  core.AutoMode | WaitTransition | core.Extension;
+
+export interface Button extends core.ScriptNode {
+  tag: core.Tag.button;
+  image: core.Image;
+  x: number;
+  y: number;
+  scripts: Script[];
+}
+
+export interface Choice extends core.ScriptNode {
+  tag: core.Tag.choice;
+  layer: core.LayerConfig;
   values: ChoiceItem[];
 }
 
-export interface Jump {
+export interface Jump extends core.ScriptNode {
+  tag: core.Tag.jump;
   scene?: string;
   frame?: string;
 }
 
-export interface ChoiceItem extends Script<Jump> {
+export interface ChoiceItem extends Jump {
   text: string;
   condition?: estree.Node;
 }
 
-export interface Condition {
+export interface Link extends core.ScriptNode, core.PaneDefinition {
+  tag: core.Tag.link;
+  width: number;
+  height: number;
+  text: string;
+  fontSize?: number;
+  scripts: Script[];
+}
+
+export interface Eval extends core.ScriptNode {
+  tag: core.Tag.evaluate;
+  program: estree.Node;
+}
+
+export interface Condition extends core.ScriptNode {
+  tag: core.Tag.condition;
   expression: estree.Node;
-  scripts: Script<any>[];
+  scripts: Script[];
 }
 
-export interface IfElse {
+export interface Backlog extends core.ScriptNode {
+  tag: core.Tag.backlog;
+  scripts: Script[];
+}
+
+export interface Timeout extends core.ScriptNode {
+  tag: core.Tag.timeout;
+  milliseconds: number;
+  scripts: Script[];
+}
+
+export interface IfElse extends core.ScriptNode {
+  tag: core.Tag.ifElse
   conditions: Condition[];
-  elseBody: Script<any>[];
+  elseBody: Script[];
 }
 
-export interface WaitTransition {
-  scripts: Script<any>[];
+export interface Click extends core.ScriptNode {
+  tag: core.Tag.click;
+  scripts: Script[];
+}
+
+export interface WaitTransition extends core.ScriptNode {
+  tag: "waitTransition";
+  scripts: Script[];
   skippable?: boolean;
 }

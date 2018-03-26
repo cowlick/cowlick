@@ -5,14 +5,14 @@ import {Script, collectAssetIds} from "./Script";
  * シーンの1フレームを表す。
  */
 export class Frame {
-  private _scripts: Script<any>[];
+  private _scripts: Script[];
   private cacheAssetIds: string[];
 
-  constructor(scripts: Script<any>[]) {
+  constructor(scripts: Script[]) {
     this._scripts = scripts;
   }
 
-  get scripts(): Script<any>[] {
+  get scripts(): Script[] {
     return this._scripts;
   }
 

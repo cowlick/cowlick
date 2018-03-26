@@ -13,10 +13,8 @@ describe("SceneController", () => {
           new core.Frame([
             {
               tag: "jump",
-              data: {
-                label: "1",
-                frame: 0
-              }
+              label: "1",
+              frame: 0
             }
           ])
         ]
@@ -27,10 +25,8 @@ describe("SceneController", () => {
           new core.Frame([
             {
               tag: "jump",
-              data: {
-                label: "0",
-                frame: 0
-              }
+              label: "0",
+              frame: 0
             }
           ])
         ]
@@ -82,8 +78,9 @@ describe("SceneController", () => {
     const controller = createController(config, scriptManager);
     controller.saveLoadScene.stateChanged.add(state => {
       if (state === g.SceneState.Active) {
-        scriptManager.call(controller, {tag: "closeLoadScene"});
+        scriptManager.call(controller, {tag: core.Tag.closeLoadScene});
         controller.jump({
+          tag: "jump",
           label: "1",
           frame: 0
         });
@@ -92,20 +89,18 @@ describe("SceneController", () => {
     controller.start();
     scriptManager.call(controller, {
       tag: core.Tag.openLoadScene,
-      data: {
-        vertical: 10,
-        horizontal: 1,
-        button: 0,
-        padding: 10,
-        base: {
-          layer: {
-            name: core.Layer.system,
-            x: 10,
-            y: 10
-          },
-          width: 580,
-          height: 30
-        }
+      vertical: 10,
+      horizontal: 1,
+      button: 0,
+      padding: 10,
+      base: {
+        layer: {
+          name: core.LayerKind.system,
+          x: 10,
+          y: 10
+        },
+        width: 580,
+        height: 30
       }
     });
   });

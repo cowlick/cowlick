@@ -159,7 +159,7 @@ function literal(value: any): estree.Literal {
 }
 
 function scriptAst(tag: string, data: estree.Property[]): estree.ObjectExpression {
-  return object([property("tag", literal(tag)), property("data", object(data))]);
+  return object([property("tag", literal(tag)), ...data]);
 }
 
 function name(value: string): estree.Property {
@@ -221,10 +221,6 @@ function image(original: core.Image): estree.ObjectExpression {
   return scriptAst(core.Tag.image, imageProperties(original));
 }
 
-function audio(original: core.Script<core.Audio>): estree.ObjectExpression {
-  return scriptAst(original.tag, [assetId(original.data.assetId), property("group", literal(original.data.group))]);
-}
-
 function nestOptions(options: VisitorOptions, i: number): VisitorOptions {
   return {
     scene: options.scene,
@@ -234,14 +230,14 @@ function nestOptions(options: VisitorOptions, i: number): VisitorOptions {
   };
 }
 
-function click(original: core.Script<any>[], options: VisitorOptions): estree.ObjectExpression {
-  return object([
-    property("tag", literal(core.Tag.click)),
-    property("data", {
+function click(original: ast.Script[], options: VisitorOptions): estree.ObjectExpression {
+  return scriptAst(
+    core.Tag.click,
+    [property("scripts", {
       type: ArrayExpression,
       elements: visitScripts(original, options, 0)
-    })
-  ]);
+    })]
+  );
 }
 
 function programToExportFunction(original: estree.Program, requireReturn: boolean) {
@@ -318,7 +314,7 @@ function exportFunction(original: estree.Node, requireReturn: boolean) {
   });
 }
 
-function evaluate(original: estree.Program, options: VisitorOptions): estree.ObjectExpression {
+function evaluate(original: estree.Node, options: VisitorOptions): estree.ObjectExpression {
   const s = new InlineScript({
     scene: options.scene,
     frame: options.frame,
@@ -329,7 +325,7 @@ function evaluate(original: estree.Program, options: VisitorOptions): estree.Obj
   return scriptAst(core.Tag.evaluate, [property("path", literal(s.assetId))]);
 }
 
-function conditionBody(is: InlineScript, scripts: core.Script<any>[], options: VisitorOptions): estree.Property[] {
+function conditionBody(is: InlineScript, scripts: ast.Script[], options: VisitorOptions): estree.Property[] {
   return [
     property("path", literal(is.assetId)),
     property("scripts", {
@@ -357,16 +353,15 @@ function condition(original: ast.Condition, options: VisitorOptions): estree.Obj
 
 function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpression {
   const label = "scene" in original ? original.scene : options.scene;
-  const data = object([property("label", literal(label))]);
-  const result = object([property("tag", literal(core.Tag.jump)), property("data", data)]);
+  const result = object([property("tag", literal(core.Tag.jump)), property("label", literal(label))]);
   if (original.frame) {
-    options.state.replaces.push(f => f(data, label, original.frame));
+    options.state.replaces.push(f => f(result, label, original.frame));
   }
   return result;
 }
 
 function choiceItem(value: ast.ChoiceItem, options: VisitorOptions): estree.ObjectExpression {
-  const result = jump(value.data, options);
+  const result = jump(value, options);
   result.properties.push(property("text", literal(value.text)));
   if (value.condition) {
     const s = new InlineScript({
@@ -391,7 +386,7 @@ function choice(original: ast.Choice, options: VisitorOptions): estree.ObjectExp
   ]);
 }
 
-function timeout(original: core.Timeout, options: VisitorOptions): estree.ObjectExpression {
+function timeout(original: ast.Timeout, options: VisitorOptions): estree.ObjectExpression {
   return scriptAst(core.Tag.timeout, [
     property("milliseconds", literal(original.milliseconds)),
     property("scripts", {
@@ -426,8 +421,7 @@ function waitTransition(original: ast.WaitTransition, options: VisitorOptions): 
       click(
         [
           {
-            tag: core.Tag.skip,
-            data: {}
+            tag: core.Tag.skip
           }
         ],
         options
@@ -437,7 +431,7 @@ function waitTransition(original: ast.WaitTransition, options: VisitorOptions): 
   return scripts;
 }
 
-function button(original: core.Button, options: VisitorOptions): estree.ObjectExpression {
+function button(original: ast.Button, options: VisitorOptions): estree.ObjectExpression {
   return scriptAst(core.Tag.button, [
     property("image", object(imageProperties(original.image))),
     property("x", literal(original.x)),
@@ -449,15 +443,11 @@ function button(original: core.Button, options: VisitorOptions): estree.ObjectEx
   ]);
 }
 
-function flatObjectToAST(tag: string, original: any): estree.ObjectExpression {
-  return scriptAst(tag, Object.entries(original).map(([k, v]) => property(k, literal(v))));
+function flatObjectToAST(original: any): estree.ObjectExpression {
+  return object(Object.entries(original).map(([k, v]) => property(k, literal(v))));
 }
 
-function trigger(original: core.Trigger): estree.ObjectExpression {
-  return object([property("tag", literal(core.Tag.trigger)), property("data", literal(original))]);
-}
-
-function backlog(original: core.Backlog, options: VisitorOptions): estree.ObjectExpression {
+function backlog(original: ast.Backlog, options: VisitorOptions): estree.ObjectExpression {
   return scriptAst(core.Tag.backlog, [
     property("scripts", {
       type: ArrayExpression,
@@ -466,85 +456,124 @@ function backlog(original: core.Backlog, options: VisitorOptions): estree.Object
   ]);
 }
 
-function fontProperties(setting: core.Font): estree.Property[] {
-  const ps: estree.Property[] = [];
-  if ("size" in setting) {
-    ps.push(property("size", literal(setting.size)));
+function paneProperties(original: core.PaneDefinition): estree.Property[] {
+  const ps: estree.Property[] = [
+    layerProperty(original.layer)
+  ];
+  if ("width" in original) {
+    ps.push(property("width", literal(original.width)));
   }
-  if ("color" in setting) {
-    ps.push(property("color", literal(setting.color)));
+  if ("height" in original) {
+    ps.push(property("height", literal(original.height)));
+  }
+  if ("backgroundImage" in original) {
+    ps.push(property("backgroundImage", literal(original.backgroundImage)));
+  }
+  if ("padding" in original) {
+    ps.push(property("padding", literal(original.padding)));
+  }
+  if ("backgroundEffector" in original) {
+    ps.push(property("backgroundEffector", object([property("borderWidth", literal(original.backgroundEffector.borderWidth))])));
+  }
+  if ("touchable" in original) {
+    ps.push(property("touchable", literal(original.touchable)));
   }
   return ps;
 }
 
-function font(original: core.Font): estree.ObjectExpression {
-  return scriptAst(core.Tag.font, fontProperties(original));
+function pane(original: core.Pane): estree.ObjectExpression {
+  return scriptAst(core.Tag.pane, paneProperties(original));
 }
 
-function userDefined(original: core.Script<any>): estree.ObjectExpression {
+function link(original: ast.Link, options: VisitorOptions): estree.ObjectExpression {
+  const ps: estree.Property[] = [
+    ...paneProperties(original),
+    property("text", literal(original.text)),
+    property("scripts", {
+      type: ArrayExpression,
+      elements: visitScripts(original.scripts, options, 0)
+    })
+  ];
+  if ("fontSize" in original) {
+    ps.push(property("fontSize", literal(original.fontSize)));
+  }
+  return scriptAst(core.Tag.button, ps);
+}
+
+function userDefined(original: any): estree.ObjectExpression {
   const ps: estree.Property[] = [];
-  for (const key of Object.keys(original.data)) {
+  for (const key of Object.keys(original)) {
     // TODO: リテラル以外のデータを解析できるようにする
-    const value = literal(original.data[key]);
+    const value = literal(original[key]);
     ps.push(property(key, value));
   }
-  return scriptAst(original.tag, ps);
+  return scriptAst(core.Tag.extension, [property("data", object(ps))]);
 }
 
-function visitScripts(scripts: core.Script<any>[], options: VisitorOptions, l: number) {
-  let result: estree.ObjectExpression[] = [];
+function visitScripts(scripts: ast.Script[], options: VisitorOptions, l: number) {
+  const result: estree.ObjectExpression[] = [];
   for (const [i, s] of scripts.entries()) {
     result.push(...visit(s, nestOptions(options, l + i)));
   }
   return result;
 }
 
-function visit(original: core.Script<any>, options: VisitorOptions): estree.ObjectExpression[] {
+function visit(original: ast.Script, options: VisitorOptions): estree.ObjectExpression[] {
   switch (original.tag) {
     case core.Tag.text:
-      return [text(original.data)];
+      return [text(original)];
+    case core.Tag.pane:
+      return [pane(original)];
     case core.Tag.image:
-      return [image(original.data)];
-    case core.Tag.layerConfig:
-      return [scriptAst(core.Tag.layerConfig, layerConfig(original.data))];
+      return [image(original)];
+    case core.Tag.layer:
+      return [scriptAst(core.Tag.layer, layerConfig(original))];
+    case core.Tag.click:
+      return [click(original.scripts, options)];
+    case core.Tag.evaluate:
+      return [evaluate(original.program, options)];
+    case core.Tag.condition:
+      return [condition(original, options)];
+    case core.Tag.jump:
+      return [jump(original, options)];
+    case core.Tag.choice:
+      return [choice(original, options)];
+    case core.Tag.timeout:
+      return [timeout(original, options)];
+    case core.Tag.ifElse:
+      return [ifElse(original, options)];
+    case Tag.waitTransition:
+      return waitTransition(original, options);
+    case core.Tag.button:
+      return [button(original, options)];
+    case core.Tag.backlog:
+      return [backlog(original, options)];
+    case core.Tag.link:
+      return [link(original, options)];
+    case core.Tag.font:
     case core.Tag.playAudio:
     case core.Tag.stopAudio:
-      return [audio(original)];
-    case core.Tag.click:
-      return [click(original.data, options)];
-    case core.Tag.evaluate:
-      return [evaluate(original.data, options)];
-    case core.Tag.condition:
-      return [condition(original.data, options)];
-    case core.Tag.jump:
-      return [jump(original.data, options)];
-    case core.Tag.choice:
-      return [choice(original.data, options)];
-    case core.Tag.timeout:
-      return [timeout(original.data, options)];
-    case core.Tag.ifElse:
-      return [ifElse(original.data, options)];
-    case Tag.waitTransition:
-      return waitTransition(original.data, options);
-    case core.Tag.button:
-      return [button(original.data, options)];
+    case core.Tag.playVideo:
+    case core.Tag.stopVideo:
     case core.Tag.removeLayer:
-      return [flatObjectToAST(core.Tag.removeLayer, original.data)];
     case core.Tag.trigger:
-      return [trigger(original.data)];
-    case core.Tag.click:
-      return [click(original.data, options)];
-    case core.Tag.backlog:
-      return [backlog(original.data, options)];
     case core.Tag.messageSpeed:
-      return [flatObjectToAST(core.Tag.messageSpeed, original.data)];
-    case core.Tag.font:
-      return [font(original.data)];
     case core.Tag.realTimeDisplay:
-      return [flatObjectToAST(core.Tag.realTimeDisplay, original.data)];
-    default:
-      return [userDefined(original)];
+    case core.Tag.skip:
+    case core.Tag.save:
+    case core.Tag.load:
+    case core.Tag.openSaveScene:
+    case core.Tag.openLoadScene:
+    case core.Tag.clearSystemVariables:
+    case core.Tag.clearCurrentVariables:
+    case core.Tag.autoMode:
+    case core.Tag.fadeIn:
+    case core.Tag.fadeOut:
+      return [flatObjectToAST(original)];
+    case core.Tag.extension:
+      return [userDefined(original.data)];
   }
+  throw new Error("unknown script: "+ JSON.stringify(original));
 }
 
 function frame(original: ast.Frame, scene: string, index: number, state: State): estree.NewExpression {

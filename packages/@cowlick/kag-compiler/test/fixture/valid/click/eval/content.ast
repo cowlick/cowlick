@@ -3,10 +3,10 @@
     "scripts": [
       {
         "tag": "click",
-        "data": [
+        "scripts": [
           {
             "tag": "eval",
-            "data": {
+            "program": {
               "type": "Program",
               "body": [
                 {
@@ -46,8 +46,7 @@
             }
           },
           {
-            "tag": "jump",
-            "data": {}
+            "tag": "jump"
           }
         ]
       }

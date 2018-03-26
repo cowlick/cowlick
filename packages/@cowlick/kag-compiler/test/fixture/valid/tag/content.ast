@@ -2,8 +2,9 @@
   {
     "scripts": [
       {
-        "tag": "foo",
+        "tag": "extension",
         "data": {
+          "tag": "foo",
           "bar": "test",
           "buz": "test"
         }

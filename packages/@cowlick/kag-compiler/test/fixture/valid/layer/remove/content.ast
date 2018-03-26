@@ -3,9 +3,7 @@
     "scripts": [
       {
         "tag": "removeLayer",
-        "data": {
-          "name": "test"
-        }
+        "name": "test"
       }
     ]
   }

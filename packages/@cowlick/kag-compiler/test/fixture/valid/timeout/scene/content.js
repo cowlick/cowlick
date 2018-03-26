@@ -6,32 +6,24 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "timeout",
-        data: {
-          milliseconds: 0,
-          scripts: [
-            {
-              tag: "jump",
-              data: {
-                label: "content"
-              }
-            }
-          ]
-        }
+        milliseconds: 0,
+        scripts: [
+          {
+            tag: "jump",
+            label: "content"
+          }
+        ]
       },
       {
         tag: "timeout",
-        data: {
-          milliseconds: 0,
-          scripts: [
-            {
-              tag: "jump",
-              data: {
-                label: "content",
-                frame: 0
-              }
-            }
-          ]
-        }
+        milliseconds: 0,
+        scripts: [
+          {
+            tag: "jump",
+            label: "content",
+            frame: 0
+          }
+        ]
       }
     ])
   ]

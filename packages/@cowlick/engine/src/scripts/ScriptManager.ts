@@ -18,21 +18,29 @@ export class ScriptManager {
     this.scripts.set(name, f);
   }
 
-  call(controller: SceneController, script: Script<any>) {
-    let f = this.scripts.get(script.tag);
+  call(controller: SceneController, script: Script) {
+    let f: ScriptFunction;
+    let data: any;
+    if (script.tag === Tag.extension) {
+      f = this.scripts.get(script.data.tag);
+      data = script.data;
+    } else {
+      f = this.scripts.get(script.tag);
+      data = script;
+    }
     if (f) {
       try {
-        f(controller, script.data);
-      } catch (e) {
-        if (e instanceof GameError) {
-          this.call(controller, {tag: Tag.exception, data: e});
+        f(controller, data);
+      } catch (error) {
+        if (error instanceof GameError) {
+          this.call(controller, {tag: Tag.exception, error});
         } else {
-          throw e;
+          throw error;
         }
       }
     } else {
-      const data = new GameError("script tag was not registered", script);
-      this.call(controller, {tag: Tag.exception, data});
+      const error = new GameError("script tag was not registered", script);
+      this.call(controller, {tag: Tag.exception, error});
     }
   }
 }

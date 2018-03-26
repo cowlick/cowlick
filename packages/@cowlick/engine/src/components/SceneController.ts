@@ -230,12 +230,14 @@ export class SceneController implements g.Destroyable {
 
   private loadFromSaveData(data: core.SaveData) {
     this.scenario.update(this.game, {
+      tag: core.Tag.jump,
       label: data.label,
       frame: data.logs[0].frame
     });
     this.loadScene(() => {
       for (const l of data.logs.slice(1)) {
         this.jump({
+          tag: core.Tag.jump,
           label: data.label,
           frame: l.frame
         });
@@ -251,8 +253,9 @@ export class SceneController implements g.Destroyable {
         frames: [
           new core.Frame([
             {
-              tag: "",
+              tag: core.Tag.extension,
               data: {
+                tag: "",
                 label
               }
             }

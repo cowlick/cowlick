@@ -3,7 +3,7 @@
     "scripts": [
       {
         "tag": "eval",
-        "data": {
+        "program": {
           "type": "Program",
           "body": [
             {

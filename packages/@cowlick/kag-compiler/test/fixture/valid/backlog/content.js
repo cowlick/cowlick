@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "backlog",
-        data: {
-          scripts: []
-        }
+        scripts: []
       }
     ])
   ]

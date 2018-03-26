@@ -3,18 +3,14 @@
     "scripts": [
       {
         "tag": "waitTransition",
-        "data": {
-          "scripts": [
-            {
-              "tag": "fadeIn",
-              "data": {
-                "layer": "test",
-                "duration": 10
-              }
-            }
-          ],
-          "skippable": true
-        }
+        "scripts": [
+          {
+            "tag": "fadeIn",
+            "layer": "test",
+            "duration": 10
+          }
+        ],
+        "skippable": true
       }
     ]
   },
@@ -22,11 +18,9 @@
     "scripts": [
       {
         "tag": "text",
-        "data": {
-          "values": [
-            "テスト"
-          ]
-        }
+        "values": [
+          "テスト"
+        ]
       }
     ]
   }

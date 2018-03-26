@@ -159,10 +159,10 @@ function stopVideo(controller: SceneController, video: core.Video) {
   controller.current.stopVideo(video);
 }
 
-function click(controller: SceneController, scripts: core.Script<any>[]) {
+function click(controller: SceneController, data: core.Click) {
   const scene = controller.current;
   scene.pointUpCapture.addOnce(() => {
-    for (const s of scripts) {
+    for (const s of data.scripts) {
       Engine.scriptManager.call(controller, s);
     }
   }, scene);
@@ -173,11 +173,11 @@ function skip(controller: SceneController, _: any) {
 }
 
 function trigger(controller: SceneController, trigger: core.Trigger) {
-  switch (trigger) {
-    case core.Trigger.Off:
+  switch (trigger.value) {
+    case core.TriggerValue.Off:
       controller.current.disableWindowClick();
       break;
-    case core.Trigger.On:
+    case core.TriggerValue.On:
       controller.current.enableWindowClick();
       break;
   }
@@ -208,7 +208,7 @@ function condition(controller: SceneController, cond: core.Condition) {
 }
 
 function backlog(controller: SceneController, data: core.Backlog) {
-  const layer = {name: core.Layer.backlog};
+  const layer = {name: core.LayerKind.backlog};
 
   for (const s of data.scripts) {
     Engine.scriptManager.call(controller, s);
@@ -217,7 +217,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
   const scene = controller.current;
   const enabled = scene.enabledWindowClick;
   if (enabled) {
-    trigger(controller, core.Trigger.Off);
+    trigger(controller, {tag: core.Tag.trigger, value: core.TriggerValue.Off});
   }
 
   const scrollable = new Scrollable({
@@ -240,6 +240,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
     gameState: scene.gameState
   });
   const text: core.Text = {
+    tag: core.Tag.text,
     values: []
   };
   for (const log of controller.backlog) {
@@ -255,23 +256,22 @@ function backlog(controller: SceneController, data: core.Backlog) {
   message.showAll();
   scrollable.content.append(message);
 
-  const scripts: core.Script<any>[] = [
+  const scripts: core.Script[] = [
     {
       tag: core.Tag.removeLayer,
-      data: {
-        name: layer.name
-      }
+      name: layer.name
     }
   ];
   if (enabled) {
     scripts.push({
       tag: core.Tag.trigger,
-      data: core.Trigger.On
+      value: core.TriggerValue.On
     });
   }
 
   const width = 80;
   const l: core.Link = {
+    tag: core.Tag.link,
     layer: {
       name: layer.name,
       x: controller.game.width - width - 10,
@@ -360,7 +360,7 @@ function closeLoadScene(controller: SceneController, _: any) {
 function openSaveLoadScene(
   controller: SceneController,
   info: core.SaveLoadScene,
-  create: (i: number) => core.Script<any>[]
+  create: (i: number) => core.Script[]
 ) {
   const scene = controller.openSaveLoadScene();
   let position: pg.Position;
@@ -390,6 +390,7 @@ function openSaveLoadScene(
   scene.append(pagination);
   for (let i = 0; i < Engine.config.system.maxSaveCount; i++) {
     const l: core.Link = {
+      tag: core.Tag.link,
       layer: info.base.layer,
       width: info.base.width,
       height: info.base.height,
@@ -413,27 +414,20 @@ function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {
   openSaveLoadScene(controller, info, index => [
     {
       tag: core.Tag.save,
-      data: {
-        index,
-        force: true
-      }
+      index,
+      force: true
     }
   ]);
 }
 
-const closeLoadSceneTag = "closeLoadScene";
-
 function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
   openSaveLoadScene(controller, info, index => [
     {
-      tag: closeLoadSceneTag,
-      data: {}
+      tag: core.Tag.closeLoadScene
     },
     {
       tag: core.Tag.load,
-      data: {
-        index
-      }
+      index
     }
   ]);
 }
@@ -483,7 +477,7 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.choice, choice],
   [core.Tag.link, link],
   [core.Tag.text, text],
-  [core.Tag.layerConfig, layerConfig],
+  [core.Tag.layer, layerConfig],
   [core.Tag.playAudio, playAudio],
   [core.Tag.stopAudio, stopAudio],
   [core.Tag.playVideo, playVideo],
@@ -507,7 +501,7 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.exception, exception],
   [core.Tag.slider, slider],
   [core.Tag.autoMode, autoMode],
-  [closeLoadSceneTag, closeLoadScene], // 内部用
+  [core.Tag.closeLoadScene, closeLoadScene],
   [core.Tag.openSaveScene, openSaveScene],
   [core.Tag.openLoadScene, openLoadScene],
   [core.Tag.messageSpeed, messageSpeed],

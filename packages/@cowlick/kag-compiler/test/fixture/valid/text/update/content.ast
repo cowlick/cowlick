@@ -3,18 +3,14 @@
     "scripts": [
       {
         "tag": "removeLayer",
-        "data": {
-          "name": "choice"
-        }
+        "name": "choice"
       },
       {
         "tag": "text",
-        "data": {
-          "clear": true,
-          "values": [
-            "テスト\n1"
-          ]
-        }
+        "clear": true,
+        "values": [
+           "テスト\n1"
+        ]
       }
     ]
   }

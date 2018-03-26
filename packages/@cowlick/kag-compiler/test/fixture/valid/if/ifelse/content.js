@@ -6,29 +6,23 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "ifElse",
-        data: {
-          conditions: [
-            {
-              path: "content_0_0_0",
-              scripts: [
-                {
-                  tag: "text",
-                  data: {
-                    values: ["first"]
-                  }
-                }
-              ]
-            }
-          ],
-          elseBody: [
-            {
-              tag: "text",
-              data: {
-                values: ["second"]
+        conditions: [
+          {
+            path: "content_0_0_0",
+            scripts: [
+              {
+                tag: "text",
+                  values: ["first"]
               }
-            }
-          ]
-        }
+            ]
+          }
+        ],
+        elseBody: [
+          {
+            tag: "text",
+            values: ["second"]
+          }
+        ]
       }
     ])
   ]

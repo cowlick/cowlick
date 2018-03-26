@@ -102,7 +102,7 @@ export class GameScene extends Scene {
     this._gameState.markAlreadyRead(scene.label, scene.index);
     this._message.onFinished.addOnce(t => {
       this.scenario.pushTextLog(t);
-      this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
+      this.scriptManager.call(this.controller, {tag: core.Tag.autoMode});
     }, this);
     this.disableWindowClick();
     this.enableWindowClick();
@@ -118,7 +118,7 @@ export class GameScene extends Scene {
   }
 
   enableWindowClick() {
-    this.layerGroup.evaluate(core.Layer.message, layer => {
+    this.layerGroup.evaluate(core.LayerKind.message, layer => {
       layer.touchable = true;
       if (this._message.finished) {
         layer.pointUp.addOnce(this.requestNextFrame, this);
@@ -150,7 +150,7 @@ export class GameScene extends Scene {
     const player = this.audioGroup.add(audio);
     if (audio.group === core.AudioGroup.voice) {
       player.stopped.addOnce(() => {
-        this.scriptManager.call(this.controller, {tag: core.Tag.autoMode, data: {}});
+        this.scriptManager.call(this.controller, {tag: core.Tag.autoMode});
       }, this);
     }
   }
@@ -215,7 +215,7 @@ export class GameScene extends Scene {
 
   private disableTrigger() {
     this.autoMode.clear();
-    this.layerGroup.evaluate(core.Layer.message, layer => {
+    this.layerGroup.evaluate(core.LayerKind.message, layer => {
       layer.touchable = false;
       layer.pointUp.removeAll();
       for (const c of layer.children) {
@@ -230,13 +230,13 @@ export class GameScene extends Scene {
       this.applyScripts(frame.scripts);
     }
     this.topMessageLayer();
-    this.layerGroup.top(core.Layer.system);
+    this.layerGroup.top(core.LayerKind.system);
   }
 
   private topMessageLayer() {
-    this.layerGroup.evaluate(core.Layer.message, layer => {
+    this.layerGroup.evaluate(core.LayerKind.message, layer => {
       if (layer.touchable) {
-        this.layerGroup.top(core.Layer.message);
+        this.layerGroup.top(core.LayerKind.message);
       }
     });
   }
@@ -244,7 +244,7 @@ export class GameScene extends Scene {
   private createMessageLayer() {
     this.scriptManager.call(this.controller, {
       tag: core.Tag.pane,
-      data: this.config.window.message
+      ...this.config.window.message
     });
     this._message = new Message({
       scene: this,
@@ -254,7 +254,7 @@ export class GameScene extends Scene {
       y: this.config.window.message.layer.y + 20,
       gameState: this.gameState
     });
-    this.layerGroup.append(this._message, {name: core.Layer.message});
+    this.layerGroup.append(this._message, {name: core.LayerKind.message});
     this.enableWindowClick();
   }
 
@@ -264,11 +264,11 @@ export class GameScene extends Scene {
     }
   }
 
-  private removeLayers(scripts: core.Script<any>[]) {
+  private removeLayers(scripts: core.Script[]) {
     const names = new Set<string>();
     for (const s of scripts) {
-      if (s.data.layer) {
-        names.add(s.data.layer);
+      if ("layer" in s) {
+        names.add((s as any).layer);
       }
     }
     names.forEach(name => {
@@ -276,7 +276,7 @@ export class GameScene extends Scene {
     });
   }
 
-  private applyScripts(scripts: core.Script<any>[]) {
+  private applyScripts(scripts: core.Script[]) {
     for (const s of scripts) {
       this.scriptManager.call(this.controller, s);
     }

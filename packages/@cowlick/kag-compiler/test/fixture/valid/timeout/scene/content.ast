@@ -4,32 +4,24 @@
     "scripts": [
       {
         "tag": "timeout",
-        "data": {
-          "milliseconds": 0,
-          "scripts": [
-            {
-              "tag": "jump",
-              "data": {
-                "scene": "content"
-              }
-            }
-          ]
-        }
+        "milliseconds": 0,
+        "scripts": [
+          {
+            "tag": "jump",
+            "scene": "content"
+          }
+        ]
       },
       {
         "tag": "timeout",
-        "data": {
-          "milliseconds": 0,
-          "scripts": [
-            {
-              "tag": "jump",
-              "data": {
-                "scene": "content",
-                "frame": "test"
-              }
-            }
-          ]
-        }
+        "milliseconds": 0,
+        "scripts": [
+          {
+            "tag": "jump",
+            "scene": "content",
+            "frame": "test"
+          }
+        ]
       }
     ]
   }

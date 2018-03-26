@@ -4,24 +4,20 @@
     "scripts": [
       {
         "tag": "click",
-        "data": [
+        "scripts": [
           {
             "tag": "jump",
-            "data": {
-              "scene": "content"
-            }
+            "scene": "content"
           }
         ]
       },
       {
         "tag": "click",
-        "data": [
+        "scripts": [
           {
             "tag": "jump",
-            "data": {
-              "scene": "content",
-              "frame": "test"
-            }
+            "scene": "content",
+            "frame": "test"
           }
         ]
       }

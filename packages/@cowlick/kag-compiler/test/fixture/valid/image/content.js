@@ -6,13 +6,11 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "image",
-        data: {
-          assetId: "test",
-          layer: {
-            name: "base",
-            x: 0,
-            y: 0
-          }
+        assetId: "test",
+        layer: {
+          name: "base",
+          x: 0,
+          y: 0
         }
       }
     ])

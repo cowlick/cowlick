@@ -6,29 +6,23 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "choice",
-        data: {
-          layer: {
-            name: "choice"
+        layer: {
+          name: "choice"
+        },
+        values: [
+          {
+            tag: "jump",
+            label: "content",
+            text: "test1",
+            frame: 0
           },
-          values: [
-            {
-              tag: "jump",
-              data: {
-                label: "content",
-                frame: 0
-              },
-              text: "test1"
-            },
-            {
-              tag: "jump",
-              data: {
-                label: "content",
-                frame: 0
-              },
-              text: "test2"
-            }
-          ]
-        }
+          {
+            tag: "jump",
+            label: "content",
+            text: "test2",
+            frame: 0
+          }
+        ]
       }
     ])
   ]

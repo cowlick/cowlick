@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "eval",
-        data: {
-          path: "content_0_0"
-        }
+        path: "content_0_0"
       }
     ])
   ]

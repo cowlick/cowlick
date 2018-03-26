@@ -3,9 +3,7 @@
     "scripts": [
       {
         "tag": "messageSpeed",
-        "data": {
-          "speed": 10
-        }
+        "speed": 10
       }
     ]
   }

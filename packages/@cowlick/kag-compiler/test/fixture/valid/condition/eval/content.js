@@ -6,17 +6,13 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "condition",
-        data: {
-          path: "content_0_0",
-          scripts: [
-            {
-              tag: "eval",
-              data: {
-                path: "content_0_0_0"
-              }
-            }
-          ]
-        }
+        path: "content_0_0",
+        scripts: [
+          {
+            tag: "eval",
+            path: "content_0_0_0"
+          }
+        ]
       }
     ])
   ]

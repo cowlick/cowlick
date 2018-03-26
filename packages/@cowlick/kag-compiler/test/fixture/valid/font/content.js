@@ -6,29 +6,21 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "font",
-        data: {
-          size: 18,
-          color: "0xffffff"
-        }
+        size: 18,
+        color: "0xffffff"
       },
       {
         tag: "font",
-        data: {
-          size: "default",
-          color: "default"
-        }
+        size: "default",
+        color: "default"
       },
       {
         tag: "font",
-        data: {
-          size: 18
-        }
+        size: 18
       },
       {
         tag: "font",
-        data: {
-          color: "0xffffff"
-        }
+        color: "0xffffff"
       }
     ])
   ]

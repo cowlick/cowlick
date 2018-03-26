@@ -5,21 +5,17 @@ module.exports = new core.Scene({
   frames: [
     new core.Frame([
       {
-        tag: "layerConfig",
-        data: {
-          name: "message",
-          visible: false
-        }
+        tag: "layer",
+        name: "message",
+        visible: false
       },
       {
         tag: "click",
-        data: [
+        scripts: [
           {
-            tag: "layerConfig",
-            data: {
-              name: "message",
-              visible: true
-            }
+            tag: "layer",
+            name: "message",
+            visible: true
           }
         ]
       }

@@ -5,12 +5,10 @@ module.exports = new core.Scene({
   frames: [
     new core.Frame([
       {
-        tag: "clearSystemVariables",
-        data: {}
+        tag: "clearSystemVariables"
       },
       {
-        tag: "clearCurrentVariables",
-        data: {}
+        tag: "clearCurrentVariables"
       }
     ])
   ]

@@ -6,22 +6,20 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "text",
-        data: {
-          values: [
-            "テスト",
-            [
-              {
-                value: "{\"rb\":\"漢\",\"rt\":\"かん\"}"
-              }
-            ],
-            [
-              {
-                value: "{\"rb\":\"字\",\"rt\":\"じ\"}"
-              }
-            ],
-            "テスト"
-          ]
-        }
+        values: [
+          "テスト",
+          [
+            {
+              value: "{\"rb\":\"漢\",\"rt\":\"かん\"}"
+            }
+          ],
+          [
+            {
+              value: "{\"rb\":\"字\",\"rt\":\"じ\"}"
+            }
+          ],
+          "テスト"
+        ]
       }
     ])
   ]

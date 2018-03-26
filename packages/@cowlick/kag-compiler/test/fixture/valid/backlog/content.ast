@@ -3,9 +3,7 @@
     "scripts": [
       {
         "tag": "backlog",
-        "data": {
-          "scripts": []
-        }
+        "scripts": []
       }
     ]
   }

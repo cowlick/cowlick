@@ -6,12 +6,10 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "click",
-        data: [
+        scripts: [
           {
             tag: "jump",
-            data: {
-              label: "content"
-            }
+            label: "content"
           }
         ]
       }

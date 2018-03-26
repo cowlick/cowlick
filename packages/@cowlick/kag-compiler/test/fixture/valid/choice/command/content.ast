@@ -4,28 +4,22 @@
     "scripts": [
       {
         "tag": "choice",
-        "data": {
-          "layer": {
-            "name": "choice"
+        "layer": {
+          "name": "choice"
+        },
+        "values": [
+          {
+            "tag": "jump",
+            "frame": "test",
+            "text": "test1"
           },
-          "values": [
-            {
-              "tag": "jump",
-              "data": {
-                "frame": "test"
-              },
-              "text": "test1"
-            },
-            {
-              "tag": "jump",
-              "data": {
-                "scene": "content",
-                "frame": "test"
-              },
-              "text": "test2"
-            }
-          ]
-        }
+          {
+            "tag": "jump",
+            "scene": "content",
+            "frame": "test",
+            "text": "test2"
+          }
+        ]
       }
     ]
   }

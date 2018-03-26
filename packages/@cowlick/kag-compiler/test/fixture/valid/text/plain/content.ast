@@ -3,11 +3,9 @@
     "scripts": [
       {
         "tag": "text",
-        "data": {
-          "values": [
-            "テスト\n1"
-          ]
-        }
+        "values": [
+          "テスト\n1"
+        ]
       }
     ]
   }

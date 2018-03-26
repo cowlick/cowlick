@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "text",
-        data: {
-          values: ["テスト\n1"]
-        }
+        values: ["テスト\n1"]
       }
     ])
   ]

@@ -6,9 +6,7 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "realTimeDisplay",
-        data: {
-          enabled: false
-        }
+        enabled: false
       }
     ])
   ]

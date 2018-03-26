@@ -6,16 +6,12 @@ module.exports = new core.Scene({
     new core.Frame([
       {
         tag: "removeLayer",
-        data: {
-          name: "choice"
-        }
+        name: "choice"
       },
       {
         tag: "text",
-        data: {
-          clear: true,
-          values: ["テスト\n1"]
-        }
+        clear: true,
+        values: ["テスト\n1"]
       }
     ])
   ]

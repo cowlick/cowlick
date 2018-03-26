@@ -23,7 +23,7 @@ export function setup(ctx: Context) {
   context = ctx;
 }
 
-export function contents(c: core.Script<any>[], cs: core.Script<any>[][]): core.Script<any>[] {
+export function contents(c: ast.Script[], cs: ast.Script[][]): ast.Script[] {
   var result = c;
   for (const c of cs) {
     result.push(...c);
@@ -38,7 +38,7 @@ export function frames(frames: ast.Frame[]) {
   };
 }
 
-export function frame(scripts: core.Script<any>[], label?: string): ast.Frame {
+export function frame(scripts: ast.Script[], label?: string): ast.Frame {
   const result: ast.Frame = {
     scripts
   };
@@ -48,29 +48,25 @@ export function frame(scripts: core.Script<any>[], label?: string): ast.Frame {
   return result;
 }
 
-export function image(assetId: string, layer: string, options: KeyValuePair[]): core.Script<any> {
-  const result: core.Script<any> = {
+export function image(assetId: string, layer: string, options: KeyValuePair[]): core.Image {
+  const result: core.Image = {
     tag: core.Tag.image,
-    data: {
-      layer: {
-        name: layer
-      },
-      assetId: assetId
-    }
+    layer: {
+      name: layer
+    },
+    assetId: assetId
   };
-  concatKeyValues(result.data.layer, options);
+  concatKeyValues(result.layer, options);
   return result;
 }
 
-export function text(values: (string | core.Ruby[])[], cm: any): core.Script<core.Text> {
-  const result: core.Script<core.Text> = {
+export function text(values: (string | core.Ruby[])[], cm: any): core.Text {
+  const result: core.Text = {
     tag: core.Tag.text,
-    data: {
-      values: values
-    }
+    values: values
   };
   if (cm) {
-    result.data.clear = true;
+    result.clear = true;
   }
   return result;
 }
@@ -193,23 +189,19 @@ export function variable(expression: string): core.Variable {
   }
 }
 
-export function playAudio(assetId: string, group: string): core.Script<core.Audio> {
+export function playAudio(assetId: string, group: string): core.Audio {
   return {
     tag: core.Tag.playAudio,
-    data: {
-      assetId: assetId,
-      group
-    }
+    assetId: assetId,
+    group
   };
 }
 
-export function stopAudio(group: string): core.Script<core.Audio> {
+export function stopAudio(group: string): core.Audio {
   return {
     tag: core.Tag.stopAudio,
-    data: {
-      assetId: null,
-      group
-    }
+    assetId: null,
+    group
   };
 }
 
@@ -230,13 +222,20 @@ export function tryParseLiteral(value: string) {
   return parsed;
 }
 
-export function tag(name: string, attrs: KeyValuePair[]): core.Script<any> {
-  const result: core.Script<any> = {
-    tag: name,
-    data: {}
+export function tag(name: string, attrs: KeyValuePair[]): core.Script {
+  const result: core.Extension = {
+    tag: core.Tag.extension,
+    data: {
+      tag: name
+    }
   };
   for (const attr of attrs) {
-    result.data[attr.key] = tryParseLiteral(attr.value);
+    (result.data as any)[attr.key] = tryParseLiteral(attr.value);
+  }
+  switch(name) {
+    case core.Tag.fadeIn:
+    case core.Tag.fadeOut:
+      return result.data as core.Fade;
   }
   return result;
 }
@@ -298,27 +297,25 @@ function traverseEval(original: string): estree.Node {
   });
 }
 
-export function evaluate(expression: string): core.Script<estree.Node> {
+export function evaluate(expression: string): ast.Eval {
   return {
     tag: core.Tag.evaluate,
-    data: traverseEval(expression)
+    program: traverseEval(expression)
   };
 }
 
-export function condition(expression: string, scripts: core.Script<any>[]): core.Script<ast.Condition> {
+export function condition(expression: string, scripts: ast.Script[]): ast.Condition {
   return {
     tag: core.Tag.condition,
-    data: {
-      expression: traverseEval(expression),
-      scripts
-    }
+    expression: traverseEval(expression),
+    scripts
   };
 }
 
-export function trigger(enabled: boolean): core.Script<core.Trigger> {
+export function trigger(enabled: boolean): core.Trigger {
   return {
     tag: core.Tag.trigger,
-    data: enabled ? core.Trigger.On : core.Trigger.Off
+    value: enabled ? core.TriggerValue.On : core.TriggerValue.Off
   };
 }
 
@@ -328,26 +325,21 @@ function pathToSceneName(scene: string): string {
   return path.join(dir, ast.filename(scene));
 }
 
-export function jump(data: ast.Jump): core.Script<ast.Jump> {
+export function jump(data: ast.Jump): ast.Jump {
   if (data.scene) {
     data.scene = pathToSceneName(data.scene);
     context.dependencies.push(data.scene);
   }
-  return {
-    tag: core.Tag.jump,
-    data
-  };
+  return data;
 }
 
-export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): core.Script<ast.Choice> {
+export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): ast.Choice {
   return {
     tag: core.Tag.choice,
-    data: {
-      layer: {
-        name: core.Layer.choice
-      },
-      values: [l].concat(ls)
-    }
+    layer: {
+      name: core.LayerKind.choice
+    },
+    values: [l].concat(ls)
   };
 }
 
@@ -365,98 +357,65 @@ export function choiceItem(text: string, data: ast.Jump, condition?: string): as
   return result;
 }
 
-export function layerConfig(name: string, options: KeyValuePair[]): core.Script<any> {
-  const result: core.Script<any> = {
-    tag: core.Tag.layerConfig,
-    data: {
-      name
-    }
+export function layerConfig(name: string, options: KeyValuePair[]): core.Layer {
+  const result: core.Layer = {
+    tag: core.Tag.layer,
+    name
   };
   for (const option of options) {
-    result.data[option.key] = option.value;
+    (result as any)[option.key] = option.value;
   }
   return result;
 }
 
-export function click(scripts: core.Script<any>[]): core.Script<core.Script<any>[]> {
+export function click(scripts: ast.Script[]): ast.Click {
   return {
     tag: core.Tag.click,
-    data: scripts
+    scripts
   };
 }
 
-export function clearSystemVariables(): core.Script<any> {
+export function clearSystemVariables(): core.ClearSystemVariables {
   return {
-    tag: core.Tag.clearSystemVariables,
-    data: {}
+    tag: core.Tag.clearSystemVariables
   };
 }
 
-export function clearCurrentVariables(): core.Script<any> {
+export function clearCurrentVariables(): core.ClearCurrentVariables {
   return {
-    tag: core.Tag.clearCurrentVariables,
-    data: {}
+    tag: core.Tag.clearCurrentVariables
   };
 }
 
-export function timeout(data: core.Timeout): core.Script<core.Timeout> {
-  return {
-    tag: core.Tag.timeout,
-    data
-  };
-}
-
-export function ifExpression(data: ast.IfElse): core.Script<ast.IfElse> {
-  return {
-    tag: core.Tag.ifElse,
-    data
-  };
-}
-
-export function waitTransition(scripts: core.Script<any>[], skippable?: boolean): core.Script<any>[] {
-  const result: core.Script<ast.WaitTransition> = {
+export function waitTransition(scripts: ast.Script[], skippable?: boolean): ast.Script[] {
+  const result: ast.WaitTransition = {
     tag: ast.waitTransition,
-    data: {
-      scripts
-    }
+    scripts
   };
   if (typeof skippable !== "undefined") {
-    result.data.skippable = skippable;
+    result.skippable = skippable;
   }
   return [result];
 }
 
-export function button(data: core.Button): core.Script<core.Button> {
-  return {
-    tag: core.Tag.button,
-    data
-  };
-}
-
-export function removeLayer(name: string): core.Script<core.RemoveLayer> {
+export function removeLayer(name: string): core.RemoveLayer {
   return {
     tag: core.Tag.removeLayer,
-    data: {
-      name
-    }
+    name
   };
 }
 
-export function backlog(): core.Script<core.Backlog> {
+export function backlog(): ast.Backlog {
   return {
     tag: core.Tag.backlog,
-    data: {
-      scripts: []
-    }
+    scripts: []
   };
 }
 
-export function messageSpeed(speed: string): core.Script<core.MessageSpeed> {
+export function messageSpeed(speed: string): core.MessageSpeed {
   return {
     tag: core.Tag.messageSpeed,
-    data: {
-      speed: tryParseLiteral(speed)
-    }
+    speed: tryParseLiteral(speed)
   };
 }
 
@@ -466,22 +425,13 @@ export function concatKeyValues(data: any, options: KeyValuePair[]) {
   }
 }
 
-export function font(data: core.Font): core.Script<core.Font> {
-  return {
-    tag: core.Tag.font,
-    data
-  };
+export function ignore(expression: string, scripts: ast.Script[]): ast.Condition {
+  return condition(`!(${expression})`, scripts);
 }
 
-export function ignore(expression: string, scripts: core.Script<any>[]): ast.Condition {
-  return condition(`!(${expression})`, scripts).data;
-}
-
-export function realTimeDisplay(enabled: boolean): core.Script<core.RealTimeDisplay> {
+export function realTimeDisplay(enabled: boolean): core.RealTimeDisplay {
   return {
     tag: core.Tag.realTimeDisplay,
-    data: {
-      enabled
-    }
+    enabled
   };
 }

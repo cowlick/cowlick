@@ -3,9 +3,7 @@
     "scripts": [
       {
         "tag": "realTimeDisplay",
-        "data": {
-          "enabled": true
-        }
+        "enabled": true
       }
     ]
   }

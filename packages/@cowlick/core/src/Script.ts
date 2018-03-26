@@ -1,8 +1,24 @@
-import {VariableType} from ".";
+import {Tag, VariableType} from "./Constant";
+import { GameError } from ".";
+
+export interface ScriptNode {
+  tag: Tag | string;
+}
 
 /**
- * レイヤー情報
+ * スクリプト情報
  */
+export type Script =
+  Layer | Image | Pane | Button |
+  Text | Jump | Trigger | Choice | Link |
+  Audio | ChangeVolume | Video | Save |
+  Load | Eval | Condition | RemoveLayer |
+  Backlog | Fade | Timeout | IfElse |
+  Slider | SaveLoadScene | MessageSpeed |
+  Font | RealTimeDisplay | Click | Skip |
+  ClearSystemVariables | ClearCurrentVariables |
+  CloseLoadScene | AutoMode | Exception | Extension;
+
 export interface LayerConfig {
   /**
    * レイヤー名
@@ -27,9 +43,17 @@ export interface LayerConfig {
 }
 
 /**
+ * レイヤー
+ */
+export interface Layer extends ScriptNode, LayerConfig {
+  tag: Tag.layer;
+}
+
+/**
  * 画像
  */
-export interface Image {
+export interface Image extends ScriptNode {
+  tag: Tag.image;
   /**
    * アセットID
    */
@@ -47,10 +71,7 @@ export interface Image {
   };
 }
 
-/**
- * 枠
- */
-export interface Pane {
+export interface PaneDefinition {
   /**
    * レイヤー情報
    */
@@ -78,9 +99,17 @@ export interface Pane {
 }
 
 /**
+ * 枠
+ */
+export interface Pane extends ScriptNode, PaneDefinition {
+  tag: Tag.pane;
+}
+
+/**
  * ボタン
  */
-export interface Button {
+export interface Button extends ScriptNode {
+  tag: Tag.button;
   /**
    * 画像情報
    */
@@ -96,7 +125,7 @@ export interface Button {
   /**
    * クリック時に実行するスクリプト
    */
-  scripts: Script<any>[];
+  scripts: Script[];
 }
 
 /**
@@ -117,7 +146,8 @@ export interface Variable {
 /**
  * テキスト
  */
-export interface Text {
+export interface Text extends ScriptNode {
+  tag: Tag.text;
   /**
    * 現在表示中のテキストを消去するかどうか
    */
@@ -131,7 +161,8 @@ export interface Text {
 /**
  * 遷移情報
  */
-export interface Jump {
+export interface Jump extends ScriptNode {
+  tag: Tag.jump;
   /**
    * シーンラベル
    */
@@ -143,40 +174,102 @@ export interface Jump {
 }
 
 /**
- * スクリプト情報
- */
-export interface Script<T> {
-  /**
-   * スクリプト名
-   */
-  tag: string;
-  /**
-   * スクリプト実行に利用するデータ
-   */
-  data: T;
-}
-
-/**
  * スクリプトからアセットのIDを収集する。
  *
  * @param scripts
  */
-export function collectAssetIds(scripts: Script<any>[]): string[] {
-  let ids: string[] = [];
+export function collectAssetIds(scripts: Script[]): string[] {
+  const ids: string[] = [];
   for (const s of scripts) {
-    if (typeof s.data === "object") {
-      if ("assetId" in s.data) {
-        ids.push(s.data.assetId);
-      }
-      if ("backgroundImage" in s.data) {
-        ids.push(s.data.backgroundImage);
-      }
-      if ("label" in s.data) {
-        ids.push(s.data.label);
-      }
-      if ("scripts" in s.data) {
-        ids.push(...collectAssetIds(s.data.scripts));
-      }
+    switch(s.tag) {
+      case Tag.image:
+        ids.push(s.assetId);
+        break;
+      case Tag.pane:
+        if (s.backgroundImage) {
+          ids.push(s.backgroundImage);
+        }
+        break;
+      case Tag.button:
+        ids.push(s.image.assetId);
+        ids.push(...collectAssetIds(s.scripts));
+        break;
+      case Tag.jump:
+        ids.push(s.label);
+        break;
+      case Tag.choice:
+        for (const c of s.values) {
+          ids.push(c.label);
+          if (c.path) {
+            ids.push(c.path);
+          }
+        }
+        if (s.backgroundImage) {
+          ids.push(s.backgroundImage);
+        }
+        break;
+      case Tag.link:
+        if (s.backgroundImage) {
+          ids.push(s.backgroundImage);
+        }
+        ids.push(...collectAssetIds(s.scripts));
+        break;
+      case Tag.playAudio:
+      case Tag.stopAudio:
+        ids.push(s.assetId);
+        break;
+      case Tag.playVideo:
+      case Tag.stopVideo:
+        ids.push(s.assetId);
+        break;
+      case Tag.evaluate:
+        ids.push(s.path);
+        break;
+      case Tag.condition:
+        ids.push(s.path);
+        ids.push(...collectAssetIds(s.scripts));
+        break;
+      case Tag.backlog:
+        ids.push(...collectAssetIds(s.scripts));
+        break;
+      case Tag.timeout:
+        ids.push(...collectAssetIds(s.scripts));
+        break;
+      case Tag.ifElse:
+        ids.push(...collectAssetIds(s.conditions));
+        ids.push(...collectAssetIds(s.elseBody));
+        break;
+      case Tag.openSaveScene:
+        if (s.base.backgroundImage) {
+          ids.push(s.base.backgroundImage);
+        }
+        break;
+      case Tag.click:
+        ids.push(...collectAssetIds(s.scripts));
+        break;
+      case Tag.extension:
+        ids.push(...collectAssetIdsFromObject(s.data));
+        break;
+      default:
+        break;
+    }
+  }
+  return ids;
+}
+
+function collectAssetIdsFromObject(data: any): string[] {
+  const ids: string[] = [];
+  for (const [k, v] of Object.entries(data)) {
+    switch(k) {
+      case "assetId":
+      case "backgroundImage":
+      case "label":
+      case "path":
+        ids.push(v as string);
+        break;
+    }
+    if (typeof v === "object") {
+      ids.push(...collectAssetIdsFromObject(v));
     }
   }
   return ids;
@@ -185,7 +278,7 @@ export function collectAssetIds(scripts: Script<any>[]): string[] {
 /**
  * 選択肢
  */
-export interface ChoiceItem extends Script<Jump> {
+export interface ChoiceItem extends Jump {
   /**
    * 選択肢として表示する文字列
    */
@@ -196,12 +289,17 @@ export interface ChoiceItem extends Script<Jump> {
   path?: string;
 }
 
+export const enum TriggerValue {
+  On,
+  Off
+}
+
 /**
  * ウィンドウのトリガー設定
  */
-export const enum Trigger {
-  On,
-  Off
+export interface Trigger extends ScriptNode {
+  tag: Tag.trigger;
+  value: TriggerValue;
 }
 
 export const enum Direction {
@@ -212,7 +310,8 @@ export const enum Direction {
 /**
  * 選択肢の集合
  */
-export interface Choice {
+export interface Choice extends ScriptNode {
+  tag: Tag.choice;
   /**
    * レイヤー情報
    */
@@ -251,7 +350,8 @@ export interface Choice {
 /**
  * リンク
  */
-export interface Link extends Pane {
+export interface Link extends ScriptNode, PaneDefinition {
+  tag: Tag.link;
   /**
    * 幅
    */
@@ -271,13 +371,14 @@ export interface Link extends Pane {
   /**
    * リンクをクリックしたときに実行するスクリプト
    */
-  scripts: Script<any>[];
+  scripts: Script[];
 }
 
 /**
  * 音声情報
  */
-export interface Audio {
+export interface Audio extends ScriptNode {
+  tag: Tag.playAudio | Tag.stopAudio;
   /**
    * アセットID
    */
@@ -291,7 +392,8 @@ export interface Audio {
 /**
  * ボリューム調整
  */
-export interface ChangeVolume {
+export interface ChangeVolume extends ScriptNode {
+  tag: Tag.changeVolume;
   /**
    * グループ名
    */
@@ -305,7 +407,8 @@ export interface ChangeVolume {
 /**
  * ビデオ情報
  */
-export interface Video {
+export interface Video extends ScriptNode {
+  tag: Tag.playVideo | Tag.stopVideo;
   /**
    * アセットID
    */
@@ -315,7 +418,8 @@ export interface Video {
 /**
  * セーブ命令
  */
-export interface Save {
+export interface Save extends ScriptNode {
+  tag: Tag.save;
   index: number;
   force?: boolean;
   description?: string;
@@ -324,42 +428,51 @@ export interface Save {
 /**
  * ロード命令
  */
-export interface Load {
+export interface Load extends ScriptNode {
+  tag: Tag.load;
   index: number;
+}
+
+export interface EvalDefinition {
+  path: string;
 }
 
 /**
  * スクリプト実行
  */
-export interface Eval {
-  path: string;
+export interface Eval extends ScriptNode, EvalDefinition {
+  tag: Tag.evaluate;
 }
 
 /**
  * 条件付きスクリプト
  */
-export interface Condition extends Eval {
-  scripts: Script<any>[];
+export interface Condition extends ScriptNode, EvalDefinition {
+  tag: Tag.condition;
+  scripts: Script[];
 }
 
 /**
  * レイヤー削除命令
  */
-export interface RemoveLayer {
+export interface RemoveLayer extends ScriptNode {
+  tag: Tag.removeLayer;
   name: string;
 }
 
 /**
  * 過去ログ表示
  */
-export interface Backlog {
-  scripts: Script<any>[];
+export interface Backlog extends ScriptNode {
+  tag: Tag.backlog;
+  scripts: Script[];
 }
 
 /**
  * フェード命令
  */
-export interface Fade {
+export interface Fade extends ScriptNode {
+  tag: Tag.fadeIn | Tag.fadeOut;
   layer: string;
   duration: number;
 }
@@ -367,20 +480,23 @@ export interface Fade {
 /**
  * スクリプトのタイムアウト実行
  */
-export interface Timeout {
+export interface Timeout extends ScriptNode {
+  tag: Tag.timeout;
   milliseconds: number;
-  scripts: Script<any>[];
+  scripts: Script[];
 }
 
 /**
  * スクリプトの条件分岐
  */
-export interface IfElse {
+export interface IfElse extends ScriptNode {
+  tag: Tag.ifElse;
   conditions: Condition[];
-  elseBody: Script<any>[];
+  elseBody: Script[];
 }
 
-export interface Slider {
+export interface Slider extends ScriptNode {
+  tag: Tag.slider;
   /**
    * レイヤー情報
    */
@@ -415,7 +531,8 @@ export enum Position {
 /**
  * セーブ、ロードシーン情報
  */
-export interface SaveLoadScene {
+export interface SaveLoadScene extends ScriptNode {
+  tag: Tag.openSaveScene | Tag.openLoadScene;
   vertical: number;
   horizontal: number;
   button: Position;
@@ -423,17 +540,23 @@ export interface SaveLoadScene {
   base: Pane;
 }
 
+export interface CloseLoadScene extends ScriptNode {
+  tag: Tag.closeLoadScene;
+}
+
 /**
  * メッセージ速度
  */
-export interface MessageSpeed {
+export interface MessageSpeed extends ScriptNode {
+  tag: Tag.messageSpeed;
   speed: number;
 }
 
 /**
  * フォント設定
  */
-export interface Font {
+export interface Font extends ScriptNode {
+  tag: Tag.font;
   size: "default" | number;
   color: string;
 }
@@ -441,6 +564,41 @@ export interface Font {
 /**
  * メッセージ即時表示設定
  */
-export interface RealTimeDisplay {
+export interface RealTimeDisplay extends ScriptNode {
+  tag: Tag.realTimeDisplay;
   enabled: boolean;
+}
+
+/**
+ * ユーザ拡張
+ */
+export interface Extension extends ScriptNode {
+  tag: Tag.extension;
+  data: ScriptNode;
+}
+
+export interface Click extends ScriptNode {
+  tag: Tag.click;
+  scripts: Script[];
+}
+
+export interface Skip extends ScriptNode {
+  tag: Tag.skip;
+}
+
+export interface ClearSystemVariables extends ScriptNode {
+  tag: Tag.clearSystemVariables;
+}
+
+export interface ClearCurrentVariables extends ScriptNode {
+  tag: Tag.clearCurrentVariables;
+}
+
+export interface AutoMode extends ScriptNode {
+  tag: Tag.autoMode;
+}
+
+export interface Exception extends ScriptNode {
+  tag: Tag.exception;
+  error: GameError
 }
