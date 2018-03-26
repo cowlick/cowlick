@@ -56,10 +56,10 @@ export namespace BuiltinVariable {
   export const alreadyRead = "alreadyRead";
 }
 
-export namespace VariableType {
-  export const builtin = "builtin";
-  export const system = "system";
-  export const current = "current";
+export enum VariableType {
+  builtin = "builtin",
+  system = "system",
+  current = "current"
 }
 
 export namespace AudioGroup {

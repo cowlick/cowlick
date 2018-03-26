@@ -1,3 +1,5 @@
+import {VariableType} from ".";
+
 /**
  * レイヤー情報
  */
@@ -108,7 +110,7 @@ export interface Ruby {
  * 変数呼び出し
  */
 export interface Variable {
-  type: string;
+  type: VariableType;
   name: string;
 }
 
