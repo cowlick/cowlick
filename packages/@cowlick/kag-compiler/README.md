@@ -1,6 +1,6 @@
 # @cowlick/kag-compiler
 
-`@cowlick/kag-compiler`は[KAG3](http://devdoc.kikyou.info/tvp/docs/kag3doc/contents/)ベースのスクリプトから`cowlick`用のJavaScriptを生成するコンパイラです。
+`@cowlick/kag-compiler`は[KAG3](http://www.ultrasync.net/dee/kr2helps/kag3doc/contents/)ベースのスクリプトから`cowlick`用のJavaScriptを生成するコンパイラです。
 
 ## Usage
 
