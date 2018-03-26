@@ -11,9 +11,9 @@
     "test": "lerna run test",
     "build": "lerna run build",
     "prettier": "prettier --write '**/*.ts'",
-    "sample:bundle": "cd packages/sample && npm run bundle",
+    "sample:bundle": "cd ./examples && npm run bundle",
     "sample:publish": "gh-pages -d ./dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
-    "start": "cd packages/sample && npm start",
+    "start": "cd ./examples && npm start",
     "precommit": "lint-staged",
     "postcommit": "git reset"
   },

@@ -64,8 +64,7 @@ typings/
 # End of https://www.gitignore.io/api/node
 
 lib/
-packages/sample/script/
-packages/sample/image/cowlick.png
+examples/script/
+examples/image/cowlick.png
 dist/
 kag.js
-

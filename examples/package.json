@@ -6,8 +6,8 @@
     "build": "cowlick-kag-compiler ./scenario -o ./script && tsc -p . && npm run scan:assets",
     "start": "akashic-sandbox .",
     "scan:assets": "npm run copy:images && akashic scan asset",
-    "copy:images": "cp ../../docs/images/cowlick.png ./image",
-    "bundle": "akashic export html -o ../../dist -M -b && cp ../../docs/images/favicon.ico ../../dist"
+    "copy:images": "shx cp ../docs/images/cowlick.png ./image",
+    "bundle": "akashic export html -o ../dist -M -b && shx cp ../docs/images/favicon.ico ../dist"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.2",
@@ -24,6 +24,7 @@
     "@akashic/akashic-sandbox": "0.13.17",
     "@types/node": "9.4.7",
     "cowlick-kag-compiler": "^0.4.2",
+    "shx": "0.2.2",
     "typescript": "2.7.2"
   }
 }
