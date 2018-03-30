@@ -1,6 +1,6 @@
 # cowlick
 
-[![npm version](https://badge.fury.io/js/cowlick-engine.svg)](https://badge.fury.io/js/cowlick-engine)
+[![npm version](https://badge.fury.io/js/%40cowlick%2Fengine.svg)](https://badge.fury.io/js/%40cowlick%2Fengine)
 [![Build Status](https://travis-ci.org/cowlick/cowlick.svg?branch=master)](https://travis-ci.org/cowlick/cowlick)
 
 <p align="center">
