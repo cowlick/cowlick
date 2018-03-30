@@ -28,5 +28,8 @@
     "@types/estraverse": "0.0.6",
     "@types/node": "9.4.7",
     "typescript": "2.7.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

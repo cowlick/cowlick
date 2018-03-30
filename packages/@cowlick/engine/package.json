@@ -35,5 +35,8 @@
     "mocha": "3.5.3",
     "power-assert": "1.4.4",
     "typescript": "2.7.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
