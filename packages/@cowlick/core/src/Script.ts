@@ -574,7 +574,7 @@ export interface RealTimeDisplay extends ScriptNode {
  */
 export interface Extension extends ScriptNode {
   tag: Tag.extension;
-  data: ScriptNode;
+  data: any;
 }
 
 export interface Click extends ScriptNode {

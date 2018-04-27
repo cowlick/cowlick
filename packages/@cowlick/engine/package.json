@@ -31,10 +31,10 @@
     "@types/mocha": "2.2.45",
     "@types/node": "9.4.7",
     "@xnv/headless-akashic": "0.0.1",
-    "espower-typescript": "8.1.2",
+    "espower-typescript": "8.1.3",
     "mocha": "3.5.3",
-    "power-assert": "1.4.4",
-    "typescript": "2.7.2"
+    "power-assert": "1.5.0",
+    "typescript": "2.8.3"
   },
   "publishConfig": {
     "access": "public"
