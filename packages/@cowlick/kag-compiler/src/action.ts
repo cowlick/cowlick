@@ -232,7 +232,7 @@ export function tag(name: string, attrs: KeyValuePair[]): core.Script {
   for (const attr of attrs) {
     (result.data as any)[attr.key] = tryParseLiteral(attr.value);
   }
-  switch(name) {
+  switch (name) {
     case core.Tag.fadeIn:
     case core.Tag.fadeOut:
       return result.data as core.Fade;

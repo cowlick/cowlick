@@ -1,7 +1,7 @@
 import {Fragment} from "@akashic-extension/akashic-label";
 
 // https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_7
-const lineHeadWrap =
+const lineHeadWrap = (
   "’”）〕］｝〉》」』】⦆〙〗»〟" +
   "‐〜゠–" +
   "？！‼⁇⁈⁉" +
@@ -10,13 +10,9 @@ const lineHeadWrap =
   "ヽヾゝゞ々〻" +
   "ー" +
   "ぁぃぅぇぉァィゥェォっゃゅょゎゕゖッャュョヮヵヶㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿㇷ゚" +
-  "）〕］"
-  .split("");
+  "）〕］").split("");
 
-const lineEndWrap =
-  "‘“（〔［｛〈《「『【⦅〘〖«〝" +
-  "（〔［"
-  .split("");
+const lineEndWrap = "‘“（〔［｛〈《「『【⦅〘〖«〝" + "（〔［".split("");
 
 export function lineBreakRule(fragments: Fragment[], index: number) {
   const target = fragments[index];
@@ -36,8 +32,8 @@ export function lineBreakRule(fragments: Fragment[], index: number) {
       } else {
         return index;
       }
-      } else {
-        return index;
-      }
+    } else {
+      return index;
+    }
   }
 }

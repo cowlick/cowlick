@@ -14,15 +14,39 @@ export interface Frame {
 }
 
 export type Script =
-  core.Layer | core.Image | core.Pane | Button |
-  core.Text | Jump | core.Trigger | Choice | Link |
-  core.Audio | core.ChangeVolume | core.Video | core.Save |
-  core.Load | Eval | Condition | core.RemoveLayer |
-  Backlog | core.Fade | Timeout | IfElse |
-  core.Slider | core.SaveLoadScene | core.MessageSpeed |
-  core.Font | core.RealTimeDisplay | Click | core.Skip |
-  core.ClearSystemVariables | core.ClearCurrentVariables |
-  core.AutoMode | WaitTransition | core.Extension;
+  | core.Layer
+  | core.Image
+  | core.Pane
+  | Button
+  | core.Text
+  | Jump
+  | core.Trigger
+  | Choice
+  | Link
+  | core.Audio
+  | core.ChangeVolume
+  | core.Video
+  | core.Save
+  | core.Load
+  | Eval
+  | Condition
+  | core.RemoveLayer
+  | Backlog
+  | core.Fade
+  | Timeout
+  | IfElse
+  | core.Slider
+  | core.SaveLoadScene
+  | core.MessageSpeed
+  | core.Font
+  | core.RealTimeDisplay
+  | Click
+  | core.Skip
+  | core.ClearSystemVariables
+  | core.ClearCurrentVariables
+  | core.AutoMode
+  | WaitTransition
+  | core.Extension;
 
 export interface Button extends core.ScriptNode {
   tag: core.Tag.button;
@@ -81,7 +105,7 @@ export interface Timeout extends core.ScriptNode {
 }
 
 export interface IfElse extends core.ScriptNode {
-  tag: core.Tag.ifElse
+  tag: core.Tag.ifElse;
   conditions: Condition[];
   elseBody: Script[];
 }

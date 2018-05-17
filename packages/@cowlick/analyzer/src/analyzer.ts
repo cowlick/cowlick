@@ -231,13 +231,12 @@ function nestOptions(options: VisitorOptions, i: number): VisitorOptions {
 }
 
 function click(original: ast.Script[], options: VisitorOptions): estree.ObjectExpression {
-  return scriptAst(
-    core.Tag.click,
-    [property("scripts", {
+  return scriptAst(core.Tag.click, [
+    property("scripts", {
       type: ArrayExpression,
       elements: visitScripts(original, options, 0)
-    })]
-  );
+    })
+  ]);
 }
 
 function programToExportFunction(original: estree.Program, requireReturn: boolean) {
@@ -457,9 +456,7 @@ function backlog(original: ast.Backlog, options: VisitorOptions): estree.ObjectE
 }
 
 function paneProperties(original: core.PaneDefinition): estree.Property[] {
-  const ps: estree.Property[] = [
-    layerProperty(original.layer)
-  ];
+  const ps: estree.Property[] = [layerProperty(original.layer)];
   if ("width" in original) {
     ps.push(property("width", literal(original.width)));
   }
@@ -473,7 +470,12 @@ function paneProperties(original: core.PaneDefinition): estree.Property[] {
     ps.push(property("padding", literal(original.padding)));
   }
   if ("backgroundEffector" in original) {
-    ps.push(property("backgroundEffector", object([property("borderWidth", literal(original.backgroundEffector.borderWidth))])));
+    ps.push(
+      property(
+        "backgroundEffector",
+        object([property("borderWidth", literal(original.backgroundEffector.borderWidth))])
+      )
+    );
   }
   if ("touchable" in original) {
     ps.push(property("touchable", literal(original.touchable)));
@@ -573,7 +575,7 @@ function visit(original: ast.Script, options: VisitorOptions): estree.ObjectExpr
     case core.Tag.extension:
       return [userDefined(original.data)];
   }
-  throw new Error("unknown script: "+ JSON.stringify(original));
+  throw new Error("unknown script: " + JSON.stringify(original));
 }
 
 function frame(original: ast.Frame, scene: string, index: number, state: State): estree.NewExpression {

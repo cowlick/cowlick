@@ -1,5 +1,5 @@
 import {Tag, VariableType} from "./Constant";
-import { GameError } from ".";
+import {GameError} from ".";
 
 export interface ScriptNode {
   tag: Tag | string;
@@ -9,15 +9,40 @@ export interface ScriptNode {
  * スクリプト情報
  */
 export type Script =
-  Layer | Image | Pane | Button |
-  Text | Jump | Trigger | Choice | Link |
-  Audio | ChangeVolume | Video | Save |
-  Load | Eval | Condition | RemoveLayer |
-  Backlog | Fade | Timeout | IfElse |
-  Slider | SaveLoadScene | MessageSpeed |
-  Font | RealTimeDisplay | Click | Skip |
-  ClearSystemVariables | ClearCurrentVariables |
-  CloseLoadScene | AutoMode | Exception | Extension;
+  | Layer
+  | Image
+  | Pane
+  | Button
+  | Text
+  | Jump
+  | Trigger
+  | Choice
+  | Link
+  | Audio
+  | ChangeVolume
+  | Video
+  | Save
+  | Load
+  | Eval
+  | Condition
+  | RemoveLayer
+  | Backlog
+  | Fade
+  | Timeout
+  | IfElse
+  | Slider
+  | SaveLoadScene
+  | MessageSpeed
+  | Font
+  | RealTimeDisplay
+  | Click
+  | Skip
+  | ClearSystemVariables
+  | ClearCurrentVariables
+  | CloseLoadScene
+  | AutoMode
+  | Exception
+  | Extension;
 
 export interface LayerConfig {
   /**
@@ -181,7 +206,7 @@ export interface Jump extends ScriptNode {
 export function collectAssetIds(scripts: Script[]): string[] {
   const ids: string[] = [];
   for (const s of scripts) {
-    switch(s.tag) {
+    switch (s.tag) {
       case Tag.image:
         ids.push(s.assetId);
         break;
@@ -260,7 +285,7 @@ export function collectAssetIds(scripts: Script[]): string[] {
 function collectAssetIdsFromObject(data: any): string[] {
   const ids: string[] = [];
   for (const [k, v] of Object.entries(data)) {
-    switch(k) {
+    switch (k) {
       case "assetId":
       case "backgroundImage":
       case "label":
@@ -600,5 +625,5 @@ export interface AutoMode extends ScriptNode {
 
 export interface Exception extends ScriptNode {
   tag: Tag.exception;
-  error: GameError
+  error: GameError;
 }
