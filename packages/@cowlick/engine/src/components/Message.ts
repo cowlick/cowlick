@@ -3,6 +3,7 @@ import * as al from "@akashic-extension/akashic-label";
 import * as core from "@cowlick/core";
 import {Config} from "@cowlick/config";
 import {GameState} from "../models/GameState";
+import {lineBreakRule} from "../lineBreakRule";
 
 export interface MessageParameters {
   scene: g.Scene;
@@ -183,7 +184,8 @@ export class Message extends al.Label {
       width: params.width,
       x: params.x,
       y: params.y,
-      fixLineGap: true
+      fixLineGap: true,
+      lineBreakRule
     };
   }
 }

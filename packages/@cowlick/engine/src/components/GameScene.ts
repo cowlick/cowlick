@@ -249,9 +249,9 @@ export class GameScene extends Scene {
     this._message = new Message({
       scene: this,
       config: this.config,
-      width: this.game.width - 40,
+      width: this.game.width - 60,
       x: this.config.window.message.layer.x + 20,
-      y: this.config.window.message.layer.y + 20,
+      y: this.config.window.message.layer.y + 10,
       gameState: this.gameState
     });
     this.layerGroup.append(this._message, {name: core.LayerKind.message});
