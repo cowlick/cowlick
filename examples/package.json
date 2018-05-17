@@ -10,7 +10,7 @@
     "bundle": "akashic export html -o ../dist -M -b && shx cp ../docs/images/favicon.ico ../dist"
   },
   "dependencies": {
-    "@akashic-extension/akashic-label": "2.0.2",
+    "@akashic-extension/akashic-label": "2.0.3",
     "@akashic-extension/akashic-timeline": "2.0.0",
     "@cowlick/config": "^0.5.0",
     "@cowlick/core": "^0.5.0",
@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.3.0",
-    "@akashic/akashic-engine": "2.1.1",
-    "@akashic/akashic-sandbox": "0.13.17",
+    "@akashic/akashic-engine": "2.2.0",
+    "@akashic/akashic-sandbox": "0.13.18",
     "@cowlick/kag-compiler": "^0.5.0",
     "@types/node": "9.4.7",
     "shx": "0.2.2",

@@ -23,7 +23,7 @@
     "estraverse": "4.2.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.1.1",
+    "@akashic/akashic-engine": "2.2.0",
     "@types/escodegen": "0.0.6",
     "@types/estraverse": "0.0.6",
     "@types/node": "9.4.7",
