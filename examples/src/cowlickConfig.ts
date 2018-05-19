@@ -29,7 +29,7 @@ const config: Config = {
         y: g.game.height - g.game.height / 4 - 40
       },
       width: g.game.width - 20,
-      height: g.game.height / 4,
+      height: g.game.height / 4 + 10,
       backgroundImage: "pane",
       padding: 4,
       backgroundEffector: {

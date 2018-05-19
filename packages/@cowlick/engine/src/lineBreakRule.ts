@@ -2,17 +2,33 @@ import {Fragment} from "@akashic-extension/akashic-label";
 
 // https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_7
 const lineHeadWrap = (
+  // 終わり括弧類
   "’”）〕］｝〉》」』】⦆〙〗»〟" +
+  // ハイフン類
   "‐〜゠–" +
+  // 区切り約物
   "？！‼⁇⁈⁉" +
+  // 中点類
   "・：；" +
+  // 句点類、読点類
   "。．、，" +
+  // 繰り返し記号
   "ヽヾゝゞ々〻" +
+  // 長音記号
   "ー" +
+  // 小書きの仮名
   "ぁぃぅぇぉァィゥェォっゃゅょゎゕゖッャュョヮヵヶㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿㇷ゚" +
-  "）〕］").split("");
+  // 割注終わり括弧類
+  "）〕］"
+).split("");
 
-const lineEndWrap = "‘“（〔［｛〈《「『【⦅〘〖«〝" + "（〔［".split("");
+// https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_8
+const lineEndWrap = (
+  // 始め括弧類
+  "‘“（〔［｛〈《「『【⦅〘〖«〝" +
+  // 割注始め括弧類
+  "（〔［"
+).split("");
 
 export function lineBreakRule(fragments: Fragment[], index: number) {
   const target = fragments[index];
