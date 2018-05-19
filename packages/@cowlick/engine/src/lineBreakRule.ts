@@ -30,6 +30,9 @@ const lineEndWrap = (
   "（〔［"
 ).split("");
 
+// https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_10
+const unbreakable = "—…‥".split("");
+
 export function lineBreakRule(fragments: Fragment[], index: number) {
   const target = fragments[index];
   if (typeof target !== "string") {
@@ -41,6 +44,8 @@ export function lineBreakRule(fragments: Fragment[], index: number) {
     if (before) {
       if (typeof before !== "string") {
         return index;
+      } else if (unbreakable.includes(target) && unbreakable.includes(before)) {
+        return index + 1;
       } else if (lineHeadWrap.includes(before)) {
         return index;
       } else if (lineEndWrap.includes(before)) {
