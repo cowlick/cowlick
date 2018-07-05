@@ -60,11 +60,11 @@ function choice(controller: SceneController, choice: core.Choice) {
   const game = controller.game;
   const count = choice.values.length;
   // TODO: 計算式を書き直す
-  const width = choice.width ? choice.width : game.width / 4 * 3;
+  const width = choice.width ? choice.width : (game.width / 4) * 3;
   const height = choice.height ? choice.height : 32;
   const space = 10;
   const baseX = choice.x ? choice.x : width / 6;
-  const baseY = choice.y ? choice.y : (game.height / 3 * 2 - height * count - space * (count - 1)) / 2;
+  const baseY = choice.y ? choice.y : ((game.height / 3) * 2 - height * count - space * (count - 1)) / 2;
   let index = 0;
   for (const item of choice.values) {
     if (item.path) {

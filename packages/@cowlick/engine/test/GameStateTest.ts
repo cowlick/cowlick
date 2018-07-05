@@ -73,7 +73,10 @@ describe("GameState", () => {
         test: 0
       }
     };
-    const actual = state.save({index: 0});
+    const actual = state.save({
+      tag: core.Tag.save,
+      index: 0
+    });
     assert.deepEqual(actual, expected);
   });
 
@@ -106,7 +109,10 @@ describe("GameState", () => {
       logs: [log],
       variables: {}
     };
-    const actual = state.save({index: 0});
+    const actual = state.save({
+      tag: core.Tag.save,
+      index: 0
+    });
     assert.deepEqual(actual, expected);
   });
 
@@ -139,7 +145,11 @@ describe("GameState", () => {
       },
       description: "test"
     };
-    const actual = state.save({index: 0, description: "test"});
+    const actual = state.save({
+      tag: core.Tag.save,
+      index: 0,
+      description: "test"
+    });
     assert.deepEqual(actual, expected);
   });
 
@@ -183,7 +193,11 @@ describe("GameState", () => {
         test: 0
       }
     };
-    const actual = state.save({index: 0, force: true});
+    const actual = state.save({
+      tag: core.Tag.save,
+      index: 0,
+      force: true
+    });
     assert.deepEqual(actual, expected);
   });
 
@@ -215,7 +229,10 @@ describe("GameState", () => {
     });
     assert.throws(() => {
       scenario.next();
-      state.save({index: 0});
+      state.save({
+        tag: core.Tag.save,
+        index: 0
+      });
     }, core.GameError);
   });
 
@@ -234,7 +251,7 @@ describe("GameState", () => {
 
     let input: any = 1;
     let target = {
-      type: "system",
+      type: core.VariableType.system,
       name: "test"
     };
     state.setValue(target, input);
@@ -242,7 +259,7 @@ describe("GameState", () => {
 
     input = false;
     target = {
-      type: "builtin",
+      type: core.VariableType.builtin,
       name: "autoMode"
     };
     state.setValue(target, input);
@@ -250,7 +267,7 @@ describe("GameState", () => {
 
     input = "test";
     target = {
-      type: "current",
+      type: core.VariableType.current,
       name: "test"
     };
     state.setValue(target, input);
@@ -277,19 +294,19 @@ describe("GameState", () => {
     });
 
     let target = {
-      type: "system",
+      type: core.VariableType.system,
       name: "test"
     };
     assert(state.getStringValue(target) === "test");
 
     target = {
-      type: "builtin",
+      type: core.VariableType.builtin,
       name: "autoMode"
     };
     assert(state.getStringValue(target) === "true");
 
     target = {
-      type: "current",
+      type: core.VariableType.current,
       name: "test"
     };
     assert(state.getStringValue(target) === "1");
@@ -310,31 +327,10 @@ describe("GameState", () => {
 
     let input: any = 1;
     let target = {
-      type: "system",
+      type: core.VariableType.system,
       name: "test"
     };
     assert(state.getValue(target) === undefined);
-  });
-
-  it("存在しない変数種別を指定した場合はエラー", () => {
-    const variables = {
-      builtin: {},
-      current: {},
-      system: {}
-    };
-    const state = new GameState({
-      data: [],
-      variables,
-      max: 1,
-      scenario: new core.Scenario([])
-    });
-    const target = {
-      type: "other",
-      name: "test"
-    };
-    assert.throws(() => {
-      state.getValue(target);
-    }, core.GameError);
   });
 
   it("スナップショットを作成できる", () => {
