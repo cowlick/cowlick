@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/analyzer",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "script analyzer for cowlick",
   "main": "lib/index.js",
   "files": [
@@ -18,7 +18,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
-    "@cowlick/core": "^0.5.0",
+    "@cowlick/core": "^0.6.0",
     "escodegen": "1.10.0",
     "estraverse": "4.2.0"
   },
