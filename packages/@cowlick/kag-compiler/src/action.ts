@@ -363,6 +363,9 @@ export function layerConfig(name: string, options: KeyValuePair[]): core.Layer {
     name
   };
   for (const option of options) {
+    if (option.key === "opacity") {
+      option.value = option.value / 255;
+    }
     (result as any)[option.key] = option.value;
   }
   return result;
