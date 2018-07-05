@@ -13,29 +13,22 @@ import {Snapshot} from "./models/Snapshot";
 export class Engine {
   private game: g.Game;
   private static _scriptManager = new ScriptManager(defaultScripts);
-  private static _config = defaultConfig;
+  config: Config;
   private player: g.Player;
 
   constructor(game: g.Game, player: g.Player) {
     this.game = game;
     this.player = player;
+    this.config = defaultConfig();
 
     const assetId = "cowlickConfig";
     if (game.assets[assetId] !== undefined) {
-      Engine._config = g._require(game, assetId);
+      this.config = g._require(game, assetId);
     }
-  }
-
-  set config(value: Config) {
-    Engine._config = value;
   }
 
   static get scriptManager(): ScriptManager {
     return Engine._scriptManager;
-  }
-
-  static get config(): Config {
-    return Engine._config;
   }
 
   /**
@@ -44,13 +37,13 @@ export class Engine {
    * @param scenario シナリオ
    */
   start(scenario: core.Scenario): SceneController {
-    const storageKeys = createStorageKeys(this.player, Engine._config.system.maxSaveCount);
+    const storageKeys = createStorageKeys(this.player, this.config.system.maxSaveCount);
 
     const controller = new SceneController({
       game: this.game,
       scenario,
       scriptManager: Engine.scriptManager,
-      config: Engine.config,
+      config: this.config,
       player: this.player,
       storageKeys
     });
@@ -77,7 +70,7 @@ export class Engine {
     return SceneController.restore({
       game: this.game,
       scriptManager: Engine.scriptManager,
-      config: Engine.config,
+      config: this.config,
       player: this.player,
       snapshot
     });
@@ -96,15 +89,11 @@ export class Engine {
 }
 
 /**
- * ノベルエンジンインスタンス
- */
-export const engine = new Engine(g.game, {id: "0"});
-
-/**
  * エンジンを準備する。
  *
+ * @param game
  * @param player
  */
-export const initialize = (player: g.Player, game?: g.Game) => {
-  return new Engine(game ? game : g.game, player);
+export const initialize = (game?: g.Game, player?: g.Player) => {
+  return new Engine(game ? game : g.game, player ? player : {id: "0"});
 };

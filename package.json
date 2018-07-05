@@ -14,8 +14,7 @@
     "sample:bundle": "cd ./examples && npm run bundle",
     "sample:publish": "gh-pages -d ./dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
     "start": "cd ./examples && npm start",
-    "precommit": "lint-staged",
-    "postcommit": "git reset"
+    "precommit": "lint-staged"
   },
   "author": "pocketberserker",
   "license": "MIT",
@@ -35,7 +34,7 @@
     "bracketSpacing": false
   },
   "lint-staged": {
-    "**/*.{ts}": [
+    "*.ts": [
       "prettier --write",
       "git add"
     ]

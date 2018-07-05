@@ -3,6 +3,7 @@ import * as tl from "@akashic-extension/akashic-timeline";
 import {Scrollable} from "@xnv/akashic-scrollable";
 import * as pg from "@pocketberserker/akashic-pagination";
 import * as core from "@cowlick/core";
+import {Config} from "@cowlick/config";
 import {Scene} from "../components/Scene";
 import {SceneController} from "../components/SceneController";
 import {ImageButton} from "../components/ImageButton";
@@ -81,7 +82,7 @@ function choice(controller: SceneController, choice: core.Choice) {
       padding: choice.padding,
       backgroundEffector: choice.backgroundEffector,
       text: item.text,
-      config: Engine.config,
+      config: controller.config,
       gameState: controller.current.gameState
     });
     button.onClick.add(() => {
@@ -101,7 +102,7 @@ function choice(controller: SceneController, choice: core.Choice) {
   }
 }
 
-function createLink(scene: Scene, link: core.Link) {
+function createLink(scene: Scene, config: Config, link: core.Link) {
   const params: LabelButtonParameters = {
     scene,
     width: link.width,
@@ -110,7 +111,7 @@ function createLink(scene: Scene, link: core.Link) {
     padding: link.padding,
     backgroundEffector: link.backgroundEffector,
     text: link.text,
-    config: Engine.config,
+    config,
     gameState: scene.gameState
   };
   if (link.fontSize) {
@@ -122,7 +123,7 @@ function createLink(scene: Scene, link: core.Link) {
 }
 
 function link(controller: SceneController, link: core.Link) {
-  const l = createLink(controller.current, link);
+  const l = createLink(controller.current, controller.config, link);
   for (const script of link.scripts) {
     l.onClick.add(() => {
       Engine.scriptManager.call(controller, script);
@@ -233,7 +234,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
 
   const message = new Message({
     scene,
-    config: Engine.config,
+    config: controller.config,
     width: controller.game.width - 60,
     x: 0,
     y: 0,
@@ -388,7 +389,7 @@ function openSaveLoadScene(
     last: true
   });
   scene.append(pagination);
-  for (let i = 0; i < Engine.config.system.maxSaveCount; i++) {
+  for (let i = 0; i < controller.config.system.maxSaveCount; i++) {
     const l: core.Link = {
       tag: core.Tag.link,
       layer: info.base.layer,
@@ -400,7 +401,7 @@ function openSaveLoadScene(
       text: String(i),
       scripts: create(i)
     };
-    const button = createLink(scene, l);
+    const button = createLink(scene, controller.config, l);
     button.onClick.add(() => {
       for (const script of l.scripts) {
         Engine.scriptManager.call(controller, script);
@@ -447,7 +448,7 @@ function fontSetting(controller: SceneController, data: core.Font) {
         type: core.VariableType.builtin,
         name: core.BuiltinVariable.fontSize
       },
-      data.size === "default" ? Engine.config.font.size : data.size
+      data.size === "default" ? controller.config.font.size : data.size
     );
   }
   if (data.color) {
@@ -456,7 +457,7 @@ function fontSetting(controller: SceneController, data: core.Font) {
         type: core.VariableType.builtin,
         name: core.BuiltinVariable.fontColor
       },
-      data.color === "default" ? Engine.config.font.color : data.color
+      data.color === "default" ? controller.config.font.color : data.color
     );
   }
   controller.current.applyFontSetting();

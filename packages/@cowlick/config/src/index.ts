@@ -93,42 +93,43 @@ export interface Config {
 
 const size = 18;
 
-export const defaultConfig: Config = {
-  window: {
-    message: {
-      layer: {
-        name: core.LayerKind.message,
-        x: 10,
-        y: 10
+export const defaultConfig = () =>
+  ({
+    window: {
+      message: {
+        layer: {
+          name: core.LayerKind.message,
+          x: 10,
+          y: 10
+        },
+        width: g.game.width - 20,
+        height: g.game.height - 20,
+        touchable: true
       },
-      width: g.game.width - 20,
-      height: g.game.height - 20,
-      touchable: true
+      system: []
     },
-    system: []
-  },
-  font: {
-    list: [
-      new g.DynamicFont({
-        game: g.game,
-        fontFamily: g.FontFamily.SansSerif,
-        size
-      })
-    ],
-    color: "black",
-    alreadyReadColor: "#4444FF",
-    size
-  },
-  system: {
-    maxSaveCount: 100,
-    messageSpeed: 1000 / g.game.fps,
-    autoMessageDuration: 1500,
-    alreadyRead: false,
-    realTimeDisplay: false
-  },
-  audio: {
-    voice: 0.5,
-    se: 0.5,
-    bgm: 0.5
-  }
-};
+    font: {
+      list: [
+        new g.DynamicFont({
+          game: g.game,
+          fontFamily: g.FontFamily.SansSerif,
+          size
+        })
+      ],
+      color: "black",
+      alreadyReadColor: "#4444FF",
+      size
+    },
+    system: {
+      maxSaveCount: 100,
+      messageSpeed: 1000 / g.game.fps,
+      autoMessageDuration: 1500,
+      alreadyRead: false,
+      realTimeDisplay: false
+    },
+    audio: {
+      voice: 0.5,
+      se: 0.5,
+      bgm: 0.5
+    }
+  } as Config);

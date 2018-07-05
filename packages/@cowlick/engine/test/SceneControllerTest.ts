@@ -1,18 +1,24 @@
 "use strict";
+import "./helpers/setup";
+import "@xnv/headless-akashic/polyfill";
 import * as assert from "assert";
 import * as core from "@cowlick/core";
-import * as engine from "./helpers/setup";
+import * as config from "@cowlick/config";
 import {GameState} from "../src/models/GameState";
+import {ScriptManager} from "../src/scripts/ScriptManager";
+import {SaveLoadScene} from "../src/components/SaveLoadScene";
+import {SceneController} from "../src/components/SceneController";
+import {defaultScripts} from "../src/scripts/defaultScripts";
 
 describe("SceneController", () => {
-  function createController(config: engine.config.Config, scriptManager: engine.ScriptManager) {
+  function createController(config: config.Config, scriptManager: ScriptManager) {
     const scenario = new core.Scenario([
       new core.Scene({
         label: "0",
         frames: [
           new core.Frame([
             {
-              tag: "jump",
+              tag: core.Tag.jump,
               label: "1",
               frame: 0
             }
@@ -24,7 +30,7 @@ describe("SceneController", () => {
         frames: [
           new core.Frame([
             {
-              tag: "jump",
+              tag: core.Tag.jump,
               label: "0",
               frame: 0
             }
@@ -32,7 +38,7 @@ describe("SceneController", () => {
         ]
       })
     ]);
-    const controller = new engine.SceneController({
+    const controller = new SceneController({
       game: g.game,
       scenario,
       player: {id: "0"},
@@ -43,7 +49,11 @@ describe("SceneController", () => {
     const data = [
       {
         label: "1",
-        frame: 0,
+        logs: [
+          {
+            frame: 0
+          }
+        ],
         variables: {}
       }
     ];
@@ -56,12 +66,13 @@ describe("SceneController", () => {
       current: {},
       system: {}
     };
-    controller.current._gameState = new GameState({
+    (controller.current as any)._gameState = new GameState({
       data,
       variables,
-      max: config.system.maxSaveCount
+      max: config.system.maxSaveCount,
+      scenario
     });
-    controller.saveLoadScene = new engine.SaveLoadScene({
+    (controller as any).saveLoadScene = new SaveLoadScene({
       game: g.game,
       scene: scenario.scene,
       config,
@@ -72,15 +83,13 @@ describe("SceneController", () => {
   }
 
   it("ロードシーンからゲームシーンに遷移できる", () => {
-    const config = engine.config.defaultConfig;
-    const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
-    const scriptManager = new engine.ScriptManager(defaultScripts);
-    const controller = createController(config, scriptManager);
-    controller.saveLoadScene.stateChanged.add(state => {
+    const scriptManager = new ScriptManager(defaultScripts);
+    const controller = createController(config.defaultConfig(), scriptManager);
+    (controller as any).saveLoadScene.stateChanged.add((state: g.SceneState) => {
       if (state === g.SceneState.Active) {
         scriptManager.call(controller, {tag: core.Tag.closeLoadScene});
         controller.jump({
-          tag: "jump",
+          tag: core.Tag.jump,
           label: "1",
           frame: 0
         });
@@ -94,6 +103,7 @@ describe("SceneController", () => {
       button: 0,
       padding: 10,
       base: {
+        tag: core.Tag.pane,
         layer: {
           name: core.LayerKind.system,
           x: 10,
@@ -106,10 +116,8 @@ describe("SceneController", () => {
   });
 
   it("破棄できる", () => {
-    const config = engine.config.defaultConfig;
-    const defaultScripts = require("../src/scripts/defaultScripts").defaultScripts;
-    const scriptManager = new engine.ScriptManager(defaultScripts);
-    const controller = createController(config, scriptManager);
+    const scriptManager = new ScriptManager(defaultScripts);
+    const controller = createController(config.defaultConfig(), scriptManager);
     controller.current.stateChanged.add(state => {
       if (state === g.SceneState.Active) {
         controller.destroy();

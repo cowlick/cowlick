@@ -1,4 +1,5 @@
 "use strict";
+import "@xnv/headless-akashic/polyfill";
 import * as assert from "assert";
 import * as core from "@cowlick/core";
 import {Snapshot} from "../src/models/Snapshot";

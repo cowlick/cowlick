@@ -9,7 +9,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc -p ./tsconfig.lib.json",
-    "test": "TS_NODE_TRANSPILE_ONLY=1 mocha --compilers ts:espower-typescript/guess test/*.ts"
+    "test": "mocha --compilers ts:espower-typescript/guess test/*.ts"
   },
   "author": "pocketberserker",
   "license": "MIT",

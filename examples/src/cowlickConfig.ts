@@ -20,6 +20,8 @@ const saveLoadPane: novel.Pane = {
 
 const size = 18;
 
+const tmpConfig = defaultConfig();
+
 const config: Config = {
   window: {
     message: {
@@ -129,8 +131,8 @@ const config: Config = {
     alreadyReadColor: "#4444FF",
     size
   },
-  system: defaultConfig.system,
-  audio: defaultConfig.audio
+  system: tmpConfig.system,
+  audio: tmpConfig.audio
 };
 
 module.exports = config;

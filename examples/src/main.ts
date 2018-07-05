@@ -1,7 +1,8 @@
 "use strict";
-import {engine} from "@cowlick/engine";
+import {initialize} from "@cowlick/engine";
 
 module.exports = (param: g.GameMainParameterObject) => {
+  const engine = initialize(g.game);
   if (param.snapshot) {
     require("snapshotLoader")(param.snapshot);
   } else {

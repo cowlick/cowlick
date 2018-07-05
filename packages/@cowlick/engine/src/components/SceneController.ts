@@ -27,13 +27,14 @@ export interface SceneRestoreParameters {
 
 export class SceneController implements g.Destroyable {
   game: g.Game;
+  config: Config;
+  current: GameScene;
+
   private player: g.Player;
-  private config: Config;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
   private storageKeys: g.StorageKey[];
 
-  private _current: GameScene;
   private saveLoadScene: SaveLoadScene;
 
   constructor(params: SceneControllerParameters) {
@@ -43,7 +44,7 @@ export class SceneController implements g.Destroyable {
     this.config = params.config;
     this.player = params.player;
     this.storageKeys = params.storageKeys;
-    this._current = new GameScene({
+    this.current = new GameScene({
       game: this.game,
       scenario: this.scenario,
       scriptManager: this.scriptManager,
@@ -53,7 +54,7 @@ export class SceneController implements g.Destroyable {
       storageKeys: this.storageKeys,
       storageValuesSerialization: params.storageValuesSerialization
     });
-    this._current.loaded.addOnce(() => {
+    this.current.loaded.addOnce(() => {
       this.saveLoadScene = new SaveLoadScene({
         game: this.game,
         scene: this.scenario.scene,
@@ -65,22 +66,18 @@ export class SceneController implements g.Destroyable {
     }, this);
   }
 
-  get current(): GameScene {
-    return this._current;
-  }
-
   get backlog(): core.Log[] {
     return this.scenario.backlog;
   }
 
   snapshot(): Snapshot {
-    return this._current.snapshot();
+    return this.current.snapshot();
   }
 
   start() {
     const scene = this.game.scene();
-    if (scene !== this._current && scene !== this.saveLoadScene) {
-      this.game.pushScene(this._current);
+    if (scene !== this.current && scene !== this.saveLoadScene) {
+      this.game.pushScene(this.current);
     }
   }
 
@@ -118,7 +115,7 @@ export class SceneController implements g.Destroyable {
 
   destroy() {
     const scene = this.game.scene();
-    const current = this._current;
+    const current = this.current;
     if (scene === this.saveLoadScene) {
       // popSceneのリクエスト直後だとcurrentのpopが行われない可能性があるので、破棄後に再度確認する
       this.saveLoadScene.stateChanged.add(status => {
@@ -136,7 +133,7 @@ export class SceneController implements g.Destroyable {
     if (scene === current) {
       this.game.popScene();
     }
-    this._current = undefined;
+    this.current = undefined;
     this.player = undefined;
     this.scenario = undefined;
     this.config = undefined;
@@ -146,7 +143,7 @@ export class SceneController implements g.Destroyable {
   }
 
   destroyed() {
-    return !this._current;
+    return !this.current;
   }
 
   static restore(params: SceneRestoreParameters): SceneController {
@@ -178,8 +175,8 @@ export class SceneController implements g.Destroyable {
   private loadScene(callback?: () => void) {
     this.scenario.clear();
     const previousLoadScene = this.saveLoadScene;
-    const previousGameScene = this._current;
-    this._current = new GameScene({
+    const previousGameScene = this.current;
+    this.current = new GameScene({
       game: this.game,
       scenario: this.scenario,
       scriptManager: this.scriptManager,
@@ -187,9 +184,9 @@ export class SceneController implements g.Destroyable {
       controller: this,
       player: this.player,
       storageKeys: this.storageKeys,
-      state: this._current.gameState
+      state: this.current.gameState
     });
-    this._current.loaded.addOnce(() => {
+    this.current.loaded.addOnce(() => {
       if (callback) {
         callback();
       }
@@ -205,7 +202,7 @@ export class SceneController implements g.Destroyable {
     if (previousLoadScene) {
       previousLoadScene.stateChanged.add(state => {
         if (state === g.SceneState.Destroyed) {
-          this.game.replaceScene(this._current);
+          this.game.replaceScene(this.current);
         }
       }, this);
       switch (previousLoadScene.state) {
@@ -218,14 +215,14 @@ export class SceneController implements g.Destroyable {
           break;
       }
     } else if (this.game.scene() === previousGameScene) {
-      this.game.replaceScene(this._current);
+      this.game.replaceScene(this.current);
     } else {
-      this.game.pushScene(this._current);
+      this.game.pushScene(this.current);
     }
   }
 
   private collectAssetIds(): string[] {
-    return this._current.gameState.collectAssetIds(this.game);
+    return this.current.gameState.collectAssetIds(this.game);
   }
 
   private loadFromSaveData(data: core.SaveData) {
