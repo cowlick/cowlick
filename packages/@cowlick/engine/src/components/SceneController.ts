@@ -126,8 +126,8 @@ export class SceneController implements g.Destroyable {
         }
       }, this);
       this.game.popScene();
-    } else if (!this.saveLoadScene.destroyed()) {
-      this.destroy();
+    } else if (this.saveLoadScene.destroyed() == false) {
+      this.saveLoadScene.destroy();
     }
     this.saveLoadScene = undefined;
     if (scene === current) {
