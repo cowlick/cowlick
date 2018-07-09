@@ -1,6 +1,6 @@
 {
   "name": "cowlick-sample",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "build": "cowlick-kag-compiler ./scenario -o ./script && tsc -p . && npm run scan:assets",
@@ -12,9 +12,9 @@
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.3",
     "@akashic-extension/akashic-timeline": "2.0.0",
-    "@cowlick/config": "^0.6.0",
-    "@cowlick/core": "^0.6.0",
-    "@cowlick/engine": "^0.6.0",
+    "@cowlick/config": "^0.7.0",
+    "@cowlick/core": "^0.7.0",
+    "@cowlick/engine": "^0.7.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4"
   },
@@ -22,7 +22,7 @@
     "@akashic/akashic-cli": "1.3.1",
     "@akashic/akashic-engine": "2.3.3",
     "@akashic/akashic-sandbox": "0.13.27",
-    "@cowlick/kag-compiler": "^0.6.0",
+    "@cowlick/kag-compiler": "^0.7.0",
     "@types/node": "9.4.7",
     "shx": "0.3.1",
     "typescript": "2.9.2"
