@@ -106,6 +106,7 @@ export class GameScene extends Scene {
     }, this);
     this.disableWindowClick();
     this.enableWindowClick();
+    this.topMessageLayer();
   }
 
   applyLayerConfig(config: core.LayerConfig) {
@@ -229,7 +230,6 @@ export class GameScene extends Scene {
       this.removeLayers(frame.scripts);
       this.applyScripts(frame.scripts);
     }
-    this.topMessageLayer();
     this.layerGroup.top(core.LayerKind.system);
   }
 
