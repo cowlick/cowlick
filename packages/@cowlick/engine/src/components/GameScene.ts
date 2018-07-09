@@ -102,6 +102,9 @@ export class GameScene extends Scene {
     this._gameState.markAlreadyRead(scene.label, scene.index);
     this._message.onFinished.addOnce(t => {
       this.scenario.pushTextLog(t);
+      for (const s of this.config.window.message.marker) {
+        this.scriptManager.call(this.controller, s);
+      }
       this.scriptManager.call(this.controller, {tag: core.Tag.autoMode});
     }, this);
     this.disableWindowClick();
@@ -244,14 +247,14 @@ export class GameScene extends Scene {
   private createMessageLayer() {
     this.scriptManager.call(this.controller, {
       tag: core.Tag.pane,
-      ...this.config.window.message
+      ...this.config.window.message.ui
     });
     this._message = new Message({
       scene: this,
       config: this.config,
       width: this.game.width - 60,
-      x: this.config.window.message.layer.x + 20,
-      y: this.config.window.message.layer.y + 10,
+      x: this.config.window.message.ui.layer.x + 20,
+      y: this.config.window.message.ui.layer.y + 10,
       gameState: this.gameState
     });
     this.layerGroup.append(this._message, {name: core.LayerKind.message});
@@ -284,8 +287,8 @@ export class GameScene extends Scene {
 
   private static collectAssetIds(params: GameSceneParameters) {
     const assetIds = params.scenario.scene.assetIds.concat(core.collectAssetIds(params.config.window.system));
-    if (params.config.window.message.backgroundImage) {
-      assetIds.push(params.config.window.message.backgroundImage);
+    if (params.config.window.message.ui.backgroundImage) {
+      assetIds.push(params.config.window.message.ui.backgroundImage);
     }
     return assetIds;
   }

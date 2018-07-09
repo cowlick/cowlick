@@ -23,13 +23,22 @@ export interface FontConfig {
 }
 
 /**
- * ゲームウィンドウ設定
+ * メッセージウィンドウ設定
  */
-export interface WindowConfig {
+export interface MessageWindowConfig {
   /**
    * メッセージレイヤに使用するPane
    */
-  message: core.PaneDefinition;
+  ui: core.PaneDefinition;
+
+  marker: core.Script[];
+}
+
+/**
+ * ゲームウィンドウ設定
+ */
+export interface WindowConfig {
+  message: MessageWindowConfig;
   /**
    * システムUIに使用するスクリプト
    */
@@ -97,14 +106,17 @@ export const defaultConfig = () =>
   ({
     window: {
       message: {
-        layer: {
-          name: core.LayerKind.message,
-          x: 10,
-          y: 10
+        ui: {
+          layer: {
+            name: core.LayerKind.message,
+            x: 10,
+            y: 10
+          },
+          width: g.game.width - 20,
+          height: g.game.height - 20,
+          touchable: true
         },
-        width: g.game.width - 20,
-        height: g.game.height - 20,
-        touchable: true
+        marker: []
       },
       system: []
     },

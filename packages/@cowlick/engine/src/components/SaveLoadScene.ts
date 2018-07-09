@@ -58,8 +58,8 @@ export class SaveLoadScene extends Scene {
 
   private static collectAssetIds(params: SaveLoadSceneParameters) {
     const assetIds = params.scene.assetIds.concat(core.collectAssetIds(params.config.window.system), params.assetIds);
-    if (params.config.window.message.backgroundImage) {
-      assetIds.push(params.config.window.message.backgroundImage);
+    if (params.config.window.message.ui.backgroundImage) {
+      assetIds.push(params.config.window.message.ui.backgroundImage);
     }
     return assetIds;
   }

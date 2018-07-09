@@ -25,19 +25,22 @@ const tmpConfig = defaultConfig();
 const config: Config = {
   window: {
     message: {
-      layer: {
-        name: novel.LayerKind.message,
-        x: 10,
-        y: g.game.height - g.game.height / 4 - 40
+      ui: {
+        layer: {
+          name: novel.LayerKind.message,
+          x: 10,
+          y: g.game.height - g.game.height / 4 - 40
+        },
+        width: g.game.width - 20,
+        height: g.game.height / 4 + 10,
+        backgroundImage: "pane",
+        padding: 4,
+        backgroundEffector: {
+          borderWidth: 4
+        },
+        touchable: true
       },
-      width: g.game.width - 20,
-      height: g.game.height / 4 + 10,
-      backgroundImage: "pane",
-      padding: 4,
-      backgroundEffector: {
-        borderWidth: 4
-      },
-      touchable: true
+      marker: []
     },
     system: [
       {
