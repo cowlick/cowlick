@@ -301,14 +301,28 @@ function clearCurrentVariables(controller: SceneController, _: any) {
 function fadeIn(controller: SceneController, info: core.Fade) {
   controller.current.transition(info.layer, layer => {
     let timeline = new tl.Timeline(controller.current);
-    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed}).fadeIn(info.duration);
+    timeline
+      .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
+      .fadeIn(info.duration)
+      .call(() => {
+        for (const s of info.after) {
+          Engine.scriptManager.call(controller, s);
+        }
+      });
   });
 }
 
 function fadeOut(controller: SceneController, info: core.Fade) {
   controller.current.transition(info.layer, layer => {
     let timeline = new tl.Timeline(controller.current);
-    timeline.create(layer, {modified: layer.modified, destroyed: layer.destroyed}).fadeOut(info.duration);
+    timeline
+      .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
+      .fadeOut(info.duration)
+      .call(() => {
+        for (const s of info.after) {
+          Engine.scriptManager.call(controller, s);
+        }
+      });
   });
 }
 

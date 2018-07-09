@@ -500,6 +500,7 @@ export interface Fade extends ScriptNode {
   tag: Tag.fadeIn | Tag.fadeOut;
   layer: string;
   duration: number;
+  after: Script[];
 }
 
 /**
