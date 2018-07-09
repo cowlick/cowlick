@@ -7,7 +7,8 @@
           {
             "tag": "fadeIn",
             "layer": "test",
-            "duration": 10
+            "duration": 10,
+            "after": []
           }
         ],
         "skippable": false

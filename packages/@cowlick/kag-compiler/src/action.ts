@@ -235,6 +235,7 @@ export function tag(name: string, attrs: KeyValuePair[]): core.Script {
   switch (name) {
     case core.Tag.fadeIn:
     case core.Tag.fadeOut:
+      result.data.after = [];
       return result.data as core.Fade;
   }
   return result;

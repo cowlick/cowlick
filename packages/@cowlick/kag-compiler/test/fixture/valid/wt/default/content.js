@@ -7,7 +7,8 @@ module.exports = new core.Scene({
       {
         tag: "fadeIn",
         layer: "test",
-        duration: 10
+        duration: 10,
+        after: []
       }
     ]),
     new core.Frame([

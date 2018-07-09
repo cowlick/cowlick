@@ -144,10 +144,15 @@ function property(name: string, value: estree.Expression): estree.Property {
   };
 }
 
-function literal(value: any): estree.Literal {
+function literal(value: any): estree.Expression {
   let raw: string;
   if (typeof value === "string") {
     raw = JSON.stringify(value);
+  } else if (Array.isArray(value)) {
+    return {
+      type: ArrayExpression,
+      elements: value
+    };
   } else {
     raw = String(value);
   }
