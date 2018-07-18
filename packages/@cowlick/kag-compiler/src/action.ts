@@ -269,6 +269,9 @@ function replaceVariable(node: estree.MemberExpression) {
       case varF:
         newObject = newMemberExpression(core.VariableType.current);
         break;
+      // akashic-engineの g については何もしない
+      case "g":
+        return;
       default:
         throw new Error(`"${object.name}" is a invalid variable name.`);
     }
