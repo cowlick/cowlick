@@ -38,7 +38,9 @@ export class LayerGroup {
     const layer = this.group.get(name);
     if (layer) {
       if (this.group.delete(name)) {
-        layer.destroy();
+        if (layer.destroyed() === false) {
+          layer.destroy();
+        }
       }
     }
   }
