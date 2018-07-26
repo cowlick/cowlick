@@ -31,6 +31,14 @@ export interface MessageWindowConfig {
    */
   ui: core.PaneDefinition;
 
+  /**
+   * 先頭文字の位置
+   */
+  top: {
+    x: number;
+    y: number;
+  };
+
   marker: core.Script[];
 }
 
@@ -115,6 +123,10 @@ export const defaultConfig = () =>
           width: g.game.width - 20,
           height: g.game.height - 20,
           touchable: true
+        },
+        top: {
+          x: 30,
+          y: 20
         },
         marker: []
       },

@@ -40,6 +40,10 @@ const config: Config = {
         },
         touchable: true
       },
+      top: {
+        x: 30,
+        y: g.game.height - g.game.height / 4 - 30
+      },
       marker: []
     },
     system: [

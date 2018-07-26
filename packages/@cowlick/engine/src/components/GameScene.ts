@@ -253,8 +253,8 @@ export class GameScene extends Scene {
       scene: this,
       config: this.config,
       width: this.game.width - 60,
-      x: this.config.window.message.ui.layer.x + 20,
-      y: this.config.window.message.ui.layer.y + 10,
+      x: this.config.window.message.top.x,
+      y: this.config.window.message.top.y,
       gameState: this.gameState
     });
     this.layerGroup.append(this._message, {name: core.LayerKind.message});
