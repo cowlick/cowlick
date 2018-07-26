@@ -27,8 +27,9 @@ async function parseScene(target: string, baseDir: string, run: Run<kag.Result>)
   };
 }
 
-export async function parse(baseDir: string, run: Run<kag.Result>): Promise<analyzer.Scenario> {
-  let targets = ["first.ks"];
+export async function parse(target: string, run: Run<kag.Result>): Promise<analyzer.Scenario> {
+  const baseDir = path.dirname(target);
+  let targets = [path.basename(target)];
   const scenario: analyzer.Scene[] = [];
   while (targets.length !== 0) {
     const result = await parseScene(targets.pop(), baseDir, run);

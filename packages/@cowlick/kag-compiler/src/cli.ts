@@ -14,19 +14,19 @@ interface CompileOpts {
 }
 
 interface CompileArgs {
-  inputDir: string;
+  input: string;
 }
 
 const root = commandpost
-  .create<CompileOpts, CompileArgs>("cowlick-kag-compiler [inputDir]")
+  .create<CompileOpts, CompileArgs>("cowlick-kag-compiler [input]")
   .version(packageJson.version, "-v, --version")
   .description("compile KAG scenario")
   .option("-o, --output <output>", "output dir")
   .action(async (opts, args) => {
     const output: string = opts.output[0] || "script";
     const outputPath = path.resolve(process.cwd(), output);
-    const basePath = path.resolve(process.cwd(), args.inputDir);
-    const ast = await parse(basePath, runProgress);
+    const target = path.resolve(process.cwd(), args.input);
+    const ast = await parse(target, runProgress);
     const result = await runProgress("Analyzing scenario", async () => analyzer.analyze(ast));
     try {
       await analyzer.mkdir(outputPath);

@@ -3,7 +3,7 @@
   "version": "0.7.0",
   "private": true,
   "scripts": {
-    "build": "cowlick-kag-compiler ./scenario -o ./script && tsc -p . && npm run scan:assets",
+    "build": "cowlick-kag-compiler ./scenario/first.ks -o ./script && tsc -p . && npm run scan:assets",
     "start": "akashic-sandbox .",
     "scan:assets": "npm run copy:images && akashic scan asset",
     "copy:images": "shx cp ../docs/images/cowlick.png ./image",
