@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/config",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "configuration for cowlick",
   "main": "lib/index.js",
   "files": [
@@ -18,7 +18,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
-    "@cowlick/core": "^0.7.0"
+    "@cowlick/core": "^0.8.0"
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.3.5",
