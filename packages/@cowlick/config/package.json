@@ -21,7 +21,7 @@
     "@cowlick/core": "^0.7.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.3.3",
+    "@akashic/akashic-engine": "2.3.5",
     "@types/node": "9.4.7",
     "typescript": "2.9.2"
   },

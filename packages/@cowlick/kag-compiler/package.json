@@ -29,10 +29,10 @@
     "acorn": "5.7.1",
     "commandpost": "1.3.0",
     "estraverse": "4.2.0",
-    "ora": "2.1.0"
+    "ora": "3.0.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.3.3",
+    "@akashic/akashic-engine": "2.3.5",
     "@types/acorn": "4.0.3",
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.2",
@@ -42,7 +42,7 @@
     "@types/node": "9.4.7",
     "@types/ora": "1.3.4",
     "espower-typescript": "9.0.0",
-    "esprima": "4.0.0",
+    "esprima": "4.0.1",
     "mocha": "5.2.0",
     "pegjs": "0.10.0",
     "power-assert": "1.6.0",
