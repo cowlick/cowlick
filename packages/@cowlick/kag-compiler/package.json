@@ -46,7 +46,7 @@
     "mocha": "5.2.0",
     "pegjs": "0.10.0",
     "power-assert": "1.6.0",
-    "typescript": "2.9.2"
+    "typescript": "3.0.1"
   },
   "publishConfig": {
     "access": "public"
