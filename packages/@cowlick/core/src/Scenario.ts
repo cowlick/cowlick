@@ -85,7 +85,7 @@ export class Scenario {
    * @param game
    * @param data
    */
-  findScene(game: g.Game, data: SaveData): Scene {
+  findScene(game: g.Game, data: SaveData): Scene | undefined {
     let scene = this.scenes.find(s => s.label === data.label);
     if (scene) {
       return scene;
@@ -113,7 +113,9 @@ export class Scenario {
   pushTextLog(text: string) {
     const index = this.scene.index;
     const log = this.logs.find(l => l.frame === index);
-    log.text = text;
+    if (log) {
+      log.text = text;
+    }
   }
 
   /**

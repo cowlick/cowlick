@@ -23,7 +23,8 @@ export type Script =
   | core.Trigger
   | Choice
   | Link
-  | core.Audio
+  | core.PlayAudio
+  | core.StopAudio
   | core.ChangeVolume
   | core.Video
   | core.Save

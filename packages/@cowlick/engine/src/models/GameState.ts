@@ -94,7 +94,7 @@ export class GameState {
    *
    * @param variable 変数情報
    */
-  getStringValue(variable: core.Variable): string {
+  findStringValue(variable: core.Variable): string | undefined {
     const result = this.getValue(variable);
     if (result) {
       return String(result);
@@ -123,7 +123,12 @@ export class GameState {
     for (const d of this.data) {
       // まだセーブされていない番地はundefinedなので飛ばす
       if (d) {
-        ids.push(...this.scenario.findScene(game, d).assetIds);
+        const scene = this.scenario.findScene(game, d);
+        if (scene) {
+          ids.push(...scene.assetIds);
+        } else {
+          throw new core.GameError("scene not found", d);
+        }
       }
     }
     return ids;

@@ -97,7 +97,7 @@ export class Message extends al.Label {
         } else if (Array.isArray(t)) {
           this.text += t[t.length - 1].value;
         } else {
-          const result = this.gameState.getStringValue(t);
+          const result = this.gameState.findStringValue(t);
           if (result) {
             this.text += result;
           } else {
@@ -152,7 +152,7 @@ export class Message extends al.Label {
     } else if (Array.isArray(ts)) {
       this.current = ts;
     } else {
-      const result = this.gameState.getStringValue(ts);
+      const result = this.gameState.findStringValue(ts);
       if (result) {
         this.current = result.split(/.*?/);
       } else {

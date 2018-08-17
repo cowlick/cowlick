@@ -8,7 +8,6 @@
       },
       {
         "tag": "stopAudio",
-        "assetId": null,
         "group": "bgm"
       }
     ]

@@ -140,7 +140,7 @@ function layerConfig(controller: SceneController, config: core.LayerConfig) {
   controller.current.applyLayerConfig(config);
 }
 
-function playAudio(controller: SceneController, audio: core.Audio) {
+function playAudio(controller: SceneController, audio: core.PlayAudio) {
   controller.current.playAudio(audio);
 }
 
@@ -148,7 +148,7 @@ function changeVolume(controller: SceneController, data: core.ChangeVolume) {
   controller.current.changeVolume(data);
 }
 
-function stopAudio(controller: SceneController, audio: core.Audio) {
+function stopAudio(controller: SceneController, audio: core.StopAudio) {
   controller.current.stopAudio(audio);
 }
 

@@ -35,7 +35,7 @@ export class SceneController implements g.Destroyable {
   private scriptManager: ScriptManager;
   private storageKeys: g.StorageKey[];
 
-  private saveLoadScene: SaveLoadScene;
+  private saveLoadScene: SaveLoadScene | undefined;
 
   constructor(params: SceneControllerParameters) {
     this.game = params.game;
@@ -106,11 +106,19 @@ export class SceneController implements g.Destroyable {
 
   openSaveLoadScene(): Scene {
     this.game.pushScene(this.saveLoadScene);
-    return this.saveLoadScene;
+    if (this.saveLoadScene) {
+      return this.saveLoadScene;
+    } else {
+      throw new core.GameError("セーブシーン、ロードシーンが存在しません");
+    }
   }
 
   closeSaveLoadScene() {
-    this.saveLoadScene.close();
+    if (this.saveLoadScene) {
+      this.saveLoadScene.close();
+    } else {
+      throw new core.GameError("セーブシーン、ロードシーンが存在しません");
+    }
   }
 
   destroy() {
@@ -126,7 +134,7 @@ export class SceneController implements g.Destroyable {
         }
       }, this);
       this.game.popScene();
-    } else if (this.saveLoadScene.destroyed() == false) {
+    } else if (this.saveLoadScene && this.saveLoadScene.destroyed() == false) {
       this.saveLoadScene.destroy();
     }
     this.saveLoadScene = undefined;

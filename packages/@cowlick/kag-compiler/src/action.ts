@@ -154,9 +154,9 @@ const varSf = "sf";
 const varF = "f";
 
 export function variable(expression: string): core.Variable {
-  let value: core.Variable;
+  let value: core.Variable | undefined;
   estraverse.traverse(acorn.parse(expression), {
-    enter: function(node, _) {
+    enter: function(node, _): estraverse.VisitorOption | void {
       if (node.type === "Program" && node.body.length === 1) {
         const statement = node.body[0];
         if (statement.type === "ExpressionStatement") {
@@ -176,7 +176,7 @@ export function variable(expression: string): core.Variable {
                 };
                 break;
             }
-            this.break();
+            return estraverse.VisitorOption.Break;
           }
         }
       }
@@ -189,7 +189,7 @@ export function variable(expression: string): core.Variable {
   }
 }
 
-export function playAudio(assetId: string, group: string): core.Audio {
+export function playAudio(assetId: string, group: string): core.PlayAudio {
   return {
     tag: core.Tag.playAudio,
     assetId: assetId,
@@ -197,10 +197,9 @@ export function playAudio(assetId: string, group: string): core.Audio {
   };
 }
 
-export function stopAudio(group: string): core.Audio {
+export function stopAudio(group: string): core.StopAudio {
   return {
     tag: core.Tag.stopAudio,
-    assetId: null,
     group
   };
 }

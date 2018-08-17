@@ -297,19 +297,19 @@ describe("GameState", () => {
       type: core.VariableType.system,
       name: "test"
     };
-    assert(state.getStringValue(target) === "test");
+    assert(state.findStringValue(target) === "test");
 
     target = {
       type: core.VariableType.builtin,
       name: "autoMode"
     };
-    assert(state.getStringValue(target) === "true");
+    assert(state.findStringValue(target) === "true");
 
     target = {
       type: core.VariableType.current,
       name: "test"
     };
-    assert(state.getStringValue(target) === "1");
+    assert(state.findStringValue(target) === "1");
   });
 
   it("変数が定義されていない場合はundefinedを返す", () => {

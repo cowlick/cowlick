@@ -356,10 +356,14 @@ function condition(original: ast.Condition, options: VisitorOptions): estree.Obj
 }
 
 function jump(original: ast.Jump, options: VisitorOptions): estree.ObjectExpression {
-  const label = "scene" in original ? original.scene : options.scene;
+  let label: string = options.scene;
+  if (original.scene) {
+    label = original.scene;
+  }
   const result = object([property("tag", literal(core.Tag.jump)), property("label", literal(label))]);
   if (original.frame) {
-    options.state.replaces.push(f => f(result, label, original.frame));
+    const frame: string = original.frame;
+    options.state.replaces.push(f => f(result, label, frame));
   }
   return result;
 }
@@ -474,13 +478,11 @@ function paneProperties(original: core.PaneDefinition): estree.Property[] {
   if ("padding" in original) {
     ps.push(property("padding", literal(original.padding)));
   }
-  if ("backgroundEffector" in original) {
-    ps.push(
-      property(
-        "backgroundEffector",
-        object([property("borderWidth", literal(original.backgroundEffector.borderWidth))])
-      )
-    );
+  if (original.backgroundEffector) {
+    const effector = original.backgroundEffector;
+    if (effector.borderWidth) {
+      ps.push(property("backgroundEffector", object([property("borderWidth", literal(effector.borderWidth))])));
+    }
   }
   if ("touchable" in original) {
     ps.push(property("touchable", literal(original.touchable)));

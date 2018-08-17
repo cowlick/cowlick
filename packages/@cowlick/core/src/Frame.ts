@@ -10,6 +10,7 @@ export class Frame {
 
   constructor(scripts: Script[]) {
     this._scripts = scripts;
+    this.cacheAssetIds = [];
   }
 
   get scripts(): Script[] {
@@ -17,7 +18,7 @@ export class Frame {
   }
 
   get assetIds(): string[] {
-    if (!this.cacheAssetIds) {
+    if (this.cacheAssetIds.length <= 0) {
       this.cacheAssetIds = collectAssetIds(this._scripts);
     }
     return this.cacheAssetIds;

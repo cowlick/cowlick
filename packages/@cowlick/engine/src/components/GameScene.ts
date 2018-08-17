@@ -150,7 +150,7 @@ export class GameScene extends Scene {
     this.scenario.next();
   }
 
-  playAudio(audio: core.Audio) {
+  playAudio(audio: core.PlayAudio) {
     const player = this.audioGroup.add(audio);
     if (audio.group === core.AudioGroup.voice) {
       player.stopped.addOnce(() => {
@@ -163,7 +163,7 @@ export class GameScene extends Scene {
     this.audioGroup.changeVolume(data.groupName, data.volume);
   }
 
-  stopAudio(audio: core.Audio) {
+  stopAudio(audio: core.StopAudio) {
     this.audioGroup.remove(audio);
   }
 

@@ -11,7 +11,6 @@ module.exports = new core.Scene({
       },
       {
         tag: "stopAudio",
-        assetId: null,
         group: "se"
       }
     ])

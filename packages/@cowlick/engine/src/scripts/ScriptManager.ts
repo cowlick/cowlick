@@ -19,7 +19,7 @@ export class ScriptManager {
   }
 
   call(controller: SceneController, script: Script) {
-    let f: ScriptFunction;
+    let f: ScriptFunction | undefined;
     let data: any;
     if (script.tag === Tag.extension) {
       f = this.scripts.get(script.data.tag);

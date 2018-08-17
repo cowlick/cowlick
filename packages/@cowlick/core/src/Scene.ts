@@ -19,6 +19,7 @@ export class Scene {
     this._index = 0;
     this._label = params.label;
     this.frames = params.frames;
+    this.cacheAssetIds = [];
   }
 
   get index() {
@@ -38,7 +39,7 @@ export class Scene {
   }
 
   get assetIds(): string[] {
-    if (!this.cacheAssetIds) {
+    if (this.cacheAssetIds.length <= 0) {
       this.cacheAssetIds = [];
       for (const f of this.frames) {
         this.cacheAssetIds.push(...f.assetIds);

@@ -18,7 +18,8 @@ export type Script =
   | Trigger
   | Choice
   | Link
-  | Audio
+  | PlayAudio
+  | StopAudio
   | ChangeVolume
   | Video
   | Save
@@ -240,7 +241,6 @@ export function collectAssetIds(scripts: Script[]): string[] {
         ids.push(...collectAssetIds(s.scripts));
         break;
       case Tag.playAudio:
-      case Tag.stopAudio:
         ids.push(s.assetId);
         break;
       case Tag.playVideo:
@@ -400,10 +400,10 @@ export interface Link extends ScriptNode, PaneDefinition {
 }
 
 /**
- * 音声情報
+ * 再生対象音声情報
  */
-export interface Audio extends ScriptNode {
-  tag: Tag.playAudio | Tag.stopAudio;
+export interface PlayAudio extends ScriptNode {
+  tag: Tag.playAudio;
   /**
    * アセットID
    */
@@ -411,7 +411,22 @@ export interface Audio extends ScriptNode {
   /**
    * 音声が属するグループ名
    */
-  group?: string;
+  group: string;
+}
+
+/**
+ * 停止対象音声情報
+ */
+export interface StopAudio extends ScriptNode {
+  tag: Tag.stopAudio;
+  /**
+   * アセットID
+   */
+  assetId?: string;
+  /**
+   * 音声が属するグループ名
+   */
+  group: string;
 }
 
 /**

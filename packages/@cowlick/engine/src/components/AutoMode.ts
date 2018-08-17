@@ -4,7 +4,7 @@ import {GameScene} from "./GameScene";
 
 export class AutoMode {
   private scene: GameScene;
-  private autoIdentifier: g.TimerIdentifier;
+  private autoIdentifier: g.TimerIdentifier | undefined;
 
   constructor(scene: GameScene) {
     this.scene = scene;
@@ -17,7 +17,7 @@ export class AutoMode {
     this.autoIdentifier = this.scene.setTimeout(
       () => {
         this.scene.requestNextFrame();
-        this.autoIdentifier = null;
+        this.autoIdentifier = undefined;
       },
       this.scene.gameState.variables.builtin[BuiltinVariable.autoMessageDuration],
       this
@@ -27,7 +27,7 @@ export class AutoMode {
   clear() {
     if (this.autoIdentifier) {
       this.scene.clearTimeout(this.autoIdentifier);
-      this.autoIdentifier = null;
+      this.autoIdentifier = undefined;
     }
   }
 }

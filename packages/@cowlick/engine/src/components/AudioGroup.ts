@@ -1,5 +1,5 @@
 "use strict";
-import {Audio, GameError} from "@cowlick/core";
+import {PlayAudio, StopAudio, GameError} from "@cowlick/core";
 import {AudioConfig} from "@cowlick/config";
 
 export class AudioGroup {
@@ -13,7 +13,7 @@ export class AudioGroup {
     this.config = config;
   }
 
-  add(audio: Audio) {
+  add(audio: PlayAudio) {
     let ps = this.group.get(audio.group);
     if (!ps) {
       ps = [];
@@ -37,7 +37,7 @@ export class AudioGroup {
     }
   }
 
-  remove(audio: Audio) {
+  remove(audio: StopAudio) {
     let ps = this.group.get(audio.group);
     if (ps) {
       if (this.group.delete(audio.group)) {
@@ -56,7 +56,7 @@ export class AudioGroup {
     }
   }
 
-  private play(audio: Audio) {
+  private play(audio: PlayAudio) {
     const asset = this.scene.assets[audio.assetId] as g.AudioAsset;
     return asset.play();
   }

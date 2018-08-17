@@ -27,12 +27,13 @@ async function parseScene(target: string, baseDir: string, run: Run<kag.Result>)
   };
 }
 
-export async function parse(target: string, run: Run<kag.Result>): Promise<analyzer.Scenario> {
-  const baseDir = path.dirname(target);
-  let targets = [path.basename(target)];
+export async function parse(first: string, run: Run<kag.Result>): Promise<analyzer.Scenario> {
+  const baseDir = path.dirname(first);
+  let targets = [path.basename(first)];
+  let target: string | undefined = path.basename(first);
   const scenario: analyzer.Scene[] = [];
-  while (targets.length !== 0) {
-    const result = await parseScene(targets.pop(), baseDir, run);
+  while (target) {
+    const result = await parseScene(target, baseDir, run);
     scenario.push(result.scene);
 
     // ファイル登場順に1度だけ解析対象として追加する
@@ -41,6 +42,8 @@ export async function parse(target: string, run: Run<kag.Result>): Promise<analy
         targets.push(d);
       }
     }
+
+    target = targets.pop();
   }
   return scenario;
 }

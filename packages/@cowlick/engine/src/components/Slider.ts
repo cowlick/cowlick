@@ -55,6 +55,8 @@ export class Slider extends g.Pane {
           image
         });
         break;
+      default:
+        throw new core.GameError("Can not initialize slider. Please bug report.");
     }
     this.width = this.bar.width;
     this.height = this.bar.height;

@@ -5,6 +5,7 @@
     "lib": [
       "es2017"
     ],
+    "strict": true,
     "sourceMap": false,
     "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
