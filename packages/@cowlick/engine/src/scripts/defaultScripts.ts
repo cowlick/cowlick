@@ -16,7 +16,7 @@ import {Engine} from "../Engine";
 
 function image(controller: SceneController, image: core.Image) {
   const scene = controller.current;
-  scene.appendLayer(createImage(scene, image), image.layer);
+  scene.appendLayer(createImage(scene.body, image), image.layer);
   scene.applyLayerConfig({
     name: image.layer.name,
     opacity: image.layer.opacity,
@@ -27,12 +27,12 @@ function image(controller: SceneController, image: core.Image) {
 function pane(controller: SceneController, pane: core.Pane) {
   const scene = controller.current;
   const p = new g.Pane({
-    scene,
+    scene: scene.body,
     width: pane.width,
     height: pane.height,
     x: pane.layer.x,
     y: pane.layer.y,
-    backgroundImage: pane.backgroundImage ? (scene.assets[pane.backgroundImage] as g.ImageAsset) : undefined,
+    backgroundImage: pane.backgroundImage ? (scene.body.assets[pane.backgroundImage] as g.ImageAsset) : undefined,
     padding: pane.padding,
     backgroundEffector: pane.backgroundEffector
       ? new g.NinePatchSurfaceEffector(scene.game, pane.backgroundEffector.borderWidth)
@@ -47,7 +47,7 @@ function jump(controller: SceneController, target: core.Jump) {
 }
 
 function button(controller: SceneController, data: core.Button) {
-  const button = ImageButton.create(controller.current, data.image);
+  const button = ImageButton.create(controller.current.body, data.image);
   button.move(data.x, data.y);
   button.onClick.add(() => {
     for (const s of data.scripts) {
@@ -75,7 +75,7 @@ function choice(controller: SceneController, choice: core.Choice) {
       }
     }
     let button = new LabelButton({
-      scene: controller.current,
+      scene: controller.current.body,
       width,
       height,
       backgroundImage: choice.backgroundImage,
@@ -104,7 +104,7 @@ function choice(controller: SceneController, choice: core.Choice) {
 
 function createLink(scene: Scene, config: Config, link: core.Link) {
   const params: LabelButtonParameters = {
-    scene,
+    scene: scene.body,
     width: link.width,
     height: link.height,
     backgroundImage: link.backgroundImage,
@@ -161,7 +161,7 @@ function stopVideo(controller: SceneController, video: core.Video) {
 }
 
 function click(controller: SceneController, data: core.Click) {
-  const scene = controller.current;
+  const scene = controller.current.body;
   scene.pointUpCapture.addOnce(() => {
     for (const s of data.scripts) {
       Engine.scriptManager.call(controller, s);
@@ -222,7 +222,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
   }
 
   const scrollable = new Scrollable({
-    scene,
+    scene: scene.body,
     x: 20,
     y: 50,
     width: controller.game.width - 50,
@@ -233,7 +233,7 @@ function backlog(controller: SceneController, data: core.Backlog) {
   scene.appendLayer(scrollable, layer);
 
   const message = new Message({
-    scene,
+    scene: scene.body,
     config: controller.config,
     width: controller.game.width - 60,
     x: 0,
@@ -300,7 +300,7 @@ function clearCurrentVariables(controller: SceneController, _: any) {
 
 function fadeIn(controller: SceneController, info: core.Fade) {
   controller.current.transition(info.layer, layer => {
-    let timeline = new tl.Timeline(controller.current);
+    let timeline = new tl.Timeline(controller.current.body);
     timeline
       .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
       .fadeIn(info.duration)
@@ -314,7 +314,7 @@ function fadeIn(controller: SceneController, info: core.Fade) {
 
 function fadeOut(controller: SceneController, info: core.Fade) {
   controller.current.transition(info.layer, layer => {
-    let timeline = new tl.Timeline(controller.current);
+    let timeline = new tl.Timeline(controller.current.body);
     timeline
       .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
       .fadeOut(info.duration)
@@ -327,7 +327,7 @@ function fadeOut(controller: SceneController, info: core.Fade) {
 }
 
 function timeout(controller: SceneController, info: core.Timeout) {
-  controller.current.setTimeout(() => {
+  controller.current.body.setTimeout(() => {
     for (const s of info.scripts) {
       Engine.scriptManager.call(controller, s);
     }
@@ -351,7 +351,7 @@ function exception(controller: SceneController, e: core.GameError) {
 
 function slider(controller: SceneController, info: core.Slider) {
   const s = new Slider({
-    scene: controller.current,
+    scene: controller.current.body,
     width: 0,
     height: 0,
     x: info.layer.x,
@@ -372,12 +372,12 @@ function closeLoadScene(controller: SceneController, _: any) {
   controller.closeSaveLoadScene();
 }
 
-function openSaveLoadScene(
+function onLoadedSaveLoadScene(
+  scene: Scene,
   controller: SceneController,
   info: core.SaveLoadScene,
   create: (i: number) => core.Script[]
 ) {
-  const scene = controller.openSaveLoadScene();
   let position: pg.Position;
   switch (info.button) {
     case core.Position.Top:
@@ -388,11 +388,11 @@ function openSaveLoadScene(
       break;
   }
   const pagination = new pg.Pagination({
-    scene,
+    scene: scene.body,
     x: 20,
     y: 40,
-    width: scene.game.width - 40,
-    height: scene.game.height - 50,
+    width: scene.body.game.width - 40,
+    height: scene.body.game.height - 50,
     limit: {
       vertical: info.vertical,
       horizontal: info.horizontal
@@ -402,7 +402,7 @@ function openSaveLoadScene(
     first: true,
     last: true
   });
-  scene.append(pagination);
+  scene.body.append(pagination);
   for (let i = 0; i < controller.config.system.maxSaveCount; i++) {
     const l: core.Link = {
       tag: core.Tag.link,
@@ -423,6 +423,14 @@ function openSaveLoadScene(
     });
     pagination.content.append(button);
   }
+}
+
+function openSaveLoadScene(
+  controller: SceneController,
+  info: core.SaveLoadScene,
+  create: (i: number) => core.Script[]
+) {
+  controller.openSaveLoadScene(scene => onLoadedSaveLoadScene(scene, controller, info, create));
 }
 
 function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {

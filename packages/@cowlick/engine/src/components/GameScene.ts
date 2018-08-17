@@ -3,7 +3,6 @@ import {Storage} from "../models/Storage";
 import * as core from "@cowlick/core";
 import {Config} from "@cowlick/config";
 import {GameState} from "../models/GameState";
-import {Snapshot} from "../models/Snapshot";
 import {ScriptManager} from "../scripts/ScriptManager";
 import {Message} from "./Message";
 import {LayerGroup} from "./LayerGroup";
@@ -11,22 +10,20 @@ import {AudioGroup} from "./AudioGroup";
 import {VideoGroup} from "./VideoGroup";
 import {Scene} from "./Scene";
 import {SceneController} from "./SceneController";
-import {loadGameState} from "./GameStateHelper";
 import {AutoMode} from "./AutoMode";
 
 export interface GameSceneParameters {
-  game: g.Game;
+  scene: g.Scene;
   scenario: core.Scenario;
   scriptManager: ScriptManager;
   config: Config;
   controller: SceneController;
   player: g.Player;
-  storageKeys?: g.StorageKey[];
-  state?: GameState;
-  storageValuesSerialization?: g.StorageValueStoreSerialization;
+  state: GameState;
 }
 
-export class GameScene extends Scene {
+export class GameScene implements Scene {
+  private scene: g.Scene;
   private _message: Message;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
@@ -36,36 +33,43 @@ export class GameScene extends Scene {
   private audioGroup: AudioGroup;
   private videoGroup: VideoGroup;
   private storage: Storage;
-  private storageKeys: g.StorageKey[];
   private player: g.Player;
   private _gameState: GameState;
   private _enabledWindowClick: boolean;
   private autoMode: AutoMode;
 
   constructor(params: GameSceneParameters) {
-    super({
-      game: params.game,
-      assetIds: GameScene.collectAssetIds(params),
-      storageKeys: params.storageKeys,
-      storageValuesSerialization: params.storageValuesSerialization
-    });
-
-    this.layerGroup = new LayerGroup(this);
+    this.scene = params.scene;
+    this.layerGroup = new LayerGroup(this.scene);
     this.scriptManager = params.scriptManager;
     this.config = params.config;
     this.controller = params.controller;
-    this.audioGroup = new AudioGroup(this, params.config.audio);
-    this.videoGroup = new VideoGroup(this);
+    this.audioGroup = new AudioGroup(this.scene, params.config.audio);
+    this.videoGroup = new VideoGroup(this.scene);
     this.player = params.player;
-    this.storageKeys = params.storageKeys;
-    if (params.state) {
-      this._gameState = params.state;
-    }
-
-    this.loaded.add(this.onLoaded, this);
-
+    this._gameState = params.state;
     this.scenario = params.scenario;
     this.scenario.onLoaded.add(this.loadFrame, this);
+
+    this.autoMode = new AutoMode(this);
+
+    this._gameState.copyGameVariables();
+    this.storage = new Storage({
+      storage: this.game.storage,
+      player: this.player,
+      state: this._gameState
+    });
+    // ゲーム中にそこそこの頻度で実行されるタイミング、という点からここで保存している
+    this.storage.saveBuiltinVariables();
+    this.storage.saveSystemVariables();
+  }
+
+  get body(): g.Scene {
+    return this.scene;
+  }
+
+  get game(): g.Game {
+    return this.scene.game;
   }
 
   get source(): core.Scene {
@@ -80,12 +84,10 @@ export class GameScene extends Scene {
     return this._enabledWindowClick;
   }
 
-  snapshot(): Snapshot {
-    return {
-      ...this.gameState.createSnapshot(),
-      storageKeys: this.storageKeys,
-      storageValuesSerialization: this.serializeStorageValues()
-    };
+  init() {
+    this.createMessageLayer();
+    this.createSystemLayer();
+    this.scenario.load();
   }
 
   appendLayer(e: g.E, config: core.LayerConfig) {
@@ -195,28 +197,6 @@ export class GameScene extends Scene {
     this._message.applyFontSetting();
   }
 
-  private onLoaded() {
-    this.autoMode = new AutoMode(this);
-
-    if (!this._gameState) {
-      this._gameState = loadGameState(this, this.storageKeys, this.config, this.scenario);
-    }
-    this._gameState.copyGameVariables();
-    this.storage = new Storage({
-      storage: this.game.storage,
-      player: this.player,
-      state: this._gameState
-    });
-    // ゲーム中にそこそこの頻度で実行されるタイミング、という点からここで保存している
-    this.storage.saveBuiltinVariables();
-    this.storage.saveSystemVariables();
-
-    this.createMessageLayer();
-    this.createSystemLayer();
-
-    this.scenario.load();
-  }
-
   private disableTrigger() {
     this.autoMode.clear();
     this.layerGroup.evaluate(core.LayerKind.message, layer => {
@@ -250,7 +230,7 @@ export class GameScene extends Scene {
       ...this.config.window.message.ui
     });
     this._message = new Message({
-      scene: this,
+      scene: this.scene,
       config: this.config,
       width: this.game.width - 60,
       x: this.config.window.message.top.x,
@@ -283,14 +263,6 @@ export class GameScene extends Scene {
     for (const s of scripts) {
       this.scriptManager.call(this.controller, s);
     }
-  }
-
-  private static collectAssetIds(params: GameSceneParameters) {
-    const assetIds = params.scenario.scene.assetIds.concat(core.collectAssetIds(params.config.window.system));
-    if (params.config.window.message.ui.backgroundImage) {
-      assetIds.push(params.config.window.message.ui.backgroundImage);
-    }
-    return assetIds;
   }
 
   private onWindowClick() {

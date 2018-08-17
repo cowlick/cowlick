@@ -14,7 +14,7 @@ export class AutoMode {
     if (this.autoIdentifier) {
       return;
     }
-    this.autoIdentifier = this.scene.setTimeout(
+    this.autoIdentifier = this.scene.body.setTimeout(
       () => {
         this.scene.requestNextFrame();
         this.autoIdentifier = undefined;
@@ -26,7 +26,7 @@ export class AutoMode {
 
   clear() {
     if (this.autoIdentifier) {
-      this.scene.clearTimeout(this.autoIdentifier);
+      this.scene.body.clearTimeout(this.autoIdentifier);
       this.autoIdentifier = undefined;
     }
   }

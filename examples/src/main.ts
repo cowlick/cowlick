@@ -1,18 +1,25 @@
 "use strict";
-import {initialize} from "@cowlick/engine";
+import {Scenario} from "@cowlick/core";
+import {initialize, SceneController} from "@cowlick/engine";
 
 module.exports = (param: g.GameMainParameterObject) => {
-  const engine = initialize(g.game);
   if (param.snapshot) {
     require("snapshotLoader")(param.snapshot);
   } else {
+    const engine = initialize(g.game);
     require("load")(engine);
-    const controller = engine.load("first");
+    let controller: SceneController | undefined;
 
     g.game.snapshotRequest.add(() => {
       if (g.game.shouldSaveSnapshot()) {
-        g.game.saveSnapshot(controller.snapshot());
+        if (controller) {
+          g.game.saveSnapshot(controller.snapshot());
+        }
       }
+    });
+
+    engine.load("first", (c: SceneController) => {
+      controller = c;
     });
   }
 };

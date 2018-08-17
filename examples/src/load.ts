@@ -14,7 +14,7 @@ module.exports = (engine: novel.Engine) => {
   engine.script("logo", (controller: novel.SceneController, data: Logo) => {
     const scene = controller.current;
     scene.transition(data.layer, (layer: g.E) => {
-      let timeline = new tl.Timeline(scene);
+      let timeline = new tl.Timeline(scene.body);
       timeline
         .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
         .fadeIn(data.duration)

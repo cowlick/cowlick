@@ -7,23 +7,37 @@ import {defaultScripts} from "./scripts/defaultScripts";
 import {createStorageKeys} from "./components/GameStateHelper";
 import {Snapshot} from "./models/Snapshot";
 
+export interface EngineParameters {
+  game: g.Game;
+  player: g.Player;
+  config?: Config;
+  storageKeys?: g.StorageKey[];
+}
+
 /**
  * ノベルエンジン本体。
  */
 export class Engine {
   private game: g.Game;
   private static _scriptManager = new ScriptManager(defaultScripts);
-  config: Config;
+  private _config: Config;
   private player: g.Player;
+  private storageKeys: g.StorageKey[];
 
-  constructor(game: g.Game, player: g.Player) {
-    this.game = game;
-    this.player = player;
-    this.config = defaultConfig();
+  constructor(params: EngineParameters) {
+    this.game = params.game;
+    this.player = params.player;
 
-    const assetId = "cowlickConfig";
-    if (game.assets[assetId] !== undefined) {
-      this.config = g._require(game, assetId);
+    if ("config" in params) {
+      this._config = params.config;
+    } else {
+      this._config = defaultConfig();
+    }
+
+    if ("storageKeys" in params) {
+      this.storageKeys = params.storageKeys;
+    } else {
+      this.storageKeys = createStorageKeys(this.player, this.config.system.maxSaveCount);
     }
   }
 
@@ -31,24 +45,33 @@ export class Engine {
     return Engine._scriptManager;
   }
 
+  get config(): Config {
+    return this._config;
+  }
+
   /**
    * シナリオに登録された最初のシーンを使用してゲームを開始する。
    *
-   * @param scenario シナリオ
+   * @param scenario
+   * @param callback
    */
-  start(scenario: core.Scenario): SceneController {
-    const storageKeys = createStorageKeys(this.player, this.config.system.maxSaveCount);
-
-    const controller = new SceneController({
-      game: this.game,
-      scenario,
-      scriptManager: Engine.scriptManager,
-      config: this.config,
-      player: this.player,
-      storageKeys
+  start(scenario: core.Scenario, callback?: (controller: SceneController) => void) {
+    const scene = this.makeScene(scenario);
+    scene.loaded.addOnce(() => {
+      const controller = new SceneController({
+        scene,
+        scenario,
+        scriptManager: Engine.scriptManager,
+        config: this.config,
+        player: this.player,
+        storageKeys: this.storageKeys
+      });
+      controller.current.init();
+      if (callback) {
+        callback(controller);
+      }
     });
-    controller.start();
-    return controller;
+    this.game.pushScene(scene);
   }
 
   /**
@@ -56,24 +79,61 @@ export class Engine {
    * 指定するassetはgame.jsonで`"global": true`に設定されている必要がある。
    *
    * @param assetId
+   * @param callback
    */
-  load(assetId: string): SceneController {
-    return this.start(new core.Scenario([g._require(this.game, assetId)]));
+  load(assetId: string, callback?: (controller: SceneController) => void) {
+    return this.start(new core.Scenario([g._require(this.game, assetId)]), callback);
   }
 
   /**
    * ゲームを復元する。
    *
-   * @params snapshot
+   * @param snapshot
+   * @param callback
    */
-  restore(snapshot: Snapshot): SceneController {
-    return SceneController.restore({
-      game: this.game,
+  restore(snapshot: Snapshot, callback?: (controller: SceneController) => void) {
+    // globalでないassetを取得するためのダミーシーン
+    const scenes = [
+      new core.Scene({
+        label: "",
+        frames: [
+          new core.Frame([
+            {
+              tag: core.Tag.jump,
+              label: snapshot.label
+            }
+          ])
+        ]
+      })
+    ];
+    const scenario = new core.Scenario(scenes);
+    const scene = this.makeScene(scenario, snapshot.storageValuesSerialization);
+    const controller = new SceneController({
+      scene,
+      scenario,
       scriptManager: Engine.scriptManager,
       config: this.config,
       player: this.player,
-      snapshot
+      storageKeys: this.storageKeys
     });
+    if (this.game.assets[snapshot.label] === undefined) {
+      scene.assetLoaded.add(asset => {
+        if (asset.id === snapshot.label) {
+          scenes.shift();
+          controller.restore(snapshot);
+          if (callback) {
+            callback(controller);
+          }
+        }
+      });
+      scene.prefetch();
+    } else {
+      scenes.shift();
+      controller.restore(snapshot);
+      if (callback) {
+        callback(controller);
+      }
+    }
   }
 
   /**
@@ -86,6 +146,16 @@ export class Engine {
   script(name: string, f: ScriptFunction) {
     Engine.scriptManager.register(name, f);
   }
+
+  private makeScene(scenario: core.Scenario, storageValuesSerialization?: g.StorageValueStoreSerialization): g.Scene {
+    return SceneController.createSceneForGame({
+      game: this.game,
+      scenario,
+      config: this.config,
+      storageKeys: this.storageKeys,
+      storageValuesSerialization
+    });
+  }
 }
 
 /**
@@ -95,5 +165,13 @@ export class Engine {
  * @param player
  */
 export const initialize = (game?: g.Game, player?: g.Player) => {
-  return new Engine(game ? game : g.game, player ? player : {id: "0"});
+  const assetId = "cowlickConfig";
+  let params: EngineParameters = {
+    game: game ? game : g.game,
+    player: player ? player : {id: "0"}
+  };
+  if (assetId in params.game.assets) {
+    params.config = g._require(game, assetId);
+  }
+  return new Engine(params);
 };
