@@ -19,11 +19,11 @@
   },
   "dependencies": {
     "@cowlick/core": "^0.8.0",
-    "escodegen": "1.10.0",
+    "escodegen": "1.11.0",
     "estraverse": "4.2.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.3.3",
+    "@akashic/akashic-engine": "2.3.7",
     "@types/escodegen": "0.0.6",
     "@types/estraverse": "0.0.6",
     "@types/node": "9.4.7",
