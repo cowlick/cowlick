@@ -171,7 +171,7 @@ export const initialize = (game?: g.Game, player?: g.Player) => {
     player: player ? player : {id: "0"}
   };
   if (assetId in params.game.assets) {
-    params.config = g._require(game, assetId);
+    params.config = g._require(params.game, assetId);
   }
   return new Engine(params);
 };

@@ -5,6 +5,7 @@
     "lib": [
       "es2017"
     ],
+    "strict": true,
     "noLib": false,
     "sourceMap": false,
     "noImplicitAny": true,

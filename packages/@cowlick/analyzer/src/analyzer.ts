@@ -223,7 +223,7 @@ function imageProperties(original: core.Image): estree.Property[] {
 }
 
 function image(original: core.Image): estree.ObjectExpression {
-  return scriptAst(core.Tag.image, imageProperties(original));
+  return scriptAst(original.tag, imageProperties(original));
 }
 
 function nestOptions(options: VisitorOptions, i: number): VisitorOptions {
@@ -534,6 +534,7 @@ function visit(original: ast.Script, options: VisitorOptions): estree.ObjectExpr
     case core.Tag.pane:
       return [pane(original)];
     case core.Tag.image:
+    case core.Tag.frameImage:
       return [image(original)];
     case core.Tag.layer:
       return [scriptAst(core.Tag.layer, layerConfig(original))];

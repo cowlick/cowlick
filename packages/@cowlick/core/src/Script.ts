@@ -11,6 +11,7 @@ export interface ScriptNode {
 export type Script =
   | Layer
   | Image
+  | FrameImage
   | Pane
   | Button
   | Text
@@ -79,7 +80,7 @@ export interface Layer extends ScriptNode, LayerConfig {
  * 画像
  */
 export interface Image extends ScriptNode {
-  tag: Tag.image;
+  tag: Tag.image | Tag.frameImage;
   /**
    * アセットID
    */
@@ -88,7 +89,14 @@ export interface Image extends ScriptNode {
    * レイヤー情報
    */
   layer: LayerConfig;
-  frame?: {
+}
+
+/**
+ * フレーム画像
+ */
+export interface FrameImage extends Image {
+  tag: Tag.frameImage;
+  frame: {
     width: number;
     height: number;
     scale: number;
@@ -105,11 +113,11 @@ export interface PaneDefinition {
   /**
    * 幅
    */
-  width?: number;
+  width: number;
   /**
    * 高さ
    */
-  height?: number;
+  height: number;
   /**
    * 背景画像
    */
@@ -139,7 +147,7 @@ export interface Button extends ScriptNode {
   /**
    * 画像情報
    */
-  image: Image;
+  image: FrameImage;
   /**
    * X座標
    */
@@ -209,6 +217,7 @@ export function collectAssetIds(scripts: Script[]): string[] {
   for (const s of scripts) {
     switch (s.tag) {
       case Tag.image:
+      case Tag.frameImage:
         ids.push(s.assetId);
         break;
       case Tag.pane:

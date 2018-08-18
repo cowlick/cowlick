@@ -46,9 +46,13 @@ export class Button extends g.Pane {
     this.modified();
   }
 
-  move(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+  move(x: number | undefined, y: number | undefined) {
+    if (x) {
+      this.x = x;
+    }
+    if (y) {
+      this.y = y;
+    }
 
     this.modified();
   }

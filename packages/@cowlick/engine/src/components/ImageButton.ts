@@ -1,5 +1,5 @@
 "use strict";
-import {Image} from "@cowlick/core";
+import {FrameImage} from "@cowlick/core";
 import {Button} from "./Button";
 import {createFrameSprite} from "./Image";
 
@@ -27,8 +27,8 @@ export class ImageButton extends Button {
     super.unpush();
   }
 
-  static create(scene: g.Scene, image: Image): Button {
+  static create(scene: g.Scene, image: FrameImage): Button {
     const asset = scene.assets[image.assetId] as g.ImageAsset;
-    return new ImageButton(scene, createFrameSprite(scene, asset, image));
+    return new ImageButton(scene, createFrameSprite(scene, asset, image.frame));
   }
 }

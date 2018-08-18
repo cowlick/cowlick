@@ -378,7 +378,7 @@ function onLoadedSaveLoadScene(
   info: core.SaveLoadScene,
   create: (i: number) => core.Script[]
 ) {
-  let position: pg.Position;
+  let position: pg.Position = pg.Position.Top;
   switch (info.button) {
     case core.Position.Top:
       position = pg.Position.Top;

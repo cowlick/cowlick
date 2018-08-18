@@ -16,6 +16,7 @@ export interface Frame {
 export type Script =
   | core.Layer
   | core.Image
+  | core.FrameImage
   | core.Pane
   | Button
   | core.Text

@@ -24,7 +24,7 @@ export interface GameSceneParameters {
 
 export class GameScene implements Scene {
   private scene: g.Scene;
-  private _message: Message;
+  private _message: Message | undefined;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
@@ -100,6 +100,9 @@ export class GameScene implements Scene {
   }
 
   updateText(text: core.Text) {
+    if (this._message === undefined) {
+      throw new core.GameError("GameSceneのメッセージコンポーネントが未初期化です。");
+    }
     const scene = this.scenario.scene;
     this._message.updateText(text, this._gameState.isAlreadyRead(scene.label, scene.index));
     this._gameState.markAlreadyRead(scene.label, scene.index);
@@ -126,6 +129,9 @@ export class GameScene implements Scene {
 
   enableWindowClick() {
     this.layerGroup.evaluate(core.LayerKind.message, layer => {
+      if (this._message === undefined) {
+        throw new core.GameError("GameSceneのメッセージコンポーネントが未初期化です。");
+      }
       layer.touchable = true;
       if (this._message.finished) {
         layer.pointUp.addOnce(this.requestNextFrame, this);
@@ -191,10 +197,16 @@ export class GameScene implements Scene {
   }
 
   applyMessageSpeed() {
+    if (this._message === undefined) {
+      throw new core.GameError("GameSceneのメッセージコンポーネントが未初期化です。");
+    }
     this._message.applySpeed();
   }
 
   applyFontSetting() {
+    if (this._message === undefined) {
+      throw new core.GameError("GameSceneのメッセージコンポーネントが未初期化です。");
+    }
     this._message.applyFontSetting();
   }
 
@@ -267,6 +279,9 @@ export class GameScene implements Scene {
   }
 
   private onWindowClick() {
+    if (this._message === undefined) {
+      throw new core.GameError("GameSceneのメッセージコンポーネントが未初期化です。");
+    }
     if (this._enabledWindowClick) {
       this.gameState.setValue(
         {

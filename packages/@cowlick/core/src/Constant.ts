@@ -1,6 +1,7 @@
 export enum Tag {
   choice = "choice",
   image = "image",
+  frameImage = "frameImage",
   pane = "pane",
   jump = "jump",
   text = "text",

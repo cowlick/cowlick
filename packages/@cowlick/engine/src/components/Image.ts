@@ -1,16 +1,24 @@
 "use strict";
-import {Image} from "@cowlick/core";
+import {Image, Tag, FrameImage} from "@cowlick/core";
 
-export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, image: Image) {
+interface Frame {
+  width: number;
+  height: number;
+  scale: number;
+  frames: number[];
+  interval?: number;
+}
+
+export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, frame: Frame) {
   const sprite = new g.FrameSprite({
     scene,
     src,
-    width: image.frame.width,
-    height: image.frame.height
+    width: frame.width,
+    height: frame.height
   });
-  sprite.frames = image.frame.frames;
-  if ("interval" in image.frame) {
-    sprite.interval = image.frame.interval;
+  sprite.frames = frame.frames;
+  if (frame.interval) {
+    sprite.interval = frame.interval;
   }
   sprite.start();
   return sprite;
@@ -19,8 +27,8 @@ export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, image: Imag
 export function createImage(scene: g.Scene, image: Image) {
   const src = scene.assets[image.assetId] as g.ImageAsset;
   let sprite: g.Sprite;
-  if (image.frame) {
-    sprite = createFrameSprite(scene, src, image);
+  if (image.tag === Tag.frameImage) {
+    sprite = createFrameSprite(scene, src, (image as FrameImage).frame);
   } else {
     sprite = new g.Sprite({
       scene,
