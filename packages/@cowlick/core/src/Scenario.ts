@@ -1,4 +1,3 @@
-"use strict";
 import {Scene} from "./Scene";
 import {Frame} from "./Frame";
 import {Jump} from "./Script";

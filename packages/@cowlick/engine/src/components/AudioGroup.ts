@@ -1,4 +1,3 @@
-"use strict";
 import {PlayAudio, StopAudio, GameError} from "@cowlick/core";
 import {AudioConfig} from "@cowlick/config";
 

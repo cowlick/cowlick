@@ -1,5 +1,3 @@
-"use strict";
-
 export class AlreadyReadManager {
   private alreadyRead: {
     [label: string]: number[];

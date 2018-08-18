@@ -1,4 +1,3 @@
-"use strict";
 import * as core from "@cowlick/core";
 import {Config, defaultConfig} from "@cowlick/config";
 import {SceneController} from "./components/SceneController";

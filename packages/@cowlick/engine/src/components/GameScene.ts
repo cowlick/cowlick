@@ -1,4 +1,3 @@
-"use strict";
 import {Storage} from "../models/Storage";
 import * as core from "@cowlick/core";
 import {Config} from "@cowlick/config";

@@ -1,4 +1,3 @@
-"use strict";
 import {Save, SaveData} from "@cowlick/core";
 import {GameState} from "./GameState";
 import {Region, gameId} from "../Constant";

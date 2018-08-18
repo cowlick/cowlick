@@ -1,4 +1,3 @@
-"use strict";
 export * from "./constant";
 export * from "./file";
 export * from "./ast";

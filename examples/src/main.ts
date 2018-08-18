@@ -1,5 +1,3 @@
-"use strict";
-import {Scenario} from "@cowlick/core";
 import {initialize, SceneController} from "@cowlick/engine";
 
 module.exports = (param: g.GameMainParameterObject) => {

@@ -1,4 +1,3 @@
-"use strict";
 import * as path from "path";
 import * as analyzer from "@cowlick/analyzer";
 import * as kag from "../resources/kag";

@@ -1,4 +1,3 @@
-"use strict";
 import "@xnv/headless-akashic/polyfill";
 import * as assert from "assert";
 import {Scenario} from "@cowlick/core";

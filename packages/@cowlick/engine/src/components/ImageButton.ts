@@ -1,4 +1,3 @@
-"use strict";
 import {FrameImage} from "@cowlick/core";
 import {Button} from "./Button";
 import {createFrameSprite} from "./Image";

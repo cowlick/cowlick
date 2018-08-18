@@ -1,4 +1,3 @@
-"use strict";
 import {LayerConfig, GameError} from "@cowlick/core";
 
 export class LayerGroup {

@@ -1,4 +1,3 @@
-"use strict";
 import * as al from "@akashic-extension/akashic-label";
 import * as core from "@cowlick/core";
 import {Config} from "@cowlick/config";

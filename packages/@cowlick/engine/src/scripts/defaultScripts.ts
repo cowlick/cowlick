@@ -1,4 +1,3 @@
-"use strict";
 import * as tl from "@akashic-extension/akashic-timeline";
 import {Scrollable} from "@xnv/akashic-scrollable";
 import * as pg from "@pocketberserker/akashic-pagination";

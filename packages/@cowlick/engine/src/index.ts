@@ -1,4 +1,3 @@
-"use strict";
 export * from "./Engine";
 export {ScriptFunction} from "./scripts/ScriptManager";
 export {defaultScripts} from "./scripts/defaultScripts";

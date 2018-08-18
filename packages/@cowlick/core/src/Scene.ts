@@ -1,4 +1,3 @@
-"use strict";
 import {Frame} from "./Frame";
 
 export interface SceneParameters {

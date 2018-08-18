@@ -1,4 +1,3 @@
-"use strict";
 import {ButtonParameters, Button} from "./Button";
 import {GameState} from "../models/GameState";
 import {BuiltinVariable, VariableType} from "@cowlick/core";

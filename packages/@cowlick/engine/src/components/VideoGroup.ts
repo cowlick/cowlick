@@ -1,4 +1,3 @@
-"use strict";
 import {Video, GameError} from "@cowlick/core";
 
 export class VideoGroup {

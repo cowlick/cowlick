@@ -1,5 +1,3 @@
-"use strict";
-
 export interface ButtonParameters {
   scene: g.Scene;
   width: number;

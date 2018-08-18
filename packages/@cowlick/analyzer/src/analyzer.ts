@@ -1,4 +1,3 @@
-"use strict";
 import * as estree from "estree";
 import * as estraverse from "estraverse";
 import * as core from "@cowlick/core";

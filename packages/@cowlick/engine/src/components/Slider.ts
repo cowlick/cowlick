@@ -1,4 +1,3 @@
-"use strict";
 import * as scrollable from "@xnv/akashic-scrollable";
 import * as core from "@cowlick/core";
 import {GameState} from "../models/GameState";

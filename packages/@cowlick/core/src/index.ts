@@ -1,4 +1,3 @@
-"use strict";
 export * from "./Constant";
 export * from "./Scenario";
 export * from "./Scene";

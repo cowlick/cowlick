@@ -1,4 +1,3 @@
-"use strict";
 import {Script, Tag, GameError} from "@cowlick/core";
 import {SceneController} from "../components/SceneController";
 

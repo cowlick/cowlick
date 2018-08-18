@@ -1,4 +1,3 @@
-"use strict";
 import * as ora from "ora";
 
 export type Run<T> = (text: string, run: () => Promise<T>) => Promise<T>;

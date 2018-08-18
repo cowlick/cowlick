@@ -1,4 +1,3 @@
-"use strict";
 import {Snapshot, Engine} from "@cowlick/engine";
 
 module.exports = (snapshot: Snapshot) => {

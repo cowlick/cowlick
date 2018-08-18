@@ -1,4 +1,3 @@
-"use strict";
 import * as acorn from "acorn";
 import * as estree from "estree";
 import * as estraverse from "estraverse";

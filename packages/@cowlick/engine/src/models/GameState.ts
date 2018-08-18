@@ -1,4 +1,3 @@
-"use strict";
 import * as core from "@cowlick/core";
 import {AlreadyReadManager} from "./AlreadyReadManager";
 

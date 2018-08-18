@@ -1,4 +1,3 @@
-"use strict";
 import * as assert from "assert";
 import {Tag} from "@cowlick/core";
 import {SceneController} from "../src/components/SceneController";

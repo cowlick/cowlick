@@ -1,4 +1,3 @@
-"use strict";
 import {Image, Tag, FrameImage} from "@cowlick/core";
 
 interface Frame {

@@ -1,4 +1,3 @@
-"use strict";
 import {Script, collectAssetIds} from "./Script";
 
 /**

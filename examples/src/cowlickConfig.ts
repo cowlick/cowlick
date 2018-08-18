@@ -1,4 +1,3 @@
-"use strict";
 import * as novel from "@cowlick/core";
 import {Config, defaultConfig} from "@cowlick/config";
 

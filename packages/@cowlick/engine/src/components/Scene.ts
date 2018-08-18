@@ -1,4 +1,3 @@
-"use strict";
 import {GameState} from "../models/GameState";
 
 export interface Scene {

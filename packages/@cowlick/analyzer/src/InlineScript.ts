@@ -1,4 +1,3 @@
-"use strict";
 import {Node} from "estree";
 import * as escodegen from "escodegen";
 import * as path from "path";

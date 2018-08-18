@@ -1,4 +1,3 @@
-"use strict";
 import {BuiltinVariable} from "@cowlick/core";
 import {GameScene} from "./GameScene";
 
