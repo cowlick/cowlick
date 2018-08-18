@@ -54,7 +54,7 @@ export class SceneController implements g.Destroyable {
       player: this.player,
       state: loadGameState(params.scene, params.storageKeys, params.config, params.scenario)
     });
-    this.requestToCreateSaveLoadScene();
+    this.saveLoadSceneBody = this.makeSaveLoadScene();
   }
 
   get backlog(): core.Log[] {
@@ -136,7 +136,6 @@ export class SceneController implements g.Destroyable {
     } else if (this.saveLoadSceneBody.destroyed() == false) {
       this.saveLoadSceneBody.destroy();
     }
-    this.saveLoadSceneBody = undefined;
     if (scene === current) {
       this.game.popScene();
     }
@@ -189,7 +188,7 @@ export class SceneController implements g.Destroyable {
         callback();
       }
 
-      this.requestToCreateSaveLoadScene();
+      this.saveLoadSceneBody = this.makeSaveLoadScene();
     }, this);
     previousLoadScene.stateChanged.add(state => {
       if (state === g.SceneState.Destroyed) {
@@ -211,7 +210,7 @@ export class SceneController implements g.Destroyable {
     }
   }
 
-  private requestToCreateSaveLoadScene() {
+  private makeSaveLoadScene() {
     const assetIds = this.scenario.scene.assetIds.concat(
       core.collectAssetIds(this.config.window.system),
       this.current.gameState.collectAssetIds(this.game)
@@ -219,11 +218,12 @@ export class SceneController implements g.Destroyable {
     if (this.config.window.message.ui.backgroundImage) {
       assetIds.push(this.config.window.message.ui.backgroundImage);
     }
-    this.saveLoadSceneBody = new g.Scene({
+    const scene = new g.Scene({
       game: this.game,
       assetIds
     });
-    this.saveLoadSceneBody.prefetch();
+    scene.prefetch();
+    return scene;
   }
 
   private skip(data: core.SaveData) {

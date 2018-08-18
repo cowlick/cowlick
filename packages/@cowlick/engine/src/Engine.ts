@@ -28,13 +28,13 @@ export class Engine {
     this.game = params.game;
     this.player = params.player;
 
-    if ("config" in params) {
+    if (params.config) {
       this._config = params.config;
     } else {
       this._config = defaultConfig();
     }
 
-    if ("storageKeys" in params) {
+    if (params.storageKeys) {
       this.storageKeys = params.storageKeys;
     } else {
       this.storageKeys = createStorageKeys(this.player, this.config.system.maxSaveCount);

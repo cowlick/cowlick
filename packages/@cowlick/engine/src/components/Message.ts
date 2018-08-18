@@ -22,7 +22,7 @@ export class Message extends al.Label {
   private current: (string | core.Ruby)[];
   private gameState: GameState;
   private config: Config;
-  private identifier: g.TimerIdentifier;
+  private identifier: g.TimerIdentifier | undefined;
 
   constructor(params: MessageParameters) {
     super(Message.toLabelParameters(params));
@@ -141,7 +141,7 @@ export class Message extends al.Label {
   private removeTimer() {
     if (this.identifier) {
       this.scene.clearInterval(this.identifier);
-      this.identifier = null;
+      this.identifier = undefined;
     }
   }
 

@@ -11,6 +11,25 @@ interface KeyValue {
 
 const prefixLength = Region.saveDataPrefix.length;
 
+function findOrCreateKeyValue(data: KeyValue[], key: g.StorageKey, keys: string[], value: g.StorageValue): KeyValue {
+  const s = data.find(kv => kv.key === value.storageKey);
+  if (s) {
+    return s;
+  } else {
+    const i = parseInt(keys[0].substring(prefixLength), 10);
+    const defaultKV: KeyValue = {
+      key,
+      value: {
+        label: "",
+        variables: {},
+        logs: []
+      }
+    };
+    data[i] = defaultKV;
+    return defaultKV;
+  }
+}
+
 function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
   const variables: core.Variables = {
     builtin: {},
@@ -24,20 +43,8 @@ function loadFromStorage(scene: g.Scene, keys: g.StorageKey[], max: number) {
       if (key.regionKey === Region.system) {
         variables.system = v;
       } else {
-        let s = data.find(kv => kv.key === value.storageKey);
         const keys = key.regionKey.split(".");
-        if (!s) {
-          const i = parseInt(keys[0].substring(prefixLength), 10);
-          s = {
-            key: value.storageKey,
-            value: {
-              label: "",
-              variables: {},
-              logs: []
-            }
-          };
-          data[i] = s;
-        }
+        const s = findOrCreateKeyValue(data, key, keys, value);
         const label = keys[keys.length - 1];
         switch (label) {
           case "label":

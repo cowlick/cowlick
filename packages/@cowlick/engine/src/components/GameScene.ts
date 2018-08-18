@@ -50,6 +50,7 @@ export class GameScene implements Scene {
     this._gameState = params.state;
     this.scenario = params.scenario;
     this.scenario.onLoaded.add(this.loadFrame, this);
+    this._enabledWindowClick = false;
 
     this.autoMode = new AutoMode(this);
 
