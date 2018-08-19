@@ -10,6 +10,7 @@ const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../packa
 
 interface CompileOpts {
   output: string[];
+  plugin: string[];
 }
 
 interface CompileArgs {
@@ -21,12 +22,15 @@ const root = commandpost
   .version(packageJson.version, "-v, --version")
   .description("compile KAG scenario")
   .option("-o, --output <output>", "output dir")
+  .option("-p, --plugin <path>", "plugin path")
   .action(async (opts, args) => {
     const output: string = opts.output[0] || "script";
-    const outputPath = path.resolve(process.cwd(), output);
-    const target = path.resolve(process.cwd(), args.input);
+    const cwd = process.cwd();
+    const outputPath = path.resolve(cwd, output);
+    const target = path.resolve(cwd, args.input);
+    const plugins = (opts.plugin ? opts.plugin : []).map(p => new analyzer.Plugin(path.resolve(cwd, p)));
     const ast = await parse(target, runProgress);
-    const result = await runProgress("Analyzing scenario", async () => analyzer.analyze(ast));
+    const result = await runProgress("Analyzing scenario", async () => await analyzer.analyze(ast, plugins));
     try {
       await analyzer.mkdir(outputPath);
     } catch (e) {

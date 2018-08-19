@@ -4,6 +4,7 @@ import * as core from "@cowlick/core";
 import * as Tag from "./constant";
 import * as ast from "./ast";
 import {InlineScript} from "./InlineScript";
+import {Plugin} from "./Plugin";
 
 /**
  * 生成されたシーン
@@ -652,12 +653,21 @@ function scenario(original: ast.Scenario, state: State): GeneratedScene[] {
   }));
 }
 
+async function applyPlugins(scene: GeneratedScene, plugins: Plugin[]) {
+  let source = scene.source;
+  for (const plugin of plugins) {
+    source = await plugin.exec(source);
+  }
+  return source;
+}
+
 /**
  * スクリプトASTを解析してJavaScript AST形式のシナリオデータに変換する。
  *
  * @param original スクリプトAST
+ * @param plugins
  */
-export function analyze(original: ast.Scenario): Result {
+export async function analyze(original: ast.Scenario, plugins: Plugin[]): Promise<Result> {
   const state: State = {
     replaces: [],
     scripts: [],
@@ -675,7 +685,12 @@ export function analyze(original: ast.Scenario): Result {
     });
   }
   return {
-    scenario: result,
+    scenario: await Promise.all(
+      result.map(async s => ({
+        label: s.label,
+        source: await applyPlugins(s, plugins)
+      }))
+    ),
     scripts: state.scripts
   };
 }

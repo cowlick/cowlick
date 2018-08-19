@@ -13,14 +13,14 @@ describe("Analyzer", () => {
     files.forEach((filePath: string) => {
       const baseName = filePath.substr(0, filePath.length - "/content.js".length).substr(path.length);
       const astFilePath = `${path}${baseName}/content.ast`;
-      it(`${astFilePath}`, () => {
+      it(`${astFilePath}`, async () => {
         const scriptAst: Scenario = [
           {
             label: "content",
             frames: JSON.parse(fs.readFileSync(astFilePath, "utf8"))
           }
         ];
-        const actual = analyze(scriptAst);
+        const actual = await analyze(scriptAst, []);
         // FIXME: start, endを外してacornでテストできるようにしたい
         const expectedAST = [
           {
