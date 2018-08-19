@@ -3,7 +3,10 @@
   "version": "0.8.0",
   "private": true,
   "scripts": {
-    "build": "cowlick-kag-compiler ./scenario/first.ks -o ./script && tsc -p . && npm run scan:assets",
+    "build": "npm run build:scenario && npm run build:src && npm run scan:assets",
+    "build:scenario": "cowlick-kag-compiler ./scenario/first.ks",
+    "build:scenario:prod": "cowlick-kag-compiler --plugin ./node_modules/.bin/cowlick-analyzer-plugin-script-encoder -- ./scenario/first.ks",
+    "build:src": "tsc -p .",
     "start": "akashic-sandbox .",
     "scan:assets": "npm run copy:images && akashic scan asset",
     "copy:images": "shx cp ../docs/images/cowlick.png ./image",
@@ -14,6 +17,7 @@
     "@akashic-extension/akashic-timeline": "2.1.0",
     "@cowlick/config": "^0.8.0",
     "@cowlick/core": "^0.8.0",
+    "@cowlick/encoded-frame": "^0.8.0",
     "@cowlick/engine": "^0.8.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4"
@@ -23,6 +27,7 @@
     "@akashic/akashic-engine": "2.3.7",
     "@akashic/akashic-sandbox": "0.13.30",
     "@cowlick/kag-compiler": "^0.8.0",
+    "@cowlick/analyzer-plugin-script-encoder": "^0.8.0",
     "@types/node": "9.4.7",
     "shx": "0.3.2",
     "typescript": "3.0.1"

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "lib": [
+      "es2017"
+    ],
+    "strict": true,
+    "alwaysStrict": true,
+    "noLib": false,
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "declaration": true,
+    "outDir": "./lib"
+  },
+  "files": [
+    "./src/cli.ts",
+    "./src/index.ts"
+  ]
+}

@@ -25,7 +25,7 @@ export class Plugin {
         if (code === 0) {
           resolve(msgpack.decode(output));
         } else {
-          reject(new Error(`Failed [${this.path}]: exit code ${code}`));
+          reject(new Error(`Return exit code ${code}: ${this.path}`));
         }
       });
       cmd.stdin.write(msgpack.encode(input));
