@@ -1,28 +1,10 @@
-# @cowlick/kag-compiler
+# @cowlick/analyzer-plugin-script-encoder
 
-`@cowlick/kag-compiler`は[KAG3](http://www.ultrasync.net/dee/kr2helps/kag3doc/contents/)ベースのスクリプトから`cowlick`用のJavaScriptを生成するコンパイラです。
+`@cowlick/analyzer-plugin-script-encoder`は`@cowlick/analyzer`用のプラグインです。
+このプラグインを適用すると、解析したスクリプトを`@cowlick/encoded-frame`で読み込み可能な形式に変換します。
 
-## Usage
-
-`npm`等のパッケージ管理システムを利用してください。
-例えば、`npm`を用いてグローバルインストールする場合は下記コマンドを実行します。
+## How to install
 
 ```bash
-npm i -g @cowlick/kag-compiler
+npm i -D @cowlick/analyzer-plugin-script-encoder
 ```
-
-### ツールとして利用する場合
-
-下記のコマンドを用いることで、`<target>`ディレクトリを起点にスクリプトをコンパイルできます。
-
-```bash
-cowlick-kag-compiler <target>
-```
-
-このとき、解析の起点となるファイルは`<target>/first.ks`です。
-
-#### -o, --output
-
-省略時: `script`
-
-出力先のディレクトリを指定します。
