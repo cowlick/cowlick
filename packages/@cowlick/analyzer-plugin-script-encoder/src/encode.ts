@@ -3,6 +3,11 @@ import {generate} from "escodegen";
 import * as estraverse from "estraverse";
 import {serializer} from "./serializer";
 
+export interface Scene {
+  label: string;
+  source: estree.Node;
+}
+
 function literal(value: string): estree.Literal {
   return {
     type: "Literal",
@@ -113,20 +118,23 @@ function repalceFrame(node: estree.NewExpression): estree.Node {
   return node;
 }
 
-export function encodeFrame(program: estree.Program): estree.Node {
-  return estraverse.replace(program, {
-    leave: (node, _) => {
-      if (node.type === "Program") {
-        const body = node.body.slice();
-        body.unshift(importEncodedFrame);
-        return {
-          ...node,
-          body
-        };
-      } else if (node.type === "NewExpression") {
-        return repalceFrame(node);
+export function encode(scenes: Scene[]): Scene[] {
+  return scenes.map(scene => ({
+    label: scene.label,
+    source: estraverse.replace(scene.source, {
+      leave: (node, _) => {
+        if (node.type === "Program") {
+          const body = node.body.slice();
+          body.unshift(importEncodedFrame);
+          return {
+            ...node,
+            body
+          };
+        } else if (node.type === "NewExpression") {
+          return repalceFrame(node);
+        }
+        return node;
       }
-      return node;
-    }
-  });
+    })
+  }));
 }

@@ -1,7 +1,7 @@
-import * as estree from "estree";
 import * as spawn from "cross-spawn";
 import * as msgpack5 from "msgpack5";
 const BufferList = require("bl");
+import {GeneratedScene} from "./analyzer";
 
 const msgpack = msgpack5();
 
@@ -12,8 +12,8 @@ export class Plugin {
     this.path = path;
   }
 
-  async exec(input: estree.Program): Promise<estree.Program> {
-    return new Promise<estree.Program>((resolve, reject) => {
+  async exec(input: GeneratedScene[]): Promise<GeneratedScene[]> {
+    return new Promise<GeneratedScene[]>((resolve, reject) => {
       let output = new BufferList();
       const cmd = spawn(this.path);
       cmd.stdout.on("data", data => {

@@ -1,12 +1,23 @@
 import * as assert from "assert";
 import * as fs from "fs";
+import * as estree from "estree";
 import * as esprima from "esprima";
-import {encodeFrame} from "../src/encode";
+import {encode} from "../src/encode";
 
 describe("script-encoder-plugin", () => {
   it("FrameをEncodedFrameに変換できる", () => {
-    const input = esprima.parseModule(fs.readFileSync("test/input.js", "utf8"));
-    const expected = esprima.parseModule(fs.readFileSync("test/expected.js", "utf8"));
-    assert.deepEqual(encodeFrame(input), expected);
+    const input = [
+      {
+        label: "scene0",
+        source: esprima.parseModule(fs.readFileSync("test/input.js", "utf8")) as estree.Node
+      }
+    ];
+    const expected = [
+      {
+        label: "scene0",
+        source: esprima.parseModule(fs.readFileSync("test/expected.js", "utf8")) as estree.Node
+      }
+    ];
+    assert.deepEqual(encode(input), expected);
   });
 });

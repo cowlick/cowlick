@@ -653,12 +653,12 @@ function scenario(original: ast.Scenario, state: State): GeneratedScene[] {
   }));
 }
 
-async function applyPlugins(scene: GeneratedScene, plugins: Plugin[]) {
-  let source = scene.source;
+async function applyPlugins(scenes: GeneratedScene[], plugins: Plugin[]) {
+  let result = scenes;
   for (const plugin of plugins) {
-    source = await plugin.exec(source);
+    result = await plugin.exec(result);
   }
-  return source;
+  return result;
 }
 
 /**
@@ -685,12 +685,7 @@ export async function analyze(original: ast.Scenario, plugins: Plugin[]): Promis
     });
   }
   return {
-    scenario: await Promise.all(
-      result.map(async s => ({
-        label: s.label,
-        source: await applyPlugins(s, plugins)
-      }))
-    ),
+    scenario: await applyPlugins(result, plugins),
     scripts: state.scripts
   };
 }
