@@ -3,15 +3,12 @@ import {generate} from "escodegen";
 import * as estraverse from "estraverse";
 import {serializer} from "./serializer";
 
-function encodeScripts(args: any): estree.Literal[] {
-  const value = serializer.encode(eval(generate(args[0]))).toString("base64");
-  return [
-    {
-      type: "Literal",
-      value,
-      raw: JSON.stringify(value)
-    }
-  ];
+function literal(value: string): estree.Literal {
+  return {
+    type: "Literal",
+    value,
+    raw: JSON.stringify(value)
+  };
 }
 
 const encodedPackage: estree.Identifier = {
@@ -45,6 +42,73 @@ const importEncodedFrame: estree.VariableDeclaration = {
   ]
 };
 
+function quoteKeys(node: estree.ObjectExpression): estree.Node {
+  const properties: estree.Property[] = node.properties.map(p => {
+    if (p.key.type === "Identifier") {
+      return {
+        ...p,
+        key: literal(p.key.name)
+      };
+    } else {
+      return p;
+    }
+  });
+  return {
+    ...node,
+    properties
+  };
+}
+
+function encodeScripts(args: any): estree.Literal[] {
+  let arg = args[0];
+  if (arg.type === "ArrayExpression") {
+    arg = {
+      ...arg,
+      elements: (arg as estree.ArrayExpression).elements.map(e => {
+        if (e.type === "ObjectExpression") {
+          return quoteKeys(e);
+        } else {
+          return e;
+        }
+      })
+    };
+  }
+  const value = serializer
+    .encode(
+      JSON.parse(
+        generate(arg, {
+          format: {
+            json: true
+          }
+        })
+      )
+    )
+    .toString("base64");
+  return [literal(value)];
+}
+
+function repalceFrame(node: estree.NewExpression): estree.Node {
+  const callee = node.callee;
+  if (callee.type === "MemberExpression") {
+    const property = callee.property;
+    if (property.type === "Identifier" && property.name === "Frame") {
+      return {
+        ...node,
+        callee: {
+          ...callee,
+          object: encodedPackage,
+          property: {
+            type: "Identifier",
+            name: "EncodedFrame"
+          }
+        },
+        arguments: encodeScripts(node.arguments)
+      };
+    }
+  }
+  return node;
+}
+
 export function encodeFrame(program: estree.Program): estree.Node {
   return estraverse.replace(program, {
     leave: (node, _) => {
@@ -56,24 +120,7 @@ export function encodeFrame(program: estree.Program): estree.Node {
           body
         };
       } else if (node.type === "NewExpression") {
-        const callee = node.callee;
-        if (callee.type === "MemberExpression") {
-          const property = callee.property;
-          if (property.type === "Identifier" && property.name === "Frame") {
-            return {
-              ...node,
-              callee: {
-                ...callee,
-                object: encodedPackage,
-                property: {
-                  type: "Identifier",
-                  name: "EncodedFrame"
-                }
-              },
-              arguments: encodeScripts(node.arguments)
-            };
-          }
-        }
+        return repalceFrame(node);
       }
       return node;
     }
