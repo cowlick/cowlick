@@ -65,11 +65,15 @@ function encodeScripts(args: any): estree.Literal[] {
     arg = {
       ...arg,
       elements: (arg as estree.ArrayExpression).elements.map(e => {
-        if (e.type === "ObjectExpression") {
-          return quoteKeys(e);
-        } else {
-          return e;
-        }
+        return estraverse.replace(e, {
+          leave: (node, _) => {
+            if (node.type === "ObjectExpression") {
+              return quoteKeys(node);
+            } else {
+              return node;
+            }
+          }
+        });
       })
     };
   }

@@ -4,6 +4,11 @@ module.exports = new core.Scene({
   frames: [
     new core.Frame([
       {
+        tag: "image",
+        assetId: "black",
+        layer: { name: "background" }
+      },
+      {
         tag: "text",
         clear: true,
         values: ["test"]
