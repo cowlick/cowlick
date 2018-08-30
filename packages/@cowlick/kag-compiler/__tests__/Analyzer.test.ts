@@ -6,7 +6,7 @@ import {Scenario, analyze} from "@cowlick/analyzer";
 
 describe("Analyzer", () => {
   describe("スクリプト ASTをJavaScript ASTに変換できる", () => {
-    const path = "test/fixture/valid/";
+    const path = "__tests__/fixture/valid/";
 
     let files = glob.sync(`${path}**/content.js`);
 

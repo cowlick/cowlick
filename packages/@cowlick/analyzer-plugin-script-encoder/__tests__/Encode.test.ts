@@ -9,13 +9,13 @@ describe("script-encoder-plugin", () => {
     const input = [
       {
         label: "scene0",
-        source: esprima.parseModule(fs.readFileSync("test/input.js", "utf8")) as estree.Node
+        source: esprima.parseModule(fs.readFileSync("__tests__/input.js", "utf8")) as estree.Node
       }
     ];
     const expected = [
       {
         label: "scene0",
-        source: esprima.parseModule(fs.readFileSync("test/expected.js", "utf8")) as estree.Node
+        source: esprima.parseModule(fs.readFileSync("__tests__/expected.js", "utf8")) as estree.Node
       }
     ];
     assert.deepEqual(encode(input), expected);

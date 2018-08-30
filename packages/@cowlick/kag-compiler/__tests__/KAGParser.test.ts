@@ -16,7 +16,7 @@ function appendSyntaxErrorinfo(e: any) {
 
 describe("KAGParser", () => {
   describe("正しい構文が処理できる", () => {
-    const path = "test/fixture/valid/";
+    const path = "__tests__/fixture/valid/";
     let files = glob.sync(`${path}**/*.ks`);
 
     files.forEach((filePath: string) => {
@@ -38,7 +38,7 @@ describe("KAGParser", () => {
   });
 
   describe("正しくない構文のファイルが処理できる", () => {
-    let path = "test/fixture/invalid/";
+    let path = "__tests__/fixture/invalid/";
     let files = glob.sync(`${path}**/*.ks`);
     files.forEach((filePath: string) => {
       const baseName = filePath.substr(0, filePath.length - "/content.ks".length).substr(path.length);
