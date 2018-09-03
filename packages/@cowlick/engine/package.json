@@ -27,7 +27,7 @@
     "@xnv/akashic-scrollable": "0.0.4"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.3.7",
+    "@akashic/akashic-engine": "2.4.0",
     "@types/jest": "23.3.1",
     "@types/node": "9.4.7",
     "@xnv/headless-akashic": "0.0.1",

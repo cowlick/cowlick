@@ -26,7 +26,7 @@
     "msgpack5": "4.2.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.3.7",
+    "@akashic/akashic-engine": "2.4.0",
     "@types/bl": "0.8.32",
     "@types/cross-spawn": "6.0.0",
     "@types/escodegen": "0.0.6",
