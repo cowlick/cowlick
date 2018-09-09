@@ -259,30 +259,27 @@ function newMemberExpression(name: string): estree.MemberExpression {
 function replaceVariable(node: estree.MemberExpression) {
   const object = node.object;
   if (object.type === "Identifier") {
-    let newObject: estree.MemberExpression;
     switch (object.name) {
       case varSf:
-        newObject = newMemberExpression(core.VariableType.system);
+        node.object = newMemberExpression(core.VariableType.system);
         break;
       case varF:
-        newObject = newMemberExpression(core.VariableType.current);
+        node.object = newMemberExpression(core.VariableType.current);
         break;
-      // akashic-engineの g については何もしない
-      case "g":
-        return;
       default:
-        throw new Error(`"${object.name}" is a invalid variable name.`);
+        break;
     }
-    node.object = newObject;
   }
 }
 
 function traverseEval(original: string): estree.Node {
   return estraverse.replace(acorn.parse(original), {
-    leave: (node, _) => {
+    leave: (node, parent) => {
       switch (node.type) {
         case MemberExpression:
-          replaceVariable(node);
+          if (parent !== null && parent.type !== "MemberExpression") {
+            replaceVariable(node);
+          }
           break;
         default:
           break;
