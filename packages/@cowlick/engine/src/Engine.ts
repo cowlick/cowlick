@@ -19,6 +19,7 @@ export interface EngineParameters {
 export class Engine {
   private game: g.Game;
   private static _scriptManager = new ScriptManager(defaultScripts);
+  private static _assetCollector: core.AssetCollector = new core.DefaultAssetCollector();
   private _config: Config;
   private player: g.Player;
   private storageKeys: g.StorageKey[];
@@ -44,6 +45,14 @@ export class Engine {
     return Engine._scriptManager;
   }
 
+  static get assetCollector(): core.AssetCollector {
+    return Engine._assetCollector;
+  }
+
+  static set assetCollector(collector: core.AssetCollector) {
+    Engine._assetCollector = collector;
+  }
+
   get config(): Config {
     return this._config;
   }
@@ -61,6 +70,7 @@ export class Engine {
         scene,
         scenario,
         scriptManager: Engine.scriptManager,
+        assetCollector: Engine.assetCollector,
         config: this.config,
         player: this.player,
         storageKeys: this.storageKeys
@@ -111,6 +121,7 @@ export class Engine {
       scene,
       scenario,
       scriptManager: Engine.scriptManager,
+      assetCollector: Engine.assetCollector,
       config: this.config,
       player: this.player,
       storageKeys: this.storageKeys
@@ -150,6 +161,7 @@ export class Engine {
     return SceneController.createSceneForGame({
       game: this.game,
       scenario,
+      assetCollector: Engine.assetCollector,
       config: this.config,
       storageKeys: this.storageKeys,
       storageValuesSerialization

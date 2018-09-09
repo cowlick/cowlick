@@ -11,6 +11,7 @@ export interface SceneControllerParameters {
   scene: g.Scene;
   scenario: core.Scenario;
   scriptManager: ScriptManager;
+  assetCollector: core.AssetCollector;
   config: Config;
   player: g.Player;
   storageKeys: g.StorageKey[];
@@ -19,6 +20,7 @@ export interface SceneControllerParameters {
 export interface SceneParameters {
   game: g.Game;
   scenario: core.Scenario;
+  assetCollector: core.AssetCollector;
   config: Config;
   storageKeys: g.StorageKey[];
   storageValuesSerialization?: g.StorageValueStoreSerialization;
@@ -32,6 +34,7 @@ export class SceneController implements g.Destroyable {
   private player: g.Player;
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
+  private assetCollector: core.AssetCollector;
   private storageKeys: g.StorageKey[];
 
   private saveLoadSceneBody: g.Scene;
@@ -41,6 +44,7 @@ export class SceneController implements g.Destroyable {
     this.game = params.scene.game;
     this.scenario = params.scenario;
     this.scriptManager = params.scriptManager;
+    this.assetCollector = params.assetCollector;
     this.config = params.config;
     this.player = params.player;
     this.storageKeys = params.storageKeys;
@@ -150,7 +154,9 @@ export class SceneController implements g.Destroyable {
   }
 
   static createSceneForGame(params: SceneParameters) {
-    const assetIds = params.scenario.scene.assetIds.concat(core.collectAssetIds(params.config.window.system));
+    const assetIds = params.assetCollector
+      .collectFromScene(params.scenario.scene)
+      .concat(params.assetCollector.collect(params.config.window.system));
     if (params.config.window.message.ui.backgroundImage) {
       assetIds.push(params.config.window.message.ui.backgroundImage);
     }
@@ -169,6 +175,7 @@ export class SceneController implements g.Destroyable {
     const scene = SceneController.createSceneForGame({
       game: this.game,
       scenario: this.scenario,
+      assetCollector: this.assetCollector,
       config: this.config,
       storageKeys: this.storageKeys
     });
@@ -210,10 +217,12 @@ export class SceneController implements g.Destroyable {
   }
 
   private makeSaveLoadScene() {
-    const assetIds = this.scenario.scene.assetIds.concat(
-      core.collectAssetIds(this.config.window.system),
-      this.current.gameState.collectAssetIds(this.game)
-    );
+    const assetIds = this.assetCollector
+      .collectFromScene(this.scenario.scene)
+      .concat(
+        this.assetCollector.collect(this.config.window.system),
+        this.current.gameState.collectAssetIds(this.game, this.assetCollector)
+      );
     if (this.config.window.message.ui.backgroundImage) {
       assetIds.push(this.config.window.message.ui.backgroundImage);
     }

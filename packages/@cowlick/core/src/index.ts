@@ -7,3 +7,4 @@ export * from "./GameError";
 export * from "./SaveData";
 export * from "./Log";
 export * from "./Variables";
+export * from "./AssetCollector";

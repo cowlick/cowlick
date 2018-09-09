@@ -104,6 +104,7 @@
 		"node_modules/@cowlick/core/lib/Scenario.js",
 		"node_modules/@cowlick/core/lib/Scene.js",
 		"node_modules/@cowlick/core/lib/Script.js",
+		"node_modules/@cowlick/core/lib/AssetCollector.js",
 		"node_modules/@cowlick/core/lib/index.js",
 		"node_modules/@cowlick/engine/lib/lineBreakRule.js",
 		"node_modules/@cowlick/engine/lib/Constant.js",

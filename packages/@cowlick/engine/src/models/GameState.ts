@@ -115,16 +115,17 @@ export class GameState {
   /**
    * セーブデータに関連するAssetIdをすべて取得する。
    *
-   * @param scenario シナリオデータ
+   * @param game
+   * @param collector
    */
-  collectAssetIds(game: g.Game): string[] {
+  collectAssetIds(game: g.Game, collector: core.AssetCollector): string[] {
     let ids: string[] = [];
     for (const d of this.data) {
       // まだセーブされていない番地はundefinedなので飛ばす
       if (d) {
         const scene = this.scenario.findScene(game, d);
         if (scene) {
-          ids.push(...scene.assetIds);
+          ids.push(...collector.collectFromScene(scene));
         } else {
           throw new core.GameError("scene not found", d);
         }

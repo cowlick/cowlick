@@ -1,5 +1,5 @@
 import {Tag, VariableType} from "./Constant";
-import {GameError} from ".";
+import {GameError} from "./GameError";
 
 export interface ScriptNode {
   tag: Tag | string;
@@ -205,108 +205,6 @@ export interface Jump extends ScriptNode {
    * フレームインデックス
    */
   frame?: number;
-}
-
-/**
- * スクリプトからアセットのIDを収集する。
- *
- * @param scripts
- */
-export function collectAssetIds(scripts: Script[]): string[] {
-  const ids: string[] = [];
-  for (const s of scripts) {
-    switch (s.tag) {
-      case Tag.image:
-      case Tag.frameImage:
-        ids.push(s.assetId);
-        break;
-      case Tag.pane:
-        if (s.backgroundImage) {
-          ids.push(s.backgroundImage);
-        }
-        break;
-      case Tag.button:
-        ids.push(s.image.assetId);
-        ids.push(...collectAssetIds(s.scripts));
-        break;
-      case Tag.jump:
-        ids.push(s.label);
-        break;
-      case Tag.choice:
-        for (const c of s.values) {
-          ids.push(c.label);
-          if (c.path) {
-            ids.push(c.path);
-          }
-        }
-        if (s.backgroundImage) {
-          ids.push(s.backgroundImage);
-        }
-        break;
-      case Tag.link:
-        if (s.backgroundImage) {
-          ids.push(s.backgroundImage);
-        }
-        ids.push(...collectAssetIds(s.scripts));
-        break;
-      case Tag.playAudio:
-        ids.push(s.assetId);
-        break;
-      case Tag.playVideo:
-      case Tag.stopVideo:
-        ids.push(s.assetId);
-        break;
-      case Tag.evaluate:
-        ids.push(s.path);
-        break;
-      case Tag.condition:
-        ids.push(s.path);
-        ids.push(...collectAssetIds(s.scripts));
-        break;
-      case Tag.backlog:
-        ids.push(...collectAssetIds(s.scripts));
-        break;
-      case Tag.timeout:
-        ids.push(...collectAssetIds(s.scripts));
-        break;
-      case Tag.ifElse:
-        ids.push(...collectAssetIds(s.conditions));
-        ids.push(...collectAssetIds(s.elseBody));
-        break;
-      case Tag.openSaveScene:
-        if (s.base.backgroundImage) {
-          ids.push(s.base.backgroundImage);
-        }
-        break;
-      case Tag.click:
-        ids.push(...collectAssetIds(s.scripts));
-        break;
-      case Tag.extension:
-        ids.push(...collectAssetIdsFromObject(s.data));
-        break;
-      default:
-        break;
-    }
-  }
-  return ids;
-}
-
-function collectAssetIdsFromObject(data: any): string[] {
-  const ids: string[] = [];
-  for (const [k, v] of Object.entries(data)) {
-    switch (k) {
-      case "assetId":
-      case "backgroundImage":
-      case "label":
-      case "path":
-        ids.push(v as string);
-        break;
-    }
-    if (typeof v === "object") {
-      ids.push(...collectAssetIdsFromObject(v));
-    }
-  }
-  return ids;
 }
 
 /**
