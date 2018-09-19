@@ -1,11 +1,9 @@
-# cowlick
+<p align="center">
+<img src="https://raw.githubusercontent.com/cowlick/cowlick-materials/master/logos/2720x800.png"/>
+</p>
 
 [![npm version](https://badge.fury.io/js/%40cowlick%2Fengine.svg)](https://badge.fury.io/js/%40cowlick%2Fengine)
 [![Build Status](https://travis-ci.org/cowlick/cowlick.svg?branch=master)](https://travis-ci.org/cowlick/cowlick)
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/cowlick/cowlick/master/docs/images/cowlick.png"/>
-</p>
 
 `cowlick`は[Akashic](https://akashic-games.github.io/)専用のノベルゲームエンジンです。
 
