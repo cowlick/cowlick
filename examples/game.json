@@ -21,11 +21,6 @@
 			"path": "script/scene0_2_0.js",
 			"global": true
 		},
-		"first": {
-			"type": "script",
-			"path": "script/first.js",
-			"global": true
-		},
 		"scene0": {
 			"type": "script",
 			"path": "script/scene0.js",

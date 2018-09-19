@@ -4,13 +4,12 @@
   "private": true,
   "scripts": {
     "build": "npm run build:scenario && npm run build:src && npm run scan:assets",
-    "build:scenario": "cowlick-kag-compiler ./scenario/first.ks",
-    "build:scenario:prod": "cowlick-kag-compiler --plugin ./node_modules/.bin/cowlick-analyzer-plugin-script-encoder -- ./scenario/first.ks",
+    "build:scenario": "cowlick-kag-compiler ./scenario/title.ks",
+    "build:scenario:prod": "cowlick-kag-compiler --plugin ./node_modules/.bin/cowlick-analyzer-plugin-script-encoder -- ./scenario/title.ks",
     "build:src": "tsc -p .",
     "start": "akashic-sandbox .",
-    "scan:assets": "npm run copy:images && akashic scan asset",
-    "copy:images": "shx cp ../docs/images/cowlick.png ./image",
-    "bundle": "akashic export html -o ../dist -M -b && shx cp ../docs/images/favicon.ico ../dist"
+    "scan:assets": "akashic scan asset",
+    "bundle": "akashic export html -o ../dist -M -b"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.3",
@@ -29,7 +28,6 @@
     "@cowlick/kag-compiler": "^0.8.0",
     "@cowlick/analyzer-plugin-script-encoder": "^0.8.0",
     "@types/node": "9.4.7",
-    "shx": "0.3.2",
     "typescript": "3.0.1"
   }
 }

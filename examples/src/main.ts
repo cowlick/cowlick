@@ -16,7 +16,7 @@ module.exports = (param: g.GameMainParameterObject) => {
       }
     });
 
-    engine.load("first", (c: SceneController) => {
+    engine.load("title", (c: SceneController) => {
       controller = c;
     });
   }

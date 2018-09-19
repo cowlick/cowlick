@@ -1,7 +1,0 @@
-[layopt layer=message visible=false]
-[layopt layer=system visible=false]
-[image storage=black layer=background]
-[image storage=cowlick layer=logo left=256 top=176 opacity=0]
-[logo layer=logo duration=1000 wait=3000]
-[wt canskip=true]
-[jump storage=title.ks]
