@@ -95,7 +95,7 @@ export class GameState {
    */
   findStringValue(variable: core.Variable): string | undefined {
     const result = this.getValue(variable);
-    if (result) {
+    if (result !== undefined) {
       return String(result);
     } else {
       return undefined;
