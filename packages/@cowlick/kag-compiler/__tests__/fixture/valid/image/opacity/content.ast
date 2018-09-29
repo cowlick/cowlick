@@ -1,0 +1,14 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "image",
+        "assetId": "test",
+        "layer": {
+          "name": "base",
+          "opacity": 1
+        }
+      }
+    ]
+  }
+]

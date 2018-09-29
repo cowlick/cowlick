@@ -48,14 +48,13 @@ export function frame(scripts: ast.Script[], label?: string): ast.Frame {
 }
 
 export function image(assetId: string, layer: string, options: KeyValuePair[]): core.Image {
+  const config = layerConfig(layer, options);
+  delete config.tag;
   const result: core.Image = {
     tag: core.Tag.image,
-    layer: {
-      name: layer
-    },
+    layer: config,
     assetId: assetId
   };
-  concatKeyValues(result.layer, options);
   return result;
 }
 
