@@ -1,0 +1,12 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "extension",
+        "data": {
+          "tag": "start"
+        }
+      }
+    ]
+  }
+]

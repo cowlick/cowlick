@@ -318,7 +318,6 @@ UserDefinedTagName
         !Space
         !"="
         !WTTagName
-        !STagName
         !LinkTagName
         !EndLinkTagName
         !IScriptTagName
