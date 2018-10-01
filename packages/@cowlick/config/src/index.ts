@@ -78,6 +78,10 @@ export interface SystemConfig {
    * メッセージ即時表示
    */
   realTimeDisplay: boolean;
+  /**
+   * システムデータを自動で保存するかどうか
+   */
+  autoSave: boolean;
 }
 
 /**
@@ -149,7 +153,8 @@ export const defaultConfig = () =>
       messageSpeed: 1000 / g.game.fps,
       autoMessageDuration: 1500,
       alreadyRead: false,
-      realTimeDisplay: false
+      realTimeDisplay: false,
+      autoSave: true
     },
     audio: {
       voice: 0.5,

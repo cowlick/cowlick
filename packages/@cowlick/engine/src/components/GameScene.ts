@@ -60,8 +60,10 @@ export class GameScene implements Scene {
       state: this._gameState
     });
     // ゲーム中にそこそこの頻度で実行されるタイミング、という点からここで保存している
-    this.storage.saveBuiltinVariables();
-    this.storage.saveSystemVariables();
+    if (this.config.system.autoSave) {
+      this.storage.saveBuiltinVariables();
+      this.storage.saveSystemVariables();
+    }
   }
 
   get body(): g.Scene {
