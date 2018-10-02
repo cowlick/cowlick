@@ -5,6 +5,7 @@ import {Tag} from "./Constant";
 export interface AssetCollector {
   collectFromScene(scene: Scene): string[];
   collect(scripts: Script[]): string[];
+  collectScript(script: Script): string[];
 }
 
 export class DefaultAssetCollector implements AssetCollector {
@@ -31,80 +32,72 @@ export class DefaultAssetCollector implements AssetCollector {
   collect(scripts: Script[]): string[] {
     const ids: string[] = [];
     for (const s of scripts) {
-      switch (s.tag) {
-        case Tag.image:
-        case Tag.frameImage:
-          ids.push(s.assetId);
-          break;
-        case Tag.pane:
-          if (s.backgroundImage) {
-            ids.push(s.backgroundImage);
-          }
-          break;
-        case Tag.button:
-          ids.push(s.image.assetId);
-          ids.push(...this.collect(s.scripts));
-          break;
-        case Tag.jump:
-          ids.push(s.label);
-          break;
-        case Tag.choice:
-          for (const c of s.values) {
-            ids.push(c.label);
-            if (c.path) {
-              ids.push(c.path);
-            }
-          }
-          if (s.backgroundImage) {
-            ids.push(s.backgroundImage);
-          }
-          break;
-        case Tag.link:
-          if (s.backgroundImage) {
-            ids.push(s.backgroundImage);
-          }
-          ids.push(...this.collect(s.scripts));
-          break;
-        case Tag.playAudio:
-          ids.push(s.assetId);
-          break;
-        case Tag.playVideo:
-        case Tag.stopVideo:
-          ids.push(s.assetId);
-          break;
-        case Tag.evaluate:
-          ids.push(s.path);
-          break;
-        case Tag.condition:
-          ids.push(s.path);
-          ids.push(...this.collect(s.scripts));
-          break;
-        case Tag.backlog:
-          ids.push(...this.collect(s.scripts));
-          break;
-        case Tag.timeout:
-          ids.push(...this.collect(s.scripts));
-          break;
-        case Tag.ifElse:
-          ids.push(...this.collect(s.conditions));
-          ids.push(...this.collect(s.elseBody));
-          break;
-        case Tag.openSaveScene:
-          if (s.base.backgroundImage) {
-            ids.push(s.base.backgroundImage);
-          }
-          break;
-        case Tag.click:
-          ids.push(...this.collect(s.scripts));
-          break;
-        case Tag.extension:
-          ids.push(...this.collectFromObject(s.data));
-          break;
-        default:
-          break;
-      }
+      ids.push(...this.collectScript(s));
     }
     return ids;
+  }
+
+  collectScript(script: Script): string[] {
+    switch (script.tag) {
+      case Tag.image:
+      case Tag.frameImage:
+        return [script.assetId];
+      case Tag.pane:
+        if (script.backgroundImage) {
+          return [script.backgroundImage];
+        } else {
+          return [];
+        }
+      case Tag.button:
+        return this.collect(script.scripts).concat([script.image.assetId]);
+      case Tag.jump:
+        return [script.label];
+      case Tag.choice:
+        const ids: string[] = [];
+        for (const c of script.values) {
+          ids.push(c.label);
+          if (c.path) {
+            ids.push(c.path);
+          }
+        }
+        if (script.backgroundImage) {
+          ids.push(script.backgroundImage);
+        }
+        return ids;
+      case Tag.link:
+        if (script.backgroundImage) {
+          return this.collect(script.scripts).concat([script.backgroundImage]);
+        } else {
+          return this.collect(script.scripts);
+        }
+      case Tag.playAudio:
+        return [script.assetId];
+      case Tag.playVideo:
+      case Tag.stopVideo:
+        return [script.assetId];
+      case Tag.evaluate:
+        return [script.path];
+      case Tag.condition:
+        return this.collect(script.scripts).concat([script.path]);
+      case Tag.backlog:
+        return this.collect(script.scripts);
+      case Tag.timeout:
+        return this.collect(script.scripts);
+      case Tag.ifElse:
+        return this.collect(script.conditions).concat(this.collect(script.elseBody));
+      case Tag.openSaveScene:
+        if (script.base.backgroundImage) {
+          return [script.base.backgroundImage];
+        } else {
+          return [];
+        }
+      case Tag.click:
+        return this.collect(script.scripts);
+      case Tag.extension:
+        return this.collectFromObject(script.data);
+      default:
+        return [];
+    }
   }
 
   private collectFromObject(data: any): string[] {
