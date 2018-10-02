@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/engine",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Novel engine for Akashic",
   "main": "lib/index.js",
   "files": [
@@ -21,8 +21,8 @@
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.3",
     "@akashic-extension/akashic-timeline": "2.1.0",
-    "@cowlick/config": "^0.8.0",
-    "@cowlick/core": "^0.8.0",
+    "@cowlick/config": "^0.9.0",
+    "@cowlick/core": "^0.9.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4"
   },
