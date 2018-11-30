@@ -153,8 +153,8 @@ const varF = "f";
 
 export function variable(expression: string): core.Variable {
   let value: core.Variable | undefined;
-  estraverse.traverse(acorn.parse(expression), {
-    enter: function(node, _): estraverse.VisitorOption | void {
+  estraverse.traverse(acorn.parse(expression) as estree.Node, {
+    enter: function(node: estree.Node): estraverse.VisitorOption | estree.Node | void {
       if (node.type === "Program" && node.body.length === 1) {
         const statement = node.body[0];
         if (statement.type === "ExpressionStatement") {
@@ -272,11 +272,11 @@ function replaceVariable(node: estree.MemberExpression) {
 }
 
 function traverseEval(original: string): estree.Node {
-  return estraverse.replace(acorn.parse(original), {
-    leave: (node, parent) => {
+  return estraverse.replace(acorn.parse(original) as estree.Node, {
+    leave: (node: estree.Node, parentNode: estree.Node | null) => {
       switch (node.type) {
         case MemberExpression:
-          if (parent !== null && parent.type !== "MemberExpression") {
+          if (parentNode !== null && parentNode.type !== "MemberExpression") {
             replaceVariable(node);
           }
           break;

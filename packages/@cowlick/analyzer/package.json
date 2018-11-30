@@ -19,21 +19,21 @@
   },
   "dependencies": {
     "@cowlick/core": "^0.9.1",
-    "bl": "2.0.1",
+    "bl": "2.1.2",
     "cross-spawn": "6.0.5",
     "escodegen": "1.11.0",
     "estraverse": "4.2.0",
-    "msgpack5": "4.2.0"
+    "msgpack5": "4.2.1"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.0",
-    "@types/bl": "0.8.32",
+    "@akashic/akashic-engine": "2.4.5",
+    "@types/bl": "2.1.0",
     "@types/cross-spawn": "6.0.0",
     "@types/escodegen": "0.0.6",
     "@types/estraverse": "0.0.6",
     "@types/msgpack5": "3.4.1",
     "@types/node": "9.4.7",
-    "typescript": "3.0.1"
+    "typescript": "3.2.1"
   },
   "publishConfig": {
     "access": "public"

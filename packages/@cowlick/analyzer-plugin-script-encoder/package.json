@@ -24,20 +24,20 @@
   "dependencies": {
     "escodegen": "1.11.0",
     "estraverse": "4.2.0",
-    "msgpack5": "4.2.0"
+    "msgpack5": "4.2.1"
   },
   "devDependencies": {
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.2",
     "@types/estraverse": "0.0.6",
-    "@types/jest": "23.3.1",
+    "@types/jest": "23.3.10",
     "@types/msgpack5": "3.4.1",
     "@types/node": "9.4.7",
     "esprima": "4.0.1",
-    "jest": "23.5.0",
-    "power-assert": "1.6.0",
-    "ts-jest": "23.1.4",
-    "typescript": "3.0.1"
+    "jest": "23.6.0",
+    "power-assert": "1.6.1",
+    "ts-jest": "23.10.5",
+    "typescript": "3.2.1"
   },
   "publishConfig": {
     "access": "public"

@@ -19,7 +19,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
-    "@akashic-extension/akashic-label": "2.0.3",
+    "@akashic-extension/akashic-label": "2.0.4",
     "@akashic-extension/akashic-timeline": "2.1.0",
     "@cowlick/config": "^0.9.1",
     "@cowlick/core": "^0.9.1",
@@ -27,14 +27,14 @@
     "@xnv/akashic-scrollable": "0.0.4"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.0",
-    "@types/jest": "23.3.1",
+    "@akashic/akashic-engine": "2.4.5",
+    "@types/jest": "23.3.10",
     "@types/node": "9.4.7",
     "@xnv/headless-akashic": "0.0.1",
-    "jest": "23.5.0",
-    "power-assert": "1.6.0",
-    "ts-jest": "23.1.4",
-    "typescript": "3.0.1"
+    "jest": "23.6.0",
+    "power-assert": "1.6.1",
+    "ts-jest": "23.10.5",
+    "typescript": "3.2.1"
   },
   "publishConfig": {
     "access": "public"
