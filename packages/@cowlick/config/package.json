@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.4.8",
-    "@types/node": "9.4.7",
-    "typescript": "3.2.1"
+    "@types/node": "10.12.18",
+    "typescript": "3.2.2"
   },
   "publishConfig": {
     "access": "public"

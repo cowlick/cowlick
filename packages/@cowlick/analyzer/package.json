@@ -32,8 +32,8 @@
     "@types/escodegen": "0.0.6",
     "@types/estraverse": "0.0.6",
     "@types/msgpack5": "3.4.1",
-    "@types/node": "9.4.7",
-    "typescript": "3.2.1"
+    "@types/node": "10.12.18",
+    "typescript": "3.2.2"
   },
   "publishConfig": {
     "access": "public"
