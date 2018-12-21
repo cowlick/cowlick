@@ -12,7 +12,6 @@
     "build": "lerna run build",
     "prettier": "prettier --write '**/*.ts'",
     "sample:bundle": "cd ./examples && npm run bundle",
-    "sample:publish": "gh-pages -d ./dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
     "start": "cd ./examples && npm start"
   },
   "author": "pocketberserker",
@@ -22,7 +21,6 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "devDependencies": {
-    "gh-pages": "2.0.1",
     "husky": "1.2.1",
     "lerna": "3.8.0",
     "lint-staged": "8.1.0",
