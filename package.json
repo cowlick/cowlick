@@ -13,8 +13,7 @@
     "prettier": "prettier --write '**/*.ts'",
     "sample:bundle": "cd ./examples && npm run bundle",
     "sample:publish": "gh-pages -d ./dist -m \"Update $(date +%Y-%m-%d:%H:%M:%s)\"",
-    "start": "cd ./examples && npm start",
-    "precommit": "lint-staged"
+    "start": "cd ./examples && npm start"
   },
   "author": "pocketberserker",
   "license": "MIT",
@@ -24,7 +23,7 @@
   },
   "devDependencies": {
     "gh-pages": "2.0.1",
-    "husky": "1.2.0",
+    "husky": "1.2.1",
     "lerna": "3.5.1",
     "lint-staged": "8.1.0",
     "prettier": "1.15.3"
@@ -38,5 +37,10 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
