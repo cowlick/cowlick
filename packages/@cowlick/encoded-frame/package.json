@@ -23,7 +23,7 @@
     "msgpack5": "4.2.1"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.5",
+    "@akashic/akashic-engine": "2.4.8",
     "@types/jest": "23.3.10",
     "@types/msgpack5": "3.4.1",
     "@types/node": "9.4.7",
