@@ -18,8 +18,10 @@
     "@cowlick/core": "^0.9.1",
     "@cowlick/encoded-frame": "^0.9.1",
     "@cowlick/engine": "^0.9.1",
+    "@cowlick/msgpack": "^0.9.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
-    "@xnv/akashic-scrollable": "0.0.4"
+    "@xnv/akashic-scrollable": "0.0.4",
+    "base64-js": "1.3.0"
   },
   "devDependencies": {
     "@akashic/akashic-cli": "1.3.2",

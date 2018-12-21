@@ -1,7 +1,6 @@
-import * as msgpack5 from "msgpack5";
+import * as base64 from "base64-js";
+import * as msgpack from "@cowlick/msgpack";
 import {Frame} from "@cowlick/core";
-
-const msgpack = msgpack5();
 
 export class EncodedFrame extends Frame {
   constructor(encoded: string) {
@@ -9,6 +8,6 @@ export class EncodedFrame extends Frame {
   }
 
   private static decode(value: string) {
-    return msgpack.decode(Buffer.from(value, "base64"));
+    return msgpack.deserialize(base64.toByteArray(value));
   }
 }

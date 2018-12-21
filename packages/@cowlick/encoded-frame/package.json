@@ -20,10 +20,12 @@
   },
   "dependencies": {
     "@cowlick/core": "^0.9.1",
-    "msgpack5": "4.2.1"
+    "@cowlick/msgpack": "0.9.0",
+    "base64-js": "1.3.0"
   },
   "devDependencies": {
     "@akashic/akashic-engine": "2.4.8",
+    "@types/base64-js":"1.2.5",
     "@types/jest": "23.3.10",
     "@types/msgpack5": "3.4.1",
     "@types/node": "9.4.7",

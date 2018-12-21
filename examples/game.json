@@ -96,6 +96,7 @@
 		"node_modules/@cowlick/core/lib/AssetCollector.js",
 		"node_modules/@cowlick/core/lib/index.js",
 		"node_modules/@cowlick/engine/lib/lineBreakRule.js",
+		"node_modules/@cowlick/encoded-frame/lib/index.js",
 		"node_modules/@cowlick/engine/lib/Constant.js",
 		"node_modules/@cowlick/engine/lib/Engine.js",
 		"node_modules/@cowlick/engine/lib/components/AudioGroup.js",
@@ -118,7 +119,9 @@
 		"node_modules/@cowlick/engine/lib/models/GameState.js",
 		"node_modules/@cowlick/engine/lib/models/Storage.js",
 		"node_modules/@cowlick/engine/lib/scripts/ScriptManager.js",
-		"node_modules/@cowlick/engine/lib/scripts/defaultScripts.js"
+		"node_modules/@cowlick/engine/lib/scripts/defaultScripts.js",
+		"node_modules/@cowlick/msgpack/index.js",
+		"node_modules/base64-js/index.js"
 	],
 	"moduleMainScripts": {
 		"@akashic-extension/akashic-label": "node_modules/@akashic-extension/akashic-label/lib/index.js",
@@ -127,6 +130,9 @@
 		"@xnv/akashic-scrollable": "node_modules/@xnv/akashic-scrollable/lib/index.js",
 		"@cowlick/config": "node_modules/@cowlick/config/lib/index.js",
 		"@cowlick/core": "node_modules/@cowlick/core/lib/index.js",
-		"@cowlick/engine": "node_modules/@cowlick/engine/lib/index.js"
+		"@cowlick/encoded-frame": "node_modules/@cowlick/encoded-frame/lib/index.js",
+		"@cowlick/engine": "node_modules/@cowlick/engine/lib/index.js",
+		"@cowlick/msgpack": "node_modules/@cowlick/msgpack/index.js",
+		"base64-js": "node_modules/base64-js/index.js"
 	}
 }

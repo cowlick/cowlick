@@ -1,0 +1,35 @@
+{
+  "name": "@cowlick/msgpack",
+  "version": "0.9.0",
+  "description": "msgpack serializer for cowlick",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "LICENSE-msgpackjs"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "pocketberserker",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cowlick/cowlick.git"
+  },
+  "devDependencies": {
+    "jest": "23.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)test)\\.js$",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "node"
+    ]
+  }
+}
