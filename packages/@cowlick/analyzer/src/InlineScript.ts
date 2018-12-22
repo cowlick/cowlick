@@ -35,7 +35,7 @@ export class InlineScript {
     return escodegen.generate(this.source);
   }
 
-  async write(basePath: string) {
-    return await writeFile(path.join(basePath, this.name), this.generate());
+  write(basePath: string): Promise<void> {
+    return writeFile(path.join(basePath, this.name), this.generate());
   }
 }
