@@ -8,8 +8,7 @@
     "build:scenario:prod": "cowlick-kag-compiler --plugin ./node_modules/.bin/cowlick-analyzer-plugin-script-encoder -- ./scenario/title.ks",
     "build:src": "tsc -p .",
     "start": "akashic-sandbox .",
-    "scan:assets": "akashic scan asset",
-    "bundle": "akashic export html -o ../dist -M -b"
+    "scan:assets": "akashic scan asset"
   },
   "dependencies": {
     "@akashic-extension/akashic-label": "2.0.5",
@@ -24,9 +23,9 @@
     "base64-js": "1.3.0"
   },
   "devDependencies": {
-    "@akashic/akashic-cli": "1.3.2",
-    "@akashic/akashic-engine": "2.4.8",
-    "@akashic/akashic-sandbox": "0.13.47",
+    "@akashic/akashic-cli": "1.5.0",
+    "@akashic/akashic-engine": "2.4.9",
+    "@akashic/akashic-sandbox": "0.13.48",
     "@cowlick/analyzer-plugin-script-encoder": "^0.9.0",
     "@cowlick/kag-compiler": "^0.9.1",
     "@types/node": "10.12.18",

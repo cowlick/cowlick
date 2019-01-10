@@ -24,7 +24,7 @@
     "base64-js": "1.3.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.8",
+    "@akashic/akashic-engine": "2.4.9",
     "@types/base64-js":"1.2.5",
     "@types/jest": "23.3.10",
     "@types/node": "10.12.18",

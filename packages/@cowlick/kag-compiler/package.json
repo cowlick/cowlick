@@ -32,7 +32,7 @@
     "ora": "3.0.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.8",
+    "@akashic/akashic-engine": "2.4.9",
     "@types/acorn": "4.0.4",
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.2",
