@@ -23,12 +23,12 @@
     "base64-js": "1.3.0"
   },
   "devDependencies": {
-    "@akashic/akashic-cli": "1.5.0",
-    "@akashic/akashic-engine": "2.4.9",
-    "@akashic/akashic-sandbox": "0.13.48",
+    "@akashic/akashic-cli": "1.5.2",
+    "@akashic/akashic-engine": "2.4.11",
+    "@akashic/akashic-sandbox": "0.13.55",
     "@cowlick/analyzer-plugin-script-encoder": "^0.9.0",
     "@cowlick/kag-compiler": "^0.9.1",
     "@types/node": "10.12.18",
-    "typescript": "3.2.2"
+    "typescript": "3.3.3333"
   }
 }

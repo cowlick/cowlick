@@ -19,7 +19,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "devDependencies": {
-    "jest": "23.6.0"
+    "jest": "24.1.0"
   },
   "publishConfig": {
     "access": "public"
