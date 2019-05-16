@@ -26,26 +26,26 @@
   "dependencies": {
     "@cowlick/analyzer": "^0.9.1",
     "@cowlick/core": "^0.9.1",
-    "acorn": "6.1.0",
+    "acorn": "6.1.1",
     "commandpost": "1.4.0",
     "estraverse": "4.2.0",
-    "ora": "3.1.0"
+    "ora": "3.4.0"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.11",
+    "@akashic/akashic-engine": "2.4.14",
     "@types/acorn": "4.0.5",
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.2",
     "@types/estraverse": "0.0.6",
     "@types/glob": "7.1.1",
-    "@types/jest": "24.0.6",
+    "@types/jest": "24.0.13",
     "@types/node": "10.12.18",
-    "@types/ora": "3.0.0",
+    "@types/ora": "3.2.0",
     "esprima": "4.0.1",
-    "jest": "24.1.0",
+    "jest": "24.8.0",
     "pegjs": "0.10.0",
-    "ts-jest": "24.0.0",
-    "typescript": "3.3.3333"
+    "ts-jest": "24.0.2",
+    "typescript": "3.4.5"
   },
   "publishConfig": {
     "access": "public"

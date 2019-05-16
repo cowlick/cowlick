@@ -18,9 +18,9 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "2.4.11",
+    "@akashic/akashic-engine": "2.4.14",
     "@types/node": "10.12.18",
-    "typescript": "3.3.3333"
+    "typescript": "3.4.5"
   },
   "publishConfig": {
     "access": "public"
