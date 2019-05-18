@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/core",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "core models for cowlick",
   "main": "lib/index.js",
   "files": [
