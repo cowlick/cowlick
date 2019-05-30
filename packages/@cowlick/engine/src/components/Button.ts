@@ -9,9 +9,15 @@ export interface ButtonParameters {
   };
 }
 
+export const enum ButtonState {
+  Inactive,
+  Hover,
+  Pushed
+}
+
 export class Button extends g.Pane {
   onClick: g.Trigger<Button>;
-  private pushed: boolean;
+  private buttonState: ButtonState;
 
   constructor(params: ButtonParameters) {
     super({
@@ -31,16 +37,21 @@ export class Button extends g.Pane {
     this.pointMove.add(this.onPointMove, this);
     this.pointUp.add(this.onPointUp, this);
     this.onClick = new g.Trigger<Button>();
-    this.pushed = false;
+    this.buttonState = ButtonState.Inactive;
   }
 
   push(): void {
-    this.pushed = true;
+    this.buttonState = ButtonState.Pushed;
     this.modified();
   }
 
   unpush(): void {
-    this.pushed = false;
+    this.buttonState = ButtonState.Inactive;
+    this.modified();
+  }
+
+  hover() {
+    this.buttonState === ButtonState.Hover;
     this.modified();
   }
 
@@ -56,13 +67,13 @@ export class Button extends g.Pane {
   }
 
   private onPointDown(_: g.PointDownEvent) {
-    if (!this.pushed) {
+    if (this.buttonState !== ButtonState.Pushed) {
       this.push();
     }
   }
 
   private isHover(e: g.PointMoveEvent) {
-    let p = {
+    const p = {
       x: e.point.x + e.startDelta.x,
       y: e.point.y + e.startDelta.y
     };
@@ -72,16 +83,16 @@ export class Button extends g.Pane {
   }
 
   private onPointMove(e: g.PointMoveEvent) {
-    let hover = this.isHover(e);
-    if (this.pushed && !hover) {
+    const hover = this.isHover(e);
+    if (this.buttonState === ButtonState.Pushed && hover === false) {
       this.unpush();
-    } else if (!this.pushed && hover) {
-      this.push();
+    } else if (this.buttonState === ButtonState.Inactive && hover) {
+      this.hover();
     }
   }
 
   private onPointUp(_: g.PointUpEvent) {
-    if (this.pushed) {
+    if (this.buttonState === ButtonState.Pushed) {
       this.onClick.fire(this);
       this.unpush();
     }

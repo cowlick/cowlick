@@ -147,7 +147,7 @@ export interface Button extends ScriptNode {
   /**
    * 画像情報
    */
-  image: FrameImage;
+  image: Image;
   /**
    * X座標
    */

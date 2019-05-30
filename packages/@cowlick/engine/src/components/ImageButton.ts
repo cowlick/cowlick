@@ -1,33 +1,38 @@
-import {FrameImage} from "@cowlick/core";
+import {Image} from "@cowlick/core";
 import {Button} from "./Button";
-import {createFrameSprite} from "./Image";
+import {createImage} from "./Image";
 
 export class ImageButton extends Button {
-  private image: g.FrameSprite;
+  private image: g.Sprite;
 
-  constructor(scene: g.Scene, image: g.FrameSprite) {
+  constructor(scene: g.Scene, image: Image) {
     super({
       scene,
-      width: image.width,
-      height: image.height
+      width: 0,
+      height: 0
     });
 
-    this.image = image;
-    this.append(image);
+    this.image = createImage(scene, image);
+    this.width = this.image.width / 3;
+    this.height = this.image.height;
+    this.append(this.image);
   }
 
   push() {
-    this.image.frameNumber = 1;
+    this.image.x = -this.image.width / 3;
+    this.image.modified();
     super.push();
   }
 
   unpush() {
-    this.image.frameNumber = 0;
+    this.image.x = 0;
+    this.image.modified();
     super.unpush();
   }
 
-  static create(scene: g.Scene, image: FrameImage): Button {
-    const asset = scene.assets[image.assetId] as g.ImageAsset;
-    return new ImageButton(scene, createFrameSprite(scene, asset, image.frame));
+  hover() {
+    this.image.x = (-this.image.width / 3) * 2;
+    this.image.modified();
+    super.unpush();
   }
 }

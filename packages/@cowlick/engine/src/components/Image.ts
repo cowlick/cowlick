@@ -8,7 +8,7 @@ interface Frame {
   interval?: number;
 }
 
-export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, frame: Frame) {
+export const createFrameSprite = (scene: g.Scene, src: g.ImageAsset, frame: Frame) => {
   const sprite = new g.FrameSprite({
     scene,
     src,
@@ -21,9 +21,9 @@ export function createFrameSprite(scene: g.Scene, src: g.ImageAsset, frame: Fram
   }
   sprite.start();
   return sprite;
-}
+};
 
-export function createImage(scene: g.Scene, image: Image) {
+export const createImage = (scene: g.Scene, image: Image) => {
   const src = scene.assets[image.assetId] as g.ImageAsset;
   let sprite: g.Sprite;
   if (image.tag === Tag.frameImage) {
@@ -42,4 +42,4 @@ export function createImage(scene: g.Scene, image: Image) {
   }
   sprite.invalidate();
   return sprite;
-}
+};

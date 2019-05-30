@@ -6,7 +6,7 @@ export * from "./models/GameState";
 export {SceneController} from "./components/SceneController";
 export {GameScene} from "./components/GameScene";
 export {SaveLoadScene} from "./components/SaveLoadScene";
-export {Button} from "./components/Button";
+export * from "./components/Button";
 export {ImageButton} from "./components/ImageButton";
 export {LabelButton} from "./components/LabelButton";
 export {Slider} from "./components/Slider";

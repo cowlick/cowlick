@@ -46,7 +46,7 @@ function jump(controller: SceneController, target: core.Jump) {
 }
 
 function button(controller: SceneController, data: core.Button) {
-  const button = ImageButton.create(controller.current.body, data.image);
+  const button = new ImageButton(controller.current.body, data.image);
   button.move(data.x, data.y);
   button.onClick.add(() => {
     for (const s of data.scripts) {
