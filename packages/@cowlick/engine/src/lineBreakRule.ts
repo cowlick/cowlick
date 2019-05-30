@@ -1,8 +1,8 @@
 import {Fragment} from "@akashic-extension/akashic-label";
 
 // https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_7
-const lineHeadWrap = (
-  // 終わり括弧類
+const lineHeadWrap = // 終わり括弧類
+(
   "’”）〕］｝〉》」』】⦆〙〗»〟" +
   // ハイフン類
   "‐〜゠–" +
@@ -23,8 +23,8 @@ const lineHeadWrap = (
 ).split("");
 
 // https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_8
-const lineEndWrap = (
-  // 始め括弧類
+const lineEndWrap = // 始め括弧類
+(
   "‘“（〔［｛〈《「『【⦅〘〖«〝" +
   // 割注始め括弧類
   "（〔［"
@@ -33,7 +33,7 @@ const lineEndWrap = (
 // https://www.w3.org/TR/2008/WD-jlreq-20081015/ja/#ja-subheading2_1_10
 const unbreakable = "—…‥".split("");
 
-export function lineBreakRule(fragments: Fragment[], index: number) {
+export const lineBreakRule = (fragments: Fragment[], index: number) => {
   const target = fragments[index];
   if (typeof target !== "string") {
     return index;
@@ -57,4 +57,4 @@ export function lineBreakRule(fragments: Fragment[], index: number) {
       return index;
     }
   }
-}
+};

@@ -13,7 +13,7 @@ import {Message} from "../components/Message";
 import {ScriptFunction} from "./ScriptManager";
 import {Engine} from "../Engine";
 
-function image(controller: SceneController, image: core.Image) {
+const image = (controller: SceneController, image: core.Image) => {
   const scene = controller.current;
   scene.appendLayer(createImage(scene.body, image), image.layer);
   scene.applyLayerConfig({
@@ -21,9 +21,9 @@ function image(controller: SceneController, image: core.Image) {
     opacity: image.layer.opacity,
     visible: image.layer.visible
   });
-}
+};
 
-function pane(controller: SceneController, pane: core.Pane) {
+const pane = (controller: SceneController, pane: core.Pane) => {
   const scene = controller.current;
   const p = new g.Pane({
     scene: scene.body,
@@ -39,13 +39,13 @@ function pane(controller: SceneController, pane: core.Pane) {
   });
   p.touchable = !!pane.touchable;
   scene.appendLayer(p, pane.layer);
-}
+};
 
-function jump(controller: SceneController, target: core.Jump) {
+const jump = (controller: SceneController, target: core.Jump) => {
   controller.jump(target);
-}
+};
 
-function button(controller: SceneController, data: core.Button) {
+const button = (controller: SceneController, data: core.Button) => {
   const button = new ImageButton(controller.current.body, data.image);
   button.move(data.x, data.y);
   button.onClick.add(() => {
@@ -54,9 +54,9 @@ function button(controller: SceneController, data: core.Button) {
     }
   });
   controller.current.appendLayer(button, data.image.layer);
-}
+};
 
-function choice(controller: SceneController, choice: core.Choice) {
+const choice = (controller: SceneController, choice: core.Choice) => {
   const game = controller.game;
   const count = choice.values.length;
   // TODO: 計算式を書き直す
@@ -99,9 +99,9 @@ function choice(controller: SceneController, choice: core.Choice) {
     controller.current.appendLayer(button, choice.layer);
     index++;
   }
-}
+};
 
-function createLink(scene: Scene, config: Config, link: core.Link) {
+const createLink = (scene: Scene, config: Config, link: core.Link) => {
   const params: LabelButtonParameters = {
     scene: scene.body,
     width: link.width,
@@ -119,9 +119,9 @@ function createLink(scene: Scene, config: Config, link: core.Link) {
   const button = new LabelButton(params);
   button.move(link.layer.x, link.layer.y);
   return button;
-}
+};
 
-function link(controller: SceneController, link: core.Link) {
+const link = (controller: SceneController, link: core.Link) => {
   const l = createLink(controller.current, controller.config, link);
   for (const script of link.scripts) {
     l.onClick.add(() => {
@@ -129,50 +129,50 @@ function link(controller: SceneController, link: core.Link) {
     });
   }
   controller.current.appendLayer(l, link.layer);
-}
+};
 
-function text(controller: SceneController, text: core.Text) {
+const text = (controller: SceneController, text: core.Text) => {
   controller.current.updateText(text);
-}
+};
 
-function layerConfig(controller: SceneController, config: core.LayerConfig) {
+const layerConfig = (controller: SceneController, config: core.LayerConfig) => {
   controller.current.applyLayerConfig(config);
-}
+};
 
-function playAudio(controller: SceneController, audio: core.PlayAudio) {
+const playAudio = (controller: SceneController, audio: core.PlayAudio) => {
   controller.current.playAudio(audio);
-}
+};
 
-function changeVolume(controller: SceneController, data: core.ChangeVolume) {
+const changeVolume = (controller: SceneController, data: core.ChangeVolume) => {
   controller.current.changeVolume(data);
-}
+};
 
-function stopAudio(controller: SceneController, audio: core.StopAudio) {
+const stopAudio = (controller: SceneController, audio: core.StopAudio) => {
   controller.current.stopAudio(audio);
-}
+};
 
-function playVideo(controller: SceneController, video: core.Video) {
+const playVideo = (controller: SceneController, video: core.Video) => {
   controller.current.playVideo(video);
-}
+};
 
-function stopVideo(controller: SceneController, video: core.Video) {
+const stopVideo = (controller: SceneController, video: core.Video) => {
   controller.current.stopVideo(video);
-}
+};
 
-function click(controller: SceneController, data: core.Click) {
+const click = (controller: SceneController, data: core.Click) => {
   const scene = controller.current.body;
   scene.pointUpCapture.addOnce(() => {
     for (const s of data.scripts) {
       Engine.scriptManager.call(controller, s);
     }
   }, scene);
-}
+};
 
-function skip(controller: SceneController, _: any) {
+const skip = (controller: SceneController, _: any) => {
   controller.current.requestNextFrame();
-}
+};
 
-function trigger(controller: SceneController, trigger: core.Trigger) {
+const trigger = (controller: SceneController, trigger: core.Trigger) => {
   switch (trigger.value) {
     case core.TriggerValue.Off:
       controller.current.disableWindowClick();
@@ -181,22 +181,22 @@ function trigger(controller: SceneController, trigger: core.Trigger) {
       controller.current.enableWindowClick();
       break;
   }
-}
+};
 
-function save(controller: SceneController, data: core.Save) {
+const save = (controller: SceneController, data: core.Save) => {
   controller.save(data);
-}
+};
 
-function load(controller: SceneController, data: core.Load) {
+const load = (controller: SceneController, data: core.Load) => {
   controller.load(data);
-}
+};
 
-function evaluate(controller: SceneController, info: core.Eval) {
+const evaluate = (controller: SceneController, info: core.Eval) => {
   const f = g._require(controller.game, info.path);
   f(controller.current.gameState.variables);
-}
+};
 
-function condition(controller: SceneController, cond: core.Condition) {
+const condition = (controller: SceneController, cond: core.Condition) => {
   const f = g._require(controller.game, cond.path);
   if (f(controller.current.gameState.variables)) {
     for (const s of cond.scripts) {
@@ -205,9 +205,9 @@ function condition(controller: SceneController, cond: core.Condition) {
     return true;
   }
   return false;
-}
+};
 
-function backlog(controller: SceneController, data: core.Backlog) {
+const backlog = (controller: SceneController, data: core.Backlog) => {
   const layer = {name: core.LayerKind.backlog};
 
   for (const s of data.scripts) {
@@ -283,23 +283,23 @@ function backlog(controller: SceneController, data: core.Backlog) {
     scripts
   };
   link(controller, l);
-}
+};
 
-function removeLayer(controller: SceneController, target: core.RemoveLayer) {
+const removeLayer = (controller: SceneController, target: core.RemoveLayer) => {
   controller.current.removeLayer(target.name);
-}
+};
 
-function clearSystemVariables(controller: SceneController, _: any) {
+const clearSystemVariables = (controller: SceneController, _: any) => {
   controller.current.gameState.variables.system = {};
-}
+};
 
-function clearCurrentVariables(controller: SceneController, _: any) {
+const clearCurrentVariables = (controller: SceneController, _: any) => {
   controller.current.gameState.variables.current = {};
-}
+};
 
-function fadeIn(controller: SceneController, info: core.Fade) {
+const fadeIn = (controller: SceneController, info: core.Fade) => {
   controller.current.transition(info.layer, layer => {
-    let timeline = new tl.Timeline(controller.current.body);
+    const timeline = new tl.Timeline(controller.current.body);
     timeline
       .create(layer, {modified: layer.modified, destroyed: layer.destroyed})
       .fadeIn(info.duration)
@@ -309,9 +309,9 @@ function fadeIn(controller: SceneController, info: core.Fade) {
         }
       });
   });
-}
+};
 
-function fadeOut(controller: SceneController, info: core.Fade) {
+const fadeOut = (controller: SceneController, info: core.Fade) => {
   controller.current.transition(info.layer, layer => {
     let timeline = new tl.Timeline(controller.current.body);
     timeline
@@ -323,17 +323,17 @@ function fadeOut(controller: SceneController, info: core.Fade) {
         }
       });
   });
-}
+};
 
-function timeout(controller: SceneController, info: core.Timeout) {
+const timeout = (controller: SceneController, info: core.Timeout) => {
   controller.current.body.setTimeout(() => {
     for (const s of info.scripts) {
       Engine.scriptManager.call(controller, s);
     }
   }, info.milliseconds);
-}
+};
 
-function ifElse(controller: SceneController, data: core.IfElse) {
+const ifElse = (controller: SceneController, data: core.IfElse) => {
   for (const c of data.conditions) {
     if (condition(controller, c)) {
       return;
@@ -342,13 +342,13 @@ function ifElse(controller: SceneController, data: core.IfElse) {
   for (const s of data.elseBody) {
     Engine.scriptManager.call(controller, s);
   }
-}
+};
 
-function exception(controller: SceneController, e: core.GameError) {
+const exception = (controller: SceneController, e: core.GameError) => {
   controller.game.logger.warn(e.message, e.data);
-}
+};
 
-function slider(controller: SceneController, info: core.Slider) {
+const slider = (controller: SceneController, info: core.Slider) => {
   const s = new Slider({
     scene: controller.current.body,
     width: 0,
@@ -359,24 +359,24 @@ function slider(controller: SceneController, info: core.Slider) {
     state: controller.current.gameState
   });
   controller.current.appendLayer(s, info.layer);
-}
+};
 
-export function autoMode(controller: SceneController, _: any) {
+export const autoMode = (controller: SceneController, _: any) => {
   if (controller.current.gameState.getValue({type: core.VariableType.builtin, name: core.BuiltinVariable.autoMode})) {
     controller.current.setAutoTrigger();
   }
-}
+};
 
-function closeLoadScene(controller: SceneController, _: any) {
+const closeLoadScene = (controller: SceneController, _: any) => {
   controller.closeSaveLoadScene();
-}
+};
 
-function onLoadedSaveLoadScene(
+const onLoadedSaveLoadScene = (
   scene: Scene,
   controller: SceneController,
   info: core.SaveLoadScene,
   create: (i: number) => core.Script[]
-) {
+) => {
   let position: pg.Position = pg.Position.Top;
   switch (info.button) {
     case core.Position.Top:
@@ -422,17 +422,17 @@ function onLoadedSaveLoadScene(
     });
     pagination.content.append(button);
   }
-}
+};
 
-function openSaveLoadScene(
+const openSaveLoadScene = (
   controller: SceneController,
   info: core.SaveLoadScene,
   create: (i: number) => core.Script[]
-) {
+) => {
   controller.openSaveLoadScene(scene => onLoadedSaveLoadScene(scene, controller, info, create));
-}
+};
 
-function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {
+const openSaveScene = (controller: SceneController, info: core.SaveLoadScene) => {
   openSaveLoadScene(controller, info, index => [
     {
       tag: core.Tag.save,
@@ -440,9 +440,9 @@ function openSaveScene(controller: SceneController, info: core.SaveLoadScene) {
       force: true
     }
   ]);
-}
+};
 
-function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
+const openLoadScene = (controller: SceneController, info: core.SaveLoadScene) => {
   openSaveLoadScene(controller, info, index => [
     {
       tag: core.Tag.closeLoadScene
@@ -452,17 +452,17 @@ function openLoadScene(controller: SceneController, info: core.SaveLoadScene) {
       index
     }
   ]);
-}
+};
 
-function messageSpeed(controller: SceneController, data: core.MessageSpeed) {
+const messageSpeed = (controller: SceneController, data: core.MessageSpeed) => {
   controller.current.gameState.setValue(
     {type: core.VariableType.builtin, name: core.BuiltinVariable.messageSpeed},
     data.speed
   );
   controller.current.applyMessageSpeed();
-}
+};
 
-function fontSetting(controller: SceneController, data: core.Font) {
+const fontSetting = (controller: SceneController, data: core.Font) => {
   if (data.size) {
     controller.current.gameState.setValue(
       {
@@ -482,14 +482,14 @@ function fontSetting(controller: SceneController, data: core.Font) {
     );
   }
   controller.current.applyFontSetting();
-}
+};
 
-function realTimeDisplay(controller: SceneController, setting: core.RealTimeDisplay) {
+const realTimeDisplay = (controller: SceneController, setting: core.RealTimeDisplay) => {
   controller.current.gameState.setValue(
     {type: core.VariableType.builtin, name: core.BuiltinVariable.realTimeDisplay},
     setting.enabled
   );
-}
+};
 
 export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],

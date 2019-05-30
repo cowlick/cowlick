@@ -8,13 +8,13 @@ export interface Scene {
   source: estree.Node;
 }
 
-function literal(value: string): estree.Literal {
+const literal = (value: string): estree.Literal => {
   return {
     type: "Literal",
     value,
     raw: JSON.stringify(value)
   };
-}
+};
 
 const encodedPackage: estree.Identifier = {
   type: "Identifier",
@@ -47,7 +47,7 @@ const importEncodedFrame: estree.VariableDeclaration = {
   ]
 };
 
-function quoteKeys(node: estree.ObjectExpression): estree.Node {
+const quoteKeys = (node: estree.ObjectExpression): estree.Node => {
   const properties: estree.Property[] = node.properties.map(p => {
     if (p.key.type === "Identifier") {
       return {
@@ -62,9 +62,9 @@ function quoteKeys(node: estree.ObjectExpression): estree.Node {
     ...node,
     properties
   };
-}
+};
 
-function encodeScripts(args: any): estree.Literal[] {
+const encodeScripts = (args: any): estree.Literal[] => {
   let arg = args[0];
   if (arg.type === "ArrayExpression") {
     arg = {
@@ -94,9 +94,9 @@ function encodeScripts(args: any): estree.Literal[] {
     )
     .toString("base64");
   return [literal(value)];
-}
+};
 
-function repalceFrame(node: estree.NewExpression): estree.Node {
+const repalceFrame = (node: estree.NewExpression): estree.Node => {
   const callee = node.callee;
   if (callee.type === "MemberExpression") {
     const property = callee.property;
@@ -116,9 +116,9 @@ function repalceFrame(node: estree.NewExpression): estree.Node {
     }
   }
   return node;
-}
+};
 
-export function encode(scenes: Scene[]): Scene[] {
+export const encode = (scenes: Scene[]): Scene[] => {
   return scenes.map(scene => ({
     label: scene.label,
     source: estraverse.replace(scene.source, {
@@ -137,4 +137,4 @@ export function encode(scenes: Scene[]): Scene[] {
       }
     })
   }));
-}
+};
