@@ -9,7 +9,7 @@ export interface ButtonParameters {
   };
 }
 
-export const enum ButtonState {
+const enum ButtonState {
   Inactive,
   Hover,
   Pushed
