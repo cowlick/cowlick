@@ -18,26 +18,26 @@ export interface Context {
 
 let context: Context;
 
-export function setup(ctx: Context) {
+export const setup = (ctx: Context) => {
   context = ctx;
-}
+};
 
-export function contents(c: ast.Script[], cs: ast.Script[][]): ast.Script[] {
+export const contents = (c: ast.Script[], cs: ast.Script[][]): ast.Script[] => {
   var result = c;
   for (const c of cs) {
     result.push(...c);
   }
   return result;
-}
+};
 
-export function frames(frames: ast.Frame[]) {
+export const frames = (frames: ast.Frame[]) => {
   return {
     dependencies: context.dependencies,
     frames
   };
-}
+};
 
-export function frame(scripts: ast.Script[], label?: string): ast.Frame {
+export const frame = (scripts: ast.Script[], label?: string): ast.Frame => {
   const result: ast.Frame = {
     scripts
   };
@@ -45,9 +45,9 @@ export function frame(scripts: ast.Script[], label?: string): ast.Frame {
     result.label = label;
   }
   return result;
-}
+};
 
-export function image(assetId: string, layer: string, options: KeyValuePair[]): core.Image {
+export const image = (assetId: string, layer: string, options: KeyValuePair[]): core.Image => {
   const config = layerConfig(layer, options);
   delete config.tag;
   const result: core.Image = {
@@ -56,9 +56,9 @@ export function image(assetId: string, layer: string, options: KeyValuePair[]): 
     assetId: assetId
   };
   return result;
-}
+};
 
-export function text(values: (string | core.Ruby[])[], cm: any): core.Text {
+export const text = (values: (string | core.Ruby[])[], cm: any): core.Text => {
   const result: core.Text = {
     tag: core.Tag.text,
     values: values
@@ -67,13 +67,13 @@ export function text(values: (string | core.Ruby[])[], cm: any): core.Text {
     result.clear = true;
   }
   return result;
-}
+};
 
-function flatten(
+const flatten = (
   result: (string | core.Ruby[] | core.Variable)[],
   text: string,
   values: (string | core.Ruby[] | core.Variable)[]
-) {
+) => {
   for (const v of values) {
     if (Array.isArray(v)) {
       if (text) {
@@ -92,12 +92,12 @@ function flatten(
     }
   }
   return text;
-}
+};
 
-export function textBlock(
+export const textBlock = (
   t: (string | core.Ruby[] | core.Variable)[],
   ts: (string | core.Ruby[] | core.Variable)[][]
-): (string | core.Ruby[] | core.Variable)[] {
+): (string | core.Ruby[] | core.Variable)[] => {
   const result: (string | core.Ruby[] | core.Variable)[] = [];
   let text = flatten(result, "", t);
   for (const t of ts) {
@@ -107,13 +107,13 @@ export function textBlock(
     result.push(text);
   }
   return result;
-}
+};
 
-export function textLine(
+export const textLine = (
   values: (string | core.Ruby[] | core.Variable)[],
   top: any,
   end: any
-): (string | core.Ruby[] | core.Variable)[] {
+): (string | core.Ruby[] | core.Variable)[] => {
   if (top) {
     if (typeof values[0] === "string") {
       values[0] = "\n" + values[0];
@@ -135,9 +135,9 @@ export function textLine(
     result.push(text);
   }
   return result;
-}
+};
 
-export function ruby(rb: string, rt: string): core.Ruby[] {
+export const ruby = (rb: string, rt: string): core.Ruby[] => {
   return [
     {
       value: JSON.stringify({
@@ -146,15 +146,15 @@ export function ruby(rb: string, rt: string): core.Ruby[] {
       })
     }
   ];
-}
+};
 
 const varSf = "sf";
 const varF = "f";
 
-export function variable(expression: string): core.Variable {
+export const variable = (expression: string): core.Variable => {
   let value: core.Variable | undefined;
   estraverse.traverse(acorn.parse(expression) as estree.Node, {
-    enter: function(node: estree.Node): estraverse.VisitorOption | estree.Node | void {
+    enter: (node: estree.Node): estraverse.VisitorOption | estree.Node | void => {
       if (node.type === "Program" && node.body.length === 1) {
         const statement = node.body[0];
         if (statement.type === "ExpressionStatement") {
@@ -185,24 +185,24 @@ export function variable(expression: string): core.Variable {
   } else {
     throw new Error(`illegal expression(call variable): ${expression}`);
   }
-}
+};
 
-export function playAudio(assetId: string, group: string): core.PlayAudio {
+export const playAudio = (assetId: string, group: string): core.PlayAudio => {
   return {
     tag: core.Tag.playAudio,
     assetId: assetId,
     group
   };
-}
+};
 
-export function stopAudio(group: string): core.StopAudio {
+export const stopAudio = (group: string): core.StopAudio => {
   return {
     tag: core.Tag.stopAudio,
     group
   };
-}
+};
 
-export function tryParseLiteral(value: string) {
+export const tryParseLiteral = (value: string) => {
   let parsed: any = parseInt(value, 10);
   if (isNaN(parsed)) {
     parsed = parseFloat(value);
@@ -217,9 +217,9 @@ export function tryParseLiteral(value: string) {
     }
   }
   return parsed;
-}
+};
 
-export function tag(name: string, attrs: KeyValuePair[]): core.Script {
+export const tag = (name: string, attrs: KeyValuePair[]): core.Script => {
   const result: core.Extension = {
     tag: core.Tag.extension,
     data: {
@@ -236,7 +236,7 @@ export function tag(name: string, attrs: KeyValuePair[]): core.Script {
       return result.data as core.Fade;
   }
   return result;
-}
+};
 
 const MemberExpression = "MemberExpression";
 const Identifier = "Identifier";
@@ -256,7 +256,7 @@ const newMemberExpression = (name: string): estree.MemberExpression => {
   };
 };
 
-function replaceVariable(node: estree.MemberExpression) {
+const replaceVariable = (node: estree.MemberExpression) => {
   const object = node.object;
   if (object.type === Identifier) {
     switch (object.name) {
@@ -270,7 +270,7 @@ function replaceVariable(node: estree.MemberExpression) {
         break;
     }
   }
-}
+};
 
 const isFirstMember = (expr: estree.MemberExpression) => {
   return expr.object.type === Identifier && expr.property.type === Identifier;
@@ -300,43 +300,43 @@ const traverseEval = (original: string): estree.Node => {
   });
 };
 
-export function evaluate(expression: string): ast.Eval {
+export const evaluate = (expression: string): ast.Eval => {
   return {
     tag: core.Tag.evaluate,
     program: traverseEval(expression)
   };
-}
+};
 
-export function condition(expression: string, scripts: ast.Script[]): ast.Condition {
+export const condition = (expression: string, scripts: ast.Script[]): ast.Condition => {
   return {
     tag: core.Tag.condition,
     expression: traverseEval(expression),
     scripts
   };
-}
+};
 
-export function trigger(enabled: boolean): core.Trigger {
+export const trigger = (enabled: boolean): core.Trigger => {
   return {
     tag: core.Tag.trigger,
     value: enabled ? core.TriggerValue.On : core.TriggerValue.Off
   };
-}
+};
 
-function pathToSceneName(scene: string): string {
+const pathToSceneName = (scene: string): string => {
   const full = path.relative(context.base, path.join(context.base, context.relative, scene));
   const dir = path.dirname(full);
   return path.join(dir, ast.filename(scene));
-}
+};
 
-export function jump(data: ast.Jump): ast.Jump {
+export const jump = (data: ast.Jump): ast.Jump => {
   if (data.scene) {
     data.scene = pathToSceneName(data.scene);
     context.dependencies.push(data.scene);
   }
   return data;
-}
+};
 
-export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): ast.Choice {
+export const choice = (l: ast.ChoiceItem, ls: ast.ChoiceItem[]): ast.Choice => {
   return {
     tag: core.Tag.choice,
     layer: {
@@ -344,9 +344,9 @@ export function choice(l: ast.ChoiceItem, ls: ast.ChoiceItem[]): ast.Choice {
     },
     values: [l].concat(ls)
   };
-}
+};
 
-export function choiceItem(text: string, data: ast.Jump, condition?: string): ast.ChoiceItem {
+export const choiceItem = (text: string, data: ast.Jump, condition?: string): ast.ChoiceItem => {
   if (data.scene) {
     context.dependencies.push(data.scene);
   }
@@ -358,9 +358,9 @@ export function choiceItem(text: string, data: ast.Jump, condition?: string): as
     result.condition = traverseEval(condition);
   }
   return result;
-}
+};
 
-export function layerConfig(name: string, options: KeyValuePair[]): core.Layer {
+export const layerConfig = (name: string, options: KeyValuePair[]): core.Layer => {
   const result: core.Layer = {
     tag: core.Tag.layer,
     name
@@ -372,28 +372,28 @@ export function layerConfig(name: string, options: KeyValuePair[]): core.Layer {
     (result as any)[option.key] = option.value;
   }
   return result;
-}
+};
 
-export function click(scripts: ast.Script[]): ast.Click {
+export const click = (scripts: ast.Script[]): ast.Click => {
   return {
     tag: core.Tag.click,
     scripts
   };
-}
+};
 
-export function clearSystemVariables(): core.ClearSystemVariables {
+export const clearSystemVariables = (): core.ClearSystemVariables => {
   return {
     tag: core.Tag.clearSystemVariables
   };
-}
+};
 
-export function clearCurrentVariables(): core.ClearCurrentVariables {
+export const clearCurrentVariables = (): core.ClearCurrentVariables => {
   return {
     tag: core.Tag.clearCurrentVariables
   };
-}
+};
 
-export function waitTransition(scripts: ast.Script[], skippable?: boolean): ast.Script[] {
+export const waitTransition = (scripts: ast.Script[], skippable?: boolean): ast.Script[] => {
   const result: ast.WaitTransition = {
     tag: ast.waitTransition,
     scripts
@@ -402,42 +402,42 @@ export function waitTransition(scripts: ast.Script[], skippable?: boolean): ast.
     result.skippable = skippable;
   }
   return [result];
-}
+};
 
-export function removeLayer(name: string): core.RemoveLayer {
+export const removeLayer = (name: string): core.RemoveLayer => {
   return {
     tag: core.Tag.removeLayer,
     name
   };
-}
+};
 
-export function backlog(): ast.Backlog {
+export const backlog = (): ast.Backlog => {
   return {
     tag: core.Tag.backlog,
     scripts: []
   };
-}
+};
 
-export function messageSpeed(speed: string): core.MessageSpeed {
+export const messageSpeed = (speed: string): core.MessageSpeed => {
   return {
     tag: core.Tag.messageSpeed,
     speed: tryParseLiteral(speed)
   };
-}
+};
 
-export function concatKeyValues(data: any, options: KeyValuePair[]) {
+export const concatKeyValues = (data: any, options: KeyValuePair[]) => {
   for (const option of options) {
     data[option.key] = option.key === "color" ? option.value : tryParseLiteral(option.value);
   }
-}
+};
 
-export function ignore(expression: string, scripts: ast.Script[]): ast.Condition {
+export const ignore = (expression: string, scripts: ast.Script[]): ast.Condition => {
   return condition(`!(${expression})`, scripts);
-}
+};
 
-export function realTimeDisplay(enabled: boolean): core.RealTimeDisplay {
+export const realTimeDisplay = (enabled: boolean): core.RealTimeDisplay => {
   return {
     tag: core.Tag.realTimeDisplay,
     enabled
   };
-}
+};
