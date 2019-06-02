@@ -52,6 +52,14 @@ export interface WindowConfig {
    */
   // TODO: 制限を強める
   system: core.Script[];
+
+  /**
+   * レイヤーの表示順序をプライオリティを用いて設定します。
+   *
+   * 登録されていないレイヤーは、スクリプト内で最後に現れたレイヤーが手前に表示されるようなプライオリティが設定されます。
+   * system, messageレイヤーは登録されていないレイヤーよりも手前に表示されるようなプライオリティが設定されます。
+   */
+  priority: Map<string, number>;
 }
 
 /**
@@ -134,7 +142,8 @@ export const defaultConfig = () =>
         },
         marker: []
       },
-      system: []
+      system: [],
+      priority: new Map<string, number>()
     },
     font: {
       list: [

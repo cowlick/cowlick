@@ -123,7 +123,8 @@ const config: Config = {
           }
         ]
       }
-    ]
+    ],
+    priority: new Map<string, number>()
   },
   font: {
     list: [

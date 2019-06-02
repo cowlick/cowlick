@@ -117,6 +117,8 @@
 		"node_modules/@cowlick/engine/lib/index.js",
 		"node_modules/@cowlick/engine/lib/models/AlreadyReadChecker.js",
 		"node_modules/@cowlick/engine/lib/models/GameState.js",
+		"node_modules/@cowlick/engine/lib/models/LayerPriority.js",
+		"node_modules/@cowlick/engine/lib/models/PriorityQueue.js",
 		"node_modules/@cowlick/engine/lib/models/Storage.js",
 		"node_modules/@cowlick/engine/lib/scripts/ScriptManager.js",
 		"node_modules/@cowlick/engine/lib/scripts/defaultScripts.js",

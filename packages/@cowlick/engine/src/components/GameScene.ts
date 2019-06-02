@@ -10,6 +10,7 @@ import {VideoGroup} from "./VideoGroup";
 import {Scene} from "./Scene";
 import {SceneController} from "./SceneController";
 import {AutoMode} from "./AutoMode";
+import {LayerPriority} from "../models/LayerPriority";
 
 export interface GameSceneParameters {
   scene: g.Scene;
@@ -27,6 +28,7 @@ export class GameScene implements Scene {
   private scenario: core.Scenario;
   private scriptManager: ScriptManager;
   private layerGroup: LayerGroup;
+  private layerPriority: LayerPriority;
   private config: Config;
   private controller: SceneController;
   private audioGroup: AudioGroup;
@@ -42,6 +44,7 @@ export class GameScene implements Scene {
     this.layerGroup = new LayerGroup(this.scene);
     this.scriptManager = params.scriptManager;
     this.config = params.config;
+    this.layerPriority = new LayerPriority(this.config.window.priority);
     this.controller = params.controller;
     this.audioGroup = new AudioGroup(this.scene, params.config.audio);
     this.videoGroup = new VideoGroup(this.scene);
@@ -94,6 +97,7 @@ export class GameScene implements Scene {
 
   appendLayer(e: g.E, config: core.LayerConfig) {
     this.layerGroup.append(e, config);
+    this.layerPriority.add(config.name);
   }
 
   removeLayer(name: string) {
@@ -116,7 +120,6 @@ export class GameScene implements Scene {
     }, this);
     this.disableWindowClick();
     this.enableWindowClick();
-    this.topMessageLayer();
   }
 
   applyLayerConfig(config: core.LayerConfig) {
@@ -227,15 +230,17 @@ export class GameScene implements Scene {
       this.removeLayers(frame.scripts);
       this.applyScripts(frame.scripts);
     }
-    this.layerGroup.top(core.LayerKind.system);
-  }
-
-  private topMessageLayer() {
-    this.layerGroup.evaluate(core.LayerKind.message, layer => {
-      if (layer.touchable) {
-        this.layerGroup.top(core.LayerKind.message);
-      }
-    });
+    this.layerPriority.add(core.LayerKind.message);
+    this.layerPriority.add(core.LayerKind.system);
+    for (const kv of this.layerPriority.collect()) {
+      const name = kv[0];
+      this.layerGroup.evaluate(name, layer => {
+        if (name === core.LayerKind.message && layer.touchable === false) {
+          return;
+        }
+        this.layerGroup.top(name);
+      });
+    }
   }
 
   private createMessageLayer() {
