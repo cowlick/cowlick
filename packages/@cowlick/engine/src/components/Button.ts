@@ -16,7 +16,7 @@ const enum ButtonState {
 }
 
 export class Button extends g.Pane {
-  onClick: g.Trigger<Button>;
+  private onClick: g.Trigger<Button> | null;
   private buttonState: ButtonState;
 
   constructor(params: ButtonParameters) {
@@ -36,8 +36,15 @@ export class Button extends g.Pane {
     this.pointDown.add(this.onPointDown, this);
     this.pointMove.add(this.onPointMove, this);
     this.pointUp.add(this.onPointUp, this);
-    this.onClick = new g.Trigger<Button>();
+    this.onClick = null;
     this.buttonState = ButtonState.Inactive;
+  }
+
+  get click(): g.Trigger<Button> {
+    if (!this.onClick) {
+      this.onClick = new g.Trigger<Button>();
+    }
+    return this.onClick;
   }
 
   push(): void {
@@ -64,6 +71,14 @@ export class Button extends g.Pane {
     }
 
     this.modified();
+  }
+
+  destroy() {
+    if (this.onClick) {
+      this.onClick.destroy();
+      this.onClick = null;
+    }
+    super.destroy();
   }
 
   private onPointDown(_: g.PointDownEvent) {
@@ -93,8 +108,10 @@ export class Button extends g.Pane {
 
   private onPointUp(_: g.PointUpEvent) {
     if (this.buttonState === ButtonState.Pushed) {
-      this.onClick.fire(this);
       this.unpush();
+      if (this.onClick) {
+        this.onClick.fire(this);
+      }
     }
   }
 }

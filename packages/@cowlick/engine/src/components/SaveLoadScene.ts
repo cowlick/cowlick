@@ -34,7 +34,7 @@ export class SaveLoadScene implements Scene {
     });
     this.button.move(this.game.width - 110, 10);
 
-    this.button.onClick.add(this.close, this);
+    this.button.click.add(this.close, this);
     this.scene.append(this.button);
   }
 

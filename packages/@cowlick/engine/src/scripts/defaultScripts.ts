@@ -48,7 +48,7 @@ const jump = (controller: SceneController, target: core.Jump) => {
 const button = (controller: SceneController, data: core.Button) => {
   const button = new ImageButton(controller.current.body, data.image);
   button.move(data.x, data.y);
-  button.onClick.add(() => {
+  button.click.add(() => {
     for (const s of data.scripts) {
       Engine.scriptManager.call(controller, s);
     }
@@ -84,7 +84,7 @@ const choice = (controller: SceneController, choice: core.Choice) => {
       config: controller.config,
       gameState: controller.current.gameState
     });
-    button.onClick.add(() => {
+    button.click.add(() => {
       Engine.scriptManager.call(controller, item);
     });
     const direction = choice.direction ? choice.direction : core.Direction.Vertical;
@@ -124,7 +124,7 @@ const createLink = (scene: Scene, config: Config, link: core.Link) => {
 const link = (controller: SceneController, link: core.Link) => {
   const l = createLink(controller.current, controller.config, link);
   for (const script of link.scripts) {
-    l.onClick.add(() => {
+    l.click.add(() => {
       Engine.scriptManager.call(controller, script);
     });
   }
@@ -415,7 +415,7 @@ const onLoadedSaveLoadScene = (
       scripts: create(i)
     };
     const button = createLink(scene, controller.config, l);
-    button.onClick.add(() => {
+    button.click.add(() => {
       for (const script of l.scripts) {
         Engine.scriptManager.call(controller, script);
       }
