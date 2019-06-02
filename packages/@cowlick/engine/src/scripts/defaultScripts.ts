@@ -62,10 +62,10 @@ const choice = (controller: SceneController, choice: core.Choice) => {
   // TODO: 計算式を書き直す
   const width = choice.width ? choice.width : (game.width / 4) * 3;
   const height = choice.height ? choice.height : 32;
-  const space = 10;
+  const margin = choice.margin ? choice.margin : 10;
   const baseX = choice.layer.x !== undefined ? choice.layer.x : width / 6;
   const baseY =
-    choice.layer.y !== undefined ? choice.layer.y : ((game.height / 3) * 2 - height * count - space * (count - 1)) / 2;
+    choice.layer.y !== undefined ? choice.layer.y : ((game.height / 3) * 2 - height * count - margin * (count - 1)) / 2;
   let index = 0;
   for (const item of choice.values) {
     if (item.path) {
@@ -91,10 +91,10 @@ const choice = (controller: SceneController, choice: core.Choice) => {
     const direction = choice.direction ? choice.direction : core.Direction.Vertical;
     switch (direction) {
       case core.Direction.Vertical:
-        button.move(baseX, baseY + (height + space) * index);
+        button.move(baseX, baseY + (height + margin) * index);
         break;
       case core.Direction.Horizontal:
-        button.move(baseX + (width + space) * index, baseY);
+        button.move(baseX + (width + margin) * index, baseY);
         break;
     }
     controller.current.appendLayer(button, choice.layer);

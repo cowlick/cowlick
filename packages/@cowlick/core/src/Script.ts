@@ -253,6 +253,10 @@ export interface Choice extends ScriptNode {
    */
   height?: number;
   /**
+   * 選択肢間の余白
+   */
+  margin?: number;
+  /**
    * 向き
    */
   direction?: Direction;
