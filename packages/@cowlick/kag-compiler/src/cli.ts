@@ -9,36 +9,38 @@ import {runProgress} from "./runner";
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf8"));
 
 interface CompileOpts {
-  output: string[];
+  outdir: string[];
   plugin: string[];
 }
 
 interface CompileArgs {
-  input: string;
+  sources: string[];
 }
 
 const root = commandpost
-  .create<CompileOpts, CompileArgs>("cowlick-kag-compiler [input]")
+  .create<CompileOpts, CompileArgs>("cowlick-kag-compiler <sources...>")
   .version(packageJson.version, "-v, --version")
   .description("compile KAG scenario")
-  .option("-o, --output <output>", "output dir")
+  .option("-o, --outdir <outdir>", "output dir")
   .option("-p, --plugin <path>", "plugin path")
   .action(async (opts, args) => {
-    const output: string = opts.output[0] || "script";
+    const outdir: string = opts.outdir[0] || "script";
     const cwd = process.cwd();
-    const outputPath = path.resolve(cwd, output);
-    const target = path.resolve(cwd, args.input);
-    const plugins = (opts.plugin ? opts.plugin : []).map(p => new analyzer.Plugin(path.resolve(cwd, p)));
-    const ast = await parse(target, runProgress);
-    const result = await runProgress("Analyzing scenario", async () => await analyzer.analyze(ast, plugins));
+    const outputPath = path.resolve(cwd, outdir);
     try {
       await analyzer.mkdir(outputPath);
     } catch (e) {
       console.log("output directory already exists: " + outputPath);
     }
-    await runProgress(`Generate scenario`, async () => analyzer.generate(outputPath, result.scenario));
-    for (const s of result.scripts) {
-      await s.write(outputPath);
+    for (const source of args.sources) {
+      const target = path.resolve(cwd, source);
+      const plugins = (opts.plugin ? opts.plugin : []).map(p => new analyzer.Plugin(path.resolve(cwd, p)));
+      const ast = await parse(target, runProgress);
+      const result = await runProgress("Analyzing scenario", async () => await analyzer.analyze(ast, plugins));
+      await runProgress(`Generate scenario`, async () => analyzer.generate(outputPath, result.scenario));
+      for (const s of result.scripts) {
+        await s.write(outputPath);
+      }
     }
   });
 
