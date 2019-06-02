@@ -9,6 +9,12 @@ module.exports = new core.Scene({
         data: {
           tag: "start"
         }
+      },
+      {
+        tag: "extension",
+        data: {
+          tag: "start"
+        }
       }
     ])
   ]

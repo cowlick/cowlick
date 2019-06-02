@@ -45,14 +45,14 @@ LabelValue
   = $( ( !Newline !EOF !Space !"|" . )+ )
 
 WT
-  = "[" WTTagName _ skippable:CanSkipAttribute? _ "]" {
+  = TagLeftBrace WTTagName _ skippable:CanSkipAttribute? _ TagRightBrace {
     if(skippable) {
       return b.tryParseLiteral(skippable);
     } else {
       return undefined;
     }
   }
-  / "@" WTTagName _ skippable:CanSkipAttribute? &(Newline / EOF) {
+  / OnelineTagOperator WTTagName _ skippable:CanSkipAttribute? &(Newline / EOF) {
     if(skippable) {
       return b.tryParseLiteral(skippable);
     } else {
@@ -63,10 +63,10 @@ WT
 WTTagName = "wt"
 
 S
-  = "[" STagName "]" {
+  = TagLeftBrace STagName TagRightBrace {
     return b.trigger(false);
   }
-  / "@" STagName {
+  / OnelineTagOperator STagName {
     return b.trigger(false);
   }
 
@@ -85,14 +85,14 @@ Tag
   / SingleTag
 
 SingleTag
-  = "@" content:TagContent condition:(_ Condition)? &(Newline / EOF) {
+  = OnelineTagOperator content:TagContent condition:(_ Condition)? &(Newline / EOF) {
     if(condition) {
       return [b.condition(condition[1], content)];
     } else {
       return content;
     }
   }
-  / "[" content:TagContent _ condition:Condition? _ "]" {
+  / TagLeftBrace content:TagContent _ condition:Condition? _ TagRightBrace {
     if(condition) {
       return [b.condition(condition, content)];
     } else {
@@ -312,22 +312,30 @@ UserDefined
 
 UserDefinedTagName
   = $(
+      !(STagName TagRightBrace)
+      !WTTagName
+      !LinkTagName
+      !EndLinkTagName
+      !IScriptTagName
+      !EndScriptTagName
+      !IfTagName
+      !ElsifTagName
+      !ElseTagName
+      !EndIfTagName
+      !IgnoreTagName
+      !EndIgnoreTagName
+      !CMTagName
+      !(LTagName TagRightBrace)
+      !(RTagName TagRightBrace)
       (
         !Newline
         !EOF
         !Space
         !"="
-        !WTTagName
-        !LinkTagName
-        !EndLinkTagName
-        !IScriptTagName
-        !EndScriptTagName
-        !IfTagName
-        !ElsifTagName
-        !ElseTagName
-        !EndIfTagName
-        !IgnoreTagName
-        !EndIgnoreTagName
+        !TagLeftBrace
+        !TagRightBrace
+        !OnelineTagOperator
+        !CommentOperator
         .
       )+
     )
@@ -343,7 +351,7 @@ Links
   }
 
 Link
-  = "@" LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
+  = OnelineTagOperator LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? condition:(_ Condition)? Newline text:PlainText Newline EndLink {
     var data = {
       tag: "jump"
     };
@@ -359,7 +367,7 @@ Link
       return b.choiceItem(text, data);
     }
   }
-  / "[" LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? _ condition:Condition? _ "]" Newline? text:PlainText EndLink {
+  / TagLeftBrace LinkTagName _ scene:StorageAttribute? _ frame:TargetAttribute? _ condition:Condition? _ TagRightBrace Newline? text:PlainText EndLink {
     var data = {
       tag: "jump"
     };
@@ -375,16 +383,16 @@ Link
 LinkTagName = "link"
 
 EndLink
-  = "@" EndLinkTagName ( (Newline R) / &(Newline / EOF) )
-  / Newline? "[" EndLinkTagName "]" (Newline? R)?
+  = OnelineTagOperator EndLinkTagName ( (Newline R) / &(Newline / EOF) )
+  / Newline? TagLeftBrace EndLinkTagName TagRightBrace (Newline? R)?
 
 EndLinkTagName = "endlink"
 
 IScript
-  = "[" IScriptTagName "]" Newline script:IScriptValue Newline EndScript {
+  = TagLeftBrace IScriptTagName TagRightBrace Newline script:IScriptValue Newline EndScript {
     return [b.evaluate(script)];
   }
-  / "@" IScriptTagName Newline script:IScriptValue Newline EndScript {
+  / OnelineTagOperator IScriptTagName Newline script:IScriptValue Newline EndScript {
     return [b.evaluate(script)];
   }
 
@@ -394,8 +402,8 @@ IScriptValue
   = $( ( !(Newline EndScript) . )* )
 
 EndScript
-  = "@" EndScriptTagName
-  / "[" EndScriptTagName "]"
+  = OnelineTagOperator EndScriptTagName
+  / TagLeftBrace EndScriptTagName TagRightBrace
 
 EndScriptTagName = "endscript"
 
@@ -411,37 +419,38 @@ IfExpression
   }
 
 If
-  = "[" IfTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+  = TagLeftBrace IfTagName _ expression:ExpressionAttribute _ TagRightBrace Newline? body:FrameBody {
     return b.condition(expression, body);
   }
-  / "@" IfTagName _ expression:ExpressionAttribute Newline body:FrameBody {
+  / OnelineTagOperator IfTagName _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.condition(expression, body);
   }
 
 IfTagName = "if"
 
 Elsif
-  = "[" ElsifTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+  = TagLeftBrace ElsifTagName _ expression:ExpressionAttribute _ TagRightBrace Newline? body:FrameBody {
     return b.condition(expression, body);
   }
-  / "@" ElsifTagName _ expression:ExpressionAttribute Newline body:FrameBody {
+  / OnelineTagOperator ElsifTagName _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.condition(expression, body);
   }
 
 ElsifTagName = "elsif"
 
 Else
-  = "[" ElseTagName "]" Newline? body:FrameBody {
+  = TagLeftBrace ElseTagName TagRightBrace Newline? body:FrameBody {
     return body;
   }
-  / "@" ElseTagName Newline body:FrameBody {
+  / OnelineTagOperator ElseTagName Newline body:FrameBody {
     return body;
   }
 
 ElseTagName = "else"
 
 EndIf
-  = "[" EndIfTagName "]" / "@" EndIfTagName
+  = TagLeftBrace EndIfTagName TagRightBrace
+  / OnelineTagOperator EndIfTagName
 
 EndIfTagName = "endif"
 
@@ -457,17 +466,18 @@ IgnoreExpression
   }
 
 Ignore
-  = "[" IgnoreTagName _ expression:ExpressionAttribute _ "]" Newline? body:FrameBody {
+  = TagLeftBrace IgnoreTagName _ expression:ExpressionAttribute _ TagRightBrace Newline? body:FrameBody {
     return b.ignore(expression, body);
   }
-  / "@" IgnoreTagName _ expression:ExpressionAttribute Newline body:FrameBody {
+  / OnelineTagOperator IgnoreTagName _ expression:ExpressionAttribute Newline body:FrameBody {
     return b.ignore(expression, body);
   }
 
 IgnoreTagName = "ignore"
 
 EndIgnore
-  = "[" EndIgnoreTagName "]" / "@" EndIgnoreTagName
+  = TagLeftBrace EndIgnoreTagName TagRightBrace
+  / OnelineTagOperator EndIgnoreTagName
 
 EndIgnoreTagName = "endignore"
 
@@ -482,12 +492,18 @@ Text
   }
 
 L
-  = "[l]"
-  / "@l" &(Newline / EOF)
+  = TagLeftBrace LTagName TagRightBrace
+  / OnelineTagOperator LTagName &(Newline / EOF)
+
+LTagName
+  = "l"
 
 CM
-  = "[cm]"
-  / "@cm" &(Newline / EOF)
+  = TagLeftBrace CMTagName TagRightBrace
+  / OnelineTagOperator CMTagName &(Newline / EOF)
+
+CMTagName
+  = "cm"
 
 TextBlock
   = Comments t:TextLine ts:(Newline Comments TextLine)* {
@@ -495,8 +511,11 @@ TextBlock
   }
 
 R
-  = "[r]"
-  / "@r" &(Newline / EOF)
+  = TagLeftBrace RTagName TagRightBrace
+  / OnelineTagOperator RTagName &(Newline / EOF)
+
+RTagName
+  = "r"
 
 TextLine
   = top:R? Newline? values:(Ruby / PlainText / Emb)+ end:R? {
@@ -529,18 +548,18 @@ Character
     )
 
 Ruby
-  = "@ruby" _ rt:TextAttribute Newline rb:Character {
+  = OnelineTagOperator "ruby" _ rt:TextAttribute Newline rb:Character {
     return b.ruby(rb, rt);
   }
-  / "[ruby" _ rt:TextAttribute "]" rb:Character {
+  / TagLeftBrace "ruby" _ rt:TextAttribute _ TagRightBrace rb:Character {
     return b.ruby(rb, rt);
   }
 
 Emb
-  = "@emb" _ exp:ExpressionAttribute &(Newline / EOF) {
+  = OnelineTagOperator "emb" _ exp:ExpressionAttribute &(Newline / EOF) {
     return b.variable(exp);
   }
-  / "[emb" _ exp:ExpressionAttribute _ "]" {
+  / TagLeftBrace "emb" _ exp:ExpressionAttribute _ TagRightBrace {
     return b.variable(exp);
   }
 
@@ -599,7 +618,7 @@ AttributeName
 
 AttributeValue
   = StringLiteral
-  / $( ( !Newline !EOF !Space !"]" . )+ )
+  / $( ( !Newline !EOF !Space !TagRightBrace . )+ )
 
 AttributeNumberValue
   = StringDigits / Digits
@@ -634,7 +653,19 @@ Comments
   = (Comment (Newline / EOF))*
 
 Comment
-  = ";" ( !Newline !EOF . )*
+  = CommentOperator ( !Newline !EOF . )*
+
+TagLeftBrace
+  = "["
+
+TagRightBrace
+  = "]"
+
+CommentOperator
+  = ";"
+
+OnelineTagOperator
+  = "@"
 
 _ "spacer"
   = $([ \t\r\n]*)
