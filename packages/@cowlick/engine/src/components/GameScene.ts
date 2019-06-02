@@ -107,7 +107,7 @@ export class GameScene implements Scene {
     const scene = this.scenario.scene;
     this._message.updateText(text, this._gameState.isAlreadyRead(scene.label, scene.index));
     this._gameState.markAlreadyRead(scene.label, scene.index);
-    this._message.onFinished.addOnce(t => {
+    this._message.finish.addOnce(t => {
       this.scenario.pushTextLog(t);
       for (const s of this.config.window.message.marker) {
         this.scriptManager.call(this.controller, s);

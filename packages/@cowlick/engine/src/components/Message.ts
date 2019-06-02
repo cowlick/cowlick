@@ -14,7 +14,7 @@ export interface MessageParameters {
 }
 
 export class Message extends al.Label {
-  onFinished: g.Trigger<string>;
+  private onFinish: g.Trigger<string> | undefined;
   private index: number;
   private counter: number;
   private original: core.Text;
@@ -36,8 +36,14 @@ export class Message extends al.Label {
     this.gameState = params.gameState;
     this.textAlign = g.TextAlign.Left;
     this.config = params.config;
-    this.onFinished = new g.Trigger<string>();
     this.applySpeed();
+  }
+
+  get finish(): g.Trigger<string> {
+    if (!this.onFinish) {
+      this.onFinish = new g.Trigger<string>();
+    }
+    return this.onFinish;
   }
 
   get finished() {
@@ -105,9 +111,20 @@ export class Message extends al.Label {
         }
       }
       this.index = this.original.values.length;
-      this.onFinished.fire(this.text);
       this.invalidate();
+      if (this.onFinish) {
+        this.onFinish.fire(this.text);
+      }
     }
+  }
+
+  destroy() {
+    this.removeTimer();
+    if (this.onFinish) {
+      this.onFinish.destroy();
+      this.onFinish = undefined;
+    }
+    super.destroy();
   }
 
   private next() {
@@ -133,7 +150,9 @@ export class Message extends al.Label {
     }
     if (this.finished) {
       this.removeTimer();
-      this.onFinished.fire(this.text);
+      if (this.onFinish) {
+        this.onFinish.fire(this.text);
+      }
     }
   }
 
