@@ -28,6 +28,7 @@ export type Script =
   | Eval
   | Condition
   | RemoveLayer
+  | RemoveLayers
   | Backlog
   | Fade
   | Timeout
@@ -388,11 +389,19 @@ export interface Condition extends ScriptNode, EvalDefinition {
 }
 
 /**
- * レイヤー削除命令
+ * レイヤー削除
  */
 export interface RemoveLayer extends ScriptNode {
   tag: Tag.removeLayer;
   name: string;
+}
+
+/**
+ * 再描画対象レイヤー削除
+ */
+export interface RemoveLayers extends ScriptNode {
+  tag: Tag.removeLayers;
+  targets: Script[];
 }
 
 /**

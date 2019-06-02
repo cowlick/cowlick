@@ -25,6 +25,7 @@ export enum Tag {
   condition = "condition",
   backlog = "backlog",
   removeLayer = "removeLayer",
+  removeLayers = "removeLayers",
   clearCurrentVariables = "clearCurrentVariables",
   clearSystemVariables = "clearSystemVariables",
   fadeIn = "fadeIn",

@@ -227,7 +227,10 @@ export class GameScene implements Scene {
 
   private loadFrame(frame: core.Frame) {
     if (frame) {
-      this.removeLayers(frame.scripts);
+      this.scriptManager.call(this.controller, {
+        tag: core.Tag.removeLayers,
+        targets: frame.scripts
+      });
       this.applyScripts(frame.scripts);
     }
     this.layerPriority.add(core.LayerKind.message);
@@ -264,18 +267,6 @@ export class GameScene implements Scene {
     for (const s of this.config.window.system) {
       this.scriptManager.call(this.controller, s);
     }
-  }
-
-  private removeLayers(scripts: core.Script[]) {
-    const names = new Set<string>();
-    for (const s of scripts) {
-      if ("layer" in s) {
-        names.add((s as any).layer);
-      }
-    }
-    names.forEach(name => {
-      this.layerGroup.remove(name);
-    });
   }
 
   private applyScripts(scripts: core.Script[]) {

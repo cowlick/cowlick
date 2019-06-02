@@ -492,6 +492,21 @@ const realTimeDisplay = (controller: SceneController, setting: core.RealTimeDisp
   );
 };
 
+const removeLayers = (controller: SceneController, data: core.RemoveLayers) => {
+  const names = new Set<string>();
+  for (const s of data.targets) {
+    if (s.tag === core.Tag.fadeIn || s.tag === core.Tag.fadeOut) {
+      continue;
+    }
+    if ("layer" in s) {
+      names.add((s as any).layer);
+    }
+  }
+  for (const name of names) {
+    controller.current.removeLayer(name);
+  }
+};
+
 export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.image, image],
   [core.Tag.pane, pane],
@@ -529,5 +544,6 @@ export const defaultScripts = new Map<string, ScriptFunction>([
   [core.Tag.openLoadScene, openLoadScene],
   [core.Tag.messageSpeed, messageSpeed],
   [core.Tag.font, fontSetting],
-  [core.Tag.realTimeDisplay, realTimeDisplay]
+  [core.Tag.realTimeDisplay, realTimeDisplay],
+  [core.Tag.removeLayers, removeLayers]
 ]);
