@@ -345,8 +345,8 @@ const ifElse = (controller: SceneController, data: core.IfElse) => {
   }
 };
 
-const exception = (controller: SceneController, e: core.GameError) => {
-  controller.game.logger.warn(e.message, e.data);
+const exception = (_: SceneController, e: core.GameError) => {
+  console.warn(e.message, e.data);
 };
 
 const slider = (controller: SceneController, info: core.Slider) => {
