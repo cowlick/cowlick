@@ -7,7 +7,7 @@
   "description": "Novel engine for Akashic",
   "scripts": {
     "prepare": "lerna bootstrap",
-    "publish": "lerna publish",
+    "release": "lerna publish from-package",
     "test": "lerna run test",
     "build": "lerna run build",
     "prettier": "prettier --write '**/*.ts'",
