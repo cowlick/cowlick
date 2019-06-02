@@ -239,25 +239,26 @@ export function tag(name: string, attrs: KeyValuePair[]): core.Script {
 }
 
 const MemberExpression = "MemberExpression";
+const Identifier = "Identifier";
 
-function newMemberExpression(name: string): estree.MemberExpression {
+const newMemberExpression = (name: string): estree.MemberExpression => {
   return {
     type: MemberExpression,
     object: {
-      type: "Identifier",
+      type: Identifier,
       name: "variables"
     },
     property: {
-      type: "Identifier",
+      type: Identifier,
       name
     },
     computed: false
   };
-}
+};
 
 function replaceVariable(node: estree.MemberExpression) {
   const object = node.object;
-  if (object.type === "Identifier") {
+  if (object.type === Identifier) {
     switch (object.name) {
       case varSf:
         node.object = newMemberExpression(core.VariableType.system);
@@ -271,19 +272,23 @@ function replaceVariable(node: estree.MemberExpression) {
   }
 }
 
-function traverseEval(original: string): estree.Node {
+const isFirstMember = (expr: estree.MemberExpression) => {
+  return expr.object.type === Identifier && expr.property.type === Identifier;
+};
+
+const traverseEval = (original: string): estree.Node => {
   return estraverse.replace(acorn.parse(original) as estree.Node, {
     leave: (node: estree.Node, parentNode: estree.Node | null) => {
       switch (node.type) {
         case MemberExpression:
-          if (parentNode !== null && parentNode.type !== "MemberExpression") {
+          if (parentNode !== null && isFirstMember(node)) {
             replaceVariable(node);
           }
           break;
         default:
           break;
       }
-      // FIME: acornでstartとendを削除する方法を探す
+      // FIXME: acornでstartとendを削除する方法を探す
       const n = node as any;
       if (typeof n.start === "number") {
         delete n["start"];
@@ -293,7 +298,7 @@ function traverseEval(original: string): estree.Node {
       }
     }
   });
-}
+};
 
 export function evaluate(expression: string): ast.Eval {
   return {

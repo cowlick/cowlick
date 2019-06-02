@@ -1,0 +1,56 @@
+[
+  {
+    "scripts": [
+      {
+        "tag": "eval",
+        "program": {
+          "type": "Program",
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "MemberExpression",
+                  "object": {
+                    "type": "MemberExpression",
+                    "object": {
+                      "type": "MemberExpression",
+                      "object": {
+                        "type": "Identifier",
+                        "name": "variables"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "name": "system"
+                      },
+                      "computed": false
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "name": "test"
+                    },
+                    "computed": false
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "name": "push"
+                  },
+                  "computed": false
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "value": "test",
+                    "raw": "\"test\""
+                  }
+                ]
+              }
+            }
+          ],
+          "sourceType": "script"
+        }
+      }
+    ]
+  }
+]
