@@ -1,0 +1,8 @@
+{
+  "sources": [
+    "./scenario/title.ks"
+  ],
+  "plugins": [
+    "./node_modules/.bin/cowlick-analyzer-plugin-script-encoder"
+  ]
+}
