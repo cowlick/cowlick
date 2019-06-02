@@ -115,7 +115,7 @@
 		"node_modules/@cowlick/engine/lib/components/Slider.js",
 		"node_modules/@cowlick/engine/lib/components/VideoGroup.js",
 		"node_modules/@cowlick/engine/lib/index.js",
-		"node_modules/@cowlick/engine/lib/models/AlreadyReadManager.js",
+		"node_modules/@cowlick/engine/lib/models/AlreadyReadChecker.js",
 		"node_modules/@cowlick/engine/lib/models/GameState.js",
 		"node_modules/@cowlick/engine/lib/models/Storage.js",
 		"node_modules/@cowlick/engine/lib/scripts/ScriptManager.js",

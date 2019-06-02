@@ -1,9 +1,9 @@
 import * as assert from "assert";
-import {AlreadyReadManager} from "../src/models/AlreadyReadManager";
+import {AlreadyReadChecker} from "../src/models/AlreadyReadChecker";
 
-describe("AlreadyReadManager", () => {
+describe("AlreadyReadChecker", () => {
   it("既読/未読をチェックできる", () => {
-    const manager = new AlreadyReadManager({
+    const manager = new AlreadyReadChecker({
       test: [0]
     });
     assert(manager.isAlreadyRead("test", 0));
@@ -13,7 +13,7 @@ describe("AlreadyReadManager", () => {
 
   it("既読情報を追加できる", () => {
     const data = {};
-    const manager = new AlreadyReadManager(data);
+    const manager = new AlreadyReadChecker(data);
     manager.mark("test", 0);
     assert(manager.isAlreadyRead("test", 0));
   });

@@ -1,4 +1,4 @@
-export class AlreadyReadManager {
+export class AlreadyReadChecker {
   private alreadyRead: {
     [label: string]: number[];
   };

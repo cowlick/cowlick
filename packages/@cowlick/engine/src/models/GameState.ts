@@ -1,5 +1,5 @@
 import * as core from "@cowlick/core";
-import {AlreadyReadManager} from "./AlreadyReadManager";
+import {AlreadyReadChecker} from "./AlreadyReadChecker";
 
 export interface GameStateParameters {
   data: core.SaveData[];
@@ -16,7 +16,7 @@ export class GameState {
   private currentVariables: core.Variables;
   private sceneStartVariables: any;
   private max: number;
-  private alreadyReadManager: AlreadyReadManager;
+  private alreadyReadChecker: AlreadyReadChecker;
   private scenario: core.Scenario;
 
   constructor(param: GameStateParameters) {
@@ -24,7 +24,7 @@ export class GameState {
     this.currentVariables = param.variables;
     this.sceneStartVariables = this.currentVariables.current;
     this.max = param.max;
-    this.alreadyReadManager = new AlreadyReadManager(this.currentVariables.builtin.alreadyRead);
+    this.alreadyReadChecker = new AlreadyReadChecker(this.currentVariables.builtin.alreadyRead);
     this.scenario = param.scenario;
   }
 
@@ -135,11 +135,11 @@ export class GameState {
   }
 
   isAlreadyRead(label: string, frame: number) {
-    return this.alreadyReadManager.isAlreadyRead(label, frame);
+    return this.alreadyReadChecker.isAlreadyRead(label, frame);
   }
 
   markAlreadyRead(label: string, frame: number) {
-    this.alreadyReadManager.mark(label, frame);
+    this.alreadyReadChecker.mark(label, frame);
   }
 
   copyGameVariables() {
