@@ -149,14 +149,6 @@ export interface Button extends ScriptNode {
    */
   image: Image;
   /**
-   * X座標
-   */
-  x: number;
-  /**
-   * Y座標
-   */
-  y: number;
-  /**
    * クリック時に実行するスクリプト
    */
   scripts: Script[];
@@ -252,14 +244,6 @@ export interface Choice extends ScriptNode {
    * 選択肢一覧
    */
   values: ChoiceItem[];
-  /**
-   * X座標
-   */
-  x?: number;
-  /**
-   * Y座標
-   */
-  y?: number;
   /**
    * 幅
    */

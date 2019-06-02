@@ -248,11 +248,11 @@ Button
       image: {
         assetId: assetId,
         layer: {
-          name: "choice"
+          name: "choice",
+          x: x,
+          y: y
         }
       },
-      x: x,
-      y: y,
       scripts: scripts
     };
     return [data];

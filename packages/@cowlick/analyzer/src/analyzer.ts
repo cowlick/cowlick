@@ -442,8 +442,6 @@ function waitTransition(original: ast.WaitTransition, options: VisitorOptions): 
 function button(original: ast.Button, options: VisitorOptions): estree.ObjectExpression {
   return scriptAst(core.Tag.button, [
     property("image", object(imageProperties(original.image))),
-    property("x", literal(original.x)),
-    property("y", literal(original.y)),
     property("scripts", {
       type: ArrayExpression,
       elements: visitScripts(original.scripts, options, 0)

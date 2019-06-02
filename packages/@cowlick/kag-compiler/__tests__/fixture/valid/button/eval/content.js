@@ -9,11 +9,11 @@ module.exports = new core.Scene({
         image: {
           assetId: "test",
           layer: {
-            name: "choice"
+            name: "choice",
+            x: 0,
+            y: 0
           }
         },
-        x: 0,
-        y: 0,
         scripts: [
           {
             tag: "eval",
