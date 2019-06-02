@@ -74,7 +74,7 @@ const choice = (controller: SceneController, choice: core.Choice) => {
         continue;
       }
     }
-    let button = new LabelButton({
+    const button = new LabelButton({
       scene: controller.current.body,
       width,
       height,
