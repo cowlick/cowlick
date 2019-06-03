@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/analyzer",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "script analyzer for cowlick",
   "main": "lib/index.js",
   "files": [
@@ -18,7 +18,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
-    "@cowlick/core": "^0.10.0",
+    "@cowlick/core": "^0.11.0",
     "bl": "3.0.0",
     "cross-spawn": "6.0.5",
     "escodegen": "1.11.1",
