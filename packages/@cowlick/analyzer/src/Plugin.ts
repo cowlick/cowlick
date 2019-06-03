@@ -1,3 +1,4 @@
+import {basename} from "path";
 import * as spawn from "cross-spawn";
 import * as msgpack5 from "msgpack5";
 const BufferList = require("bl");
@@ -25,7 +26,7 @@ export class Plugin {
         if (code === 0) {
           resolve(msgpack.decode(output));
         } else {
-          reject(new Error(`Return exit code ${code}: ${this.path}`));
+          reject(new Error(`"${basename(this.path)}" returned exit code ${code}`));
         }
       });
       cmd.stdin.write(msgpack.encode(input));
