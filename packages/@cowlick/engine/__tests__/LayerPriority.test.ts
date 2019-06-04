@@ -35,4 +35,13 @@ describe("LayerPriority", () => {
     priority.add(LayerKind.backlog);
     assert.deepEqual([...priority.collect()], [[LayerKind.message, -2], [LayerKind.system, -1]]);
   });
+
+  it("レイヤー削除", () => {
+    const priority = new LayerPriority(new Map<string, number>());
+    priority.add(LayerKind.message);
+    priority.add(LayerKind.system);
+    priority.add("test0");
+    priority.clear(new Set<string>(["test0"]));
+    assert.deepEqual([...priority.collect()], [[LayerKind.message, -2], [LayerKind.system, -1]]);
+  });
 });

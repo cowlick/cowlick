@@ -104,6 +104,13 @@ export class GameScene implements Scene {
     this.layerGroup.remove(name);
   }
 
+  removeLayers(layers: Set<string>) {
+    for (const layer of layers) {
+      this.removeLayer(layer);
+    }
+    this.layerPriority.clear(layers);
+  }
+
   updateText(text: core.Text) {
     if (this._message === undefined) {
       throw new core.GameError("GameSceneのメッセージコンポーネントが未初期化です。");

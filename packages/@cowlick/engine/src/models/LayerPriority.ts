@@ -34,7 +34,10 @@ export class LayerPriority {
       }
       queue.add([name, priority]);
     }
-    this.layers = [];
     return queue;
+  }
+
+  clear(layers: Set<string>) {
+    this.layers = this.layers.filter(l => layers.has(l) === false);
   }
 }

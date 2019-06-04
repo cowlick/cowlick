@@ -502,9 +502,7 @@ const removeLayers = (controller: SceneController, data: core.RemoveLayers) => {
       names.add((s as any).layer);
     }
   }
-  for (const name of names) {
-    controller.current.removeLayer(name);
-  }
+  controller.current.removeLayers(names);
 };
 
 export const defaultScripts = new Map<string, ScriptFunction>([
