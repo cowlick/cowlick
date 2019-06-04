@@ -154,9 +154,9 @@ export class SceneController implements g.Destroyable {
   }
 
   static createSceneForGame(params: SceneParameters) {
-    const assetIds = params.assetCollector
-      .collectFromScene(params.scenario.scene)
-      .concat(params.assetCollector.collect(params.config.window.system));
+    const assetIds = params.assetCollector.collectFromScene(params.scenario.scene);
+    assetIds.push(...params.assetCollector.collect(params.config.window.system));
+    assetIds.push(...params.assetCollector.collect(params.config.window.message.marker));
     if (params.config.window.message.ui.backgroundImage) {
       assetIds.push(params.config.window.message.ui.backgroundImage);
     }
