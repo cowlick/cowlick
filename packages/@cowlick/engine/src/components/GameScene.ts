@@ -44,7 +44,7 @@ export class GameScene implements Scene {
     this.layerGroup = new LayerGroup(this.scene);
     this.scriptManager = params.scriptManager;
     this.config = params.config;
-    this.layerPriority = new LayerPriority(this.config.window.priority);
+    this.layerPriority = new LayerPriority(new Map<string, number>(this.config.window.priority));
     this.controller = params.controller;
     this.audioGroup = new AudioGroup(this.scene, params.config.audio);
     this.videoGroup = new VideoGroup(this.scene);

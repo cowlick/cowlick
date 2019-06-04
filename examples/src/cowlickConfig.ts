@@ -124,7 +124,7 @@ const config: Config = {
         ]
       }
     ],
-    priority: new Map<string, number>()
+    priority: tmpConfig.window.priority
   },
   font: {
     list: [
