@@ -13,6 +13,8 @@ export class ImageButton extends Button {
     });
 
     this.image = createImage(scene, image);
+    this.image.x = 0;
+    this.image.y = 0;
     this.width = this.image.width / 3;
     this.height = this.image.height;
     this.append(this.image);
