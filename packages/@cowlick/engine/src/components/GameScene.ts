@@ -130,6 +130,9 @@ export class GameScene implements Scene {
   }
 
   applyLayerConfig(config: core.LayerConfig) {
+    if (config.name === core.LayerKind.system && this.existsSystemLayer() === false) {
+      return;
+    }
     this.layerGroup.applyConfig(config);
   }
 
@@ -160,6 +163,9 @@ export class GameScene implements Scene {
   }
 
   transition(layer: string, f: (e: g.E) => void) {
+    if (layer === core.LayerKind.system && this.existsSystemLayer() === false) {
+      return;
+    }
     this.layerGroup.evaluate(layer, f);
   }
 
@@ -241,7 +247,9 @@ export class GameScene implements Scene {
       this.applyScripts(frame.scripts);
     }
     this.layerPriority.add(core.LayerKind.message);
-    this.layerPriority.add(core.LayerKind.system);
+    if (this.layerGroup.exists(core.LayerKind.system)) {
+      this.layerPriority.add(core.LayerKind.system);
+    }
     for (const kv of this.layerPriority.collect()) {
       const name = kv[0];
       this.layerGroup.evaluate(name, layer => {
@@ -302,5 +310,9 @@ export class GameScene implements Scene {
         this.enableWindowClick();
       }
     }
+  }
+
+  private existsSystemLayer() {
+    return this.layerGroup.exists(core.LayerKind.system);
   }
 }

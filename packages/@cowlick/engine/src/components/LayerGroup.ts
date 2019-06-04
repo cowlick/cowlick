@@ -87,4 +87,8 @@ export class LayerGroup {
       throw new GameError("layer not found", {name});
     }
   }
+
+  exists(name: string): boolean {
+    return this.group.has(name);
+  }
 }
