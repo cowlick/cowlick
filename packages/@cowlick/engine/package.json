@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/engine",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Novel engine for Akashic",
   "main": "lib/index.js",
   "files": [

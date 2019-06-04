@@ -16,7 +16,7 @@
     "@cowlick/config": "^0.11.0",
     "@cowlick/core": "^0.11.0",
     "@cowlick/encoded-frame": "^0.11.0",
-    "@cowlick/engine": "^0.11.0",
+    "@cowlick/engine": "^0.11.1",
     "@cowlick/msgpack": "^0.10.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4",
