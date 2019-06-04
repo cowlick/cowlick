@@ -250,14 +250,8 @@ export class GameScene implements Scene {
     if (this.layerGroup.exists(core.LayerKind.system)) {
       this.layerPriority.add(core.LayerKind.system);
     }
-    for (const kv of this.layerPriority.collect()) {
-      const name = kv[0];
-      this.layerGroup.evaluate(name, layer => {
-        if (name === core.LayerKind.message && layer.touchable === false) {
-          return;
-        }
-        this.layerGroup.top(name);
-      });
+    for (const [name] of this.layerPriority.collect()) {
+      this.layerGroup.top(name);
     }
   }
 
