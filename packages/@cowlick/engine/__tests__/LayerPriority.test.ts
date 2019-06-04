@@ -44,4 +44,12 @@ describe("LayerPriority", () => {
     priority.clear(new Set<string>(["test0"]));
     assert.deepEqual([...priority.collect()], [[LayerKind.message, -2], [LayerKind.system, -1]]);
   });
+
+  it("2度呼び出しても順序が変わらない", () => {
+    const priority = new LayerPriority(new Map<string, number>());
+    priority.add("test0");
+    priority.add("test1");
+    assert.deepEqual([...priority.collect()], [["test0", -2], ["test1", -1]]);
+    assert.deepEqual([...priority.collect()], [["test0", -2], ["test1", -1]]);
+  });
 });

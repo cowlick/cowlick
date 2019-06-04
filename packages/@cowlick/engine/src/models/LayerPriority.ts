@@ -26,7 +26,7 @@ export class LayerPriority {
   collect() {
     const queue = new PriorityQueue<[string, number]>(([_, a], [__, b]) => a < b);
     let count = this.minPriority;
-    for (const name of this.layers.reverse()) {
+    for (const name of this.layers.slice().reverse()) {
       let priority = this.priorities.get(name);
       if (priority === undefined || priority === null || name === LayerKind.message || name === LayerKind.system) {
         priority = count;
