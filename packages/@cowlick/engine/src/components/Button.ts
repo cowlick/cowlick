@@ -1,3 +1,5 @@
+import {HoverableE} from "@akashic-extension/akashic-hover-plugin";
+
 export interface ButtonParameters {
   scene: g.Scene;
   width: number;
@@ -15,9 +17,12 @@ const enum ButtonState {
   Pushed
 }
 
-export class Button extends g.Pane {
+export class Button extends g.Pane implements HoverableE {
+  hoverable: boolean;
   private onClick: g.Trigger<Button> | null;
   private buttonState: ButtonState;
+  private onHovered: g.Trigger<void> | null;
+  private onUnhovered: g.Trigger<void> | null;
 
   constructor(params: ButtonParameters) {
     super({
@@ -32,12 +37,15 @@ export class Button extends g.Pane {
         ? new g.NinePatchSurfaceEffector(params.scene.game, params.backgroundEffector.borderWidth)
         : undefined
     });
+    this.hoverable = true;
     this.touchable = true;
     this.pointDown.add(this.onPointDown, this);
     this.pointMove.add(this.onPointMove, this);
     this.pointUp.add(this.onPointUp, this);
     this.onClick = null;
     this.buttonState = ButtonState.Inactive;
+    this.onHovered = null;
+    this.onUnhovered = null;
   }
 
   get click(): g.Trigger<Button> {
@@ -47,19 +55,37 @@ export class Button extends g.Pane {
     return this.onClick;
   }
 
+  get hovered(): g.Trigger<void> {
+    if (!this.onHovered) {
+      this.onHovered = new g.Trigger<void>();
+    }
+    return this.onHovered;
+  }
+
+  get unhovered(): g.Trigger<void> {
+    if (!this.onUnhovered) {
+      this.onUnhovered = new g.Trigger<void>();
+    }
+    return this.onUnhovered;
+  }
+
   push(): void {
     this.buttonState = ButtonState.Pushed;
+    this.hoverable = false;
     this.modified();
   }
 
   unpush(): void {
     this.buttonState = ButtonState.Inactive;
+    this.hoverable = true;
     this.modified();
   }
 
-  hover() {
-    this.buttonState === ButtonState.Hover;
-    this.modified();
+  hover(): void {
+    if (this.buttonState !== ButtonState.Hover) {
+      this.buttonState = ButtonState.Hover;
+      this.modified();
+    }
   }
 
   move(x: number | undefined, y: number | undefined) {
@@ -78,6 +104,15 @@ export class Button extends g.Pane {
       this.onClick.destroy();
       this.onClick = null;
     }
+    if (this.onHovered) {
+      this.onHovered.destroy();
+      this.onHovered = null;
+    }
+    if (this.onUnhovered) {
+      this.onUnhovered.destroy();
+      this.onUnhovered = null;
+    }
+    this.hoverable = false;
     super.destroy();
   }
 
@@ -102,7 +137,7 @@ export class Button extends g.Pane {
     if (this.buttonState === ButtonState.Pushed && hover === false) {
       this.unpush();
     } else if (this.buttonState === ButtonState.Inactive && hover) {
-      this.hover();
+      this.push();
     }
   }
 

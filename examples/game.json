@@ -65,12 +65,24 @@
 	"environment": {
 		"sandbox-runtime": "2"
 	},
+	"operationPlugins": [
+		{
+			"code": 1,
+			"script": "./node_modules/@akashic-extension/akashic-hover-plugin/lib/HoverPlugin.js",
+			"option": {
+				"showTooltip": false
+			}
+		}
+	],
 	"globalScripts": [
 		"node_modules/@akashic-extension/akashic-label/lib/DefaultRubyParser.js",
 		"node_modules/@akashic-extension/akashic-label/lib/FragmentDrawInfo.js",
 		"node_modules/@akashic-extension/akashic-label/lib/Label.js",
 		"node_modules/@akashic-extension/akashic-label/lib/RubyParser.js",
 		"node_modules/@akashic-extension/akashic-label/lib/index.js",
+		"node_modules/@akashic-extension/akashic-hover-plugin/lib/Converter.js",
+		"node_modules/@akashic-extension/akashic-hover-plugin/lib/HoverPlugin.js",
+		"node_modules/@akashic-extension/akashic-hover-plugin/lib/index.js",
 		"node_modules/@akashic-extension/akashic-timeline/lib/ActionType.js",
 		"node_modules/@akashic-extension/akashic-timeline/lib/Easing.js",
 		"node_modules/@akashic-extension/akashic-timeline/lib/Timeline.js",
@@ -127,6 +139,7 @@
 	],
 	"moduleMainScripts": {
 		"@akashic-extension/akashic-label": "node_modules/@akashic-extension/akashic-label/lib/index.js",
+		"@akashic-extension/akashic-hover-plugin": "node_modules/@akashic-extension/akashic-hover-plugin/lib/index.js",
 		"@akashic-extension/akashic-timeline": "node_modules/@akashic-extension/akashic-timeline/lib/index.js",
 		"@pocketberserker/akashic-pagination": "node_modules/@pocketberserker/akashic-pagination/lib/index.js",
 		"@xnv/akashic-scrollable": "node_modules/@xnv/akashic-scrollable/lib/index.js",

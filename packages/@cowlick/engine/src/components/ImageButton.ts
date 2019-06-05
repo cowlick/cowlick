@@ -18,6 +18,9 @@ export class ImageButton extends Button {
     this.width = this.image.width / 3;
     this.height = this.image.height;
     this.append(this.image);
+
+    this.hovered.add(this.hover, this);
+    this.unhovered.add(this.unpush, this);
   }
 
   push() {
@@ -35,6 +38,6 @@ export class ImageButton extends Button {
   hover() {
     this.image.x = (-this.image.width / 3) * 2;
     this.image.modified();
-    super.unpush();
+    super.hover();
   }
 }
