@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/kag-compiler",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "cowlick kag compiler",
   "main": "lib/index.js",
   "bin": {
@@ -24,7 +24,7 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "dependencies": {
-    "@cowlick/analyzer": "^0.11.0",
+    "@cowlick/analyzer": "^0.12.0",
     "@cowlick/core": "^0.11.0",
     "acorn": "6.1.1",
     "commandpost": "1.4.0",

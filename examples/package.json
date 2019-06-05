@@ -17,7 +17,7 @@
     "@cowlick/config": "^0.12.0",
     "@cowlick/core": "^0.11.0",
     "@cowlick/encoded-frame": "^0.11.0",
-    "@cowlick/engine": "^0.12.1",
+    "@cowlick/engine": "^0.13.0",
     "@cowlick/msgpack": "^0.10.0",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4",
@@ -27,8 +27,8 @@
     "@akashic/akashic-cli": "1.5.33",
     "@akashic/akashic-engine": "2.4.14",
     "@akashic/akashic-sandbox": "0.13.61",
-    "@cowlick/analyzer-plugin-script-encoder": "^0.10.0",
-    "@cowlick/kag-compiler": "^0.11.0",
+    "@cowlick/analyzer-plugin-script-encoder": "^0.11.0",
+    "@cowlick/kag-compiler": "^0.12.0",
     "@types/node": "10.12.18",
     "typescript": "3.4.5"
   }
