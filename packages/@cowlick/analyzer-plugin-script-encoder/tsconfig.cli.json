@@ -16,7 +16,6 @@
     "outDir": "./lib"
   },
   "files": [
-    "./src/cli.ts",
     "./src/index.ts"
   ]
 }

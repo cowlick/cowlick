@@ -3,11 +3,7 @@
   "version": "0.10.0",
   "description": "script encoder plugin for cowlick analyzer",
   "main": "lib/index.js",
-  "bin": {
-    "cowlick-analyzer-plugin-script-encoder": "./bin/run"
-  },
   "files": [
-    "bin",
     "lib"
   ],
   "scripts": {
@@ -24,6 +20,7 @@
   "dependencies": {
     "escodegen": "1.11.1",
     "estraverse": "4.2.0",
+    "micro": "9.3.4",
     "msgpack5": "4.2.1"
   },
   "devDependencies": {
@@ -31,6 +28,7 @@
     "@types/esprima": "4.0.2",
     "@types/estraverse": "0.0.6",
     "@types/jest": "24.0.13",
+    "@types/micro": "7.3.3",
     "@types/msgpack5": "3.4.1",
     "@types/node": "10.12.18",
     "esprima": "4.0.1",

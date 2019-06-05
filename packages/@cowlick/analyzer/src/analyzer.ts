@@ -651,21 +651,22 @@ function scenario(original: ast.Scenario, state: State): GeneratedScene[] {
   }));
 }
 
-async function applyPlugins(scenes: GeneratedScene[], plugins: Plugin[]) {
+const applyPlugins = async (scenes: GeneratedScene[], plugins: Plugin[], port: number) => {
   let result = scenes;
   for (const plugin of plugins) {
-    result = await plugin.exec(result);
+    result = await plugin.exec(result, port);
   }
   return result;
-}
+};
 
 /**
  * スクリプトASTを解析してJavaScript AST形式のシナリオデータに変換する。
  *
  * @param original スクリプトAST
  * @param plugins
+ * @param port pluginのport番号
  */
-export async function analyze(original: ast.Scenario, plugins: Plugin[]): Promise<Result> {
+export const analyze = async (original: ast.Scenario, plugins: Plugin[], port: number): Promise<Result> => {
   const state: State = {
     replaces: [],
     scripts: [],
@@ -683,7 +684,7 @@ export async function analyze(original: ast.Scenario, plugins: Plugin[]): Promis
     });
   }
   return {
-    scenario: await applyPlugins(result, plugins),
+    scenario: await applyPlugins(result, plugins, port),
     scripts: state.scripts
   };
-}
+};

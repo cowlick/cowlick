@@ -11,6 +11,7 @@ const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../packa
 interface CompileOpts {
   outdir: string[];
   plugin: string[];
+  port: string[];
   config: string[];
 }
 
@@ -21,6 +22,7 @@ interface CompileArgs {
 interface Config {
   outdir: string;
   plugins: string[];
+  port: number;
   sources: string[];
 }
 
@@ -29,12 +31,14 @@ const root = commandpost
   .version(packageJson.version, "-v, --version")
   .description("compile KAG scenario")
   .option("-o, --outdir <outdir>", "output dir")
-  .option("-p, --plugin <path>", "plugin path")
+  .option("-l, --plugin <path>", "plugin path")
+  .option("-p, --port [port]", "plugin port")
   .option("-c, --config <path>", "config JSON file path for cowlick KAG compiler")
   .action(async (opts, args) => {
     const config: Config = {
       outdir: "script",
       plugins: [],
+      port: 3000,
       sources: []
     };
     const cwd = process.cwd();
@@ -46,6 +50,9 @@ const root = commandpost
       if ("plugins" in configJson) {
         config.plugins.push(...configJson.plugins);
       }
+      if ("port" in configJson) {
+        config.port = configJson.port;
+      }
       if ("sources" in configJson) {
         config.sources.push(...configJson.sources);
       }
@@ -55,6 +62,9 @@ const root = commandpost
       }
       if (opts.plugin) {
         config.plugins.push(...opts.plugin);
+      }
+      if (opts.port && opts.port[0]) {
+        config.port = parseInt(opts.port[0]);
       }
       if (args.sources && args.sources.length > 0) {
         config.sources.push(...args.sources);
@@ -73,7 +83,10 @@ const root = commandpost
       const target = path.resolve(cwd, source);
       const plugins = config.plugins.map(p => new analyzer.Plugin(path.resolve(cwd, p)));
       const ast = await parse(target, runProgress);
-      const result = await runProgress("Analyzing scenario", async () => await analyzer.analyze(ast, plugins));
+      const result = await runProgress(
+        "Analyzing scenario",
+        async () => await analyzer.analyze(ast, plugins, config.port)
+      );
       await runProgress(`Generate scenario`, async () => analyzer.generate(outputPath, result.scenario));
       for (const s of result.scripts) {
         await s.write(outputPath);

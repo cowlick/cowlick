@@ -1,7 +1,7 @@
+import * as http from "http";
 import {basename} from "path";
-import * as spawn from "cross-spawn";
+import axios from "axios";
 import * as msgpack5 from "msgpack5";
-const BufferList = require("bl");
 import {GeneratedScene} from "./analyzer";
 
 const msgpack = msgpack5();
@@ -13,23 +13,19 @@ export class Plugin {
     this.path = path;
   }
 
-  async exec(input: GeneratedScene[]): Promise<GeneratedScene[]> {
-    return new Promise<GeneratedScene[]>((resolve, reject) => {
-      let output = new BufferList();
-      const cmd = spawn(this.path);
-      cmd.stdout.on("data", data => {
-        if (typeof data !== "string") {
-          output.append(data);
-        }
+  async exec(input: GeneratedScene[], port: number): Promise<GeneratedScene[]> {
+    const server: http.Server = require(this.path);
+    server.listen(port);
+    try {
+      const response = await axios.post(`http://localhost:${port}`, msgpack.encode(input), {
+        responseType: "arraybuffer"
       });
-      cmd.on("close", code => {
-        if (code === 0) {
-          resolve(msgpack.decode(output));
-        } else {
-          reject(new Error(`"${basename(this.path)}" returned exit code ${code}`));
-        }
-      });
-      cmd.stdin.write(msgpack.encode(input));
-    });
+      if (response.status !== 200) {
+        throw new Error(`"${basename(this.path)}" returned ${response.status}: ${response.statusText}`);
+      }
+      return msgpack.decode(response.data);
+    } finally {
+      server.close();
+    }
   }
 }

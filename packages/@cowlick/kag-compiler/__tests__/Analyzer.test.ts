@@ -20,7 +20,7 @@ describe("Analyzer", () => {
             frames: JSON.parse(fs.readFileSync(astFilePath, "utf8"))
           }
         ];
-        const actual = await analyze(scriptAst, []);
+        const actual = await analyze(scriptAst, [], 3000);
         // FIXME: start, endを外してacornでテストできるようにしたい
         const expectedAST = [
           {

@@ -3,6 +3,7 @@
     "./scenario/title.ks"
   ],
   "plugins": [
-    "./node_modules/.bin/cowlick-analyzer-plugin-script-encoder"
-  ]
+    "./node_modules/@cowlick/analyzer-plugin-script-encoder/lib/index.js"
+  ],
+  "port": 3000
 }
