@@ -3,7 +3,7 @@ import * as escodegen from "escodegen";
 import {mkdir, writeFile} from "./file";
 import {GeneratedScene} from "./analyzer";
 
-export async function generate(targetDir: string, scenario: GeneratedScene[]) {
+export const generate = async (targetDir: string, scenario: GeneratedScene[]) => {
   for (const scene of scenario) {
     const target = join(targetDir, `${scene.label}.js`);
     try {
@@ -15,4 +15,4 @@ export async function generate(targetDir: string, scenario: GeneratedScene[]) {
     }
     await writeFile(target, escodegen.generate(scene.source));
   }
-}
+};

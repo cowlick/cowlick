@@ -7,9 +7,9 @@ import * as path from "path";
  *
  * @param target ファイル
  */
-export function filename(target: string): string {
+export const filename = (target: string): string => {
   return path.basename(target, path.extname(target));
-}
+};
 
 export const writeFile = promisify(fs.writeFile);
 export const readFile = promisify(fs.readFile);
