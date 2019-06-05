@@ -324,7 +324,6 @@ describe("GameState", () => {
       scenario: new core.Scenario([])
     });
 
-    let input: any = 1;
     let target = {
       type: core.VariableType.system,
       name: "test"

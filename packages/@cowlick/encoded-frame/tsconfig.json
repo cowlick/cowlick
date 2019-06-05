@@ -5,9 +5,12 @@
     "lib": [
       "es2017"
     ],
-    "alwaysStrict": true,
+    "strict": true,
     "noLib": false,
     "sourceMap": false,
-    "noImplicitAny": true
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   }
 }
