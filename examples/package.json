@@ -16,9 +16,9 @@
     "@akashic-extension/akashic-timeline": "2.1.0",
     "@cowlick/config": "^0.12.0",
     "@cowlick/core": "^0.11.0",
-    "@cowlick/encoded-frame": "^0.11.0",
+    "@cowlick/encoded-frame": "^0.11.1",
     "@cowlick/engine": "^0.13.0",
-    "@cowlick/msgpack": "^0.10.0",
+    "@cowlick/msgpack": "^0.10.1",
     "@pocketberserker/akashic-pagination": "0.0.4",
     "@xnv/akashic-scrollable": "0.0.4",
     "base64-js": "1.3.0"

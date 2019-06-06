@@ -1,6 +1,6 @@
 {
   "name": "@cowlick/msgpack",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "msgpack serializer for cowlick",
   "main": "index.js",
   "types": "index.d.ts",
