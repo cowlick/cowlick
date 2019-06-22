@@ -26,12 +26,12 @@
   "devDependencies": {
     "@akashic/akashic-engine": "2.4.14",
     "@types/base64-js": "1.2.5",
-    "@types/jest": "24.0.13",
+    "@types/jest": "24.0.15",
     "@types/node": "10.12.18",
     "@xnv/headless-akashic": "0.0.1",
     "jest": "24.8.0",
     "ts-jest": "24.0.2",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "publishConfig": {
     "access": "public"

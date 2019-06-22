@@ -30,7 +30,7 @@
     "@types/estraverse": "0.0.6",
     "@types/msgpack5": "3.4.1",
     "@types/node": "10.12.18",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "publishConfig": {
     "access": "public"

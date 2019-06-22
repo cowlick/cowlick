@@ -27,14 +27,14 @@
     "@types/escodegen": "0.0.6",
     "@types/esprima": "4.0.2",
     "@types/estraverse": "0.0.6",
-    "@types/jest": "24.0.13",
+    "@types/jest": "24.0.15",
     "@types/micro": "7.3.3",
     "@types/msgpack5": "3.4.1",
     "@types/node": "10.12.18",
     "esprima": "4.0.1",
     "jest": "24.8.0",
     "ts-jest": "24.0.2",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "publishConfig": {
     "access": "public"
