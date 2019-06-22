@@ -10,6 +10,7 @@
     "LICENSE-msgpackjs"
   ],
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc -p .",
     "test": "jest"
   },
