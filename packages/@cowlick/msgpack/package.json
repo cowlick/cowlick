@@ -21,9 +21,9 @@
     "url": "https://github.com/cowlick/cowlick.git"
   },
   "devDependencies": {
-    "@types/node": "12.0.5",
-    "jest": "24.8.0",
-    "typescript": "3.5.2"
+    "@types/node": "^12.0.5",
+    "jest": "^24.9.0",
+    "typescript": "^3.5.3"
   },
   "publishConfig": {
     "access": "public"
