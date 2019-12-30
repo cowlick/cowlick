@@ -25,12 +25,12 @@
     "msgpack5": "^4.2.1"
   },
   "devDependencies": {
-    "@akashic/akashic-engine": "^2.5.0",
+    "@akashic/akashic-engine": "^2.6.1",
     "@types/escodegen": "^0.0.6",
     "@types/estraverse": "^0.0.6",
     "@types/msgpack5": "^3.4.1",
-    "@types/node": "10.12.18",
-    "typescript": "^3.5.3"
+    "@types/node": "10.17.13",
+    "typescript": "^3.7.4"
   },
   "publishConfig": {
     "access": "public"
